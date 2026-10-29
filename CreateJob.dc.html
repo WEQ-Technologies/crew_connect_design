@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Post a job</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <!-- FORM -->
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="bar"><a class="iconbtn" href="PosterHome.dc.html" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a><div class="ttl">Post a job</div><button class="btn btn-t btn-sm" onClick="{{saveDraft}}" style="margin-right: 8px">Save draft</button></div>
+  </sc-if>
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="sc" style="gap: 18px">
+      <div style="padding: 0 0 2px"><div class="stepper"><div class="on"></div><div></div></div><div class="t-c mut" style="margin-top: 8px">Step 1 of 2 · Job details</div></div>
+      <sc-if value="{{hasErrors}}" hint-placeholder-val="{{ false }}">
+        <div class="alert a-e" role="alert"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg><div>Fix {{errCount}} before reviewing your job.</div></div>
+      </sc-if>
+      <div class="fld"><label class="lbl" for="t">Job title <span class="req">*</span></label><input id="t" class="{{tCls}}" placeholder="e.g. Focus Puller — Feature Film" value="{{title}}" onChange="{{onTitle}}" maxlength="90">
+        <sc-if value="{{tErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Add a job title.</span></sc-if>
+        <span class="help" style="text-align: right">{{titleLen}} / 90</span>
+      </div>
+      <div class="fld"><label class="lbl" for="c">Category <span class="req">*</span></label>
+        <select id="c" class="{{cCls}}" value="{{cat}}" onChange="{{onCat}}"><option value="">Select category</option><option>Camera</option><option>Direction</option><option>Editing &amp; Post</option><option>Sound</option><option>Lighting &amp; Grip</option><option>Art &amp; Production Design</option><option>Cast / Acting</option><option>Production</option><option>Costume &amp; Make-up</option><option>VFX</option></select>
+        <sc-if value="{{cErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Choose a category so the right people find it.</span></sc-if>
+      </div>
+      <div class="fld"><label class="lbl" for="l">Location <span class="req">*</span></label><input id="l" class="{{lCls}}" placeholder="e.g. Film City, Mumbai" value="{{loc}}" onChange="{{onLoc}}">
+        <sc-if value="{{lErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Add where the work happens.</span></sc-if>
+      </div>
+      <div class="fld"><span class="lbl">Payment range <span class="opt">(optional)</span></span>
+        <div class="row" style="gap: 8px">
+          <div class="pre sp"><span>₹</span><input inputmode="numeric" placeholder="Min" value="{{pmin}}" onChange="{{onMin}}" aria-label="Minimum payment"></div>
+          <span class="mut">–</span>
+          <div class="pre sp"><span>₹</span><input inputmode="numeric" placeholder="Max" value="{{pmax}}" onChange="{{onMax}}" aria-label="Maximum payment"></div>
+        </div>
+        <select class="inp" aria-label="Payment unit"><option>per day</option><option>per month</option><option>project fee</option><option>flat</option></select>
+        <sc-if value="{{pErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Maximum must be the same as or more than minimum.</span></sc-if>
+        <sc-if value="{{noPErr}}" hint-placeholder-val="{{ true }}"><span class="help">Jobs with a payment range are easier for crew to assess.</span></sc-if>
+      </div>
+      <div class="fld"><label class="lbl" for="d">Description <span class="req">*</span></label><textarea id="d" class="{{dCls}}" style="min-height: 140px" placeholder="Project, schedule, responsibilities and what you need from candidates." onChange="{{onDesc}}">{{desc}}</textarea>
+        <sc-if value="{{dErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Write at least 40 characters so candidates understand the role.</span></sc-if>
+      </div>
+      <div class="fld"><span class="lbl">Job PDF <span class="opt">(optional)</span></span>
+        <sc-if value="{{noPdf}}" hint-placeholder-val="{{ true }}"><button class="file" onClick="{{addPdf}}" style="border-style: dashed; cursor: pointer; width: 100%; font: inherit"><span class="sq" style="width: 40px; height: 40px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span><span class="sp" style="text-align: left"><span class="t-s b" style="display: block">Attach a brief or call sheet</span><span class="t-c mut">PDF only · max [SIZE TBC] MB</span></span></button></sc-if>
+        <sc-if value="{{hasPdf}}" hint-placeholder-val="{{ false }}"><div class="file"><div class="fico">PDF</div><div class="sp"><div class="t-h3 trunc">Focus-Puller-Brief-Lantern.pdf</div><div class="t-c mut">248 KB</div></div><button class="iconbtn" onClick="{{removePdf}}" aria-label="Remove PDF"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></div></sc-if>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="foot"><button class="btn btn-p w100" onClick="{{review}}">Review job</button></div>
+  </sc-if>
+
+  <!-- REVIEW -->
+  <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+    <div class="bar"><button class="iconbtn" onClick="{{toForm}}" aria-label="Back to edit"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button><div class="ttl">Review before publishing</div></div>
+  </sc-if>
+  <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="gap: 16px">
+      <div><div class="stepper"><div class="done"></div><div class="on"></div></div><div class="t-c mut" style="margin-top: 8px">Step 2 of 2 · This is how Job Seekers will see it</div></div>
+      <div class="card" style="gap: 12px">
+        <div class="t-h2">{{title}}</div>
+        <div class="t-s mut">Lantern Pictures</div>
+        <div class="hr"></div>
+        <div class="kv"><span>Category</span><span>{{cat}}</span></div>
+        <div class="kv"><span>Location</span><span>{{loc}}</span></div>
+        <div class="kv"><span>Payment</span><span>{{payText}}</span></div>
+        <div class="hr"></div>
+        <p class="t-s" style="white-space: pre-line">{{desc}}</p>
+        <sc-if value="{{hasPdf}}" hint-placeholder-val="{{ false }}"><div class="file"><div class="fico">PDF</div><div class="sp"><div class="t-h3 trunc">Focus-Puller-Brief-Lantern.pdf</div><div class="t-c mut">248 KB</div></div></div></sc-if>
+      </div>
+      <button class="btn btn-s w100" onClick="{{toForm}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>Edit details</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+    <div class="foot">
+      <sc-if value="{{publishing}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>Publishing…</button></sc-if>
+      <sc-if value="{{notPublishing}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{publish}}">Publish job</button></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- DONE -->
+  <sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="justify-content: center; align-items: center; text-align: center; gap: 14px; padding: 32px">
+      <div style="width: 80px; height: 80px; border-radius: 40px; background: #E3F3E9; color: #1E7D47; display: flex; align-items: center; justify-content: center"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 40px; height: 40px; stroke-width: 2.2"><path d="m5 12 5 5 9-10"></path></svg></div>
+      <div class="t-h1">Your job is live</div>
+      <div class="t-b mut">“{{title}}” is now visible to Job Seekers. Applicants will appear on the job as they apply.</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 10px">
+        <a class="btn btn-p w100" href="Applicants.dc.html">View applicants</a>
+        <a class="btn btn-s w100" href="MyJobs.dc.html">Go to my jobs</a>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>Draft saved</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = {
+      phase: 'form', tried: false, publishing: false, toast: false, pdf: true,
+      title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', cat: 'Camera', loc: '', pmin: '8000', pmax: '12000',
+      desc: 'A-camera focus puller for an untitled Hindi feature. 32 shooting days across Film City and Goa, 4 Nov – 12 Dec.\n\nNeed 3+ years on features and comfort with ARRI Alexa 35.'
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.b); }
+  renderVals() {
+    const s = this.state, tr = s.tried;
+    const n = (v) => Number(String(v).replace(/[^0-9]/g, '')) || 0;
+    const tE = !s.title.trim(), cE = !s.cat, lE = !s.loc.trim(), dE = s.desc.trim().length < 40;
+    const pE = s.pmin && s.pmax && n(s.pmax) < n(s.pmin);
+    const errs = [tE, cE, lE, dE, pE].filter(Boolean).length;
+    const inr = (v) => '₹' + n(v).toLocaleString('en-IN');
+    return {
+      isForm: s.phase === 'form', isReview: s.phase === 'review', isDone: s.phase === 'done',
+      title: s.title, cat: s.cat, loc: s.loc, pmin: s.pmin, pmax: s.pmax, desc: s.desc, titleLen: s.title.length,
+      tErr: tr && tE, cErr: tr && cE, lErr: tr && lE, dErr: tr && dE, pErr: tr && pE, noPErr: !(tr && pE),
+      tCls: tr && tE ? 'inp bad' : 'inp', cCls: tr && cE ? 'inp bad' : 'inp', lCls: tr && lE ? 'inp bad' : 'inp', dCls: tr && dE ? 'inp bad' : 'inp',
+      hasErrors: tr && errs > 0, errCount: errs === 1 ? '1 field' : errs + ' fields',
+      payText: s.pmin || s.pmax ? (s.pmin && s.pmax ? inr(s.pmin) + ' – ' + inr(s.pmax) : inr(s.pmin || s.pmax)) + ' per day' : 'Not specified',
+      hasPdf: s.pdf, noPdf: !s.pdf,
+      addPdf: () => this.setState({ pdf: true }), removePdf: () => this.setState({ pdf: false }),
+      onTitle: (e) => this.setState({ title: e.target.value }),
+      onCat: (e) => this.setState({ cat: e.target.value }),
+      onLoc: (e) => this.setState({ loc: e.target.value }),
+      onMin: (e) => this.setState({ pmin: e.target.value }),
+      onMax: (e) => this.setState({ pmax: e.target.value }),
+      onDesc: (e) => this.setState({ desc: e.target.value }),
+      review: () => (errs ? this.setState({ tried: true }) : this.setState({ phase: 'review' })),
+      toForm: () => this.setState({ phase: 'form' }),
+      publishing: s.publishing, notPublishing: !s.publishing,
+      publish: () => { this.setState({ publishing: true }); this.a = setTimeout(() => this.setState({ publishing: false, phase: 'done' }), 1100); },
+      toast: s.toast,
+      saveDraft: () => { this.setState({ toast: true }); clearTimeout(this.b); this.b = setTimeout(() => this.setState({ toast: false }), 2200); }
+    };
+  }
+}
+</script>
+</body>
+</html>

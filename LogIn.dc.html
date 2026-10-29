@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Log in with email</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="Welcome.dc.html" aria-label="Back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl"></div></div>
+  <div class="sc" style="padding: 16px 24px 24px; gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div class="t-over" style="color: #5B2A8C">Log in</div>
+      <h1 class="t-d">Welcome back</h1>
+      <p class="t-b mut">Enter the email you signed up with. We'll send a six-digit code to log you in.</p>
+    </div>
+    <div class="fld">
+      <label class="lbl" for="em">Email address <span class="req">*</span></label>
+      <input id="em" type="email" inputmode="email" autocomplete="email" class="{{inpCls}}" placeholder="name@studio.com" value="{{email}}" onChange="{{onEmail}}" aria-invalid="{{errOn}}" aria-describedby="em-msg">
+      <sc-if value="{{errOn}}" hint-placeholder-val="{{ false }}">
+        <span id="em-msg" class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{err}}</span>
+      </sc-if>
+    </div>
+    <div class="row t-s mut" style="gap: 10px; align-items: flex-start">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #1E7D47"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+      <span>One login for every role — Job Seeker, Job Poster or Vendor.</span>
+    </div>
+  </div>
+  <div style="flex: none; padding: 12px 24px 36px; display: flex; flex-direction: column; gap: 14px">
+    <sc-if value="{{valid}}" hint-placeholder-val="{{ false }}">
+      <a class="btn btn-p w100" href="Otp.dc.html">Continue</a>
+    </sc-if>
+    <sc-if value="{{invalid}}" hint-placeholder-val="{{ true }}">
+      <button class="btn btn-p w100" onClick="{{submit}}">Continue</button>
+    </sc-if>
+    <p class="t-s mut" style="text-align: center">New to CrewConnect? <a href="SignUp.dc.html" style="font-weight: 700">Create an account</a></p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { email: '', touched: false }; }
+  renderVals() {
+    const e = this.state.email.trim();
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+    let err = '';
+    if (this.state.touched && !e) err = 'Enter your email address to continue.';
+    else if (this.state.touched && !valid) err = 'Enter a valid email address, like name@studio.com';
+    return {
+      email: this.state.email,
+      valid, invalid: !valid,
+      err, errOn: !!err,
+      inpCls: err ? 'inp bad' : 'inp',
+      onEmail: (ev) => this.setState({ email: ev.target.value }),
+      submit: () => this.setState({ touched: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

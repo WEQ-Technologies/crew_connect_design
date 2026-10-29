@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create invoice</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="Invoices.dc.html" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a><div class="ttl">New invoice</div><span class="t-s mut b" style="padding-right: 14px">INV-2026-015</span></div>
+  <div class="sc" style="gap: 18px">
+    <sc-if value="{{showErr}}" hint-placeholder-val="{{ false }}">
+      <div class="alert a-e" role="alert"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg><div>Add a client name and a rate and number of days for every line item.</div></div>
+    </sc-if>
+    <div class="t-over">Bill to</div>
+    <div class="fld"><label class="lbl" for="cl">Client name <span class="req">*</span></label><input id="cl" class="{{clCls}}" placeholder="Company or person" value="{{client}}" onChange="{{onClient}}"></div>
+    <div class="fld"><label class="lbl" for="ce">Client email <span class="opt">(optional)</span></label><input id="ce" class="inp" type="email" value="accounts@lanternpictures.in"></div>
+    <div class="fld"><label class="lbl" for="cg">Client GSTIN <span class="opt">(optional)</span></label><input id="cg" class="inp" value="27AABCL4821F1Z6" style="letter-spacing: 0.04em"></div>
+    <div class="row" style="gap: 12px">
+      <div class="fld sp"><label class="lbl" for="id">Invoice date</label><input id="id" class="inp" type="date" value="2026-10-20"></div>
+      <div class="fld sp"><label class="lbl" for="dd">Due date</label><input id="dd" class="inp" type="date" value="2026-11-04"></div>
+    </div>
+
+    <div class="hr"></div>
+    <div class="sec"><div class="t-over">Line items</div><span class="t-c mut">{{itemCount}}</span></div>
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="2">
+      <div class="card" style="gap: 12px">
+        <div class="row"><span class="t-c mut b sp">Item {{it.n}}</span><sc-if value="{{it.canRemove}}" hint-placeholder-val="{{ true }}"><button class="iconbtn" onClick="{{it.remove}}" aria-label="Remove item {{it.n}}" style="width: 36px; height: 36px; color: #B42318"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if></div>
+        <input class="inp" value="{{it.desc}}" onChange="{{it.onDesc}}" placeholder="Description, e.g. Focus pulling — principal photography" aria-label="Item {{it.n}} description">
+        <div class="row" style="gap: 10px">
+          <div class="fld sp"><span class="lbl" style="font-size: 12px">Day rate <span class="req">*</span></span><div class="pre" style="{{it.rateStyle}}"><span>₹</span><input inputmode="numeric" value="{{it.rate}}" onChange="{{it.onRate}}" aria-label="Item {{it.n}} day rate"></div></div>
+          <div class="fld" style="width: 84px"><span class="lbl" style="font-size: 12px">Days <span class="req">*</span></span><input class="{{it.daysCls}}" inputmode="numeric" value="{{it.days}}" onChange="{{it.onDays}}" aria-label="Item {{it.n}} number of days"></div>
+        </div>
+        <div class="row t-s"><span class="mut sp">Amount</span><b>{{it.amt}}</b></div>
+      </div>
+    </sc-for>
+    <button class="btn btn-s w100" onClick="{{addItem}}" style="border-style: dashed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add line item</button>
+
+    <div class="fld"><label class="lbl" for="gst">GST rate</label>
+      <select id="gst" class="inp" value="{{gst}}" onChange="{{onGst}}"><option value="0">No GST (0%)</option><option value="5">5%</option><option value="12">12%</option><option value="18">18%</option></select>
+      <span class="help">CGST + SGST vs IGST split and rate rules: <span class="ph-tag">[GST LOGIC TBC]</span></span>
+    </div>
+
+    <div class="card" style="gap: 2px; background: #F7F2FB; border-color: #EFE7F7">
+      <div class="kv"><span>Subtotal</span><span>{{sub}}</span></div>
+      <div class="kv"><span>GST ({{gst}}%)</span><span>{{tax}}</span></div>
+      <div class="hr" style="margin: 6px 0"></div>
+      <div class="kv" style="font-size: 17px"><span style="color: #1D1B22; font-weight: 700">Total</span><span style="font-weight: 800">{{total}}</span></div>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>Saved as draft</div>
+  </sc-if>
+
+  <div class="foot">
+    <button class="btn btn-s" onClick="{{saveDraft}}" style="flex: 1">Save draft</button>
+    <sc-if value="{{valid}}" hint-placeholder-val="{{ true }}"><a class="btn btn-p" href="InvoiceDetail.dc.html" style="flex: 1.5">Preview invoice</a></sc-if>
+    <sc-if value="{{invalid}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" onClick="{{tryPreview}}" style="flex: 1.5">Preview invoice</button></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.nextId = 3;
+    this.state = {
+      client: 'Lantern Pictures', gst: '18', tried: false, toast: false,
+      items: [
+        { id: 1, desc: 'Focus pulling — principal photography', rate: '10000', days: '6' },
+        { id: 2, desc: 'Camera prep day', rate: '5000', days: '1' }
+      ]
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state;
+    const num = (v) => Number(String(v).replace(/[^0-9.]/g, '')) || 0;
+    const inr = (v) => '₹' + Math.round(v).toLocaleString('en-IN');
+    const upd = (id, k, v) => this.setState({ items: s.items.map((x) => (x.id === id ? { ...x, [k]: v } : x)) });
+    const sub = s.items.reduce((a, x) => a + num(x.rate) * num(x.days), 0);
+    const tax = sub * num(s.gst) / 100;
+    const valid = !!s.client.trim() && s.items.length > 0 && s.items.every((x) => num(x.rate) > 0 && num(x.days) > 0);
+    return {
+      client: s.client, gst: s.gst,
+      clCls: s.tried && !s.client.trim() ? 'inp bad' : 'inp',
+      onClient: (e) => this.setState({ client: e.target.value }),
+      onGst: (e) => this.setState({ gst: e.target.value }),
+      itemCount: s.items.length + (s.items.length === 1 ? ' item' : ' items'),
+      items: s.items.map((x, i) => {
+        const badR = s.tried && !(num(x.rate) > 0), badD = s.tried && !(num(x.days) > 0);
+        return {
+          ...x, n: i + 1, canRemove: s.items.length > 1,
+          amt: inr(num(x.rate) * num(x.days)),
+          rateStyle: badR ? 'border-color:#B42318;box-shadow:0 0 0 3px #FDECEA' : '',
+          daysCls: badD ? 'inp bad' : 'inp',
+          onDesc: (e) => upd(x.id, 'desc', e.target.value),
+          onRate: (e) => upd(x.id, 'rate', e.target.value),
+          onDays: (e) => upd(x.id, 'days', e.target.value),
+          remove: () => this.setState({ items: s.items.filter((y) => y.id !== x.id) })
+        };
+      }),
+      addItem: () => this.setState({ items: [...s.items, { id: this.nextId++, desc: '', rate: '', days: '' }] }),
+      sub: inr(sub), tax: inr(tax), total: inr(sub + tax),
+      valid, invalid: !valid, showErr: s.tried && !valid,
+      tryPreview: () => this.setState({ tried: true }),
+      toast: s.toast,
+      saveDraft: () => { this.setState({ toast: true }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: false }), 2200); }
+    };
+  }
+}
+</script>
+</body>
+</html>

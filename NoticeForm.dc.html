@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create or edit notice</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <sc-if value="{{notDone}}" hint-placeholder-val="{{ true }}">
+    <div class="bar"><a class="iconbtn" href="AssocNotices.dc.html" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a><div class="ttl">{{heading}}</div></div>
+  </sc-if>
+  <sc-if value="{{notDone}}" hint-placeholder-val="{{ true }}">
+    <div class="sc" style="gap: 18px">
+      <sc-if value="{{isEdit}}" hint-placeholder-val="{{ false }}">
+        <div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg><div>Published 27 Oct 2026 · last edited 27 Oct, 4:10 pm. Saving shows an “Edited” label to readers.</div></div>
+      </sc-if>
+      <div class="row" style="gap: 10px"><span style="width: 36px; height: 36px; border-radius: 10px; background: #EFE7F7; color: #4A1F73; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex: none">CTG</span><span class="t-s mut">Posting as <b style="color: #1D1B22">Cine Technicians Guild of Maharashtra</b></span></div>
+      <div class="fld"><label class="lbl" for="t">Notice title <span class="req">*</span></label><input id="t" class="{{tCls}}" maxlength="120" value="{{title}}" onChange="{{onTitle}}" placeholder="e.g. Office closed for Diwali, 7–10 November">
+        <sc-if value="{{tErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Add a title for the notice.</span></sc-if>
+        <span class="help" style="text-align: right">{{tLen}} / 120</span>
+      </div>
+      <div class="fld"><label class="lbl" for="b">Notice content <span class="req">*</span></label><textarea id="b" class="{{bCls}}" style="min-height: 180px" onChange="{{onBody}}" placeholder="Write the full notice. Plain text; line breaks are kept.">{{body}}</textarea>
+        <sc-if value="{{bErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Write at least 40 characters.</span></sc-if>
+        <span class="help">The first two lines appear as the preview on the Forum wall.</span>
+      </div>
+      <div class="fld"><span class="lbl">Attachment <span class="opt">(optional)</span></span>
+        <sc-if value="{{noFile}}" hint-placeholder-val="{{ false }}"><button class="file" onClick="{{addFile}}" style="border-style: dashed; cursor: pointer; width: 100%; font: inherit"><span class="sq" style="width: 40px; height: 40px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span><span class="sp" style="text-align: left"><span class="t-s b" style="display: block">Attach PDF or document</span><span class="t-c mut">PDF, DOC or DOCX · max [SIZE TBC] MB</span></span></button></sc-if>
+        <sc-if value="{{hasFile}}" hint-placeholder-val="{{ true }}"><div class="file"><div class="fico">PDF</div><div class="sp"><div class="t-h3 trunc">CTG-Rate-Card-Dec-2026.pdf</div><div class="t-c mut">412 KB</div></div><button class="iconbtn" onClick="{{removeFile}}" aria-label="Remove attachment"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></div></sc-if>
+      </div>
+      <div class="card" style="gap: 2px; background: #FAF8F5">
+        <div class="kv"><span>Publication date</span><span>{{pubDate}}</span></div>
+        <div class="kv"><span>Visible to</span><span>All CrewConnect users</span></div>
+        <div class="help" style="margin-top: 4px">Scheduling a future date: <span class="ph-tag">[TBC]</span></div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{notDone}}" hint-placeholder-val="{{ true }}">
+    <div class="foot">
+      <sc-if value="{{saving}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>{{savingLabel}}</button></sc-if>
+      <sc-if value="{{notSaving}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{submit}}">{{submitLabel}}</button></sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="justify-content: center; align-items: center; text-align: center; gap: 14px; padding: 32px">
+      <div style="width: 80px; height: 80px; border-radius: 40px; background: #E3F3E9; color: #1E7D47; display: flex; align-items: center; justify-content: center"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 40px; height: 40px; stroke-width: 2.2"><path d="m5 12 5 5 9-10"></path></svg></div>
+      <div class="t-h1">{{doneTitle}}</div>
+      <div class="t-b mut">“{{title}}” is on the Forum wall for all CrewConnect users.</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 10px">
+        <a class="btn btn-p w100" href="NoticeDetail.dc.html">View notice</a>
+        <a class="btn btn-s w100" href="AssocNotices.dc.html">Back to my notices</a>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["create","edit"],"default":"create"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    const edit = (p.mode ?? 'create') === 'edit';
+    this.state = {
+      tried: false, saving: false, done: false, file: edit,
+      title: edit ? 'Revised minimum day rates for camera and lighting crew — effective 1 December' : '',
+      body: edit ? 'Following the general body meeting held on 20 October 2026, the Guild has approved revised minimum day rates for camera and lighting crew working on feature films, web series and advertising projects in Maharashtra.' : ''
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.a); }
+  renderVals() {
+    const s = this.state;
+    const edit = (this.props.mode ?? 'create') === 'edit';
+    const tE = !s.title.trim(), bE = s.body.trim().length < 40;
+    return {
+      isEdit: edit, heading: edit ? 'Edit notice' : 'Create notice',
+      notDone: !s.done, done: s.done,
+      title: s.title, body: s.body, tLen: s.title.length,
+      tErr: s.tried && tE, bErr: s.tried && bE,
+      tCls: s.tried && tE ? 'inp bad' : 'inp', bCls: s.tried && bE ? 'inp bad' : 'inp',
+      onTitle: (e) => this.setState({ title: e.target.value }),
+      onBody: (e) => this.setState({ body: e.target.value }),
+      hasFile: s.file, noFile: !s.file,
+      addFile: () => this.setState({ file: true }), removeFile: () => this.setState({ file: false }),
+      pubDate: edit ? '27 Oct 2026 (unchanged)' : 'Today, when you publish',
+      saving: s.saving, notSaving: !s.saving,
+      savingLabel: edit ? 'Saving…' : 'Publishing…',
+      submitLabel: edit ? 'Save changes' : 'Publish notice',
+      doneTitle: edit ? 'Notice updated' : 'Notice published',
+      submit: () => {
+        if (tE || bE) return this.setState({ tried: true });
+        this.setState({ saving: true });
+        this.a = setTimeout(() => this.setState({ saving: false, done: true }), 1000);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

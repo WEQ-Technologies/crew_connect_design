@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invoices</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar">
+    <sc-if value="{{isPoster}}" hint-placeholder-val="{{ false }}"><a class="iconbtn" href="PosterProfile.dc.html" aria-label="Back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a></sc-if>
+    <div class="ttl" style="padding-left: 12px; font-size: 20px">Invoices</div>
+    <a class="btn btn-p btn-sm" href="InvoiceCreate.dc.html" style="margin-right: 12px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Create</a>
+  </div>
+  <div style="flex: none; padding: 4px 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <div class="card" style="padding: 12px; gap: 2px"><div class="t-c mut">Outstanding</div><div class="t-h2">₹1,53,400</div><div class="t-c" style="color: #B42318; font-weight: 700">1 overdue</div></div>
+      <div class="card" style="padding: 12px; gap: 2px"><div class="t-c mut">Paid in October</div><div class="t-h2">₹82,600</div><div class="t-c" style="color: #1E7D47; font-weight: 700">2 invoices</div></div>
+    </div>
+    <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="Search by client or invoice no." value="{{q}}" onChange="{{onQ}}" aria-label="Search invoices"></div>
+    <div class="chips x"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="5"><button class="{{t.cls}}" onClick="{{t.pick}}" aria-pressed="{{t.on}}">{{t.label}}</button></sc-for></div>
+  </div>
+  <div class="sc" style="padding-top: 0; gap: 12px">
+    <div class="list">
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+        <a class="li" href="InvoiceDetail.dc.html" style="align-items: flex-start; padding: 14px 16px">
+          <div class="sp"><div class="t-h3 trunc">{{r.client}}</div><div class="t-c mut" style="margin-top: 2px">{{r.no}} · {{r.date}}</div></div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px">
+            <span class="t-s b">{{r.amt}}</span>
+            <span class="{{r.badge}}">
+              <sc-if value="{{r.iDraft}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg></sc-if>
+              <sc-if value="{{r.iSent}}" hint-placeholder-val="{{ true }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg></sc-if>
+              <sc-if value="{{r.iPaid}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if>
+              <sc-if value="{{r.iOver}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg></sc-if>
+              {{r.st}}
+            </span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></div><div class="t-h3">No invoices match</div><div class="t-s mut">Try another status or search term.</div><a class="btn btn-p btn-sm" href="InvoiceCreate.dc.html">Create invoice</a></div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{isSeeker}}" hint-placeholder-val="{{ true }}">
+    <nav class="nav" aria-label="Main">
+      <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+      <a href="JobSearch.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>Discover</a>
+      <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
+      <a class="on" href="Invoices.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>Invoices</a>
+      <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
+    </nav>
+  </sc-if>
+  <sc-if value="{{isVendor}}" hint-placeholder-val="{{ false }}">
+    <nav class="nav" aria-label="Main">
+      <a href="VendorHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+      <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>My Listings</a>
+      <a href="Discover.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>Discover</a>
+      <a class="on" href="Invoices.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>Invoices</a>
+      <a href="VendorProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg></span>Profile</a>
+    </nav>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"role":{"editor":"enum","options":["seeker","poster","vendor"],"default":"seeker"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.data = [
+      { no: 'INV-2026-014', client: 'Lantern Pictures', date: '18 Oct 2026', amt: '₹76,700', st: 'Sent' },
+      { no: 'INV-2026-013', client: 'Northlight Studios', date: '2 Oct 2026', amt: '₹76,700', st: 'Overdue' },
+      { no: 'INV-2026-012', client: 'Pinewood Ads', date: '28 Sep 2026', amt: '₹23,600', st: 'Paid' },
+      { no: 'INV-2026-011', client: 'Third Bell Collective — short film “Kaagaz”', date: '20 Sep 2026', amt: '₹59,000', st: 'Paid' },
+      { no: 'Draft', client: 'Redline Motion Pictures', date: 'Edited today', amt: '₹47,200', st: 'Draft' }
+    ];
+    this.state = { q: '', tab: 'All' };
+  }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const role = this.props.role ?? 'seeker';
+    const bc = { Draft: 'badge b-n', Sent: 'badge b-p', Paid: 'badge b-g', Overdue: 'badge b-e' };
+    const list = this.data.filter((r) => (s.tab === 'All' || r.st === s.tab) && (!q || (r.no + r.client).toLowerCase().includes(q)));
+    return {
+      isSeeker: role === 'seeker', isVendor: role === 'vendor', isPoster: role === 'poster',
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      tabs: ['All', 'Draft', 'Sent', 'Paid', 'Overdue'].map((t) => ({ label: t, on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) })),
+      rows: list.map((r) => ({ ...r, badge: bc[r.st], iDraft: r.st === 'Draft', iSent: r.st === 'Sent', iPaid: r.st === 'Paid', iOver: r.st === 'Overdue' })),
+      empty: list.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>User profile — Follow and Connect</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="Talent.dc.html" aria-label="Back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">Profile</div><button class="iconbtn" onClick="{{openMenu}}" aria-label="More options" style="margin-right: 4px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.2"></circle><circle cx="12" cy="12" r="1.2"></circle><circle cx="12" cy="19" r="1.2"></circle></svg></button></div>
+  <div class="sc" style="gap: 16px">
+
+    <sc-if value="{{isReceived}}" hint-placeholder-val="{{ false }}">
+      <div class="card" style="gap: 10px; background: #F7F2FB; border-color: #EFE7F7">
+        <div class="row" style="gap: 8px"><span class="badge b-p"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>Request received</span><span class="t-c mut">2 days ago</span></div>
+        <div class="t-s"><b>{{p.first}}</b> wants to connect with you.</div>
+        <div class="t-s mut" style="font-style: italic; border-left: 0; background: #fff; border-radius: 10px; padding: 10px 12px">“{{inNote}}”</div>
+        <div class="row" style="gap: 10px"><button class="btn btn-s btn-sm" onClick="{{decline}}" style="flex: 1">Decline</button><button class="btn btn-p btn-sm" onClick="{{accept}}" style="flex: 1.4">Accept</button></div>
+      </div>
+    </sc-if>
+
+    <div class="card" style="align-items: center; text-align: center; padding: 20px; gap: 10px">
+      <div class="{{avCls}}">{{p.ini}}</div>
+      <div><div class="t-h1">{{p.name}}</div><div class="t-s mut">{{p.sub}}</div></div>
+      <div class="chips" style="justify-content: center"><span class="badge b-n">{{p.roleLabel}}</span><span class="badge b-n">{{p.city}}</span></div>
+      <div class="row" style="gap: 0; justify-content: center; width: 100%; margin-top: 2px">
+        <a href="FollowList.dc.html" style="flex: 1; color: #1D1B22; text-decoration: none; padding: 6px 0"><div class="t-h2">{{followers}}</div><div class="t-c mut">Followers</div></a>
+        <span style="width: 1px; height: 32px; background: #E7E3EA"></span>
+        <a href="FollowList.dc.html" style="flex: 1; color: #1D1B22; text-decoration: none; padding: 6px 0"><div class="t-h2">{{p.following}}</div><div class="t-c mut">Following</div></a>
+      </div>
+      <div class="row" style="gap: 10px; width: 100%">
+        <sc-if value="{{notFollowing}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s" onClick="{{follow}}" style="flex: 1" aria-pressed="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"></circle><path d="M2 21a7 7 0 0 1 14 0"></path><path d="M19 8v6M16 11h6"></path></svg>Follow</button></sc-if>
+        <sc-if value="{{isFollowing}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" onClick="{{unfollow}}" style="flex: 1; background: #F7F2FB; border-color: #B79AD6; color: #4A1F73" aria-pressed="true" aria-label="Following — tap to unfollow"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Following</button></sc-if>
+
+        <sc-if value="{{isNone}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" onClick="{{openConnect}}" style="flex: 1"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><path d="M9 12h6"></path></svg>Connect</button></sc-if>
+        <sc-if value="{{isPending}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" onClick="{{openCancel}}" style="flex: 1; border-style: dashed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Request sent</button></sc-if>
+        <sc-if value="{{isReceived}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" onClick="{{accept}}" style="flex: 1">Accept request</button></sc-if>
+        <sc-if value="{{isConnected}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" onClick="{{openMenu}}" style="flex: 1; background: #F1F9F4; border-color: #9FD3B3; color: #17663A"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Connected</button></sc-if>
+      </div>
+      <div class="t-c mut">{{statusLine}}</div>
+    </div>
+
+    <sc-if value="{{isVendor}}" hint-placeholder-val="{{ false }}">
+      <a class="card" href="VendorPublic.dc.html" style="text-decoration: none; flex-direction: row; align-items: center; gap: 12px"><span class="sq g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><span class="sp"><span class="t-h3" style="display: block">Listings &amp; business contact</span><span class="t-s mut">Opens the vendor page</span></span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6E6876"><path d="m9 18 6-6-6-6"></path></svg></a>
+    </sc-if>
+
+    <div class="card"><div class="t-over">About</div><p class="t-s">{{p.bio}}</p>
+      <div class="chips"><span class="tag">{{p.s1}}</span><span class="tag">{{p.s2}}</span><span class="tag">{{p.s3}}</span></div>
+    </div>
+    <div class="list">
+      <a class="li" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6E6876"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg><span class="sp t-s b">{{p.link}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6E6876"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status" style="bottom: 24px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span><span class="sp">{{toastText}}</span><sc-if value="{{canUndo}}" hint-placeholder-val="{{ false }}"><button class="btn btn-t btn-sm" onClick="{{undo}}" style="color: #B79AD6">Undo</button></sc-if></div>
+  </sc-if>
+
+  <!-- Connect sheet -->
+  <sc-if value="{{sheetConnect}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim"><div class="sheet" role="dialog" aria-label="Send connection request">
+      <div class="grab"></div>
+      <div class="row" style="gap: 12px"><div class="{{avSm}}">{{p.ini}}</div><div class="sp"><div class="t-h2">Connect with {{p.first}}</div><div class="t-c mut">{{p.first}} needs to accept before you're connected.</div></div></div>
+      <div class="fld"><label class="lbl" for="note">Add a note <span class="opt">(optional)</span></label><textarea id="note" class="inp" maxlength="300" placeholder="Say how you know each other or why you'd like to connect." value="{{note}}" onChange="{{onNote}}"></textarea><span class="help" style="text-align: right">{{noteLen}} / 300 <span class="ph-tag">[LIMIT TBC]</span></span></div>
+      <sc-if value="{{sendErr}}" hint-placeholder-val="{{ false }}"><div class="alert a-e" role="alert"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg><div>We couldn't send your request. Check your connection and try again.</div></div></sc-if>
+      <sc-if value="{{sending}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>Sending…</button></sc-if>
+      <sc-if value="{{notSending}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{send}}">Send request</button></sc-if>
+      <button class="btn btn-t w100" onClick="{{closeAll}}">Cancel</button>
+    </div></div>
+  </sc-if>
+
+  <!-- Cancel request -->
+  <sc-if value="{{sheetCancel}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c"><div class="dlg" role="alertdialog" aria-label="Cancel request">
+      <div class="t-h2">Cancel your request?</div>
+      <div class="t-s mut">{{p.first}} won't see your request any more. You can send a new one later.</div>
+      <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{closeAll}}" style="flex: 1">Keep</button><button class="btn btn-p" onClick="{{cancelReq}}" style="flex: 1; background: #B42318">Cancel request</button></div>
+    </div></div>
+  </sc-if>
+
+  <!-- More menu -->
+  <sc-if value="{{sheetMenu}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim"><div class="sheet" role="dialog" aria-label="More options">
+      <div class="grab"></div>
+      <div class="list">
+        <sc-if value="{{isConnected}}" hint-placeholder-val="{{ false }}"><button class="li" onClick="{{askRemove}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"></circle><path d="M2 21a7 7 0 0 1 14 0M16 11h6"></path></svg><span class="sp" style="text-align: left">Remove connection</span></button></sc-if>
+        <button class="li" onClick="{{report}}" style="color: #B42318"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4h11l-1.5 4L16 12H5"></path></svg><span class="sp" style="text-align: left">Report {{p.first}}</span></button>
+      </div>
+      <button class="btn btn-t w100" onClick="{{closeAll}}">Close</button>
+    </div></div>
+  </sc-if>
+
+  <!-- Remove connection -->
+  <sc-if value="{{sheetRemove}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c"><div class="dlg" role="alertdialog" aria-label="Remove connection">
+      <div class="t-h2">Remove {{p.first}} as a connection?</div>
+      <div class="t-s mut">You'll both need to send a new request to reconnect. This doesn't change whether you follow each other.</div>
+      <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{closeAll}}" style="flex: 1">Cancel</button><button class="btn btn-p" onClick="{{remove}}" style="flex: 1; background: #B42318">Remove</button></div>
+    </div></div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"person":{"editor":null},"store":{"editor":null},"act":{"editor":null},"connection":{"editor":"enum","options":["none","pending","received","connected"],"default":"none"},"role":{"editor":"enum","options":["seeker","poster","vendor"],"default":"seeker"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { conn: null, following: false, sheet: null, note: '', sending: false, sendErr: false, toast: '', undo: null }; }
+  componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.t); }
+  flash(m, undo) { this.setState({ toast: m, undo: undo || null }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '', undo: null }), 3000); }
+  renderVals() {
+    const s = this.state;
+    const st = this.props.store, act = this.props.act;
+    const byRole = {
+      seeker: { name: 'Meera Joshi', first: 'Meera', ini: 'MJ', sub: 'Focus Puller · Camera · Senior', roleLabel: 'Job Seeker', city: 'Mumbai', base: 1248, following: 312, s1: 'Focus pulling', s2: 'Anamorphic', s3: 'ARRI Alexa', link: 'Portfolio · meerajoshi.in', bio: 'Fourteen years on Hindi and Marathi features; regular A-camera 1st AC for two Mumbai DOPs.' },
+      poster: { name: 'Kavya Menon', first: 'Kavya', ini: 'KM', sub: 'Producer · Lantern Pictures', roleLabel: 'Job Poster', city: 'Mumbai', base: 3420, following: 186, s1: 'Features', s2: 'Long-form series', s3: 'Hindi & Marathi', link: 'Website · lanternpictures.in', bio: 'Producer at Lantern Pictures, hiring crew per project for Mumbai and Goa schedules.' },
+      vendor: { name: 'Reelhouse Camera Rentals', first: 'Reelhouse', ini: 'RC', sub: 'Camera & lenses · Rent & buy', roleLabel: 'Vendor', city: 'Mumbai', base: 2105, following: 48, s1: 'Camera bodies', s2: 'Cine lenses', s3: 'Monitoring', link: 'Website · reelhouse.in', bio: 'Camera bodies, cine lenses and monitoring for features, series and ads since 2016.' }
+    };
+    // In the unified prototype the viewed person and Follow/Connect state come from shared props.
+    let role = this.props.role ?? 'seeker', P = byRole[role];
+    const who = this.props.person;
+    if (st && who) {
+      const known = Object.values(byRole).find((x) => x.name === who);
+      const m = (st.meta && st.meta[who]) || { sub: 'CrewConnect member', role: 'Job Seeker' };
+      role = m.role === 'Vendor' ? 'vendor' : m.role === 'Job Poster' ? 'poster' : 'seeker';
+      P = known || {
+        name: who, first: who.split(' ')[0], ini: who.split(' ').map((x) => x[0]).join('').slice(0, 2),
+        sub: m.sub, roleLabel: m.role, city: m.city || 'Mumbai', base: m.base || 236, following: m.following || 91,
+        s1: m.s1 || byRole[role].s1, s2: m.s2 || byRole[role].s2, s3: m.s3 || byRole[role].s3,
+        link: m.link || 'Portfolio link', bio: m.bio || (who + ' works in ' + m.sub + '.')
+      };
+    }
+    const conn = st && who ? (st.conn[who] || 'none') : (s.conn ?? (this.props.connection ?? 'none'));
+    const following = st && who ? !!st.follow[who] : s.following;
+    const n = P.base + (following ? 1 : 0);
+    const statusLine = { none: 'Not connected', pending: 'Connection request pending', received: P.first + ' sent you a connection request', connected: 'You are connected' }[conn];
+    const set = (c) => (st && who && act ? act('conn', who, c) : this.setState({ conn: c }));
+    const setF = (v) => (st && who && act ? act('follow', who, v) : this.setState({ following: v }));
+    const inNote = st && who && st.notes && st.notes[who] ? st.notes[who] : 'Loved your work on the Lantern features — would be great to stay in touch for upcoming Goa schedules.';
+    return {
+      p: P, followers: n.toLocaleString('en-IN'), isVendor: role === 'vendor', inNote,
+      avCls: role === 'vendor' ? 'av lg g' : 'av lg', avSm: role === 'vendor' ? 'av g' : 'av',
+      isFollowing: following, notFollowing: !following,
+      isNone: conn === 'none', isPending: conn === 'pending', isReceived: conn === 'received', isConnected: conn === 'connected',
+      statusLine,
+      sheetConnect: s.sheet === 'connect', sheetCancel: s.sheet === 'cancel', sheetMenu: s.sheet === 'menu', sheetRemove: s.sheet === 'remove',
+      note: s.note, noteLen: s.note.length, onNote: (e) => this.setState({ note: e.target.value }),
+      sending: s.sending, notSending: !s.sending, sendErr: s.sendErr,
+      toast: !!s.toast, toastText: s.toast, canUndo: !!s.undo,
+      undo: () => { if (s.undo) s.undo(); this.setState({ toast: '', undo: null }); },
+      follow: () => { setF(true); this.flash('You are now following ' + P.first); },
+      unfollow: () => { setF(false); this.flash('Unfollowed ' + P.first, () => setF(true)); },
+      openConnect: () => this.setState({ sheet: 'connect', sendErr: false }),
+      openCancel: () => this.setState({ sheet: 'cancel' }),
+      openMenu: () => this.setState({ sheet: 'menu' }),
+      askRemove: () => this.setState({ sheet: 'remove' }),
+      closeAll: () => this.setState({ sheet: null }),
+      send: () => {
+        this.setState({ sending: true, sendErr: false });
+        this.a = setTimeout(() => {
+          if (s.note.trim().toLowerCase() === 'fail') return this.setState({ sending: false, sendErr: true });
+          this.setState({ sending: false, sheet: null, note: '' });
+          set('pending');
+          this.flash('Request sent to ' + P.first);
+        }, 900);
+      },
+      cancelReq: () => { set('none'); this.setState({ sheet: null }); this.flash('Request cancelled'); },
+      accept: () => { set('connected'); this.flash('You and ' + P.first + ' are now connected'); },
+      decline: () => { set('none'); this.flash('Request declined'); },
+      remove: () => { set('none'); this.setState({ sheet: null }); this.flash('Connection removed'); },
+      report: () => { this.setState({ sheet: null }); this.flash('Thanks — our team will review this report'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

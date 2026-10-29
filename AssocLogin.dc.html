@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Association login</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar">
+    <sc-if value="{{stEmail}}" hint-placeholder-val="{{ true }}"><a class="iconbtn" href="Welcome.dc.html" aria-label="Back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a></sc-if>
+    <sc-if value="{{stCode}}" hint-placeholder-val="{{ false }}"><button class="iconbtn" onClick="{{back}}" aria-label="Change email"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button></sc-if>
+    <div class="ttl"></div>
+  </div>
+  <div class="sc" style="padding: 16px 24px 24px; gap: 24px">
+    <sc-if value="{{stEmail}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 24px">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <span class="badge b-p" style="align-self: flex-start"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"></path></svg>Association account</span>
+          <h1 class="t-d">Association login</h1>
+          <p class="t-b mut">For associations authorised to publish notices on CrewConnect. Enter your registered email and we'll send a six-digit code.</p>
+        </div>
+        <div class="fld">
+          <label class="lbl" for="em">Registered email <span class="req">*</span></label>
+          <input id="em" type="email" class="{{inpCls}}" placeholder="notices@association.org" value="{{email}}" onChange="{{onEmail}}">
+          <sc-if value="{{errOn}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{err}}</span></sc-if>
+        </div>
+        <div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.01"></path></svg><div>Association accounts are created by CrewConnect admins. There's no self sign-up. To request access, contact <b>[SUPPORT EMAIL TBC]</b>.</div></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{stCode}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 22px">
+        <div style="display: flex; flex-direction: column; gap: 10px"><h1 class="t-d">Check your email</h1><p class="t-b mut">We sent a six-digit code to <b style="color: #1D1B22">{{email}}</b>.</p></div>
+        <div class="fld">
+          <label class="lbl" for="otp">Verification code</label>
+          <div style="position: relative">
+            <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px"><sc-for list="{{boxes}}" as="b" hint-placeholder-count="6"><div style="{{b.style}}">{{b.ch}}</div></sc-for></div>
+            <input id="otp" value="{{code}}" onChange="{{onCode}}" inputmode="numeric" maxlength="6" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; border: 0">
+          </div>
+          <sc-if value="{{codeErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Enter all 6 digits of the code.</span></sc-if>
+        </div>
+        <div class="row t-s" style="justify-content: center"><span class="mut">Didn't get it?</span><span class="btn btn-t btn-sm">Resend code</span></div>
+      </div>
+    </sc-if>
+  </div>
+  <div style="flex: none; padding: 12px 24px 36px">
+    <sc-if value="{{stEmail}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{sendCode}}">Continue</button></sc-if>
+    <sc-if value="{{codeReady}}" hint-placeholder-val="{{ false }}"><a class="btn btn-p w100" href="AssocNotices.dc.html">Verify &amp; log in</a></sc-if>
+    <sc-if value="{{codeNotReady}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" onClick="{{tryVerify}}">Verify &amp; log in</button></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { step: 'email', email: '', err: '', code: '', codeErr: false }; }
+  renderVals() {
+    const s = this.state;
+    const boxes = [0, 1, 2, 3, 4, 5].map((i) => {
+      const ch = s.code[i] || '';
+      const active = i === Math.min(s.code.length, 5);
+      const b = s.codeErr ? '#B42318' : active ? '#5B2A8C' : ch ? '#B79AD6' : '#D3CDD8';
+      return { ch, style: 'height:56px;border-radius:12px;border:1.5px solid ' + b + ';background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700' + (active && !s.codeErr ? ';box-shadow:0 0 0 3px #EFE7F7' : '') };
+    });
+    return {
+      stEmail: s.step === 'email', stCode: s.step === 'code',
+      email: s.email, err: s.err, errOn: !!s.err, inpCls: s.err ? 'inp bad' : 'inp',
+      onEmail: (e) => this.setState({ email: e.target.value, err: '' }),
+      sendCode: () => {
+        const e = s.email.trim();
+        if (!e) return this.setState({ err: 'Enter your registered email address.' });
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) return this.setState({ err: 'Enter a valid email address, like notices@association.org' });
+        if (!/association|guild|council|forum|\.org$/i.test(e)) return this.setState({ err: 'This email isn’t registered as an association account. Use the email your admin set up.' });
+        this.setState({ step: 'code' });
+      },
+      back: () => this.setState({ step: 'email', code: '', codeErr: false }),
+      code: s.code, boxes, codeErr: s.codeErr,
+      onCode: (e) => this.setState({ code: e.target.value.replace(/\D/g, '').slice(0, 6), codeErr: false }),
+      codeReady: s.step === 'code' && s.code.length === 6,
+      codeNotReady: s.step === 'code' && s.code.length < 6,
+      tryVerify: () => this.setState({ codeErr: true })
+    };
+  }
+}
+</script>
+</body>
+</html>
