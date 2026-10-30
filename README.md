@@ -71,3 +71,10 @@ reference a script puts together while the page runs (for example
 
 Serve the folder (e.g. `python3 -m http.server`) and open `Prototype.dc.html`;
 some browsers block the scripts over file://.
+
+## Deployment (Vercel)
+
+This repository is configured for static hosting on Vercel with:
+- `vercel.json` — handles header configs, rewrites, and MIME types.
+- `index.html` — entry fallback redirecting to `Prototype.dc.html`.
+
