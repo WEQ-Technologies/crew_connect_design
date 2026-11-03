@@ -17,10 +17,12 @@ rather than copy wholesale.
 - `AssocLogin.dc.html` — referenced resource
 - `AssocNotices.dc.html` — referenced resource
 - `AssociationProfile.dc.html` — referenced resource
+- `Associations.dc.html` — referenced resource
 - `Calendar.dc.html` — referenced resource
 - `Connections.dc.html` — referenced resource
 - `CreateJob.dc.html` — referenced resource
 - `Discover.dc.html` — referenced resource
+- `DiscoverFeed.dc.html` — referenced resource
 - `FollowList.dc.html` — referenced resource
 - `FollowingFeed.dc.html` — referenced resource
 - `ForumWall.dc.html` — referenced resource
@@ -71,10 +73,3 @@ reference a script puts together while the page runs (for example
 
 Serve the folder (e.g. `python3 -m http.server`) and open `Prototype.dc.html`;
 some browsers block the scripts over file://.
-
-## Deployment (Vercel)
-
-This repository is configured for static hosting on Vercel with:
-- `vercel.json` — handles header configs, rewrites, and MIME types.
-- `index.html` — entry fallback redirecting to `Prototype.dc.html`.
-

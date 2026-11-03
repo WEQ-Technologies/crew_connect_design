@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -35,11 +35,11 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <div style="display: flex; flex-direction: column; gap: 12px">
         <sc-for list="{{notices}}" as="n" hint-placeholder-count="4">
           <div class="card" style="gap: 10px">
-            <a href="AssociationProfile.dc.html" class="row" style="gap: 10px; text-decoration: none; color: #1D1B22">
+            <a href="AssociationProfile.dc.html" data-assoc="{{n.a}}" class="row" style="gap: 10px; text-decoration: none; color: #1A1820">
               <span style="{{n.logo}}" role="img" aria-label="{{n.assoc}} logo">{{n.mono}}</span>
-              <span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.assoc}}</span><span class="t-c mut">{{n.date}}</span></span>
+              <span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.assoc}}</span><span class="t-c mut">{{n.date}}</span></span><sc-if value="{{n.isNew}}" hint-placeholder-val="{{ false }}"><span class="badge b-g">New</span></sc-if>
             </a>
-            <a href="NoticeDetail.dc.html" style="text-decoration: none; color: #1D1B22; display: flex; flex-direction: column; gap: 6px">
+            <a href="NoticeDetail.dc.html" style="text-decoration: none; color: #1A1820; display: flex; flex-direction: column; gap: 6px">
               <span class="t-h3">{{n.title}}</span>
               <span class="t-s mut clamp2">{{n.preview}}</span>
             </a>
@@ -58,15 +58,15 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   constructor(p) {
     super(p);
     this.A = {
       CTG: { name: 'Cine Technicians Guild of Maharashtra', short: 'Cine Technicians Guild', bg: '#EFE7F7', fg: '#4A1F73' },
-      WLA: { name: 'Western India Film Lighting Association', short: 'Film Lighting Assn.', bg: '#E3F3E9', fg: '#17663A' },
+      WLA: { name: 'Western India Film Lighting Association', short: 'Film Lighting Assn.', bg: '#E6F2DC', fg: '#2C6619' },
       SSP: { name: 'Screen Sound Professionals Forum', short: 'Screen Sound Forum', bg: '#FFF2DB', fg: '#8A5300' },
-      IPC: { name: 'Independent Producers Council', short: 'Producers Council', bg: '#F3F1F4', fg: '#1D1B22' }
+      IPC: { name: 'Independent Producers Council', short: 'Producers Council', bg: '#F2F0F5', fg: '#1A1820' }
     };
     this.data = [
       { a: 'CTG', date: '27 Oct 2026', title: 'Revised minimum day rates for camera and lighting crew — effective 1 December', preview: 'Following the general body meeting on 20 October, the revised minimum day rates for camera assistants, focus pullers and lighting technicians are published below. Members should quote these rates on all new engagements.', pdf: true },
@@ -80,13 +80,14 @@ class Component extends DCLogic {
   componentWillUnmount() { clearTimeout(this.t); }
   renderVals() {
     const s = this.state;
-    const list = this.data.filter((n) => s.f === 'All' || n.a === s.f);
+    const all = ((this.props.store && this.props.store.posts) || []).map((n) => ({ ...n, isNew: true })).concat(this.data);
+    const list = all.filter((n) => s.f === 'All' || n.a === s.f);
     const keys = ['All', 'CTG', 'WLA', 'SSP', 'IPC'];
     return {
       assocs: keys.map((k) => ({ label: k === 'All' ? 'All associations' : this.A[k].short, on: s.f === k, cls: s.f === k ? 'chip on' : 'chip', pick: () => { this.setState({ f: k, loading: true }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ loading: false }), 500); } })),
       notices: list.map((n) => {
         const A = this.A[n.a];
-        return { ...n, assoc: A.name, mono: n.a, logo: 'width:40px;height:40px;border-radius:10px;flex:none;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;letter-spacing:.04em;border:1px solid #E7E3EA;background:' + A.bg + ';color:' + A.fg };
+        return { ...n, isNew: !!n.isNew, assoc: A.name, mono: n.a, logo: 'width:40px;height:40px;border-radius:10px;flex:none;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;letter-spacing:.04em;border:1px solid #E8E5EE;background:' + A.bg + ';color:' + A.fg };
       }),
       count: s.loading ? 'Loading…' : list.length + (list.length === 1 ? ' notice' : ' notices'),
       loading: s.loading, ready: !s.loading && list.length > 0, empty: !s.loading && list.length === 0,

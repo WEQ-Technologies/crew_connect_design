@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Discover</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <sc-if value="{{isAssoc}}" hint-placeholder-val="{{ false }}">
+    <div class="bar"><a class="iconbtn" href="AssocNotices.dc.html" aria-label="Back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">Discover</div></div>
+  </sc-if>
+  <div style="flex: none; padding: 0 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <sc-if value="{{notAssoc}}" hint-placeholder-val="{{ true }}"><div style="padding-top: 20px"><div class="t-h1">Discover</div></div></sc-if>
+    <div class="seg" role="tablist" style="grid-template-columns: 1fr 1fr">
+      <button role="tab" class="{{feedTabCls}}" aria-selected="{{onFeed}}" onClick="{{toFeed}}">Feed</button>
+      <button role="tab" class="{{custTabCls}}" aria-selected="{{onCust}}" onClick="{{toCust}}">Customise Feed</button>
+    </div>
+    <sc-if value="{{onFeed}}" hint-placeholder-val="{{ true }}">
+      <div class="chips x"><sc-for list="{{kinds}}" as="k" hint-placeholder-count="3"><button class="{{k.cls}}" aria-pressed="{{k.on}}" onClick="{{k.pick}}">{{k.label}}</button></sc-for></div>
+    </sc-if>
+  </div>
+
+  <!-- FEED -->
+  <sc-if value="{{onFeed}}" hint-placeholder-val="{{ true }}">
+    <div class="sc" style="padding-top: 0; gap: 12px">
+      <div class="row t-c mut"><span class="sp">{{feedCount}}</span><span>Newest first</span></div>
+      <sc-for list="{{feed}}" as="f" hint-placeholder-count="4">
+        <div>
+          <sc-if value="{{f.isJob}}" hint-placeholder-val="{{ true }}">
+            <a href="JobDetail.dc.html" class="card" style="text-decoration: none; gap: 8px">
+              <div class="row"><span class="badge b-p"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg>Job post</span><span class="sp"></span><span class="t-c mut">{{f.when}}</span></div>
+              <div class="t-h3">{{f.title}}</div>
+              <div class="t-s mut">{{f.org}}</div>
+              <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"></path><circle cx="7.5" cy="8" r="1.5"></circle></svg>{{f.cat}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{f.loc}}</span></div>
+              <div class="pay">{{f.pay}}</div>
+            </a>
+          </sc-if>
+          <sc-if value="{{f.isNotice}}" hint-placeholder-val="{{ false }}">
+            <a href="NoticeDetail.dc.html" class="card" style="text-decoration: none; gap: 8px">
+              <div class="row"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a3 3 0 0 1 0 6"></path></svg>Association notice</span><sc-if value="{{f.isNew}}" hint-placeholder-val="{{ false }}"><span class="badge b-w">New</span></sc-if><span class="sp"></span><span class="t-c mut">{{f.when}}</span></div>
+              <div class="row" style="gap: 10px"><span style="{{f.logo}}" aria-hidden="true">{{f.a}}</span><span class="t-s b sp trunc">{{f.assoc}}</span></div>
+              <div class="t-h3">{{f.title}}</div>
+              <div class="t-s mut clamp2">{{f.preview}}</div>
+              <sc-if value="{{f.pdf}}" hint-placeholder-val="{{ false }}"><span class="tag" style="align-self: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"></path><path d="M14 3v5h5"></path></svg>PDF attached</span></sc-if>
+            </a>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- CUSTOMISE: filters -->
+  <sc-if value="{{showPanel}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 0; gap: 16px">
+      <div class="t-s mut">Pick the kinds of updates you care about. Only updates from your <b style="color: #1A1820">{{connCount}} connections</b> are shown.</div>
+      <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="Search by name, skill or link" value="{{dq}}" onChange="{{onQ}}" aria-label="Search connection updates"></div>
+      <div class="fld"><span class="lbl">Update type</span>
+        <div class="chips"><sc-for list="{{types}}" as="t" hint-placeholder-count="3"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+        <span class="help">Select none to include every type.</span>
+      </div>
+      <div class="fld"><span class="lbl">Location</span>
+        <div class="chips"><sc-for list="{{locs}}" as="l" hint-placeholder-count="3"><button class="{{l.cls}}" aria-pressed="{{l.on}}" onClick="{{l.pick}}">{{l.label}}</button></sc-for></div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{showPanel}}" hint-placeholder-val="{{ false }}">
+    <div class="foot">
+      <button class="btn btn-s" style="flex: 1" onClick="{{clearAll}}">Clear</button>
+      <button class="btn btn-p" style="flex: 2" onClick="{{apply}}">{{applyLabel}}</button>
+    </div>
+  </sc-if>
+
+  <!-- CUSTOMISE: results -->
+  <sc-if value="{{showResults}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 0; gap: 12px">
+      <div class="card" style="padding: 12px 14px; gap: 10px; background: #F7F2FB; border-color: #EFE7F7">
+        <div class="row"><span class="t-s b sp">{{resCount}}</span><button class="btn btn-t btn-sm" onClick="{{edit}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>Edit filters</button></div>
+        <div class="chips"><sc-for list="{{activeTags}}" as="a" hint-placeholder-count="2"><span class="tag" style="background: #FFFFFF">{{a}}</span></sc-for></div>
+        <button class="btn btn-t btn-sm" style="align-self: flex-start; padding: 0" onClick="{{clearAll}}">Clear filters</button>
+      </div>
+      <sc-for list="{{results}}" as="u" hint-placeholder-count="4">
+        <a href="UserProfile.dc.html" aria-label="Open {{u.who}}" class="card" style="text-decoration: none; gap: 10px">
+          <div class="row" style="gap: 12px"><span class="{{u.avCls}}">{{u.ini}}</span><span class="sp" style="display: flex; flex-direction: column"><span class="t-h3">{{u.who}}</span><span class="t-c mut">{{u.sub}} · Connection</span></span><span class="t-c mut">{{u.when}}</span></div>
+          <div class="row" style="gap: 8px"><span class="{{u.badge}}">{{u.typeLabel}}</span><span class="t-s b">{{u.text}}</span></div>
+          <div class="t-s" style="padding: 10px 12px; background: #F7F6FA; border-radius: 10px; display: flex; gap: 8px; align-items: center"><sc-if value="{{u.isLink}}" hint-placeholder-val="{{ true }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></sc-if><sc-if value="{{u.isSkill}}" hint-placeholder-val="{{ false }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"></path></svg></sc-if><sc-if value="{{u.isLoc}}" hint-placeholder-val="{{ false }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></sc-if><span class="sp">{{u.detail}}</span></div>
+          <div class="t-c mut row" style="gap: 4px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{u.city}}</div>
+        </a>
+      </sc-for>
+      <sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}">
+        <div class="empty"><div class="t-h2">No matching updates</div><div class="t-s mut" style="max-width: 260px">None of your connections have updates for these filters yet.</div><button class="btn btn-s" onClick="{{edit}}">Change filters</button></div>
+      </sc-if>
+    </div>
+  </sc-if>
+  <sc-if value="{{is_seeker}}" hint-placeholder-val="{{ true }}">
+    <nav class="nav" aria-label="Main">
+      <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+      <a class="on" href="DiscoverFeed.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
+      <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
+      <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
+      <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
+    </nav>
+  </sc-if>
+  <sc-if value="{{is_poster}}" hint-placeholder-val="{{ false }}">
+    <nav class="nav" aria-label="Main">
+      <a href="PosterHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+      <a class="on" href="DiscoverFeed.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
+      <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
+      <a href="MyJobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>My Jobs</a>
+      <a href="PosterProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-3h4v3"></path></svg></span>Profile</a>
+    </nav>
+  </sc-if>
+  <sc-if value="{{is_vendor}}" hint-placeholder-val="{{ false }}">
+    <nav class="nav" aria-label="Main">
+      <a href="VendorHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+      <a class="on" href="DiscoverFeed.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
+      <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
+      <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>My Listings</a>
+      <a href="VendorProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg></span>Profile</a>
+    </nav>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"role":{"editor":"enum","options":["seeker","poster","vendor","association"],"default":"seeker"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.A = {
+      CTG: { name: 'Cine Technicians Guild of Maharashtra', short: 'Cine Technicians Guild', bg: '#EFE7F7', fg: '#4A1F73' },
+      WLA: { name: 'Western India Film Lighting Association', short: 'Film Lighting Assn.', bg: '#E6F2DC', fg: '#2C6619' },
+      SSP: { name: 'Screen Sound Professionals Forum', short: 'Screen Sound Forum', bg: '#FFF2DB', fg: '#8A5300' },
+      IPC: { name: 'Independent Producers Council', short: 'Producers Council', bg: '#F2F0F5', fg: '#1A1820' }
+    };
+    this.notices = [
+      { a: 'CTG', date: '27 Oct 2026', title: 'Revised minimum day rates for camera and lighting crew — effective 1 December', preview: 'Following the general body meeting on 20 October, the revised minimum day rates for camera assistants, focus pullers and lighting technicians are published below. Members should quote these rates on all new engagements.', pdf: true },
+      { a: 'WLA', date: '25 Oct 2026', title: 'Mandatory electrical safety refresher — November batches open', preview: 'All member gaffers and best boys working on sets above 50 kW must complete the annual safety refresher. Four batches will run at Goregaon in November.', pdf: true },
+      { a: 'SSP', date: '22 Oct 2026', title: 'Wireless frequency guidance for outdoor shoots in Mumbai', preview: 'Members have reported interference near Film City during evening schedules. We recommend the frequency plan in the attached note until further notice.', pdf: false },
+      { a: 'CTG', date: '18 Oct 2026', title: 'Office closed for Diwali, 7–10 November', preview: 'The Guild office and helpline will be closed from 7 to 10 November. Emergency on-set grievances can still be raised by email.', pdf: false },
+      { a: 'WLA', date: '12 Oct 2026', title: 'New member registration window: 1–30 November', preview: 'Applications for new members open on 1 November. Bring two references from existing members and proof of three credits.', pdf: true }
+    ];
+    this.jobs = [
+      { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', cat: 'Camera', loc: 'Film City, Mumbai', pay: '₹8,000 – ₹12,000 / day', ago: '2d ago', d: 2 },
+      { title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', cat: 'Camera', loc: 'Ramoji Film City, Hyderabad', pay: '₹10,000 – ₹14,000 / day', ago: '2d ago', d: 2 },
+      { title: 'Assistant Editor — Web Series (8 episodes)', org: 'Northlight Studios', cat: 'Editing & Post', loc: 'Andheri West, Mumbai', pay: '₹55,000 – ₹70,000 / month', ago: '3d ago', d: 3 },
+      { title: 'Location Sound Recordist — Wildlife Documentary', org: 'Kite & Kettle Films', cat: 'Sound', loc: 'Leh, Ladakh (travel)', pay: '₹6,000 – ₹9,000 / day', ago: '4d ago', d: 4 },
+      { title: 'Gaffer — TVC, 2-day shoot', org: 'Pinewood Ads', cat: 'Lighting & Grip', loc: 'Bandra, Mumbai', pay: 'Payment not specified', ago: '5d ago', d: 5 },
+      { title: 'Colourist — Independent Feature (DaVinci Resolve)', org: 'Saffron Frame', cat: 'Editing & Post', loc: 'Indiranagar, Bengaluru', pay: '₹2,50,000 project fee', ago: '6d ago', d: 6 }
+    ];
+    this.nd = { '27 Oct 2026': 3, '25 Oct 2026': 5, '22 Oct 2026': 8, '18 Oct 2026': 12, '12 Oct 2026': 18 };
+    this.updates = [
+      { who: 'Farhan Siddiqui', type: 'link', text: 'Added a new work link', detail: 'Portfolio · farhansiddiqui.in/camera-reel', city: 'Mumbai', when: '3h ago' },
+      { who: 'Ananya Iyer', type: 'skill', text: 'Updated their Skill Board', detail: 'Added DaVinci Resolve and Assembly cuts', city: 'Mumbai', when: '5h ago' },
+      { who: 'Arjun Kulkarni', type: 'location', text: 'Changed their location', detail: 'Now based in Pune', city: 'Pune', when: 'Yesterday' },
+      { who: 'Kavya Menon', type: 'link', text: 'Added a new work link', detail: 'Website · lanternpictures.in/showreel', city: 'Mumbai', when: 'Yesterday' },
+      { who: 'Farhan Siddiqui', type: 'skill', text: 'Updated their Skill Board', detail: 'Added RED and Data wrangling', city: 'Mumbai', when: '2 days ago' },
+      { who: 'Reelhouse Camera Rentals', type: 'location', text: 'Updated their business location', detail: 'Goregaon East, Mumbai', city: 'Mumbai', when: '3 days ago' },
+      { who: 'Ananya Iyer', type: 'link', text: 'Added a new work link', detail: 'IMDb · imdb.com/name/ananya-iyer', city: 'Mumbai', when: '4 days ago' },
+      { who: 'Arjun Kulkarni', type: 'skill', text: 'Updated their Skill Board', detail: 'Added Sound Devices and Boom ops', city: 'Pune', when: '1 week ago' }
+    ];
+    this.subs = { 'Farhan Siddiqui': '1st Assistant Camera', 'Ananya Iyer': 'Editor', 'Arjun Kulkarni': 'Sound Recordist', 'Kavya Menon': 'Producer · Lantern Pictures', 'Reelhouse Camera Rentals': 'Vendor · Camera & lenses' };
+    this.T = { link: 'New work links', skill: 'Skill Board updates', location: 'Location updates' };
+    this.state = { tab: 'feed', kind: 'all', dTypes: [], dLoc: 'Any', dq: '', applied: null, editing: false };
+  }
+  renderVals() {
+    const s = this.state, role = this.props.role ?? 'seeker';
+    const store = this.props.store || {};
+    const conn = store.conn || null;
+    const isConn = (n) => !conn || conn[n] === 'connected';
+    // FEED
+    const posts = (store.posts || []).map((n) => ({ ...n, isNew: true, d: 0, when: 'Just now' }));
+    const notices = posts.concat(this.notices.map((n) => ({ ...n, d: this.nd[n.date] || 9, when: n.date.replace(' 2026', '') })));
+    const items = [];
+    if (s.kind !== 'notices') this.jobs.forEach((j) => items.push({ ...j, isJob: true, isNotice: false, when: j.ago }));
+    if (s.kind !== 'jobs') notices.forEach((n) => { const A = this.A[n.a]; items.push({ ...n, isJob: false, isNotice: true, isNew: !!n.isNew, pdf: !!n.pdf, assoc: A.name,
+      logo: 'width:32px;height:32px;border-radius:9px;flex:none;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:1px solid #E8E5EE;background:' + A.bg + ';color:' + A.fg }); });
+    items.sort((a, b) => a.d - b.d);
+    // CUSTOMISE
+    const match = (f) => this.updates.filter((u) => isConn(u.who)
+      && (!f.types.length || f.types.indexOf(u.type) >= 0)
+      && (f.loc === 'Any' || u.city === f.loc)
+      && (!f.q.trim() || (u.who + ' ' + u.text + ' ' + u.detail).toLowerCase().includes(f.q.trim().toLowerCase())));
+    const draft = { types: s.dTypes, loc: s.dLoc, q: s.dq };
+    const draftN = match(draft).length;
+    const res = s.applied ? match(s.applied) : [];
+    const conns = Object.keys(this.subs).filter(isConn).length;
+    const chip = (on) => (on ? 'chip on' : 'chip');
+    const onCust = s.tab === 'cust';
+    const tags = s.applied ? (s.applied.types.length ? s.applied.types.map((t) => this.T[t]) : ['All update types']).concat(s.applied.loc === 'Any' ? [] : [s.applied.loc], s.applied.q.trim() ? ['“' + s.applied.q.trim() + '”'] : []) : [];
+    const BADGE = { link: 'badge b-p', skill: 'badge b-g', location: 'badge b-w' };
+    const SHORT = { link: 'Work link', skill: 'Skill Board', location: 'Location' };
+    return {
+      isAssoc: role === 'association', notAssoc: role !== 'association',
+      is_seeker: role === 'seeker', is_poster: role === 'poster', is_vendor: role === 'vendor',
+      onFeed: !onCust, onCust,
+      feedTabCls: !onCust ? 'on' : '', custTabCls: onCust ? 'on' : '',
+      toFeed: () => this.setState({ tab: 'feed' }), toCust: () => this.setState({ tab: 'cust' }),
+      kinds: [['all', 'All'], ['jobs', 'Job posts'], ['notices', 'Association & Forum updates']].map(([k, l]) => ({ label: l, on: s.kind === k, cls: chip(s.kind === k), pick: () => this.setState({ kind: k }) })),
+      feed: items, feedCount: items.length + (items.length === 1 ? ' post' : ' posts'),
+      showPanel: onCust && (!s.applied || s.editing), showResults: onCust && !!s.applied && !s.editing,
+      connCount: conns,
+      dq: s.dq, onQ: (e) => this.setState({ dq: e.target.value }),
+      types: ['link', 'skill', 'location'].map((t) => { const on = s.dTypes.indexOf(t) >= 0; return { label: this.T[t], on, cls: chip(on), pick: () => this.setState({ dTypes: on ? s.dTypes.filter((x) => x !== t) : s.dTypes.concat([t]) }) }; }),
+      locs: ['Any', 'Mumbai', 'Pune'].map((l) => ({ label: l === 'Any' ? 'Any location' : l, on: s.dLoc === l, cls: chip(s.dLoc === l), pick: () => this.setState({ dLoc: l }) })),
+      applyLabel: draftN ? 'Apply · ' + draftN + (draftN === 1 ? ' update' : ' updates') : 'Apply filters',
+      apply: () => this.setState({ applied: { types: s.dTypes.slice(), loc: s.dLoc, q: s.dq }, editing: false }),
+      edit: () => this.setState({ editing: true }),
+      clearAll: () => this.setState({ dTypes: [], dLoc: 'Any', dq: '', applied: null, editing: false }),
+      activeTags: tags,
+      resCount: res.length + (res.length === 1 ? ' update from your connections' : ' updates from your connections'),
+      results: res.map((u) => ({ ...u, sub: this.subs[u.who] || '', ini: u.who.split(' ').map((w) => w[0]).slice(0, 2).join(''), avCls: u.who === 'Reelhouse Camera Rentals' ? 'av g' : 'av', badge: BADGE[u.type], typeLabel: SHORT[u.type], isLink: u.type === 'link', isSkill: u.type === 'skill', isLoc: u.type === 'location' })),
+      noResults: !!s.applied && res.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

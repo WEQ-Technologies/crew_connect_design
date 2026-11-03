@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -37,6 +37,10 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <a href="MyListings.dc.html" class="card" style="padding: 14px; gap: 2px; text-decoration: none"><div class="t-h1">2</div><div class="t-c mut">Drafts to finish</div></a>
     </div>
 
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <a href="Discover.dc.html" class="card row" style="padding: 12px 14px; gap: 10px; text-decoration: none; flex-direction: row"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><span class="t-s b">Discover vendors</span></a>
+      <a href="Invoices.dc.html" class="card row" style="padding: 12px 14px; gap: 10px; text-decoration: none; flex-direction: row"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span><span class="t-s b">Invoices</span></a>
+    </div>
     <div class="sec"><h2>Recently updated</h2><a href="MyListings.dc.html" class="btn btn-t btn-sm">All listings</a></div>
     <div class="list">
       <a class="li" href="ListingForm.dc.html"><span class="sq" style="width: 40px; height: 40px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><div class="sp"><div class="t-h3 trunc">ARRI Alexa Mini LF — full kit</div><div class="t-c mut">Rent · ₹28,000 / day</div></div><span class="badge b-g">Published</span></a>
@@ -48,9 +52,9 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </div>
   <nav class="nav" aria-label="Main">
     <a class="on" href="VendorHome.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+    <a href="DiscoverFeed.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
+    <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
     <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>My Listings</a>
-    <a href="Discover.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>Discover</a>
-    <a href="Invoices.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>Invoices</a>
     <a href="VendorProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg></span>Profile</a>
   </nav>
 </div>

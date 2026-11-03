@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -40,7 +40,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 
     <div class="t-over">Compare plans</div>
     <div class="list">
-      <div class="li t-c" style="min-height: 40px; background: #F3F1F4; font-weight: 700; color: #58535F; cursor: default"><span class="sp">Benefit</span><span style="width: 76px; text-align: center">Free</span><span style="width: 76px; text-align: center; color: #5B2A8C">Premium</span></div>
+      <div class="li t-c" style="min-height: 40px; background: #F2F0F5; font-weight: 700; color: #545060; cursor: default"><span class="sp">Benefit</span><span style="width: 76px; text-align: center">Free</span><span style="width: 76px; text-align: center; color: #5B2A8C">Premium</span></div>
       <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
         <div class="li t-s" style="cursor: default"><span class="sp">{{r.label}}</span><span style="width: 76px; text-align: center"><span class="ph-tag">{{r.free}}</span></span><span style="width: 76px; text-align: center"><span class="ph-tag">{{r.prem}}</span></span></div>
       </sc-for>
@@ -57,7 +57,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <div class="sheet" role="dialog" aria-label="{{sheetTitle}}">
         <div class="grab"></div>
         <div class="t-h2">{{sheetTitle}}</div>
-        <div class="card" style="gap: 2px; background: #FAF8F5">
+        <div class="card" style="gap: 2px; background: #F7F6FA">
           <div class="kv"><span>Plan</span><span>Premium</span></div>
           <div class="kv"><span>{{expiryKey}}</span><span>26 Nov 2026 <span class="ph-tag">[TBC]</span></span></div>
           <div class="kv"><span>Amount</span><span>₹100</span></div>

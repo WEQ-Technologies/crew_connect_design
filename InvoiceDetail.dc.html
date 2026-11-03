@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -22,29 +22,33 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
     <sc-if value="{{paid}}" hint-placeholder-val="{{ false }}"><span class="badge b-g" style="margin-right: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Paid</span></sc-if>
     <sc-if value="{{sent}}" hint-placeholder-val="{{ true }}"><span class="badge b-p" style="margin-right: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>Sent</span></sc-if>
   </div>
-  <div class="sc" style="gap: 14px; background: #F3F1F4; padding-top: 12px">
-    <div style="background: #fff; border-radius: 12px; border: 1px solid #E7E3EA; padding: 20px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 1px 2px rgba(29,27,34,.06)">
+  <div class="sc" style="gap: 14px; background: #F2F0F5; padding-top: 12px">
+    <div style="background: #fff; border-radius: 12px; border: 1px solid #E8E5EE; padding: 20px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 1px 2px rgba(29,27,34,.06)">
       <div class="row" style="align-items: flex-start">
         <div class="sp"><div class="t-over" style="color: #5B2A8C">Tax invoice</div><div class="t-h2" style="margin-top: 4px">Priya Nair</div><div class="t-c mut">Focus Puller · Mumbai</div><div class="t-c mut">priya.nair@gmail.com</div></div>
         <div style="text-align: right"><div class="t-c mut">Invoice no.</div><div class="t-s b">INV-2026-014</div></div>
+      </div>
+      <div style="border-left: 3px solid #5B2A8C; background: #F7F2FB; border-radius: 0 10px 10px 0; padding: 10px 14px">
+        <div class="t-over" style="color: #5B2A8C">Project</div>
+        <div class="t-h2" style="margin-top: 2px">Untitled Hindi Feature</div>
       </div>
       <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
         <div><div class="t-c mut">Bill to</div><div class="t-s b">Lantern Pictures</div><div class="t-c mut">GSTIN 27AABCL4821F1Z6</div></div>
         <div style="text-align: right"><div class="t-c mut">Issued · Due</div><div class="t-s b">18 Oct · 2 Nov 2026</div></div>
       </div>
-      <div style="border: 1px solid #E7E3EA; border-radius: 10px; overflow: hidden">
-        <div class="row t-c" style="background: #F3F1F4; padding: 8px 10px; font-weight: 700; color: #58535F"><span class="sp">Item</span><span style="width: 62px; text-align: right">Rate</span><span style="width: 34px; text-align: right">Days</span><span style="width: 66px; text-align: right">Amount</span></div>
-        <div class="row t-c" style="padding: 10px; border-top: 1px solid #E7E3EA; align-items: flex-start"><span class="sp" style="font-size: 12px; line-height: 16px">Focus pulling — principal photography</span><span style="width: 62px; text-align: right">₹10,000</span><span style="width: 34px; text-align: right">6</span><span style="width: 66px; text-align: right; font-weight: 700">₹60,000</span></div>
-        <div class="row t-c" style="padding: 10px; border-top: 1px solid #E7E3EA"><span class="sp" style="font-size: 12px">Camera prep day</span><span style="width: 62px; text-align: right">₹5,000</span><span style="width: 34px; text-align: right">1</span><span style="width: 66px; text-align: right; font-weight: 700">₹5,000</span></div>
+      <div style="border: 1px solid #E8E5EE; border-radius: 10px; overflow: hidden">
+        <div class="row t-c" style="background: #F2F0F5; padding: 8px 10px; font-weight: 700; color: #545060"><span class="sp">Item</span><span style="width: 62px; text-align: right">Rate</span><span style="width: 34px; text-align: right">Days</span><span style="width: 66px; text-align: right">Amount</span></div>
+        <div class="row t-c" style="padding: 10px; border-top: 1px solid #E8E5EE; align-items: flex-start"><span class="sp" style="font-size: 12px; line-height: 16px">Focus pulling — principal photography</span><span style="width: 62px; text-align: right">₹10,000</span><span style="width: 34px; text-align: right">6</span><span style="width: 66px; text-align: right; font-weight: 700">₹60,000</span></div>
+        <div class="row t-c" style="padding: 10px; border-top: 1px solid #E8E5EE"><span class="sp" style="font-size: 12px">Camera prep day</span><span style="width: 62px; text-align: right">₹5,000</span><span style="width: 34px; text-align: right">1</span><span style="width: 66px; text-align: right; font-weight: 700">₹5,000</span></div>
       </div>
       <div style="display: flex; flex-direction: column; gap: 2px">
         <div class="kv" style="font-size: 13px"><span>Subtotal</span><span>₹65,000</span></div>
         <div class="kv" style="font-size: 13px"><span>GST @ 18%</span><span>₹11,700</span></div>
         <div class="hr" style="margin: 6px 0"></div>
-        <div class="kv"><span style="color: #1D1B22; font-weight: 800">Total</span><span style="font-weight: 800; font-size: 18px">₹76,700</span></div>
+        <div class="kv"><span style="color: #1A1820; font-weight: 800">Total</span><span style="font-weight: 800; font-size: 18px">₹76,700</span></div>
         <div class="t-c mut" style="text-align: right">Rupees seventy-six thousand seven hundred only</div>
       </div>
-      <div class="t-c mut" style="border-top: 1px dashed #D3CDD8; padding-top: 10px">Payment details and terms: <span class="ph-tag">[TBC]</span></div>
+      <div class="t-c mut" style="border-top: 1px dashed #D4D0DC; padding-top: 10px">Payment details and terms: <span class="ph-tag">[TBC]</span></div>
     </div>
 
     <div class="file" style="background: #fff"><div class="fico">PDF</div><div class="sp"><div class="t-h3 trunc">INV-2026-014.pdf</div><div class="t-c mut">Generated from this invoice</div></div></div>
