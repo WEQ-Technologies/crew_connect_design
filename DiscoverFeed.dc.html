@@ -39,12 +39,12 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <sc-for list="{{feed}}" as="f" hint-placeholder-count="4">
         <div>
           <sc-if value="{{f.isJob}}" hint-placeholder-val="{{ true }}">
-            <a href="JobDetail.dc.html" class="card" style="text-decoration: none; gap: 8px">
+            <a href="JobDetail.dc.html" data-job="{{f.variant}}" class="card" style="text-decoration: none; gap: 8px">
               <div class="row"><span class="badge b-p"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg>Job post</span><span class="sp"></span><span class="t-c mut">{{f.when}}</span></div>
               <div class="t-h3">{{f.title}}</div>
               <div class="t-s mut">{{f.org}}</div>
-              <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"></path><circle cx="7.5" cy="8" r="1.5"></circle></svg>{{f.cat}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{f.loc}}</span></div>
-              <div class="pay">{{f.pay}}</div>
+              <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"></path><circle cx="7.5" cy="8" r="1.5"></circle></svg>{{f.cat}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{f.loc}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{f.dur}}</span></div>
+              <div class="pay">{{f.pay}}</div><sc-if value="{{f.disc}}" hint-placeholder-val="{{ false }}"><span class="badge b-w" style="align-self: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"></path><path d="M12 10v4M12 17v.01"></path></svg>Poster may be from another production house</span></sc-if>
             </a>
           </sc-if>
           <sc-if value="{{f.isNotice}}" hint-placeholder-val="{{ false }}">
@@ -64,8 +64,15 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   <!-- CUSTOMISE: filters -->
   <sc-if value="{{showPanel}}" hint-placeholder-val="{{ false }}">
     <div class="sc" style="padding-top: 0; gap: 16px">
-      <div class="t-s mut">Pick the kinds of updates you care about. Only updates from your <b style="color: #1A1820">{{connCount}} connections</b> are shown.</div>
+      <div class="t-s mut">Filter by skill, role, location or update type. Only updates from your <b style="color: #1A1820">{{connCount}} connections</b> are shown.</div>
       <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="Search by name, skill or link" value="{{dq}}" onChange="{{onQ}}" aria-label="Search connection updates"></div>
+      <div class="fld"><span class="lbl">Skill</span>
+        <div class="chips"><sc-for list="{{skillF}}" as="t" hint-placeholder-count="4"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+      </div>
+      <div class="fld"><span class="lbl">Role</span>
+        <div class="chips"><sc-for list="{{roleF}}" as="t" hint-placeholder-count="4"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+        <span class="help">Skill and role lists: <span class="ph-tag">Placeholder – pending client input</span></span>
+      </div>
       <div class="fld"><span class="lbl">Update type</span>
         <div class="chips"><sc-for list="{{types}}" as="t" hint-placeholder-count="3"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
         <span class="help">Select none to include every type.</span>
@@ -87,15 +94,16 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
     <div class="sc" style="padding-top: 0; gap: 12px">
       <div class="card" style="padding: 12px 14px; gap: 10px; background: #F7F2FB; border-color: #EFE7F7">
         <div class="row"><span class="t-s b sp">{{resCount}}</span><button class="btn btn-t btn-sm" onClick="{{edit}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>Edit filters</button></div>
-        <div class="chips"><sc-for list="{{activeTags}}" as="a" hint-placeholder-count="2"><span class="tag" style="background: #FFFFFF">{{a}}</span></sc-for></div>
+        <div class="chips"><sc-for list="{{activeTags}}" as="a" hint-placeholder-count="2"><span class="tag" style="background: rgba(255,255,255,.8)">{{a}}</span></sc-for></div>
         <button class="btn btn-t btn-sm" style="align-self: flex-start; padding: 0" onClick="{{clearAll}}">Clear filters</button>
       </div>
       <sc-for list="{{results}}" as="u" hint-placeholder-count="4">
         <a href="UserProfile.dc.html" aria-label="Open {{u.who}}" class="card" style="text-decoration: none; gap: 10px">
-          <div class="row" style="gap: 12px"><span class="{{u.avCls}}">{{u.ini}}</span><span class="sp" style="display: flex; flex-direction: column"><span class="t-h3">{{u.who}}</span><span class="t-c mut">{{u.sub}} · Connection</span></span><span class="t-c mut">{{u.when}}</span></div>
+          <div class="row" style="gap: 12px; align-items: flex-start"><span class="{{u.avCls}}" data-ini="{{u.ini}}" style="width: 48px; height: 48px; border-radius: 24px">{{u.ini}}</span><span class="sp" style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span class="row" style="gap: 6px"><span class="t-h3 trunc">{{u.who}}</span><span class="t-c mut" style="margin-left: auto; white-space: nowrap">{{u.when}}</span></span><span class="t-s b" style="color: #5B2A8C">{{u.titles}}</span><span class="t-c mut">{{u.dept}} · {{u.city}}</span></span></div>
+          <div class="row" style="gap: 10px; flex-wrap: wrap"><sc-if value="{{u.hasAvail}}" hint-placeholder-val="{{ true }}"><span class="{{u.availCls}}">{{u.availText}}</span></sc-if><sc-if value="{{u.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{u.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{u.mutText}}</span></span></sc-if></div>
           <div class="row" style="gap: 8px"><span class="{{u.badge}}">{{u.typeLabel}}</span><span class="t-s b">{{u.text}}</span></div>
-          <div class="t-s" style="padding: 10px 12px; background: #F7F6FA; border-radius: 10px; display: flex; gap: 8px; align-items: center"><sc-if value="{{u.isLink}}" hint-placeholder-val="{{ true }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></sc-if><sc-if value="{{u.isSkill}}" hint-placeholder-val="{{ false }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"></path></svg></sc-if><sc-if value="{{u.isLoc}}" hint-placeholder-val="{{ false }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></sc-if><span class="sp">{{u.detail}}</span></div>
-          <div class="t-c mut row" style="gap: 4px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{u.city}}</div>
+          <div class="t-s" style="padding: 10px 12px; background: rgba(255,255,255,.5); border-radius: 10px; display: flex; gap: 8px; align-items: center"><sc-if value="{{u.isLink}}" hint-placeholder-val="{{ true }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></sc-if><sc-if value="{{u.isSkill}}" hint-placeholder-val="{{ false }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"></path></svg></sc-if><sc-if value="{{u.isLoc}}" hint-placeholder-val="{{ false }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></sc-if><span class="sp">{{u.detail}}</span></div>
+
         </a>
       </sc-for>
       <sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}">
@@ -105,35 +113,50 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </sc-if>
   <sc-if value="{{is_seeker}}" hint-placeholder-val="{{ true }}">
     <nav class="nav" aria-label="Main">
-      <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
-      <a class="on" href="DiscoverFeed.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
-      <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
-      <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
+      <a class="on" href="SeekerHome.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+      <a href="Jobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>Jobs</a>
+      <div class="nm"><label class="nm-btn"><input type="checkbox" class="nm-t" aria-label="More: Calendar and Invoices"><span class="nm-scrim" aria-hidden="true"></span><span class="nm-core"><svg class="i nm-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"></rect></svg></span><span class="nm-lbl">More</span></label><div class="nm-menu"><span class="nm-arc" aria-hidden="true"></span><a class="nm-opt nm-o1" href="Calendar.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="nm-tag">Calendar</span></a><a class="nm-opt nm-o2" href="Invoices.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span><span class="nm-tag">Invoices</span></a></div></div>
+      <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>Listings</a>
       <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
     </nav>
   </sc-if>
   <sc-if value="{{is_poster}}" hint-placeholder-val="{{ false }}">
     <nav class="nav" aria-label="Main">
-      <a href="PosterHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
-      <a class="on" href="DiscoverFeed.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
-      <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
-      <a href="MyJobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>My Jobs</a>
-      <a href="PosterProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-3h4v3"></path></svg></span>Profile</a>
+      <a class="on" href="SeekerHome.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+      <a href="Jobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>Jobs</a>
+      <div class="nm"><label class="nm-btn"><input type="checkbox" class="nm-t" aria-label="More: Calendar and Invoices"><span class="nm-scrim" aria-hidden="true"></span><span class="nm-core"><svg class="i nm-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"></rect></svg></span><span class="nm-lbl">More</span></label><div class="nm-menu"><span class="nm-arc" aria-hidden="true"></span><a class="nm-opt nm-o1" href="Calendar.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="nm-tag">Calendar</span></a><a class="nm-opt nm-o2" href="Invoices.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span><span class="nm-tag">Invoices</span></a></div></div>
+      <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>Listings</a>
+      <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
     </nav>
   </sc-if>
   <sc-if value="{{is_vendor}}" hint-placeholder-val="{{ false }}">
     <nav class="nav" aria-label="Main">
-      <a href="VendorHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
-      <a class="on" href="DiscoverFeed.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
-      <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
-      <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>My Listings</a>
-      <a href="VendorProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg></span>Profile</a>
+      <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+      <a href="Jobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>Jobs</a>
+      <div class="nm"><label class="nm-btn"><input type="checkbox" class="nm-t" aria-label="More: Calendar and Invoices"><span class="nm-scrim" aria-hidden="true"></span><span class="nm-core"><svg class="i nm-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"></rect></svg></span><span class="nm-lbl">More</span></label><div class="nm-menu"><span class="nm-arc" aria-hidden="true"></span><a class="nm-opt nm-o1" href="Calendar.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="nm-tag">Calendar</span></a><a class="nm-opt nm-o2" href="Invoices.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span><span class="nm-tag">Invoices</span></a></div></div>
+      <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>Listings</a>
+      <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
     </nav>
   </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"role":{"editor":"enum","options":["seeker","poster","vendor","association"],"default":"seeker"},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
+  net(n) {
+    const N = { 'Meera Joshi': [12, 'av'], 'Arjun Kulkarni': [4, 'tb'], 'Sana Mirza': [7, 'av'], 'Farhan Siddiqui': [9, 'un'], 'Ananya Iyer': [3, 'av'], 'Vikram Bhosle': [15, 'tb'], 'Kavya Menon': [18, ''], 'Northlight Studios': [6, ''], 'Reelhouse Camera Rentals': [11, ''], 'Kilowatt Lighting Co.': [2, ''], 'Nisha Verma': [5, 'av'], 'Aditya Rao': [8, 'av'], 'Priya Nair': [10, 'av'], 'Rohan D’Souza': [1, 'un'], 'Karthik Subramanian': [0, 'av'], 'Imran Shaikh': [2, 'av'] };
+    const pool = ['FS', 'AI', 'MJ', 'VB', 'AK', 'SM', 'KM', 'NV'];
+    const e = N[n] || [0, ''];
+    const me = n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const m = e[0];
+    const AV = { av: ['Available', 'avail a-av'], un: ['Unavailable', 'avail a-un'], tb: ['Tentatively booked', 'avail a-tb'] };
+    return {
+      isHiring: ['Kavya Menon', 'Vikram Bhosle', 'Nisha Verma'].indexOf(n) >= 0,
+      mutN: m, hasMut: m > 0, noMut: m === 0,
+      mutText: m === 0 ? 'No mutual connections' : m + (m === 1 ? ' mutual connection' : ' mutual connections'),
+      mutAv: pool.filter((x) => x !== me).slice(0, Math.min(3, m)),
+      hasAvail: !!e[1], availText: e[1] ? AV[e[1]][0] : '', availCls: e[1] ? AV[e[1]][1] : ''
+    };
+  }
   constructor(p) {
     super(p);
     this.A = {
@@ -150,27 +173,34 @@ class Component extends DCLogic {
       { a: 'WLA', date: '12 Oct 2026', title: 'New member registration window: 1–30 November', preview: 'Applications for new members open on 1 November. Bring two references from existing members and proof of three credits.', pdf: true }
     ];
     this.jobs = [
-      { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', cat: 'Camera', loc: 'Film City, Mumbai', pay: '₹8,000 – ₹12,000 / day', ago: '2d ago', d: 2 },
-      { title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', cat: 'Camera', loc: 'Ramoji Film City, Hyderabad', pay: '₹10,000 – ₹14,000 / day', ago: '2d ago', d: 2 },
-      { title: 'Assistant Editor — Web Series (8 episodes)', org: 'Northlight Studios', cat: 'Editing & Post', loc: 'Andheri West, Mumbai', pay: '₹55,000 – ₹70,000 / month', ago: '3d ago', d: 3 },
-      { title: 'Location Sound Recordist — Wildlife Documentary', org: 'Kite & Kettle Films', cat: 'Sound', loc: 'Leh, Ladakh (travel)', pay: '₹6,000 – ₹9,000 / day', ago: '4d ago', d: 4 },
-      { title: 'Gaffer — TVC, 2-day shoot', org: 'Pinewood Ads', cat: 'Lighting & Grip', loc: 'Bandra, Mumbai', pay: 'Payment not specified', ago: '5d ago', d: 5 },
-      { title: 'Colourist — Independent Feature (DaVinci Resolve)', org: 'Saffron Frame', cat: 'Editing & Post', loc: 'Indiranagar, Bengaluru', pay: '₹2,50,000 project fee', ago: '6d ago', d: 6 }
+      { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', dur: '32 days', org: 'Lantern Pictures', cat: 'Camera', loc: 'Film City, Mumbai', pay: '₹8,000 – ₹12,000 / day', ago: '2d ago', d: 2 },
+      { title: 'Second Unit Camera Operator — Action Feature', dur: '18 days', variant: 'disc', disc: true, org: 'Redline Motion Pictures', cat: 'Camera', loc: 'Ramoji Film City, Hyderabad', pay: '₹10,000 – ₹14,000 / day', ago: '2d ago', d: 2 },
+      { title: 'Assistant Editor — Web Series (8 episodes)', dur: '3 months', org: 'Northlight Studios', cat: 'Editing & Post', loc: 'Andheri West, Mumbai', pay: '₹55,000 – ₹70,000 / month', ago: '3d ago', d: 3 },
+      { title: 'Location Sound Recordist — Wildlife Documentary', dur: '21 days', org: 'Kite & Kettle Films', cat: 'Sound', loc: 'Leh, Ladakh (travel)', pay: '₹6,000 – ₹9,000 / day', ago: '4d ago', d: 4 },
+      { title: 'Gaffer — TVC, 2-day shoot', dur: '2 days', org: 'Pinewood Ads', cat: 'Lighting & Grip', loc: 'Bandra, Mumbai', pay: 'Payment not specified', ago: '5d ago', d: 5 },
+      { title: 'Colourist — Independent Feature (DaVinci Resolve)', dur: '4 weeks', org: 'Saffron Frame', cat: 'Editing & Post', loc: 'Indiranagar, Bengaluru', pay: '₹2,50,000 project fee', ago: '6d ago', d: 6 }
     ];
     this.nd = { '27 Oct 2026': 3, '25 Oct 2026': 5, '22 Oct 2026': 8, '18 Oct 2026': 12, '12 Oct 2026': 18 };
     this.updates = [
-      { who: 'Farhan Siddiqui', type: 'link', text: 'Added a new work link', detail: 'Portfolio · farhansiddiqui.in/camera-reel', city: 'Mumbai', when: '3h ago' },
-      { who: 'Ananya Iyer', type: 'skill', text: 'Updated their Skill Board', detail: 'Added DaVinci Resolve and Assembly cuts', city: 'Mumbai', when: '5h ago' },
+      { who: 'Farhan Siddiqui', type: 'link', text: 'Added a new work link', detail: 'Vimeo · vimeo.com/farhansiddiqui', city: 'Hyderabad', when: '3h ago' },
+      { who: 'Ananya Iyer', type: 'skill', text: 'Updated their Skill Board', detail: 'Added DaVinci Resolve and Assembly cuts', city: 'Bengaluru', when: '5h ago' },
       { who: 'Arjun Kulkarni', type: 'location', text: 'Changed their location', detail: 'Now based in Pune', city: 'Pune', when: 'Yesterday' },
       { who: 'Kavya Menon', type: 'link', text: 'Added a new work link', detail: 'Website · lanternpictures.in/showreel', city: 'Mumbai', when: 'Yesterday' },
-      { who: 'Farhan Siddiqui', type: 'skill', text: 'Updated their Skill Board', detail: 'Added RED and Data wrangling', city: 'Mumbai', when: '2 days ago' },
+      { who: 'Farhan Siddiqui', type: 'skill', text: 'Updated their Skill Board', detail: 'Added RED and Data wrangling', city: 'Hyderabad', when: '2 days ago' },
       { who: 'Reelhouse Camera Rentals', type: 'location', text: 'Updated their business location', detail: 'Goregaon East, Mumbai', city: 'Mumbai', when: '3 days ago' },
-      { who: 'Ananya Iyer', type: 'link', text: 'Added a new work link', detail: 'IMDb · imdb.com/name/ananya-iyer', city: 'Mumbai', when: '4 days ago' },
+      { who: 'Ananya Iyer', type: 'link', text: 'Added a new work link', detail: 'IMDb · imdb.com/name/ananya-iyer', city: 'Bengaluru', when: '4 days ago' },
       { who: 'Arjun Kulkarni', type: 'skill', text: 'Updated their Skill Board', detail: 'Added Sound Devices and Boom ops', city: 'Pune', when: '1 week ago' }
     ];
     this.subs = { 'Farhan Siddiqui': '1st Assistant Camera', 'Ananya Iyer': 'Editor', 'Arjun Kulkarni': 'Sound Recordist', 'Kavya Menon': 'Producer · Lantern Pictures', 'Reelhouse Camera Rentals': 'Vendor · Camera & lenses' };
+    this.P = {
+      'Farhan Siddiqui': { titles: ['1st Assistant Camera', 'Focus Puller'], dept: 'Camera', skills: ['Camera prep', 'RED', 'Data wrangling'] },
+      'Ananya Iyer': { titles: ['Editor', 'Assistant Editor'], dept: 'Editing & Post', skills: ['Premiere Pro', 'DaVinci Resolve', 'Assembly cuts'] },
+      'Arjun Kulkarni': { titles: ['Sound Recordist', 'Boom Operator'], dept: 'Sound', skills: ['Location sound', 'Boom ops', 'Sound Devices'] },
+      'Kavya Menon': { titles: ['Line Producer'], dept: 'Production', skills: ['Budgeting', 'Scheduling'] },
+      'Reelhouse Camera Rentals': { titles: ['Vendor · Camera & lenses'], dept: 'Equipment', skills: [] }
+    };
     this.T = { link: 'New work links', skill: 'Skill Board updates', location: 'Location updates' };
-    this.state = { tab: 'feed', kind: 'all', dTypes: [], dLoc: 'Any', dq: '', applied: null, editing: false };
+    this.state = { tab: 'feed', kind: 'all', dTypes: [], dLoc: 'Any', dSkill: 'Any', dRole: 'Any', dq: '', applied: null, editing: false };
   }
   renderVals() {
     const s = this.state, role = this.props.role ?? 'seeker';
@@ -189,14 +219,16 @@ class Component extends DCLogic {
     const match = (f) => this.updates.filter((u) => isConn(u.who)
       && (!f.types.length || f.types.indexOf(u.type) >= 0)
       && (f.loc === 'Any' || u.city === f.loc)
+      && (f.skill === 'Any' || (this.P[u.who] || { skills: [] }).skills.indexOf(f.skill) >= 0)
+      && (f.role === 'Any' || (this.P[u.who] || { titles: [] }).titles.indexOf(f.role) >= 0)
       && (!f.q.trim() || (u.who + ' ' + u.text + ' ' + u.detail).toLowerCase().includes(f.q.trim().toLowerCase())));
-    const draft = { types: s.dTypes, loc: s.dLoc, q: s.dq };
+    const draft = { types: s.dTypes, loc: s.dLoc, q: s.dq, skill: s.dSkill, role: s.dRole };
     const draftN = match(draft).length;
     const res = s.applied ? match(s.applied) : [];
     const conns = Object.keys(this.subs).filter(isConn).length;
     const chip = (on) => (on ? 'chip on' : 'chip');
     const onCust = s.tab === 'cust';
-    const tags = s.applied ? (s.applied.types.length ? s.applied.types.map((t) => this.T[t]) : ['All update types']).concat(s.applied.loc === 'Any' ? [] : [s.applied.loc], s.applied.q.trim() ? ['“' + s.applied.q.trim() + '”'] : []) : [];
+    const tags = s.applied ? (s.applied.types.length ? s.applied.types.map((t) => this.T[t]) : ['All update types']).concat(s.applied.skill === 'Any' ? [] : [s.applied.skill], s.applied.role === 'Any' ? [] : [s.applied.role], s.applied.loc === 'Any' ? [] : [s.applied.loc], s.applied.q.trim() ? ['“' + s.applied.q.trim() + '”'] : []) : [];
     const BADGE = { link: 'badge b-p', skill: 'badge b-g', location: 'badge b-w' };
     const SHORT = { link: 'Work link', skill: 'Skill Board', location: 'Location' };
     return {
@@ -211,14 +243,16 @@ class Component extends DCLogic {
       connCount: conns,
       dq: s.dq, onQ: (e) => this.setState({ dq: e.target.value }),
       types: ['link', 'skill', 'location'].map((t) => { const on = s.dTypes.indexOf(t) >= 0; return { label: this.T[t], on, cls: chip(on), pick: () => this.setState({ dTypes: on ? s.dTypes.filter((x) => x !== t) : s.dTypes.concat([t]) }) }; }),
-      locs: ['Any', 'Mumbai', 'Pune'].map((l) => ({ label: l === 'Any' ? 'Any location' : l, on: s.dLoc === l, cls: chip(s.dLoc === l), pick: () => this.setState({ dLoc: l }) })),
+      skillF: ['Any', 'Camera prep', 'RED', 'Premiere Pro', 'DaVinci Resolve', 'Location sound', 'Boom ops', 'Budgeting'].map((l) => ({ label: l === 'Any' ? 'Any skill' : l, on: s.dSkill === l, cls: chip(s.dSkill === l), pick: () => this.setState({ dSkill: l }) })),
+      roleF: ['Any', 'Focus Puller', '1st Assistant Camera', 'Editor', 'Sound Recordist', 'Line Producer'].map((l) => ({ label: l === 'Any' ? 'Any role' : l, on: s.dRole === l, cls: chip(s.dRole === l), pick: () => this.setState({ dRole: l }) })),
+      locs: ['Any', 'Mumbai', 'Pune', 'Hyderabad', 'Bengaluru'].map((l) => ({ label: l === 'Any' ? 'Any location' : l, on: s.dLoc === l, cls: chip(s.dLoc === l), pick: () => this.setState({ dLoc: l }) })),
       applyLabel: draftN ? 'Apply · ' + draftN + (draftN === 1 ? ' update' : ' updates') : 'Apply filters',
-      apply: () => this.setState({ applied: { types: s.dTypes.slice(), loc: s.dLoc, q: s.dq }, editing: false }),
+      apply: () => this.setState({ applied: { types: s.dTypes.slice(), loc: s.dLoc, q: s.dq, skill: s.dSkill, role: s.dRole }, editing: false }),
       edit: () => this.setState({ editing: true }),
-      clearAll: () => this.setState({ dTypes: [], dLoc: 'Any', dq: '', applied: null, editing: false }),
+      clearAll: () => this.setState({ dTypes: [], dLoc: 'Any', dSkill: 'Any', dRole: 'Any', dq: '', applied: null, editing: false }),
       activeTags: tags,
       resCount: res.length + (res.length === 1 ? ' update from your connections' : ' updates from your connections'),
-      results: res.map((u) => ({ ...u, sub: this.subs[u.who] || '', ini: u.who.split(' ').map((w) => w[0]).slice(0, 2).join(''), avCls: u.who === 'Reelhouse Camera Rentals' ? 'av g' : 'av', badge: BADGE[u.type], typeLabel: SHORT[u.type], isLink: u.type === 'link', isSkill: u.type === 'skill', isLoc: u.type === 'location' })),
+      results: res.map((u) => ({ ...u, ...this.net(u.who), titles: ((this.P[u.who] || {}).titles || []).join(' · '), dept: (this.P[u.who] || {}).dept || '', sub: this.subs[u.who] || '', ini: u.who.split(' ').map((w) => w[0]).slice(0, 2).join(''), avCls: u.who === 'Reelhouse Camera Rentals' ? 'av g' : 'av', badge: BADGE[u.type], typeLabel: SHORT[u.type], isLink: u.type === 'link', isSkill: u.type === 'skill', isLoc: u.type === 'location' })),
       noResults: !!s.applied && res.length === 0
     };
   }

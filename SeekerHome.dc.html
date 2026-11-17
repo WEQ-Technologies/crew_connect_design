@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Job Seeker home</title>
+<title>Home</title>
 <script src="./vendor/react.js"></script>
 <script src="./vendor/react-dom.js"></script>
 <script src="./support.js"></script>
@@ -15,76 +15,570 @@
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
+/* Explore CrewConnect slider — direction A “Glass wash” (chosen) */
+.xs-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:20px;margin:0 -20px;padding:4px 20px 12px;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+.xs-row::-webkit-scrollbar{display:none;height:0}
+.xs-row::after{content:'';flex:none;width:8px}
+.xs-card{position:relative;overflow:hidden;flex:none;width:70%;min-height:184px;box-sizing:border-box;scroll-snap-align:start;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:12px;text-decoration:none;color:#1A1820;
+  border:1px solid rgba(255,255,255,.95);box-shadow:0 16px 34px -18px rgba(46,18,72,.35),inset 0 1px 0 #fff;-webkit-backdrop-filter:blur(18px) saturate(165%);backdrop-filter:blur(18px) saturate(165%);
+  transition:transform .18s ease,box-shadow .18s ease;animation:xsIn .5s cubic-bezier(.22,.8,.2,1) both}
+a.xs-card:hover{color:#1A1820;box-shadow:0 0 0 3px rgba(183,154,214,.22),0 18px 36px -18px rgba(46,18,72,.42),inset 0 1px 0 #fff}
+.xs-card:active{transform:scale(.98)}
+.xs-card:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(183,154,214,.75)}
+@keyframes xsIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+.xs-deco{position:absolute;right:-22px;bottom:-26px;width:128px;height:128px;opacity:.12;pointer-events:none}
+.xs-deco svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.xs-txt{display:flex;flex-direction:column;gap:3px;position:relative}
+.xs-cta{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 12px;border-radius:14px;font-size:12.5px;font-weight:700;position:relative}
+.xs-open{background:rgba(255,255,255,.88);color:#4A1F73;border:1px solid rgba(183,154,214,.55)}
+.xs-on{background:#5B2A8C;color:#fff;box-shadow:0 8px 16px -8px rgba(91,42,140,.6)}
+.xs-dots{display:flex;gap:6px;justify-content:center;margin-top:-2px}
+.xs-dots span{width:6px;height:6px;border-radius:3px;background:#D9CFE6;transition:width .18s ease,background-color .18s ease}
+.xs-dots span.on{width:18px;background:#5B2A8C}
+/* Your jobs (both modes): one card, two tabs, fixed height so the feed below never jumps */
+.yj-tab{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.yj-badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#367A22;color:#fff;font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
+.yj-new{height:18px;padding:0 6px;border-radius:9px;background:#FFF4CC;color:#8A5300;font-size:10.5px;font-weight:800;display:inline-flex;align-items:center}
+.yj-body{min-height:318px;display:flex;flex-direction:column;gap:10px;touch-action:pan-y}
+.yj-in{animation:yjIn .22s ease both}
+@keyframes yjIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.xs-card{animation:xsFade .15s ease both;transition:none}.xs-dots span{transition:none}.yj-in{animation:xsFade .15s ease both}}
+@keyframes xsFade{from{opacity:0}to{opacity:1}}
 </style>
 </helmet>
 <div class="ph">
-  <div style="flex: none; padding: 20px 20px 8px; display: flex; align-items: center; gap: 12px">
+  <div style="flex: none; padding: 20px 20px 8px; display: flex; align-items: center; gap: 8px">
     <div class="sp">
       <div class="t-s mut">Good morning,</div>
-      <div class="t-h1">Priya</div>
+      <div class="t-h1">{{first}}</div>
     </div>
-    <a href="ForumWall.dc.html" class="iconbtn" aria-label="Association notices"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a3 3 0 0 1 0 6M18 6a7 7 0 0 1 0 12"></path></svg></a>
-    <a href="Notifications.dc.html" class="iconbtn" aria-label="Notifications, 2 unread" style="position: relative"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span style="position: absolute; top: 6px; right: 6px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: #B42318; color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center" aria-hidden="true">2</span></a>
-    <a href="SeekerProfile.dc.html" class="av" aria-label="Open your profile" style="text-decoration: none">PN</a>
+    <a href="ForumWall.dc.html" class="iconbtn" aria-label="Forum — association notices, {{forumN}} new" style="position: relative; width: 40px; height: 40px; border-radius: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 22px; height: 22px"><path d="M4.5 4h9A1.5 1.5 0 0 1 15 5.5v6a1.5 1.5 0 0 1-1.5 1.5H9l-3.5 3v-3h-1A1.5 1.5 0 0 1 3 11.5v-6A1.5 1.5 0 0 1 4.5 4z"></path><path d="M18 9h1.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-1v3L15 18h-4.5A1.5 1.5 0 0 1 9 16.5V16"></path></svg><span style="position: absolute; top: 3px; right: 3px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: #B42318; color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center" aria-hidden="true">{{forumN}}</span></a>
+    <a href="Notifications.dc.html" class="iconbtn" aria-label="Notifications, {{bellN}} unread" style="position: relative; width: 40px; height: 40px; border-radius: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 22px; height: 22px"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span style="position: absolute; top: 3px; right: 3px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: #B42318; color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center" aria-hidden="true">{{bellN}}</span></a>
+    <sc-if value="{{noPhoto}}" hint-placeholder-val="{{ true }}"><a href="SeekerProfile.dc.html" class="av" aria-label="Open your profile" style="text-decoration: none; width: 40px; height: 40px; font-size: 14px; margin-left: 4px" data-ini="{{meIni}}">{{meIni}}</a></sc-if>
+    <sc-if value="{{hasPhoto}}" hint-placeholder-val="{{ false }}"><a href="SeekerProfile.dc.html" aria-label="Open your profile" style="margin-left: 4px; width: 40px; height: 40px; border-radius: 20px; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; flex: none; background: linear-gradient(150deg, #B79AD6 0%, #8A6CE0 45%, #5CC8AC 100%); box-shadow: 0 0 0 2px rgba(255,255,255,.9)"><svg viewBox="0 0 64 64" width="34" height="34" aria-hidden="true"><circle cx="32" cy="24" r="12" fill="rgba(255,255,255,.88)"></circle><path d="M8 64c0-14 11-22 24-22s24 8 24 22z" fill="rgba(255,255,255,.88)"></path></svg></a></sc-if>
   </div>
 
-  <div class="sc" style="gap: 20px; padding-top: 8px">
-    <a href="JobSearch.dc.html" class="srch" style="text-decoration: none">
-      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
-      <span class="sp" style="font-size: 15px; color: #6B6676">Search jobs, roles or locations</span>
-      <span class="iconbtn" style="width: 40px; height: 40px; color: #5B2A8C" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg></span>
-    </a>
-
-    <div class="chips x">
-      <a class="chip" href="JobSearch.dc.html">Camera</a>
-      <a class="chip" href="JobSearch.dc.html">Editing &amp; Post</a>
-      <a class="chip" href="JobSearch.dc.html">Sound</a>
-      <a class="chip" href="JobSearch.dc.html">Cast</a>
-      <a class="chip" href="JobSearch.dc.html">Lighting &amp; Grip</a>
-      <a class="chip" href="JobSearch.dc.html">Direction</a>
-    </div>
-
-    <a href="SeekerProfile.dc.html" class="card" style="text-decoration: none; background: #F7F2FB; border-color: #EFE7F7; gap: 10px">
-      <div class="row"><div class="sp"><div class="t-h3">Your profile is 80% complete</div><div class="t-s mut">Add your IMDb link so Job Posters can check your credits.</div></div><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5B2A8C"><path d="m9 18 6-6-6-6"></path></svg></div>
-      <div class="prog" style="background: #fff"><div style="width: 80%"></div></div>
-    </a>
-
-    <div class="sec"><h2>Recently posted</h2><a href="JobSearch.dc.html" class="btn btn-t btn-sm">See all</a></div>
-    <sc-for list="{{jobs}}" as="j" hint-placeholder-count="4">
-      <a href="JobDetail.dc.html" class="card" style="text-decoration: none">
-        <div class="row" style="align-items: flex-start; gap: 12px">
-          <div class="sp"><div class="t-h3 clamp2">{{j.title}}</div><div class="t-s mut" style="margin-top: 2px">{{j.org}}</div></div>
-          <span class="t-c mut" style="white-space: nowrap; padding-top: 2px">{{j.ago}}</span>
-        </div>
-        <div class="meta">
-          <span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"></rect><rect x="13" y="4" width="7" height="7" rx="1"></rect><rect x="4" y="13" width="7" height="7" rx="1"></rect><rect x="13" y="13" width="7" height="7" rx="1"></rect></svg>{{j.cat}}</span>
-          <span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{j.loc}}</span>
-        </div>
-        <div class="row"><span class="pay">{{j.pay}}</span><span class="sp"></span><sc-if value="{{j.pdf}}" hint-placeholder-val="{{ false }}"><span class="tag"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Brief PDF</span></sc-if></div>
+  <div class="sc" ref="{{scRef}}" style="gap: 28px; padding-top: 8px; padding-bottom: 96px">
+    <!-- 1 · PROFILE COMPLETION (hidden at 100%) -->
+    <sc-if value="{{showCompletion}}" hint-placeholder-val="{{ true }}">
+      <a href="CompleteProfile.dc.html" class="card" style="gap: 10px; text-decoration: none; color: #1A1820; border-color: #EFE7F7" aria-label="Profile {{pct}}% complete. Complete your profile">
+        <div class="row" style="gap: 12px"><div class="sp"><div class="t-h3">{{compTitle}}</div><div class="t-c mut">Next: {{nextSection}}</div></div><span class="t-h2" style="color: #5B2A8C">{{pct}}%</span></div>
+        <div style="height: 8px; border-radius: 4px; background: #EFE7F7; overflow: hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{pct}}"><div style="{{barStyle}}"></div></div>
+        <span class="btn btn-s btn-sm" style="align-self: flex-start">Continue completing your profile<svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span>
       </a>
-    </sc-for>
+    </sc-if>
+
+
+    <!-- 2 · EXPLORE CREWCONNECT — horizontal slider, directly below the completion card (first section at 100%). -->
+    <section style="display: flex; flex-direction: column; gap: 10px" aria-label="Explore CrewConnect">
+      <h2 class="t-h2">Explore CrewConnect</h2>
+      <div class="xs-row" role="list" aria-label="Explore CrewConnect, swipe for more" onScroll="{{onSlide}}">
+        <sc-for list="{{tiles}}" as="t" hint-placeholder-count="5"><a role="listitem" class="xs-card" href="{{t.href}}" data-mode="{{t.mode}}" data-role="{{t.role}}" data-tab="{{t.tab}}" aria-label="{{t.aria}}" style="{{t.cardStyle}}">
+          <span class="xs-deco" style="{{t.decoStyle}}" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="{{t.icon}}"></path></svg></span>
+          <span style="{{t.orbBig}}" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" style="width: 26px; height: 26px"><path d="{{t.icon}}"></path></svg></span>
+          <span class="xs-txt"><span class="t-h3" style="font-size: 16px">{{t.label}}</span><span class="t-c" style="color: #4A4552">{{t.desc}}</span></span>
+          <span class="{{t.ctaCls}}">{{t.cta}}<svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 14px; height: 14px"><path d="m9 18 6-6-6-6"></path></svg></span>
+        </a></sc-for>
+      </div>
+      <div class="xs-dots" aria-hidden="true"><sc-for list="{{dots}}" as="d" hint-placeholder-count="5"><span class="{{d.cls}}"></span></sc-for></div>
+    </section>
+
+    <!-- 3 · YOUR JOBS (both modes) — one card, two tabs; each tab reuses its card's contents exactly. -->
+    <sc-if value="{{showYJ}}" hint-placeholder-val="{{ false }}">
+    <section style="display: flex; flex-direction: column; gap: 12px" aria-label="Your jobs">
+      <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Your jobs</h2><a href="Jobs.dc.html" data-tab="{{yjLinkTab}}" data-seen="{{yjSeen}}" class="t-s b" style="color: #5B2A8C; text-decoration: none">{{yjLink}}</a></div>
+      <div class="card" style="gap: 12px" onPointerDown="{{yjDown}}" onPointerUp="{{yjUp}}">
+        <div class="seg" role="tablist" aria-label="Your jobs" style="grid-template-columns: 1fr 1fr">
+          <button role="tab" class="{{yjAppsCls}}" aria-selected="{{yjOnApps}}" onClick="{{yjToApps}}"><span class="yj-tab">Applications<sc-if value="{{yjAppsBadge}}" hint-placeholder-val="{{ true }}"><span class="yj-badge" aria-label="{{yjUpd}} new">{{yjUpd}}</span></sc-if><sc-if value="{{yjAppsNew}}" hint-placeholder-val="{{ false }}"><span class="yj-new">New</span></sc-if></span></button>
+          <button role="tab" class="{{yjPostsCls}}" aria-selected="{{yjOnPosts}}" onClick="{{yjToPosts}}"><span class="yj-tab">Job posts<sc-if value="{{yjPostsBadge}}" hint-placeholder-val="{{ true }}"><span class="yj-badge" aria-label="{{yjNewA}} new">{{yjNewA}}</span></sc-if><sc-if value="{{yjPostsNew}}" hint-placeholder-val="{{ false }}"><span class="yj-new">New</span></sc-if></span></button>
+        </div>
+        <sc-if value="{{appsLoading}}" hint-placeholder-val="{{ false }}">
+          <div class="yj-body" aria-busy="true" aria-label="Loading your jobs"><div class="row" style="gap: 10px"><div class="skel" style="width: 34px; height: 30px"></div><div class="skel" style="height: 12px; width: 40%"></div><span class="sp"></span><div class="skel" style="height: 22px; width: 90px; border-radius: 11px"></div></div><div class="skel" style="height: 44px"></div><div class="skel" style="height: 44px"></div><div class="skel" style="height: 44px"></div><div class="row" style="gap: 8px; margin-top: auto"><div class="skel" style="height: 36px; flex: 1; border-radius: 12px"></div><div class="skel" style="height: 36px; flex: 1; border-radius: 12px"></div></div></div>
+        </sc-if>
+        <!-- Applications tab = Your applications card contents -->
+        <sc-if value="{{yjShowApps}}" hint-placeholder-val="{{ true }}">
+          <div class="yj-body yj-in" role="tabpanel" aria-label="Your applications">
+            <div class="row" style="gap: 10px"><span class="t-d" style="font-size: 30px; line-height: 34px; color: #5B2A8C">{{appsN}}</span><span class="t-s mut sp">{{appsWord}}</span><sc-if value="{{hasUpd}}" hint-placeholder-val="{{ true }}"><span class="badge b-g">{{updText}}</span></sc-if></div>
+            <sc-if value="{{hasActiveApps}}" hint-placeholder-val="{{ true }}">
+              <div class="list">
+                <sc-for list="{{appRows}}" as="a" hint-placeholder-count="3"><a class="li" href="JobDetail.dc.html" data-job="{{a.variant}}" data-app="{{a.status}}" data-seen="{{a.title}}" style="min-height: 56px"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{a.title}}</span><span class="t-c mut trunc" style="display: block">{{a.org}} · {{a.status}}</span></span><sc-if value="{{a.isNew}}" hint-placeholder-val="{{ false }}"><span class="{{a.pill}}">{{a.pillText}}</span></sc-if><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a></sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{noActiveApps}}" hint-placeholder-val="{{ false }}"><div class="t-s mut" style="flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px">You haven’t applied to any jobs yet.</div></sc-if>
+            <div class="row" style="gap: 8px; margin-top: auto"><a class="btn btn-p btn-sm" href="Jobs.dc.html" data-tab="find" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Find jobs</a><a class="btn btn-s btn-sm" href="Jobs.dc.html" data-tab="saved" style="flex: 1">Saved jobs</a></div>
+          </div>
+        </sc-if>
+        <!-- Job posts tab = Your active posts card contents -->
+        <sc-if value="{{yjShowPosts}}" hint-placeholder-val="{{ false }}">
+          <div class="yj-body yj-in" role="tabpanel" aria-label="Your job posts">
+            <div class="row" style="gap: 10px"><span class="t-d" style="font-size: 30px; line-height: 34px; color: #5B2A8C">{{activeN}}</span><span class="t-s mut sp">{{activeWord}}</span><sc-if value="{{hasNewA}}" hint-placeholder-val="{{ true }}"><span class="badge b-g">{{newAText}}</span></sc-if></div>
+            <sc-if value="{{hasActive}}" hint-placeholder-val="{{ true }}">
+              <div class="list">
+                <sc-for list="{{activePosts}}" as="p" hint-placeholder-count="3"><a class="li" href="Applicants.dc.html" data-post="{{p.id}}" style="min-height: 56px"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{p.title}}</span><span class="t-c mut trunc" style="display: block">{{p.house}} · {{p.appText}}</span></span><sc-if value="{{p.hasNew}}" hint-placeholder-val="{{ false }}"><span class="badge b-g">{{p.newA}} new</span></sc-if><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a></sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{noActive}}" hint-placeholder-val="{{ false }}"><div class="t-s mut" style="flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px">No active posts. Post a job and new applicants show up here.</div></sc-if>
+            <div class="row" style="gap: 8px; margin-top: auto"><a class="btn btn-p btn-sm" href="CreateJob.dc.html" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Post a job</a><a class="btn btn-s btn-sm" href="Talent.dc.html" style="flex: 1">Find talent</a></div>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+    </sc-if>
+
+    <!-- YOUR ACTIVE POSTS (Job Poster mode) -->
+    <sc-if value="{{postsFirst}}" hint-placeholder-val="{{ false }}">
+    <section style="display: flex; flex-direction: column; gap: 12px" aria-label="Your active posts">
+      <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Your active posts</h2><a href="Jobs.dc.html" data-tab="posts" class="t-s b" style="color: #5B2A8C; text-decoration: none">My Posts</a></div>
+      <sc-if value="{{hasActive}}" hint-placeholder-val="{{ true }}">
+        <div class="card" style="gap: 10px">
+          <div class="row" style="gap: 10px"><span class="t-d" style="font-size: 30px; line-height: 34px; color: #5B2A8C">{{activeN}}</span><span class="t-s mut sp">{{activeWord}}</span><sc-if value="{{hasNewA}}" hint-placeholder-val="{{ true }}"><span class="badge b-g">{{newAText}}</span></sc-if></div>
+          <div class="list">
+            <sc-for list="{{activePosts}}" as="p" hint-placeholder-count="3"><a class="li" href="Applicants.dc.html" data-post="{{p.id}}" style="min-height: 56px"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{p.title}}</span><span class="t-c mut trunc" style="display: block">{{p.house}} · {{p.appText}}</span></span><sc-if value="{{p.hasNew}}" hint-placeholder-val="{{ false }}"><span class="badge b-g">{{p.newA}} new</span></sc-if><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a></sc-for>
+          </div>
+          <div class="row" style="gap: 8px"><a class="btn btn-p btn-sm" href="CreateJob.dc.html" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Post a job</a><a class="btn btn-s btn-sm" href="Talent.dc.html" style="flex: 1">Find talent</a></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{noActive}}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="align-items: center; text-align: center; gap: 8px; padding: 20px 16px"><div class="t-h3">No active posts</div><div class="t-s mut" style="max-width: 260px">Post a job and new applicants show up here.</div><div class="row" style="gap: 8px"><a class="btn btn-p btn-sm" href="CreateJob.dc.html">Post a job</a><a class="btn btn-s btn-sm" href="Talent.dc.html">Find talent</a></div></div>
+      </sc-if>
+    </section>
+    </sc-if>
+
+    <!-- YOUR APPLICATIONS (Job Seeker mode) — mirrors Your active posts: same card, data and labels only. Rejected never shows here. -->
+    <sc-if value="{{showApps}}" hint-placeholder-val="{{ false }}">
+    <section style="display: flex; flex-direction: column; gap: 12px" aria-label="Your applications">
+      <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Your applications</h2><a href="Jobs.dc.html" data-tab="apps" data-seen="*" class="t-s b" style="color: #5B2A8C; text-decoration: none">Applications</a></div>
+      <sc-if value="{{appsLoading}}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="gap: 10px" aria-busy="true" aria-label="Loading your applications"><div class="row" style="gap: 10px"><div class="skel" style="width: 34px; height: 30px"></div><div class="skel" style="height: 12px; width: 40%"></div><span class="sp"></span><div class="skel" style="height: 22px; width: 90px; border-radius: 11px"></div></div><div class="skel" style="height: 44px"></div><div class="skel" style="height: 44px"></div><div class="skel" style="height: 44px"></div><div class="row" style="gap: 8px"><div class="skel" style="height: 36px; flex: 1; border-radius: 12px"></div><div class="skel" style="height: 36px; flex: 1; border-radius: 12px"></div></div></div>
+      </sc-if>
+      <sc-if value="{{appsReady}}" hint-placeholder-val="{{ true }}">
+        <div class="card" style="gap: 10px">
+          <div class="row" style="gap: 10px"><span class="t-d" style="font-size: 30px; line-height: 34px; color: #5B2A8C">{{appsN}}</span><span class="t-s mut sp">{{appsWord}}</span><sc-if value="{{hasUpd}}" hint-placeholder-val="{{ true }}"><span class="badge b-g">{{updText}}</span></sc-if></div>
+          <sc-if value="{{hasActiveApps}}" hint-placeholder-val="{{ true }}">
+            <div class="list">
+              <sc-for list="{{appRows}}" as="a" hint-placeholder-count="3"><a class="li" href="JobDetail.dc.html" data-job="{{a.variant}}" data-app="{{a.status}}" data-seen="{{a.title}}" style="min-height: 56px"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{a.title}}</span><span class="t-c mut trunc" style="display: block">{{a.org}} · {{a.status}}</span></span><sc-if value="{{a.isNew}}" hint-placeholder-val="{{ false }}"><span class="{{a.pill}}">{{a.pillText}}</span></sc-if><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a></sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{noActiveApps}}" hint-placeholder-val="{{ false }}"><div class="t-s mut" style="padding: 10px 2px">You haven’t applied to any jobs yet.</div></sc-if>
+          <div class="row" style="gap: 8px"><a class="btn btn-p btn-sm" href="Jobs.dc.html" data-tab="find" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Find jobs</a><a class="btn btn-s btn-sm" href="Jobs.dc.html" data-tab="saved" style="flex: 1">Saved jobs</a></div>
+        </div>
+      </sc-if>
+    </section>
+    </sc-if>
+    <!-- YOUR ACTIVE POSTS (Job Poster mode) -->
+    <sc-if value="{{postsMid}}" hint-placeholder-val="{{ false }}">
+    <section style="display: flex; flex-direction: column; gap: 12px" aria-label="Your active posts">
+      <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Your active posts</h2><a href="Jobs.dc.html" data-tab="posts" class="t-s b" style="color: #5B2A8C; text-decoration: none">My Posts</a></div>
+      <sc-if value="{{hasActive}}" hint-placeholder-val="{{ true }}">
+        <div class="card" style="gap: 10px">
+          <div class="row" style="gap: 10px"><span class="t-d" style="font-size: 30px; line-height: 34px; color: #5B2A8C">{{activeN}}</span><span class="t-s mut sp">{{activeWord}}</span><sc-if value="{{hasNewA}}" hint-placeholder-val="{{ true }}"><span class="badge b-g">{{newAText}}</span></sc-if></div>
+          <div class="list">
+            <sc-for list="{{activePosts}}" as="p" hint-placeholder-count="3"><a class="li" href="Applicants.dc.html" data-post="{{p.id}}" style="min-height: 56px"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{p.title}}</span><span class="t-c mut trunc" style="display: block">{{p.house}} · {{p.appText}}</span></span><sc-if value="{{p.hasNew}}" hint-placeholder-val="{{ false }}"><span class="badge b-g">{{p.newA}} new</span></sc-if><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a></sc-for>
+          </div>
+          <div class="row" style="gap: 8px"><a class="btn btn-p btn-sm" href="CreateJob.dc.html" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Post a job</a><a class="btn btn-s btn-sm" href="Talent.dc.html" style="flex: 1">Find talent</a></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{noActive}}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="align-items: center; text-align: center; gap: 8px; padding: 20px 16px"><div class="t-h3">No active posts</div><div class="t-s mut" style="max-width: 260px">Post a job and new applicants show up here.</div><div class="row" style="gap: 8px"><a class="btn btn-p btn-sm" href="CreateJob.dc.html">Post a job</a><a class="btn btn-s btn-sm" href="Talent.dc.html">Find talent</a></div></div>
+      </sc-if>
+    </section>
+    </sc-if>
+
+    <!-- 2 · JOBS FOR YOU (Crew role, Job Seeker mode) -->
+    <sc-if value="{{showJobs}}" hint-placeholder-val="{{ true }}">
+    <section style="display: flex; flex-direction: column; gap: 12px" aria-label="Jobs for you">
+      <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Jobs for you</h2><a href="JobSearch.dc.html" class="t-s b" style="color: #5B2A8C; text-decoration: none">See all</a></div>
+      <sc-if value="{{hasJobs}}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div class="t-c mut" style="margin-top: -6px">Matched to your work titles, skills, department and location</div>
+          <sc-for list="{{jobs}}" as="j" hint-placeholder-count="3">
+            <div class="card" style="gap: 8px">
+              <div class="row" style="align-items: flex-start; gap: 8px"><a href="JobDetail.dc.html" data-job="{{j.variant}}" class="sp" style="text-decoration: none; color: #1A1820; min-width: 0"><div class="t-h3 trunc">{{j.title}}</div><div class="t-s mut trunc">{{j.org}}</div></a><button class="iconbtn" onClick="{{j.more}}" aria-label="More options for {{j.title}}" style="width: 32px; height: 32px; margin: -4px -6px 0 0; color: #6B6676"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle></svg></button></div>
+              <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{j.loc}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{j.dur}}</span></div>
+              <div class="row" style="gap: 8px"><span class="sp" style="display: flex; flex-direction: column; gap: 2px"><span class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg>{{j.dates}}</span></span><span class="t-c mut">Posted {{j.ago}}</span></span><a class="btn btn-p btn-sm" href="JobDetail.dc.html" data-job="{{j.variant}}">View &amp; apply</a></div>
+            </div>
+          </sc-for>
+          <sc-if value="{{showDigest}}" hint-placeholder-val="{{ true }}">
+            <a href="JobDigest.dc.html" class="row" style="gap: 10px; padding: 10px 14px; border: 1px solid rgba(255,255,255,.85); border-radius: 12px; text-decoration: none; color: #1A1820; background: rgba(255,255,255,.6); -webkit-backdrop-filter: blur(18px) saturate(165%); backdrop-filter: blur(18px) saturate(165%)"><span class="badge b-y" style="height: 22px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 8 4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg>Premium</span><span class="sp t-c mut">Your daily job summary · 3 new matches</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{noJobs}}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="align-items: center; text-align: center; gap: 8px; padding: 24px 16px">
+          <div class="ring" style="width: 52px; height: 52px; border-radius: 26px; background: #F7F2FB; border: 1px solid #EFE7F7; color: #5B2A8C; display: flex; align-items: center; justify-content: center"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+          <div class="t-h3">No job recommendations yet</div>
+          <div class="t-s mut" style="max-width: 260px">Add your work titles and skills so we can match you with jobs.</div>
+          <a class="btn btn-s btn-sm" href="SeekerProfile.dc.html">Complete your profile</a>
+        </div>
+      </sc-if>
+    </section>
+    </sc-if>
+    <!-- YOUR ACTIVE POSTS (Job Poster mode) -->
+    <sc-if value="{{postsAfter}}" hint-placeholder-val="{{ false }}">
+    <section style="display: flex; flex-direction: column; gap: 12px" aria-label="Your active posts">
+      <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Your active posts</h2><a href="Jobs.dc.html" data-tab="posts" class="t-s b" style="color: #5B2A8C; text-decoration: none">My Posts</a></div>
+      <sc-if value="{{hasActive}}" hint-placeholder-val="{{ true }}">
+        <div class="card" style="gap: 10px">
+          <div class="row" style="gap: 10px"><span class="t-d" style="font-size: 30px; line-height: 34px; color: #5B2A8C">{{activeN}}</span><span class="t-s mut sp">{{activeWord}}</span><sc-if value="{{hasNewA}}" hint-placeholder-val="{{ true }}"><span class="badge b-g">{{newAText}}</span></sc-if></div>
+          <div class="list">
+            <sc-for list="{{activePosts}}" as="p" hint-placeholder-count="3"><a class="li" href="Applicants.dc.html" data-post="{{p.id}}" style="min-height: 56px"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{p.title}}</span><span class="t-c mut trunc" style="display: block">{{p.house}} · {{p.appText}}</span></span><sc-if value="{{p.hasNew}}" hint-placeholder-val="{{ false }}"><span class="badge b-g">{{p.newA}} new</span></sc-if><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a></sc-for>
+          </div>
+          <div class="row" style="gap: 8px"><a class="btn btn-p btn-sm" href="CreateJob.dc.html" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Post a job</a><a class="btn btn-s btn-sm" href="Talent.dc.html" style="flex: 1">Find talent</a></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{noActive}}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="align-items: center; text-align: center; gap: 8px; padding: 20px 16px"><div class="t-h3">No active posts</div><div class="t-s mut" style="max-width: 260px">Post a job and new applicants show up here.</div><div class="row" style="gap: 8px"><a class="btn btn-p btn-sm" href="CreateJob.dc.html">Post a job</a><a class="btn btn-s btn-sm" href="Talent.dc.html">Find talent</a></div></div>
+      </sc-if>
+    </section>
+    </sc-if>
+
+    <!-- VENDOR MODULES (Vendor role): your listings, contact reveals, invoices -->
+    <sc-if value="{{hasVendor}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 28px">
+        <section style="display: flex; flex-direction: column; gap: 12px" aria-label="Your listings">
+          <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Your listings</h2><a href="MyListings.dc.html" class="t-s b" style="color: #5B2A8C; text-decoration: none">Manage</a></div>
+          <div class="card" style="gap: 12px">
+            <div class="row" style="gap: 12px"><span class="sq g" style="width: 44px; height: 44px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><div class="sp" style="min-width: 0"><div class="t-h3 trunc">{{bizName}}</div><div class="t-c mut">Public vendor page · Live</div></div><span class="badge b-g">Live</span></div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+              <div style="padding: 10px; border-radius: 12px; background: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.9)"><div class="t-h2">{{lsTotal}}</div><div class="t-c mut">Published</div></div>
+              <div style="padding: 10px; border-radius: 12px; background: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.9)"><div class="t-h2">{{lsRent}}</div><div class="t-c mut">For rent</div></div>
+              <div style="padding: 10px; border-radius: 12px; background: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.9)"><div class="t-h2">{{lsBuy}}</div><div class="t-c mut">For sale</div></div>
+            </div>
+            <div class="row" style="gap: 8px"><a class="btn btn-p btn-sm" href="ListingForm.dc.html" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add listing</a><a class="btn btn-s btn-sm" href="VendorPublic.dc.html" style="flex: 1">Preview public page</a></div>
+          </div>
+        </section>
+        <section style="display: flex; flex-direction: column; gap: 12px" aria-label="Contact reveals">
+          <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Contact reveals</h2><a href="Notifications.dc.html" data-cat="reveals" class="t-s b" style="color: #5B2A8C; text-decoration: none">See all</a></div>
+          <div class="t-c mut" style="margin-top: -6px">People who tapped Show contact details on your page</div>
+          <sc-if value="{{revLoading}}" hint-placeholder-val="{{ false }}">
+            <div class="card" style="gap: 12px" aria-busy="true" aria-label="Loading contact reveals"><div class="skel" style="height: 22px; width: 40%"></div><div class="row" style="gap: 10px"><div class="skel" style="width: 36px; height: 36px; border-radius: 18px"></div><div class="sp" style="display: flex; flex-direction: column; gap: 6px"><div class="skel" style="height: 12px; width: 60%"></div><div class="skel" style="height: 10px; width: 35%"></div></div></div><div class="row" style="gap: 10px"><div class="skel" style="width: 36px; height: 36px; border-radius: 18px"></div><div class="sp" style="display: flex; flex-direction: column; gap: 6px"><div class="skel" style="height: 12px; width: 50%"></div><div class="skel" style="height: 10px; width: 30%"></div></div></div></div>
+          </sc-if>
+          <sc-if value="{{revHas}}" hint-placeholder-val="{{ true }}">
+            <div class="card" style="gap: 10px">
+              <div class="row" style="gap: 10px"><span class="t-d" style="font-size: 30px; line-height: 34px; color: #367A22">{{revN}}</span><span class="t-s mut sp">contact reveals this week</span><span class="badge b-g">{{revNew}} new</span></div>
+              <div class="list">
+                <sc-for list="{{reveals}}" as="r" hint-placeholder-count="3"><a class="li" href="UserProfile.dc.html" aria-label="Open {{r.name}}" style="min-height: 56px"><span class="av" data-ini="{{r.ini}}" style="width: 36px; height: 36px; font-size: 13px">{{r.ini}}</span><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{r.name}}</span><span class="t-c mut trunc" style="display: block">{{r.sub}} · {{r.when}}</span></span><sc-if value="{{r.isNew}}" hint-placeholder-val="{{ true }}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #367A22; flex: none" aria-label="New"></span></sc-if></a></sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{revEmpty}}" hint-placeholder-val="{{ false }}">
+            <div class="card" style="align-items: center; text-align: center; gap: 6px; padding: 20px 16px"><div class="t-h3">No contact reveals yet</div><div class="t-s mut" style="max-width: 260px">When someone taps Show contact details on your vendor page, they appear here.</div><a class="btn btn-s btn-sm" href="ListingForm.dc.html">Add a listing</a></div>
+          </sc-if>
+        </section>
+        <sc-if value="{{vendorOnly}}" hint-placeholder-val="{{ false }}"><section style="display: flex; flex-direction: column; gap: 12px" aria-label="Invoices">
+          <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Invoices</h2><a href="Invoices.dc.html" class="t-s b" style="color: #5B2A8C; text-decoration: none">Open</a></div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+            <a href="Invoices.dc.html" class="card" style="padding: 12px; gap: 2px; text-decoration: none"><div class="t-c mut">Outstanding</div><div class="t-h2">₹1,53,400</div><div class="t-c" style="color: #B42318; font-weight: 700">1 overdue</div></a>
+            <a href="Invoices.dc.html" class="card" style="padding: 12px; gap: 2px; text-decoration: none"><div class="t-c mut">Paid this month</div><div class="t-h2">₹82,600</div><div class="t-c" style="color: #367A22; font-weight: 700">2 invoices</div></a>
+          </div>
+        </section></sc-if>
+        <sc-if value="{{showNeedGear}}" hint-placeholder-val="{{ false }}">
+          <a href="AddRole.dc.html" data-role="crew" class="row" style="gap: 10px; padding: 12px 14px; border: 1px dashed #D4D0DC; border-radius: 14px; text-decoration: none; color: #1A1820"><span class="sq" style="width: 32px; height: 32px; border-radius: 9px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span><span class="sp t-s"><b>Work on productions too?</b> <span class="mut">Add a crew profile to find jobs.</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <!-- NEED GEAR? replaced by the catalog's Rent/Buy or Listings tile -->
+    <sc-if value="{{showNeedGear}}" hint-placeholder-val="{{ false }}">
+      <a href="MyListings.dc.html" class="card" style="flex-direction: row; align-items: center; gap: 12px; text-decoration: none"><span class="sq g" style="width: 44px; height: 44px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><span class="sp" style="min-width: 0"><span class="t-h3" style="display: block">Need gear?</span><span class="t-c mut" style="display: block">Cameras, lenses and lighting to rent or buy</span></span><span class="btn btn-s btn-sm">Browse</span></a>
+    </sc-if>
+
+    <!-- LISTINGS (same card pattern as Jobs for you; Both roles) -->
+    <sc-if value="{{bothRoles}}" hint-placeholder-val="{{ true }}">
+    <section style="display: flex; flex-direction: column; gap: 12px" aria-label="Listings for you">
+      <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">Listings for you</h2><a href="MyListings.dc.html" class="t-s b" style="color: #5B2A8C; text-decoration: none">See all</a></div>
+      <div class="t-c mut" style="margin-top: -6px">Equipment and products to rent or buy</div>
+      <sc-for list="{{listings}}" as="l" hint-placeholder-count="3">
+        <div class="card" style="gap: 8px">
+          <a href="VendorPublic.dc.html" style="text-decoration: none; color: #1A1820; min-width: 0"><div class="t-h3 trunc">{{l.name}}</div><div class="t-s mut trunc">{{l.vendor}}</div></a>
+          <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg>{{l.cat}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{l.city}}</span></div>
+          <div class="row" style="gap: 8px"><span class="sp" style="display: flex; flex-direction: column; gap: 2px"><span class="pay">{{l.price}} <span class="t-c mut" style="font-weight: 500">{{l.unit}}</span></span><span class="t-c mut">{{l.mode}}</span></span><a class="btn btn-p btn-sm" href="VendorPublic.dc.html">View listing</a></div>
+        </div>
+      </sc-for>
+    </section>
+    </sc-if>
+
+    <!-- 3 · CREW (Crew role) -->
+    <sc-if value="{{hasCrew}}" hint-placeholder-val="{{ true }}">
+    <section style="display: flex; flex-direction: column; gap: 12px" aria-label="{{crewTitle}}">
+      <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">{{crewTitle}}</h2><a href="Talent.dc.html" class="t-s b" style="color: #5B2A8C; text-decoration: none">See all</a></div>
+      <div class="t-c mut" style="margin-top: -6px">{{crewSub}}</div>
+      <sc-for list="{{crew}}" as="c" hint-placeholder-count="3">
+        <div class="card" style="gap: 10px">
+          <div class="row" style="gap: 12px; align-items: flex-start">
+            <a href="UserProfile.dc.html" aria-label="Open {{c.name}}" class="av" data-ini="{{c.ini}}" style="width: 52px; height: 52px; border-radius: 26px; text-decoration: none">{{c.ini}}</a>
+            <a href="UserProfile.dc.html" aria-label="Open {{c.name}}" class="sp" style="display: flex; flex-direction: column; gap: 2px; text-decoration: none; color: #1A1820; min-width: 0"><span class="t-h3 trunc">{{c.name}}</span><span class="t-s b trunc" style="color: #5B2A8C">{{c.titles}}</span><span class="t-c mut">{{c.dept}}</span></a>
+            <button class="iconbtn" onClick="{{c.more}}" aria-label="More options for {{c.name}}" style="width: 32px; height: 32px; margin: -4px -6px 0 0; color: #6B6676"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle></svg></button>
+          </div>
+          <div class="row" style="gap: 10px; flex-wrap: wrap"><sc-if value="{{c.hasAvail}}" hint-placeholder-val="{{ true }}"><span class="{{c.availCls}}">{{c.availText}}</span></sc-if><sc-if value="{{c.isHiring}}" hint-placeholder-val="{{ false }}"><span class="hire-badge">Currently hiring</span></sc-if></div>
+          <div class="row" style="gap: 8px"><sc-if value="{{c.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{c.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{c.mutText}}</span></span></sc-if><span class="sp"></span>
+            <sc-if value="{{c.canConnect}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p btn-sm" onClick="{{c.connect}}">Connect</button></sc-if>
+            <sc-if value="{{c.requested}}" hint-placeholder-val="{{ false }}"><button class="btn btn-sm dis" disabled="">Requested</button></sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+    </sc-if>
+
+    <!-- 4 · NETWORK -->
+    <section style="display: flex; flex-direction: column; gap: 12px" aria-label="From your network">
+      <div class="row" style="align-items: baseline; gap: 8px"><h2 class="t-h2 sp">From your network</h2><a href="DiscoverFeed.dc.html" class="t-s b" style="color: #5B2A8C; text-decoration: none">See all</a></div>
+      <div class="list">
+        <sc-for list="{{net}}" as="n" hint-placeholder-count="3">
+          <a class="li" href="{{n.href}}" aria-label="{{n.aria}}" data-assoc="{{n.assoc}}" style="align-items: flex-start; min-height: 64px">
+            <span class="{{n.avCls}}" data-ini="{{n.ini}}" style="{{n.avStyle}}">{{n.ini}}</span>
+            <span class="sp" style="min-width: 0"><span class="t-s" style="display: block"><b>{{n.who}}</b> {{n.text}}</span><span class="t-c mut trunc" style="display: block">{{n.detail}} · {{n.when}}</span></span>
+          </a>
+        </sc-for>
+      </div>
+    </section>
   </div>
 
+  <!-- Floating create button + action menu -->
+  <sc-if value="{{fabOpen}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim" onClick="{{closeFab}}" style="position: absolute; inset: 0; z-index: 20"></div>
+    <div role="menu" aria-label="Create" style="position: absolute; right: 20px; bottom: 164px; z-index: 22; display: flex; flex-direction: column; gap: 10px; align-items: flex-end">
+      <sc-if value="{{hasVendor}}" hint-placeholder-val="{{ true }}"><a role="menuitem" href="ListingForm.dc.html" onPointerDown="{{closeFab}}" class="row" style="gap: 12px; padding: 10px 16px 10px 10px; min-height: 52px; border-radius: 16px; text-decoration: none; color: #1A1820; background: rgba(255,255,255,.86); border: 1px solid rgba(255,255,255,.95); -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%); box-shadow: 0 14px 32px -14px rgba(46,18,72,.4)"><span class="sq g" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><span class="t-s b">Create a Listing</span></a></sc-if>
+      <sc-if value="{{seekOnly}}" hint-placeholder-val="{{ false }}"><a role="menuitem" href="AddMode.dc.html" data-mode="post" onPointerDown="{{closeFab}}" style="padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 600; color: #4A1F73; background: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.95); text-decoration: none; box-shadow: 0 10px 22px -14px rgba(46,18,72,.4)">Hire crew? Become a Job Poster</a></sc-if>
+      <sc-if value="{{canPost}}" hint-placeholder-val="{{ true }}"><a role="menuitem" href="CreateJob.dc.html" onPointerDown="{{closeFab}}" class="row" style="gap: 12px; padding: 10px 16px 10px 10px; min-height: 52px; border-radius: 16px; text-decoration: none; color: #1A1820; background: rgba(255,255,255,.86); border: 1px solid rgba(255,255,255,.95); -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%); box-shadow: 0 14px 32px -14px rgba(46,18,72,.4)"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span><span class="t-s b">Create a Job Post</span></a></sc-if>
+      <sc-if value="{{crewOnly}}" hint-placeholder-val="{{ false }}"><a role="menuitem" href="AddRole.dc.html" data-role="vendor" onPointerDown="{{closeFab}}" style="padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 600; color: #4A1F73; background: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.95); text-decoration: none; box-shadow: 0 10px 22px -14px rgba(46,18,72,.4)">List your equipment</a></sc-if>
+      <sc-if value="{{vendorOnly}}" hint-placeholder-val="{{ false }}"><a role="menuitem" href="AddRole.dc.html" data-role="crew" onPointerDown="{{closeFab}}" style="padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 600; color: #4A1F73; background: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.95); text-decoration: none; box-shadow: 0 10px 22px -14px rgba(46,18,72,.4)">Looking for crew work?</a></sc-if>
+    </div>
+  </sc-if>
+  <button class="fab" onClick="{{toggleFab}}" aria-label="{{fabLabel}}" aria-expanded="{{fabOpen}}" aria-haspopup="menu" style="{{fabStyle}}"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true" style="{{fabIcon}}"><path d="M12 5v14M5 12h14"></path></svg></button>
+
+  <sc-if value="{{menu}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim"><div class="sheet" role="dialog" aria-label="More options">
+      <div class="grab"></div>
+      <div class="row"><div class="t-h3 sp trunc">{{menuTitle}}</div><button class="iconbtn" onClick="{{closeMenu}}" aria-label="Close menu"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+      <div class="list"><sc-for list="{{menuOpts}}" as="o" hint-placeholder-count="3"><button class="li" onClick="{{o.run}}"><span class="sp t-s b" style="text-align: left">{{o.label}}</span></button></sc-for></div>
+    </div></div>
+  </sc-if>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status">{{toastText}}</div></sc-if>
   <nav class="nav" aria-label="Main">
     <a class="on" href="SeekerHome.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
-    <a href="DiscoverFeed.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
-    <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
-    <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
+    <a href="Jobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>Jobs</a><div class="nm"><label class="nm-btn"><input type="checkbox" class="nm-t" aria-label="More: Calendar and Invoices"><span class="nm-scrim" aria-hidden="true"></span><span class="nm-core"><svg class="i nm-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"></rect></svg></span><span class="nm-lbl">More</span></label><div class="nm-menu"><span class="nm-arc" aria-hidden="true"></span><a class="nm-opt nm-o1" href="Calendar.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="nm-tag">Calendar</span></a><a class="nm-opt nm-o2" href="Invoices.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span><span class="nm-tag">Invoices</span></a></div></div>
+    <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>Listings</a>
+    
+    
     <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
   </nav>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"store": {"editor": null}, "act": {"editor": null}, "noRecs": {"editor": "boolean", "default": false}, "$preview": {"width": 390, "height": 844}}'>
 class Component extends DCLogic {
-  renderVals() {
+  constructor(p) {
+    super(p);
+    this.jobs = [
+      { variant: 'main', title: 'Focus Puller — Feature Film (Hindi)', org: 'Lantern Pictures', loc: 'Film City, Mumbai', dur: '32 days', dates: '4 Nov – 12 Dec 2026', ago: '2d ago' },
+      { variant: 'tvc', title: 'Focus Puller — TVC, 2-day shoot', org: 'Pinewood Ads', loc: 'Bandra, Mumbai', dur: '2 days', dates: '14 – 15 Nov 2026', ago: 'today' },
+      { variant: 'disc', title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', loc: 'Ramoji Film City, Hyderabad', dur: '18 days', dates: '10 – 27 Nov 2026', ago: '2d ago' }
+    ];
+    this.general = [
+      { name: 'Meera Joshi', titles: 'Focus Puller · 1st Assistant Camera', dept: 'Camera' },
+      { name: 'Vikram Bhosle', titles: 'Gaffer', dept: 'Lighting & Grip' },
+      { name: 'Sana Mirza', titles: 'Production Designer', dept: 'Art & Production Design' }
+    ];
+    this.forRoles = [
+      { name: 'Rohan D’Souza', titles: '2nd Assistant Camera', dept: 'Camera' },
+      { name: 'Nisha Verma', titles: '2nd Assistant Camera · Producer', dept: 'Camera' },
+      { name: 'Karthik Subramanian', titles: 'Camera Trainee · 2nd Assistant Camera', dept: 'Camera' }
+    ];
+    this.netItems = [
+      { who: 'Kavya Menon', ini: 'KM', text: 'shared a job', detail: 'Focus Puller — Feature Film (Hindi), Lantern Pictures', when: '1h ago', href: 'JobDetail.dc.html', aria: 'Open the shared job', assoc: '' },
+      { who: 'Farhan Siddiqui', ini: 'FS', text: 'added a new work link', detail: 'Vimeo · vimeo.com/farhansiddiqui', when: '3h ago', href: 'UserProfile.dc.html', aria: 'Open Farhan Siddiqui', assoc: '' },
+      { who: 'Cine Technicians Guild', ini: 'CTG', text: 'posted a notice', detail: 'Revised minimum day rates — effective 1 December', when: '27 Oct', href: 'NoticeDetail.dc.html', aria: 'Open notice', assoc: 'CTG', isAssoc: true },
+      { who: 'Ananya Iyer', ini: 'AI', text: 'updated their Skill Board', detail: 'Added DaVinci Resolve and Assembly cuts', when: '5h ago', href: 'UserProfile.dc.html', aria: 'Open Ananya Iyer', assoc: '' }
+    ];
+    this.listings = [
+      { name: 'ARRI Alexa Mini LF — full kit', vendor: 'Reelhouse Camera Rentals', cat: 'Camera bodies', city: 'Goregaon East, Mumbai', price: '₹28,000', unit: 'per day', mode: 'Rent' },
+      { name: 'Cooke S4/i prime set (6 lenses)', vendor: 'Reelhouse Camera Rentals', cat: 'Lenses', city: 'Goregaon East, Mumbai', price: '₹12,500', unit: 'per day', mode: 'Rent' },
+      { name: 'Sony FX3 cinema camera kit', vendor: 'Reelhouse Camera Rentals', cat: 'Camera bodies', city: 'Goregaon East, Mumbai', price: '₹4,500', unit: 'per day', mode: 'Rent' }
+    ];
+    this.state = { updOpen: false, menu: null, hidden: {}, req: {}, toast: '', fab: false };
+  }
+  net(n) {
+    const N = { 'Meera Joshi': [12, 'av'], 'Arjun Kulkarni': [4, 'tb'], 'Sana Mirza': [7, 'av'], 'Farhan Siddiqui': [9, 'un'], 'Ananya Iyer': [3, 'av'], 'Vikram Bhosle': [15, 'tb'], 'Kavya Menon': [18, ''], 'Northlight Studios': [6, ''], 'Reelhouse Camera Rentals': [11, ''], 'Kilowatt Lighting Co.': [2, ''], 'Nisha Verma': [5, 'av'], 'Aditya Rao': [8, 'av'], 'Priya Nair': [10, 'av'], 'Rohan D’Souza': [1, 'un'], 'Karthik Subramanian': [0, 'av'], 'Imran Shaikh': [2, 'av'] };
+    const pool = ['FS', 'AI', 'MJ', 'VB', 'AK', 'SM', 'KM', 'NV'];
+    const e = N[n] || [0, ''];
+    const me = n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const m = e[0];
+    const AV = { av: ['Available', 'avail a-av'], un: ['Unavailable', 'avail a-un'], tb: ['Tentatively booked', 'avail a-tb'] };
     return {
-      jobs: [
-        { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', cat: 'Camera', loc: 'Film City, Mumbai', pay: '₹8,000 – ₹12,000 / day', ago: '2d ago', pdf: true },
-        { title: 'Assistant Editor — Web Series (8 episodes)', org: 'Northlight Studios', cat: 'Editing & Post', loc: 'Andheri West, Mumbai', pay: '₹55,000 – ₹70,000 / month', ago: '3d ago', pdf: false },
-        { title: 'Location Sound Recordist — Wildlife Documentary', org: 'Kite & Kettle Films', cat: 'Sound', loc: 'Leh, Ladakh (travel)', pay: '₹6,000 – ₹9,000 / day', ago: '4d ago', pdf: true },
-        { title: 'Gaffer — TVC, 2-day shoot', org: 'Pinewood Ads', cat: 'Lighting & Grip', loc: 'Bandra, Mumbai', pay: 'Payment not specified', ago: '5d ago', pdf: false },
-        { title: 'Supporting Actor (Male, 30–40) — Short Film', org: 'Third Bell Collective', cat: 'Cast', loc: 'Pune, Maharashtra', pay: '₹15,000 flat', ago: '1w ago', pdf: false }
-      ]
+      mutN: m, hasMut: m > 0, noMut: m === 0,
+      mutText: m === 0 ? 'No mutual connections' : m + (m === 1 ? ' mutual connection' : ' mutual connections'),
+      mutAv: pool.filter((x) => x !== me).slice(0, Math.min(3, m)),
+      hasAvail: !!e[1], availText: e[1] ? AV[e[1]][0] : '', availCls: e[1] ? AV[e[1]][1] : ''
+    };
+  }
+  // Explore slider cards. Direction A “Glass wash” is the default; B and C are kept for the comparison board.
+  sliderStyle(t, i, dir) {
+    const TN = { lav: ['#EFE7F7', '#DCCDF0', '#5B2A8C'], grn: ['#E6F2DC', '#CFE6C0', '#367A22'], amb: ['#FFF4CC', '#F6E3A6', '#8A5300'], blu: ['#E3EEFA', '#C9DDF3', '#2F5F9E'] }[t.tint] || ['#EFE7F7', '#DCCDF0', '#5B2A8C'];
+    const bg = dir === 'b' ? 'linear-gradient(180deg,' + TN[1] + ' 0,' + TN[0] + ' 74px,rgba(255,255,255,.78) 74px)'
+      : dir === 'c' ? 'radial-gradient(circle at 100% 0%,' + TN[1] + ' 0,rgba(255,255,255,0) 62%),rgba(255,255,255,.74)'
+      : 'linear-gradient(155deg,' + TN[0] + ' 0%,rgba(255,255,255,.78) 64%)';
+    return { cardStyle: 'background:' + bg + ';animation-delay:' + (0.05 + i * 0.06).toFixed(2) + 's',
+      decoStyle: 'color:' + TN[2] + (dir === 'a' ? '' : ';display:none'),
+      orbBig: 'width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;position:relative;flex:none;color:' + TN[2] + ';background:' + (dir === 'b' ? 'rgba(255,255,255,.9)' : 'linear-gradient(150deg,' + TN[0] + ',' + TN[1] + ')') + ';box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 8px 18px -12px ' + TN[2],
+      cta: t.turnOn ? 'Turn on' : 'Open', ctaCls: 'xs-cta ' + (t.turnOn ? 'xs-on' : 'xs-open') };
+  }
+  // Your jobs (both modes): remembered tab, badges, swipe.
+  yjVals(store, act, newA, both) {
+    const upd = ((store.crew && store.crew.apps) || []).filter((a) => a.isNew && ['Applied', 'Under Review', 'Shortlisted'].indexOf(a.status) >= 0).length;
+    const tab = store.homeTab || (newA > 0 && upd === 0 ? 'posts' : 'apps');
+    const set = (k) => { if (k !== tab) act('homeTab', k); };
+    const loading = (this.props.demo || '') === 'loading';
+    return { showYJ: both, yjOnApps: tab === 'apps', yjOnPosts: tab === 'posts',
+      yjAppsCls: 'yj-t' + (tab === 'apps' ? ' on' : ''), yjPostsCls: 'yj-t' + (tab === 'posts' ? ' on' : ''),
+      yjShowApps: !loading && tab === 'apps', yjShowPosts: !loading && tab === 'posts',
+      yjUpd: upd, yjNewA: newA,
+      yjAppsBadge: upd > 0 && store.coach !== 'seek', yjPostsBadge: newA > 0 && store.coach !== 'post',
+      yjAppsNew: store.coach === 'seek', yjPostsNew: store.coach === 'post',
+      yjLink: tab === 'apps' ? 'Applications' : 'My Posts', yjLinkTab: tab === 'apps' ? 'apps' : 'posts', yjSeen: tab === 'apps' ? '*' : '',
+      yjToApps: () => set('apps'), yjToPosts: () => set('posts'),
+      yjDown: (e) => { this.px = e.clientX; },
+      yjUp: (e) => { if (this.px == null) return; const dx = e.clientX - this.px; this.px = null; if (dx < -50) set('posts'); if (dx > 50) set('apps'); } };
+  }
+  // Your applications: active = Applied, Under Review, Shortlisted. Newest status change first, then newest application.
+  appsCard(store, crewR, md) {
+    const all = crewR && md.seek ? ((store.crew && store.crew.apps) || []) : [];
+    const act = all.filter((a) => ['Applied', 'Under Review', 'Shortlisted'].indexOf(a.status) >= 0);
+    const rows = act.filter((a) => a.isNew).concat(act.filter((a) => !a.isNew));
+    const upd = act.filter((a) => a.isNew).length;
+    const P = { Shortlisted: ['badge b-g', 'Shortlisted'], 'Under Review': ['badge b-p', 'Under review'], Applied: ['badge b-n', 'Applied'] };
+    const loading = (this.props.demo || '') === 'loading';
+    return { showApps: crewR && !!md.seek && !md.post, appsLoading: loading, appsReady: !loading,
+      appsN: act.length, appsWord: act.length === 1 ? 'active application' : 'active applications',
+      hasUpd: upd > 0, updText: upd + (upd === 1 ? ' new update' : ' new updates'),
+      hasActiveApps: act.length > 0, noActiveApps: act.length === 0,
+      appRows: rows.slice(0, 3).map((a) => ({ ...a, isNew: !!a.isNew, pill: (P[a.status] || P.Applied)[0], pillText: (P[a.status] || P.Applied)[1] })) };
+  }
+  // Explore CrewConnect tiles. Owned features open directly; missing ones show Turn on and open the matching opt-in.
+  tiles(store, md) {
+    const R = store.roles || { crew: true, vendor: true };
+    const vOnly = !!R.vendor && !R.crew, rentBuy = !!R.crew && !R.vendor && md.seek && !md.post;
+    const IC = { tag: 'M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 6a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z', cube: 'M3 7.5 12 3l9 4.5v9L12 21l-9-4.5zM3 7.5 12 12l9-4.5M12 12v9', cal: 'M3 5h18v16H3zM8 3v4M16 3v4M3 10h18', inv: 'M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6', post: 'M9 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM2.5 20a6.5 6.5 0 0 1 13 0M19 8v6M16 11h6', seek: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-3.5-3.5', shop: 'M4 9 5.5 4h13L20 9M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11zM5 13v7h14v-7', crew: 'M3 7h18v13H3zM9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18' };
+    const TINT = { lav: '#EFE7F7,#DCCDF0);color:#5B2A8C', grn: '#E6F2DC,#CFE6C0);color:#367A22', amb: '#FFF4CC,#F6E3A6);color:#8A5300', blu: '#E3EEFA,#C9DDF3);color:#2F5F9E' };
+    const T = (label, desc, href, icon, tint, o) => ({ label, desc, href, icon: IC[icon], tint, orb: 'width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,' + TINT[tint], mode: '', role: '', tab: '', turnOn: false, ...(o || {}) });
+    const list = [];
+    list.push(T(rentBuy ? 'Rent/Buy' : 'Listings', vOnly ? 'Manage your listings' : 'Rent or buy gear from vendors', 'MyListings.dc.html', rentBuy ? 'tag' : 'cube', 'grn'));
+    if (R.crew) list.push(T('Calendar', 'Mark your availability', 'Calendar.dc.html', 'cal', 'blu'));
+    list.push(T('Invoices', 'Create and track invoices', 'Invoices.dc.html', 'inv', 'amb'));
+    if (R.crew) {
+      if (md.seek && md.post) list.push(T('Job Poster', 'Post jobs and hire crew', 'Jobs.dc.html', 'post', 'lav', { tab: 'posts' }));
+      else if (md.seek) list.push(T('Job Poster', 'Post jobs and hire crew', 'AddMode.dc.html', 'post', 'lav', { mode: 'post', turnOn: true }));
+      else list.push(T('Job Seeker', 'Find work and apply', 'AddMode.dc.html', 'seek', 'lav', { mode: 'seek', turnOn: true }));
+      if (R.vendor) list.push(T('Vendor', 'List and rent out your equipment', 'MyListings.dc.html', 'shop', 'grn'));
+      else list.push(T('Vendor', 'List and rent out your equipment', 'AddRole.dc.html', 'shop', 'grn', { role: 'vendor', turnOn: true }));
+    } else {
+      list.push(T('Crew', 'Find work or hire crew', 'AddRole.dc.html', 'crew', 'lav', { role: 'crew', turnOn: true }));
+    }
+    // An odd last tile spans both columns so the grid never leaves a hole.
+    return list.map((t, i) => ({ ...t, aria: t.label + ', ' + t.desc.toLowerCase() + ', ' + (t.turnOn ? 'turn on' : 'open'),
+      style: 'text-decoration:none;color:#1A1820;gap:6px;padding:14px;min-height:118px;' + (i === list.length - 1 && list.length % 2 ? 'grid-column:span 2' : '') }));
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  flash(m) { this.setState({ toast: m, menu: null }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2200); }
+  renderVals() {
+    const s = this.state;
+    const store = this.props.store || {};
+    // Crew modes: Job Seeker owns applications and job matches; Job Poster owns posts and applicants.
+    const md = store.modes || { seek: true, post: true };
+    const crewR = !!(store.roles || { crew: true }).crew;
+    const c0 = store.crew || { posts: [], apps: [], saved: {} };
+    const c = { ...c0, posts: md.post ? c0.posts : [], apps: md.seek ? c0.apps : [] };
+    const act = this.props.act || (() => {});
+    const conn = store.conn || {};
+    const noRecs = !!this.props.noRecs || !!c.noRecs;
+    const active = c.posts.filter((p) => p.st === 'Active');
+    const newA = active.reduce((n, p) => n + (p.newA || 0), 0);
+    const top = active.slice().sort((a, b) => (b.newA || 0) - (a.newA || 0))[0];
+    const big = active.find((p) => p.apps > 5);
+    const changed = c.apps.filter((a) => a.isNew);
+    // 1 · Updates (job and applicant updates exist only for the Crew role)
+    const upd = [];
+    const crewOn = !!(store.roles || { crew: true }).crew;
+    if (newA) upd.push({ text: newA + (newA === 1 ? ' new applicant' : ' new applicants'), sub: top.title, href: 'Applicants.dc.html', app: '', job: '', dot: 'b-p', k: 'a' });
+    if (big) upd.push({ text: 'More than 5 applications', sub: big.title + ' · ' + big.apps + ' applicants', href: 'Applicants.dc.html', app: '', job: '', dot: 'b-p', k: 'b' });
+    changed.forEach((a) => upd.push({ text: 'Application ' + a.status.toLowerCase(), sub: a.title, href: 'JobDetail.dc.html', app: a.status, job: a.variant, dot: 'b-g', k: 'c' }));
+    if (!crewOn) upd.length = 0;
+    upd.forEach((u) => { u.dotStyle = 'width:8px;height:8px;border-radius:4px;flex:none;background:' + (u.dot === 'b-g' ? '#367A22' : '#5B2A8C'); });
+    const bits = [];
+    if (newA) bits.push(newA + (newA === 1 ? ' new applicant' : ' new applicants'));
+    if (big) bits.push('1 post passed 5 applications');
+    if (changed.length) bits.push(changed.length + (changed.length === 1 ? ' application ' + changed[0].status.toLowerCase() : ' application updates'));
+    // 2 · Jobs
+    const jobs = noRecs ? [] : this.jobs.filter((j) => !s.hidden[j.title]).slice(0, 3).map((j) => ({ ...j, more: () => this.setState({ menu: { kind: 'job', j } }) }));
+    // 3 · Crew
+    const forRoles = active.length > 0;
+    const crewList = (forRoles ? this.forRoles : this.general).filter((p) => !s.hidden[p.name]).slice(0, 3).map((p) => {
+      const st = s.req[p.name] || conn[p.name];
+      return { ...p, ...this.net(p.name), ini: p.name.split(' ').map((x) => x[0]).join('').slice(0, 2),
+        canConnect: !st || st === 'none', requested: st === 'pending' || st === 'requested',
+        connect: () => { this.setState({ req: { ...s.req, [p.name]: 'requested' } }); act('conn', p.name, 'pending'); this.flash('Connection request sent to ' + p.name.split(' ')[0]); },
+        more: () => this.setState({ menu: { kind: 'crew', p } }) };
+    });
+    const m = s.menu;
+    const menuOpts = !m ? [] : m.kind === 'job'
+      ? [{ label: (c.saved && c.saved[m.j.title]) ? 'Remove from saved' : 'Save job', run: () => { act('save', m.j.title); this.flash('Saved to Jobs › Find Jobs'); } },
+         { label: 'Share job', run: () => this.flash('Share link copied') },
+         { label: 'Not interested', run: () => { this.setState({ hidden: { ...s.hidden, [m.j.title]: true } }); this.flash('We’ll show fewer jobs like this'); } }]
+      : [{ label: 'Follow', run: () => { act('follow', m.p.name, true); this.flash('Following ' + m.p.name.split(' ')[0]); } },
+         { label: 'Hide suggestion', run: () => { this.setState({ hidden: { ...s.hidden, [m.p.name]: true } }); this.flash('Suggestion hidden'); } }];
+    const nm = (store.name || 'Priya Nair').trim() || 'Priya Nair';
+    return {
+      ...(() => {
+        // Completion counts only the sections of the account's roles. Both: basic + 4 × 20%. One role: basic 34% + 2 × 33% [TBC].
+        const R = store.roles || { crew: true, vendor: true };
+        const pf = store.prof || { pro: true, refs: true, biz: true, contact: true };
+        const L = [].concat(R.crew ? [['pro', 'Professional information'], ['refs', 'External references']] : [], R.vendor ? [['biz', 'Business details'], ['contact', 'Business contact & GST']] : []);
+        const n = L.filter((x) => pf[x[0]]).length, left = L.length - n;
+        const pct = L.length === 4 ? 20 * (1 + n) : 34 + 33 * n;
+        const nx = L.find((x) => !pf[x[0]]);
+        const ja = store.justAdded;
+        const compTitle = ja && left ? 'New ' + (ja === 'vendor' ? 'vendor' : 'crew') + ' profile added: ' + left + (left === 1 ? ' section to go' : ' sections to go') : 'Your profile is ' + pct + '% complete';
+        const rv = store.reveals || [];
+        const demo = this.props.demo || '';
+        const ls = store.listings || { total: 12, rent: 9, buy: 3 };
+        return { pct, compTitle, showCompletion: pct < 100, nextSection: nx ? nx[1] : '', barStyle: 'height:100%;border-radius:4px;background:linear-gradient(90deg,#5B2A8C,#367A22);width:' + pct + '%',
+          hasCrew: !!R.crew, hasVendor: !!R.vendor, crewOnly: !!R.crew && !R.vendor, vendorOnly: !!R.vendor && !R.crew, bothRoles: !!R.crew && !!R.vendor,
+          bizName: store.bizName || 'Your business', lsTotal: ls.total, lsRent: ls.rent, lsBuy: ls.buy,
+          revLoading: demo === 'loading', revHas: demo !== 'loading' && demo !== 'empty' && rv.length > 0, revEmpty: demo !== 'loading' && (demo === 'empty' || rv.length === 0),
+          revN: rv.length, revNew: rv.filter((r) => r.isNew).length,
+          reveals: rv.slice(0, 3).map((r) => ({ ...r, isNew: !!r.isNew, ini: r.name.split(' ').map((x) => x[0]).join('').slice(0, 2) })) };
+      })(),
+      showJobs: crewR && !!md.seek, canPost: crewR && !!md.post, seekOnly: crewR && !!md.seek && !md.post,
+      postsFirst: crewR && !!md.post && !md.seek, postsAfter: false, postsMid: false,
+      ...this.appsCard(store, crewR, md),
+      ...this.yjVals(store, act, newA, crewR && !!md.seek && !!md.post),
+      tiles: this.tiles(store, md).map((t, i) => ({ ...t, ...this.sliderStyle(t, i, this.props.slider || 'a') })),
+      dots: this.tiles(store, md).map((t, i) => ({ cls: i === (this.state.slide || 0) ? 'on' : '' })),
+      onSlide: (e) => { const el = e.currentTarget || e.target; const c1 = el && el.querySelector('.xs-card'); if (!c1) return; const i = Math.round(el.scrollLeft / (c1.offsetWidth + 12)); if (i !== (this.state.slide || 0)) this.setState({ slide: i }); },
+      showNeedGear: false,
+      // Board-only: demo="catalog" scrolls the artboard to Explore CrewConnect.
+      scRef: (el) => { if (el && (this.props.demo || '') === 'catalog') setTimeout(() => { const t = el.querySelector('[aria-label="Explore CrewConnect"]'); if (t) el.scrollTop = t.offsetTop - 16; }, 80); },
+      hasActive: active.length > 0, noActive: active.length === 0, activeN: active.length, activeWord: active.length === 1 ? 'active post' : 'active posts',
+      hasNewA: newA > 0, newAText: newA + (newA === 1 ? ' new applicant' : ' new applicants'),
+      activePosts: active.slice(0, 3).map((p) => ({ ...p, hasNew: (p.newA || 0) > 0, appText: p.apps ? p.apps + (p.apps === 1 ? ' applicant' : ' applicants') : 'No applicants yet' })),
+      hasPhoto: !!store.photo, noPhoto: !store.photo,
+      listings: this.listings,
+      fabOpen: s.fab, toggleFab: () => this.setState({ fab: !s.fab }), closeFab: () => this.setState({ fab: false }),
+      fabLabel: s.fab ? 'Close create menu' : 'Create a listing or job post',
+      fabStyle: 'position:absolute;right:20px;bottom:96px;z-index:23;width:56px;height:56px;border-radius:28px;border:1px solid rgba(255,255,255,.35);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:#fff',
+      fabIcon: 'stroke-width:2.4;transition:transform .2s;' + (s.fab ? 'transform:rotate(45deg)' : ''),
+      first: nm.split(' ')[0], meIni: nm.split(/\s+/).map((x) => x[0]).join('').slice(0, 2).toUpperCase(),
+      bellN: upd.length + 2,
+      forumN: 2 + (store.posts || []).length,
+      hasUpd: upd.length > 0, upd, updOpen: s.updOpen, updClosed: !s.updOpen, toggleUpd: () => this.setState({ updOpen: !s.updOpen }),
+      updRadius: s.updOpen ? 'border-radius: 16px 16px 0 0' : '',
+      updHead: upd.length + (upd.length === 1 ? ' update' : ' updates'), updSub: bits.join(' · '),
+      hasJobs: jobs.length > 0, noJobs: jobs.length === 0, jobs, showDigest: jobs.length > 0,
+      crewTitle: forRoles ? 'Crew for your open roles' : 'Crew to connect with',
+      crewSub: forRoles ? 'Matching ' + (top ? top.title.split(' — ')[0] : 'your open roles') + ' · ' + active.length + (active.length === 1 ? ' open role' : ' open roles') : 'Based on your department and connections',
+      crew: crewList, noPosts: c.posts.length === 0,
+      net: this.netItems.map((n) => ({ ...n, avCls: n.isAssoc ? 'av g' : 'av', avStyle: n.isAssoc ? 'border-radius: 12px; font-size: 11px' : '' })),
+      menu: !!m, menuTitle: m ? (m.kind === 'job' ? m.j.title : m.p.name) : '', menuOpts, closeMenu: () => this.setState({ menu: null }),
+      toast: !!s.toast, toastText: s.toast
     };
   }
 }

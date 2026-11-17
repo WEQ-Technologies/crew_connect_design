@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Jobs</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+/* Crew-mode opt-in: a compact frosted card above the tab bar. "Not now" collapses it into a chip in the header. */
+.jo-card{position:absolute;left:16px;right:16px;bottom:80px;z-index:22;padding:14px 14px 12px;border-radius:20px;display:flex;flex-direction:column;gap:10px;
+  background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.68));border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 18px 40px -16px rgba(46,18,72,.38),inset 0 1px 0 #fff;-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);
+  animation:joUp .5s cubic-bezier(.34,1.3,.64,1) both}
+@keyframes joUp{from{transform:translateY(28px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+.jo-chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:16px;border:1px solid rgba(183,154,214,.65);background:rgba(255,255,255,.78);
+  color:#4A1F73;font:600 12.5px/1 Inter,system-ui,sans-serif;cursor:pointer;transition:background .18s ease,box-shadow .18s ease;animation:joChip .5s cubic-bezier(.34,1.45,.64,1) both}
+.jo-chip:hover{background:#fff;box-shadow:0 0 0 3px rgba(183,154,214,.2)}
+@keyframes joChip{from{transform:translateY(46px) scale(.55);opacity:0}to{transform:none;opacity:1}}
+.jo-pad .sc{padding-bottom:210px!important}
+.pv-app .jo-card{bottom:108px}
+@media (prefers-reduced-motion:reduce){.jo-card,.jo-chip{animation:joFade .15s ease both}}
+@keyframes joFade{from{opacity:0}to{opacity:1}}
+</style>
+</helmet>
+<div class="{{phCls}}">
+  <div style="flex: none; padding: 20px 20px 10px; display: flex; flex-direction: column; gap: 12px">
+    <div class="row" style="gap: 8px"><div class="t-h1 sp">Jobs</div>
+      <sc-if value="{{canPost}}" hint-placeholder-val="{{ true }}"><a class="btn btn-s btn-sm" href="CreateJob.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Post a job</a></sc-if>
+      <sc-if value="{{showChip}}" hint-placeholder-val="{{ false }}"><button class="jo-chip" onClick="{{openOptin}}" aria-label="{{chipAria}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{chipLabel}}</button></sc-if>
+    </div>
+    <div class="seg" role="tablist" style="{{segStyle}}">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button role="tab" class="{{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px">{{t.label}}<sc-if value="{{t.hasDot}}" hint-placeholder-val="{{ false }}"><span class="dot-new">{{t.dot}}</span></sc-if></button></sc-for>
+    </div>
+  </div>
+
+  <!-- FIND JOBS -->
+  <sc-if value="{{onFind}}" hint-placeholder-val="{{ true }}">
+    <div class="sc" style="padding-top: 0; gap: 12px">
+      <a href="JobSearch.dc.html" class="srch" style="text-decoration: none"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><span class="sp" style="font-size: 15px; color: #6B6676">Search jobs, roles or locations</span></a>
+      <div class="chips"><sc-for list="{{findTabs}}" as="f" hint-placeholder-count="2"><button class="{{f.cls}}" aria-pressed="{{f.on}}" onClick="{{f.pick}}">{{f.label}}</button></sc-for></div>
+      <div class="t-c mut">{{findNote}}</div>
+      <sc-for list="{{findList}}" as="j" hint-placeholder-count="3">
+        <div class="card" style="gap: 8px">
+          <div class="row" style="align-items: flex-start; gap: 10px">
+            <a href="JobDetail.dc.html" data-job="{{j.variant}}" class="sp" style="text-decoration: none; color: #1A1820"><div class="t-h3 clamp2">{{j.title}}</div><div class="t-s mut" style="margin-top: 2px">{{j.org}}</div></a>
+            <sc-if value="{{j.mine}}" hint-placeholder-val="{{ false }}"><span class="badge b-p">Your post</span></sc-if>
+            <sc-if value="{{j.notMine}}" hint-placeholder-val="{{ true }}"><button class="{{j.bmkCls}}" onClick="{{j.toggleSave}}" aria-pressed="{{j.saved}}" aria-label="Save {{j.title}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></button></sc-if>
+          </div>
+          <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{j.loc}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{j.dur}}</span></div>
+          <div class="row"><span class="pay sp">{{j.pay}}</span><span class="t-c mut">{{j.ago}}</span></div>
+        </div>
+      </sc-for>
+      <sc-if value="{{findEmpty}}" hint-placeholder-val="{{ false }}">
+        <div class="empty"><div class="ring"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></div><div class="t-h3">No saved jobs yet</div><div class="t-s mut">Tap the bookmark on any job to keep it here.</div></div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- MY APPLICATIONS -->
+  <sc-if value="{{onApps}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 0; gap: 12px">
+      <sc-if value="{{hasApps}}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+            <div class="card" style="padding: 10px 12px; gap: 0"><div class="t-h2">{{aAll}}</div><div class="t-c mut">Applied</div></div>
+            <div class="card" style="padding: 10px 12px; gap: 0"><div class="t-h2" style="color: #5B2A8C">{{aActive}}</div><div class="t-c mut">In progress</div></div>
+            <div class="card" style="padding: 10px 12px; gap: 0"><div class="t-h2" style="color: #2C6619">{{aShort}}</div><div class="t-c mut">Shortlisted</div></div>
+          </div>
+          <div class="chips x"><sc-for list="{{appTabs}}" as="t" hint-placeholder-count="4"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+          <sc-for list="{{appList}}" as="a" hint-placeholder-count="3">
+            <a href="JobDetail.dc.html" data-job="{{a.variant}}" data-app="{{a.status}}" class="card" style="text-decoration: none; gap: 8px">
+              <div class="row" style="align-items: flex-start; gap: 10px"><div class="sp"><div class="t-h3 clamp2">{{a.title}}</div><div class="t-s mut" style="margin-top: 2px">{{a.org}}</div></div><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></div>
+              <div class="row" style="gap: 8px"><span class="{{a.badge}}">{{a.status}}</span><span class="t-c mut">Applied {{a.applied}}</span><span class="sp"></span><sc-if value="{{a.isNew}}" hint-placeholder-val="{{ false }}"><span class="t-c b" style="color: #2C6619">Updated</span></sc-if></div>
+            </a>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{noApps}}" hint-placeholder-val="{{ false }}">
+        <div class="empty" style="padding-top: 48px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></div><div class="t-h3">No applications yet</div><div class="t-s mut" style="max-width: 260px">Jobs you apply for show up here with their latest status.</div><button class="btn btn-p" onClick="{{toFind}}">Find jobs</button></div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- MY POSTS -->
+  <sc-if value="{{onPosts}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 0; gap: 12px">
+      <sc-if value="{{hasFlash}}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="gap: 12px; background: #F3F9EE; border-color: #E6F2DC">
+          <div class="row" style="gap: 12px; align-items: flex-start"><span style="width: 36px; height: 36px; border-radius: 18px; background: #367A22; color: #fff; display: flex; align-items: center; justify-content: center; flex: none"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.6"><path d="m5 12 5 5 9-10"></path></svg></span><div class="sp"><div class="t-h3">Your job is live</div><div class="t-s mut">“{{flashTitle}}” is visible to crew now.</div></div><button class="iconbtn" onClick="{{dismissFlash}}" aria-label="Dismiss" style="width: 32px; height: 32px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+          <div class="t-s"><b>Working on this project yourself?</b> Mark {{flashDates}} on your calendar so other posters see you're booked.</div>
+          <div class="row" style="gap: 8px; flex-wrap: wrap"><button class="btn btn-sm" style="background: #FFF4CC; color: #7A5A00; border-color: #E8B92E" onClick="{{markT}}">Tentatively booked</button><button class="btn btn-sm" style="background: #FDECEA; color: #B42318; border-color: #F0B6AF" onClick="{{markU}}">Unavailable</button><button class="btn btn-t btn-sm" onClick="{{dismissFlash}}">Not now</button></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{waiting}}" hint-placeholder-val="{{ false }}"><div class="alert a-i" style="padding: 10px 12px; align-items: center"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg><div class="sp">{{waitingText}}</div></div></sc-if>
+      <sc-if value="{{hasPosts}}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div class="chips x"><sc-for list="{{postTabs}}" as="t" hint-placeholder-count="4"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+          <sc-for list="{{postList}}" as="p" hint-placeholder-count="3">
+            <div class="card" style="gap: 10px">
+              <div class="row" style="align-items: flex-start; gap: 10px">
+                <a href="PosterJobDetail.dc.html" data-post="{{p.id}}" class="sp" style="text-decoration: none; color: #1A1820"><div class="t-h3 clamp2">{{p.title}}</div><div class="t-s mut" style="margin-top: 2px">{{p.house}} · {{p.posted}}</div></a>
+                <span class="{{p.badge}}">{{p.stLabel}}</span>
+              </div>
+              <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{p.loc}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{p.dur}}</span></div>
+              <div class="row" style="gap: 8px"><span class="t-s b">{{p.appText}}</span><sc-if value="{{p.hasNew}}" hint-placeholder-val="{{ false }}"><span class="badge b-g">{{p.newA}} new</span></sc-if></div>
+              <div class="row" style="gap: 8px">
+                <sc-if value="{{p.canView}}" hint-placeholder-val="{{ true }}"><a class="btn btn-p btn-sm" href="Applicants.dc.html" data-post="{{p.id}}" style="flex: 1.4">View applicants</a></sc-if>
+                <sc-if value="{{p.canClose}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s btn-sm" onClick="{{p.askClose}}" aria-label="Close {{p.title}}" style="color: #B42318">Close</button></sc-if>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{postFiltEmpty}}" hint-placeholder-val="{{ false }}"><div class="card" style="align-items: center; text-align: center"><div class="t-s mut">Nothing here.</div></div></sc-if>
+          <div class="help" style="text-align: center">Closed posts stay here for your records and are hidden from your public profile.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{noPosts}}" hint-placeholder-val="{{ false }}">
+        <div class="empty" style="padding-top: 48px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></div><div class="t-h3">Hiring for a project?</div><div class="t-s mut" style="max-width: 260px">Post a job to find crew. Applicants show up here with their profiles and availability.</div><a class="btn btn-p" href="CreateJob.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Post a job</a></div>
+      </sc-if>
+    </div>
+  </sc-if>
+  <!-- Crew-mode opt-in overlay (Job Seeker only or Job Poster only). Never covers the list: the list gets extra bottom padding. -->
+  <sc-if value="{{showOptin}}" hint-placeholder-val="{{ false }}">
+    <div class="jo-card" role="region" aria-label="{{optinTitle}}">
+      <div class="row" style="gap: 12px; align-items: flex-start">
+        <span class="{{optinSq}}" style="width: 36px; height: 36px; border-radius: 11px; flex: none"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M19 8v6M16 11h6"></path></svg></span>
+        <div class="sp"><div class="t-h3">{{optinTitle}}</div><div class="t-c mut" style="margin-top: 2px">{{optinText}}</div></div>
+      </div>
+      <div class="row" style="gap: 8px"><button class="btn btn-t btn-sm" onClick="{{dismissOptin}}" style="flex: 1">Not now</button><a class="btn btn-p btn-sm" href="AddMode.dc.html" data-mode="{{optinMode}}" style="flex: 1.6">{{optinCta}}</a></div>
+    </div>
+  </sc-if>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status">{{toastText}}</div></sc-if>
+  <sc-if value="{{confirm}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c"><div class="dlg" role="alertdialog" aria-label="Close job">
+      <div class="t-h2">Close this job?</div>
+      <div class="t-s mut">“{{cTitle}}” stops accepting applications. Existing applicants and their statuses stay as they are.</div>
+      <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{cancel}}" style="flex: 1">Cancel</button><button class="btn btn-p" onClick="{{doClose}}" style="flex: 1; background: #B42318">Close job</button></div>
+    </div></div>
+  </sc-if>
+  <nav class="nav" aria-label="Main">
+    <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+    <a class="on" href="Jobs.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>Jobs</a><div class="nm"><label class="nm-btn"><input type="checkbox" class="nm-t" aria-label="More: Calendar and Invoices"><span class="nm-scrim" aria-hidden="true"></span><span class="nm-core"><svg class="i nm-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"></rect></svg></span><span class="nm-lbl">More</span></label><div class="nm-menu"><span class="nm-arc" aria-hidden="true"></span><a class="nm-opt nm-o1" href="Calendar.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="nm-tag">Calendar</span></a><a class="nm-opt nm-o2" href="Invoices.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span><span class="nm-tag">Invoices</span></a></div></div>
+    
+    <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>Listings</a>
+    <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store": {"editor": null}, "act": {"editor": null}, "tab": {"editor": "enum", "options": ["", "find", "apps", "posts"], "default": ""}, "tabKey": {"editor": null}, "$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.jobs = [
+      { variant: 'main', title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', loc: 'Film City, Mumbai', dur: '32 days', pay: '₹8,000 – ₹12,000 / day', ago: '2d ago' },
+      { variant: 'tvc', title: 'Focus Puller — TVC, 2-day shoot', org: 'Pinewood Ads', loc: 'Bandra, Mumbai', dur: '2 days', pay: '₹9,000 / day', ago: 'Today' },
+      { variant: 'disc', title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', loc: 'Ramoji Film City, Hyderabad', dur: '18 days', pay: '₹10,000 – ₹14,000 / day', ago: '2d ago' },
+      { variant: 'main', title: 'Gaffer — TVC, 2-day shoot', org: 'Pinewood Ads', loc: 'Bandra, Mumbai', dur: '2 days', pay: 'Payment not specified', ago: '5d ago' },
+      { variant: 'main', title: 'Assistant Editor — Web Series (8 episodes)', org: 'Northlight Studios', loc: 'Andheri West, Mumbai', dur: '3 months', pay: '₹55,000 – ₹70,000 / month', ago: '3d ago' }
+    ];
+    this.state = { find: 'rec', af: 'All', pf: 'Active', toast: '', confirm: null };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  flash(m) { this.setState({ toast: m }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  keys(a, b) { const out = {}; if (!a || !b) return out; const d = new Date(a), e = new Date(b); for (let x = d; x <= e; x = new Date(x.getTime() + 864e5)) out[x.toISOString().slice(0, 10)] = true; return out; }
+  renderVals() {
+    const s = this.state;
+    const store = this.props.store || {};
+    const c = store.crew || { posts: [], apps: [], saved: {}, hiring: {} };
+    const act = this.props.act || (() => {});
+    const active = c.posts.filter((p) => p.st === 'Active');
+    const newA = active.reduce((n, p) => n + (p.newA || 0), 0);
+    if (this.k !== this.props.tabKey) { this.k = this.props.tabKey; this.userTab = null; this.userFind = false; }
+    // “Saved jobs” on Home's Your applications card opens Find Jobs on its Saved list.
+    const fm = !this.userFind && this.props.tab === 'saved' ? 'saved' : s.find;
+    // Crew modes: Job Seeker sees Find Jobs + Applications; Job Poster sees My Posts; both see all three.
+    const md = store.modes || { seek: true, post: true };
+    const views = [].concat(md.seek ? ['find', 'apps'] : [], md.post ? ['posts'] : []);
+    const want = (this.props.tab === 'saved' ? 'find' : this.props.tab) || (md.post && newA > 0 ? 'posts' : views[0]);
+    const def = views.indexOf(want) >= 0 ? want : views[0];
+    const tab = views.indexOf(this.userTab) >= 0 ? this.userTab : def;
+    const one = views.length < 3, collapsed = !!store.optinCollapsed;
+    const setTab = (t) => { this.userTab = t; this.setState({}); };
+    const chip = (on) => (on ? 'chip on' : 'chip');
+    // Find
+    const mine = active.map((p) => ({ variant: 'own', title: p.title, org: p.house, loc: p.loc, dur: p.dur, pay: p.pay, ago: p.posted, mine: true }));
+    const base = (fm === 'saved' ? this.jobs.filter((j) => c.saved[j.title]) : mine.slice(0, 1).concat(this.jobs));
+    const findList = base.map((j) => ({ ...j, mine: !!j.mine, notMine: !j.mine, saved: !!c.saved[j.title], bmkCls: c.saved[j.title] ? 'iconbtn on-bmk' : 'iconbtn', toggleSave: () => { act('save', j.title); this.flash(c.saved[j.title] ? 'Removed from saved jobs' : 'Saved'); } }));
+    const nSaved = this.jobs.filter((j) => c.saved[j.title]).length;
+    // Apps
+    const B = { Applied: 'badge b-n', 'Under Review': 'badge b-p', Shortlisted: 'badge b-g', 'On Hold': 'badge b-w', Selected: 'badge b-g', Rejected: 'badge b-e' };
+    const appList = c.apps.filter((a) => s.af === 'All' || a.status === s.af);
+    // Posts
+    const cnt = (st) => c.posts.filter((p) => p.st === st).length;
+    const postList = c.posts.filter((p) => p.st === s.pf).map((p) => ({
+      ...p, stLabel: p.st, badge: { Active: 'badge b-g', Closed: 'badge b-n' }[p.st],
+      appText: p.apps ? p.apps + (p.apps === 1 ? ' applicant' : ' applicants') : 'No applicants yet', hasNew: (p.newA || 0) > 0 && p.st === 'Active',
+      canView: p.apps > 0, canClose: p.st === 'Active',
+      askClose: () => this.setState({ confirm: p })
+    }));
+    const fl = c.flash;
+    return {
+      phCls: one && !collapsed ? 'ph jo-pad' : 'ph',
+      canPost: !!md.post, showChip: one && collapsed, showOptin: one && !collapsed,
+      chipLabel: md.post ? 'Job Seeker' : 'Job Poster', chipAria: md.post ? 'Looking for work too? Turn on Job Seeker' : 'Hiring? Turn on Job Poster',
+      openOptin: () => act('optin', false), dismissOptin: () => act('optin', true),
+      optinMode: md.post ? 'seek' : 'post', optinSq: md.post ? 'sq' : 'sq g',
+      optinTitle: md.post ? 'Looking for work too?' : 'Hiring for a production?',
+      optinText: md.post ? 'Turn on Job Seeker to find jobs and apply.' : 'Turn on Job Poster to post jobs and find talent.',
+      optinCta: md.post ? 'Become a Job Seeker' : 'Become a Job Poster',
+      segStyle: 'grid-template-columns: ' + (views.length === 3 ? '1fr 1.15fr 1fr' : views.length === 2 ? '1fr 1fr' : '1fr'),
+      tabs: [['find', 'Find Jobs', 0], ['apps', 'Applications', 0], ['posts', 'My Posts', newA]].filter((x) => views.indexOf(x[0]) >= 0).map(([k, l, d]) => ({ label: l, on: tab === k, cls: tab === k ? 'on' : '', hasDot: d > 0, dot: d, pick: () => setTab(k) })),
+      onFind: tab === 'find', onApps: tab === 'apps', onPosts: tab === 'posts',
+      findTabs: [['rec', 'Recommended'], ['saved', 'Saved · ' + nSaved]].map(([k, l]) => ({ label: l, on: fm === k, cls: chip(fm === k), pick: () => { this.userFind = true; this.setState({ find: k }); } })),
+      findNote: fm === 'rec' ? 'Based on your work titles, skills and location' : nSaved + ' saved',
+      findList, findEmpty: findList.length === 0,
+      hasApps: c.apps.length > 0, noApps: c.apps.length === 0, toFind: () => setTab('find'),
+      aAll: c.apps.length, aActive: c.apps.filter((a) => a.status !== 'Rejected' && a.status !== 'Selected').length, aShort: c.apps.filter((a) => a.status === 'Shortlisted').length,
+      appTabs: ['All', 'Applied', 'Under Review', 'Shortlisted', 'Rejected'].map((t) => ({ label: t, on: s.af === t, cls: chip(s.af === t), pick: () => this.setState({ af: t }) })),
+      appList: appList.map((a) => ({ ...a, badge: B[a.status], isNew: !!a.isNew })),
+      hasPosts: c.posts.length > 0, noPosts: c.posts.length === 0,
+      postTabs: [['Active', 'Active'], ['Closed', 'Closed']].map(([k, l]) => ({ label: l + ' · ' + cnt(k), on: s.pf === k, cls: chip(s.pf === k), pick: () => this.setState({ pf: k }) })),
+      postList, postFiltEmpty: postList.length === 0,
+      waiting: tab === 'posts' && newA > 0 && !fl, waitingText: newA + (newA === 1 ? ' new applicant is' : ' new applicants are') + ' waiting for review',
+      hasFlash: tab === 'posts' && !!fl, flashTitle: fl ? fl.title : '', flashDates: fl && fl.dates ? fl.dates : 'the shoot dates',
+      dismissFlash: () => act('flash'),
+      markT: () => { const k = this.keys(fl.start, fl.end); Object.keys(k).forEach((x) => { k[x] = 't'; }); act('avail', k); this.flash('Marked Tentatively booked on your calendar'); },
+      markU: () => { const k = this.keys(fl.start, fl.end); Object.keys(k).forEach((x) => { k[x] = 'u'; }); act('avail', k); this.flash('Marked Unavailable on your calendar'); },
+      toast: !!s.toast, toastText: s.toast,
+      confirm: !!s.confirm, cTitle: s.confirm ? s.confirm.title : '',
+      cancel: () => this.setState({ confirm: null }),
+      doClose: () => { act('postSt', s.confirm.id, 'Closed'); this.setState({ confirm: null }); this.flash('Job closed to new applicants'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

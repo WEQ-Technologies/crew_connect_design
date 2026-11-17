@@ -38,9 +38,28 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <div class="alert a-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><div>Your plan won't renew automatically. Renew before <b>26 Oct 2026</b> to keep Premium benefits.</div></div>
     </sc-if>
 
+    <sc-if value="{{hasCrew}}" hint-placeholder-val="{{ true }}">
+    <div class="card" style="gap: 10px">
+      <div class="row"><div class="t-over sp">Premium · for finding work and hiring</div><span class="ph-tag">Placeholder – pending client input</span></div>
+      <div class="row t-s" style="gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg><span>Daily or weekly digest of new jobs that match your profile</span></div>
+      <div class="row t-s" style="gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg><span>Instant alerts when a matching job is posted</span></div>
+      <div class="row t-s" style="gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg><span><b>When hiring:</b> featured job posts and applicant insights</span></div>
+      <div class="row t-s" style="gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg><span>Premium-only content is marked with a gold <span class="badge b-y" style="height: 20px">Premium</span> label</span></div>
+      <a href="JobDigest.dc.html" class="li" style="border: 1px solid #E8E5EE; border-radius: 12px; min-height: 48px"><span class="sp t-s b">Preview the job digest</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
+    </div>
+    </sc-if>
+    <!-- Vendor-only accounts see vendor benefits only -->
+    <sc-if value="{{vendorOnly}}" hint-placeholder-val="{{ false }}">
+    <div class="card" style="gap: 10px">
+      <div class="row"><div class="t-over sp">Premium · for vendors</div><span class="ph-tag">Placeholder – pending client input</span></div>
+      <div class="row t-s" style="gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg><span>More active listings on your public vendor page</span></div>
+      <div class="row t-s" style="gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg><span>Higher visibility in Discover vendors</span></div>
+      <div class="row t-s" style="gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg><span>More invoices per month and priority support</span></div>
+    </div>
+    </sc-if>
     <div class="t-over">Compare plans</div>
     <div class="list">
-      <div class="li t-c" style="min-height: 40px; background: #F2F0F5; font-weight: 700; color: #545060; cursor: default"><span class="sp">Benefit</span><span style="width: 76px; text-align: center">Free</span><span style="width: 76px; text-align: center; color: #5B2A8C">Premium</span></div>
+      <div class="li t-c" style="min-height: 40px; background: rgba(236,230,244,.6); font-weight: 700; color: #545060; cursor: default"><span class="sp">Benefit</span><span style="width: 76px; text-align: center">Free</span><span style="width: 76px; text-align: center; color: #5B2A8C">Premium</span></div>
       <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
         <div class="li t-s" style="cursor: default"><span class="sp">{{r.label}}</span><span style="width: 76px; text-align: center"><span class="ph-tag">{{r.free}}</span></span><span style="width: 76px; text-align: center"><span class="ph-tag">{{r.prem}}</span></span></div>
       </sc-for>
@@ -57,7 +76,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <div class="sheet" role="dialog" aria-label="{{sheetTitle}}">
         <div class="grab"></div>
         <div class="t-h2">{{sheetTitle}}</div>
-        <div class="card" style="gap: 2px; background: #F7F6FA">
+        <div class="card" style="gap: 2px; background: rgba(255,255,255,.5)">
           <div class="kv"><span>Plan</span><span>Premium</span></div>
           <div class="kv"><span>{{expiryKey}}</span><span>26 Nov 2026 <span class="ph-tag">[TBC]</span></span></div>
           <div class="kv"><span>Amount</span><span>₹100</span></div>
@@ -78,11 +97,14 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const role = this.props.role ?? 'seeker';
+    // Plan rows follow the account's roles: Crew → applications, posts, digest; Vendor → listings; both → invoices, visibility, support.
+    const R = this.props.roles || { crew: true, vendor: true };
     let plan = this.props.plan ?? 'expiring';
+    const MDs = this.props.modes || { seek: true, post: true };
     if (s.renewed) plan = 'active';
-    const roleRow = { seeker: 'Job applications / month', poster: 'Active job posts', vendor: 'Active product listings' }[role];
+
     return {
-      backHref: { seeker: 'SeekerProfile.dc.html', poster: 'PosterProfile.dc.html', vendor: 'VendorProfile.dc.html' }[role],
+      backHref: role === 'poster' ? 'PosterProfile.dc.html' : 'SeekerProfile.dc.html',
       isActive: plan === 'active', isExpiring: plan === 'expiring', isExpired: plan === 'expired', isFree: plan === 'free',
       planName: plan === 'free' ? 'Free' : 'Premium',
       expiryLine: plan === 'free' ? 'Subscribe to unlock Premium benefits' : plan === 'expired' ? 'Expired on 12 Oct 2026' : plan === 'active' ? 'Renews manually · expires 26 Nov 2026' : 'Expires on 26 Oct 2026',
@@ -94,12 +116,17 @@ class Component extends DCLogic {
       confirmLabel: s.mode === 'subscribe' ? 'Pay ₹100 & subscribe' : 'Confirm renewal',
       busyLabel: s.mode === 'subscribe' ? 'Subscribing…' : 'Renewing…',
       toastText: s.mode === 'subscribe' ? 'Subscribed — Premium active until 26 Nov 2026' : 'Plan renewed until 26 Nov 2026',
+      hasCrew: !!R.crew, vendorOnly: !!R.vendor && !R.crew,
       rows: [
-        { label: roleRow, free: '[TBC]', prem: '[TBC]' },
+        // One subscription per account; rows follow the Crew modes in use (limits are not split by mode).
+        R.crew && MDs.seek && { label: 'Job applications / month', free: '[TBC]', prem: '[TBC]' },
+        R.crew && MDs.post && { label: 'Active job posts', free: '[TBC]', prem: '[TBC]' },
+        R.crew && MDs.seek && { label: 'Job digest', free: '[TBC]', prem: '[TBC]' },
+        R.vendor && { label: 'Active product listings', free: '[TBC]', prem: '[TBC]' },
         { label: 'Invoices / month', free: '[TBC]', prem: '[TBC]' },
         { label: 'Profile visibility', free: '[TBC]', prem: '[TBC]' },
         { label: 'Support', free: '[TBC]', prem: '[TBC]' }
-      ],
+      ].filter(Boolean),
       dlg: s.dlg, renewing: s.renewing, notRenewing: !s.renewing, toast: s.toast,
       openRenew: () => this.setState({ dlg: true, mode: plan === 'free' ? 'subscribe' : 'renew' }),
       closeRenew: () => this.setState({ dlg: false }),

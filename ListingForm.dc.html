@@ -60,14 +60,13 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
         <div class="hr"></div>
         <p class="t-s" style="white-space: pre-line">{{desc}}</p>
         <div class="hr"></div>
-        <div class="row t-c mut" style="gap: 6px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg>Reelhouse Camera Rentals · Goregaon East, Mumbai</div>
+        <div class="row t-c mut" style="gap: 6px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg>{{bizName}} · Goregaon East, Mumbai</div>
       </div>
       <button class="btn btn-s w100" onClick="{{toForm}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>Edit details</button>
     </div>
   </sc-if>
   <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
     <div class="foot">
-      <button class="btn btn-s" onClick="{{saveDraft}}" style="flex: 1">Save draft</button>
       <sc-if value="{{saving}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" style="flex: 1.6" aria-busy="true"><span class="spin"></span>Publishing…</button></sc-if>
       <sc-if value="{{notSaving}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" style="flex: 1.6" onClick="{{publish}}">{{publishLabel}}</button></sc-if>
     </div>
@@ -88,11 +87,11 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </sc-if>
 
   <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
-    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>Saved as draft</div>
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>Saved</div>
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   constructor(p) {
     super(p);
@@ -108,6 +107,7 @@ class Component extends DCLogic {
     const nE = !s.name.trim(), pE = !(Number(String(s.price).replace(/[^0-9]/g, '')) > 0), dE = s.desc.trim().length < 30;
     const unit = s.mode === 'Buy' ? 'one-time' : 'per day';
     return {
+      bizName: (this.props.store && this.props.store.bizName) || 'Reelhouse Camera Rentals',
       isForm: s.phase === 'form', isReview: s.phase === 'review', isDone: s.phase === 'done',
       editing: s.editing, heading: s.editing ? 'Edit listing' : 'Add listing',
       name: s.name, price: s.price, desc: s.desc, mode: s.mode,
@@ -126,8 +126,7 @@ class Component extends DCLogic {
       doneTitle: s.editing ? 'Listing updated' : 'Listing published',
       publish: () => { this.setState({ saving: true }); this.a = setTimeout(() => this.setState({ saving: false, phase: 'done' }), 1000); },
       editAgain: () => this.setState({ phase: 'form', editing: true, tried: false }),
-      toast: s.toast,
-      saveDraft: () => { this.setState({ toast: true }); clearTimeout(this.b); this.b = setTimeout(() => this.setState({ toast: false }), 2200); }
+      toast: s.toast
     };
   }
 }

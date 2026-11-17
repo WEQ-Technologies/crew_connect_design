@@ -30,16 +30,14 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
     <sc-for list="{{jobs}}" as="j" hint-placeholder-count="4">
       <div class="card">
         <div class="row" style="align-items: flex-start; gap: 10px">
-          <a href="PosterJobDetail.dc.html" class="sp" style="color: #1A1820; text-decoration: none"><div class="t-h3 clamp2">{{j.title}}</div><div class="t-c mut" style="margin-top: 4px">{{j.cat}} · {{j.loc}}</div></a>
+          <a href="PosterJobDetail.dc.html" class="sp" style="color: #1A1820; text-decoration: none"><div class="t-h3 clamp2">{{j.title}}</div><div class="t-c mut" style="margin-top: 4px">{{j.cat}} · {{j.loc}} · {{j.dur}}</div></a>
           <sc-if value="{{j.pub}}" hint-placeholder-val="{{ true }}"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle></svg>Published</span></sc-if>
-          <sc-if value="{{j.draft}}" hint-placeholder-val="{{ false }}"><span class="badge b-n"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>Draft</span></sc-if>
         </div>
         <div class="row t-c mut" style="gap: 14px"><span class="row" style="gap: 5px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{j.when}}</span><span class="row" style="gap: 5px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path></svg>{{j.apps}}</span></div>
         <div class="hr"></div>
         <div class="row" style="gap: 8px">
           <a class="btn btn-s btn-sm" href="CreateJob.dc.html" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>Edit</a>
           <sc-if value="{{j.pub}}" hint-placeholder-val="{{ true }}"><a class="btn btn-p btn-sm" href="Applicants.dc.html" style="flex: 1.4">View applicants</a></sc-if>
-          <sc-if value="{{j.draft}}" hint-placeholder-val="{{ false }}"><a class="btn btn-p btn-sm" href="CreateJob.dc.html" style="flex: 1.4">Review &amp; publish</a></sc-if>
         </div>
       </div>
     </sc-for>
@@ -51,11 +49,11 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   <a class="fab" href="CreateJob.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add job</a>
 
   <nav class="nav" aria-label="Main">
-    <a href="PosterHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
-    <a href="DiscoverFeed.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
-    <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
-    <a class="on" href="MyJobs.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>My Jobs</a>
-    <a href="PosterProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-3h4v3"></path></svg></span>Profile</a>
+    <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+    <a class="on" href="Jobs.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>Jobs</a>
+    <a class="post" href="CreateJob.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.4"><path d="M12 5v14M5 12h14"></path></svg></span>Post a job</a>
+    <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
+    <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
   </nav>
 </div>
 </x-dc>
@@ -64,10 +62,9 @@ class Component extends DCLogic {
   constructor(p) {
     super(p);
     this.data = [
-      { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', cat: 'Camera', loc: 'Film City, Mumbai', st: 'Published', when: 'Posted 2d ago', apps: '18 applicants' },
-      { title: 'Production Designer — Period Drama Pilot', cat: 'Art & Production Design', loc: 'Mumbai', st: 'Published', when: 'Posted 6d ago', apps: '9 applicants' },
-      { title: 'Spot Boy / Set Assistant (4 positions)', cat: 'Production', loc: 'Panaji, Goa', st: 'Published', when: 'Posted today', apps: 'No applicants yet' },
-      { title: 'Costume Assistant — Feature Film Goa schedule', cat: 'Costume & Make-up', loc: 'Panaji, Goa', st: 'Draft', when: 'Edited yesterday', apps: 'Not published' }
+      { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', dur: '32 days', cat: 'Camera', loc: 'Film City, Mumbai', st: 'Published', when: 'Posted 2d ago', apps: '18 applicants' },
+      { title: 'Production Designer — Period Drama Pilot', dur: '6 weeks', cat: 'Art & Production Design', loc: 'Mumbai', st: 'Published', when: 'Posted 6d ago', apps: '9 applicants' },
+      { title: 'Spot Boy / Set Assistant (4 positions)', dur: '10 days', cat: 'Production', loc: 'Panaji, Goa', st: 'Published', when: 'Posted today', apps: 'No applicants yet' }
     ];
     this.state = { q: '', tab: 'All' };
   }
@@ -77,8 +74,8 @@ class Component extends DCLogic {
     const cnt = (t) => (t === 'All' ? this.data.length : this.data.filter((j) => j.st === t).length);
     return {
       q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
-      tabs: ['All', 'Published', 'Draft'].map((t) => ({ label: t + ' (' + cnt(t) + ')', on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) })),
-      jobs: list.map((j) => ({ ...j, pub: j.st === 'Published', draft: j.st === 'Draft' })),
+      tabs: ['All', 'Published'].map((t) => ({ label: t + ' (' + cnt(t) + ')', on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) })),
+      jobs: list.map((j) => ({ ...j, pub: j.st === 'Published' })),
       count: list.length, countWord: list.length === 1 ? 'job' : 'jobs', empty: list.length === 0
     };
   }

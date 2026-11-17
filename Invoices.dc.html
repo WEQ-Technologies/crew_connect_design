@@ -39,7 +39,6 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
           <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px">
             <span class="t-s b">{{r.amt}}</span>
             <span class="{{r.badge}}">
-              <sc-if value="{{r.iDraft}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg></sc-if>
               <sc-if value="{{r.iSent}}" hint-placeholder-val="{{ true }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg></sc-if>
               <sc-if value="{{r.iPaid}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if>
               <sc-if value="{{r.iOver}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg></sc-if>
@@ -54,22 +53,14 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
     </sc-if>
   </div>
 
-  <sc-if value="{{isSeeker}}" hint-placeholder-val="{{ true }}">
+  <sc-if value="{{hasNav}}" hint-placeholder-val="{{ true }}">
     <nav class="nav" aria-label="Main">
       <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
-      <a href="DiscoverFeed.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
-      <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
-      <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
-      <a class="on" href="SeekerProfile.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
-    </nav>
-  </sc-if>
-  <sc-if value="{{isVendor}}" hint-placeholder-val="{{ false }}">
-    <nav class="nav" aria-label="Main">
-      <a href="VendorHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
-      <a href="DiscoverFeed.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
-      <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
-      <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>My Listings</a>
-      <a class="on" href="VendorProfile.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg></span>Profile</a>
+      <a href="Jobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>Jobs</a><div class="nm on"><label class="nm-btn"><input type="checkbox" class="nm-t" aria-label="More: Calendar and Invoices"><span class="nm-scrim" aria-hidden="true"></span><span class="nm-core"><svg class="i nm-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"></rect></svg></span><span class="nm-lbl">More</span></label><div class="nm-menu"><span class="nm-arc" aria-hidden="true"></span><a class="nm-opt nm-o1" href="Calendar.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="nm-tag">Calendar</span></a><a class="nm-opt nm-o2 on" href="Invoices.dc.html" aria-current="page"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span><span class="nm-tag">Invoices</span></a></div></div>
+      <a href="MyListings.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>Listings</a>
+      
+      
+      <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
     </nav>
   </sc-if>
 </div>
@@ -82,21 +73,20 @@ class Component extends DCLogic {
       { no: 'INV-2026-014', client: 'Lantern Pictures', date: '18 Oct 2026', amt: '₹76,700', st: 'Sent' },
       { no: 'INV-2026-013', client: 'Northlight Studios', date: '2 Oct 2026', amt: '₹76,700', st: 'Overdue' },
       { no: 'INV-2026-012', client: 'Pinewood Ads', date: '28 Sep 2026', amt: '₹23,600', st: 'Paid' },
-      { no: 'INV-2026-011', client: 'Third Bell Collective — short film “Kaagaz”', date: '20 Sep 2026', amt: '₹59,000', st: 'Paid' },
-      { no: 'Draft', client: 'Redline Motion Pictures', date: 'Edited today', amt: '₹47,200', st: 'Draft' }
+      { no: 'INV-2026-011', client: 'Third Bell Collective — short film “Kaagaz”', date: '20 Sep 2026', amt: '₹59,000', st: 'Paid' }
     ];
     this.state = { q: '', tab: 'All' };
   }
   renderVals() {
     const s = this.state, q = s.q.trim().toLowerCase();
     const role = this.props.role ?? 'seeker';
-    const bc = { Draft: 'badge b-n', Sent: 'badge b-p', Paid: 'badge b-g', Overdue: 'badge b-e' };
+    const bc = { Sent: 'badge b-p', Paid: 'badge b-g', Overdue: 'badge b-e' };
     const list = this.data.filter((r) => (s.tab === 'All' || r.st === s.tab) && (!q || (r.no + r.client).toLowerCase().includes(q)));
     return {
-      isSeeker: role === 'seeker', isVendor: role === 'vendor', isPoster: role === 'poster',
+      hasNav: role !== 'poster', isPoster: role === 'poster',
       q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
-      tabs: ['All', 'Draft', 'Sent', 'Paid', 'Overdue'].map((t) => ({ label: t, on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) })),
-      rows: list.map((r) => ({ ...r, badge: bc[r.st], iDraft: r.st === 'Draft', iSent: r.st === 'Sent', iPaid: r.st === 'Paid', iOver: r.st === 'Overdue' })),
+      tabs: ['All', 'Sent', 'Paid', 'Overdue'].map((t) => ({ label: t, on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) })),
+      rows: list.map((r) => ({ ...r, badge: bc[r.st], iSent: r.st === 'Sent', iPaid: r.st === 'Paid', iOver: r.st === 'Overdue' })),
       empty: list.length === 0
     };
   }

@@ -22,6 +22,11 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   <div style="flex: none; padding: 4px 20px 12px; display: flex; flex-direction: column; gap: 10px">
     <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="Search by name, title or skill" value="{{q}}" onChange="{{onQ}}" aria-label="Search talent"></div>
     <div class="chips x"><sc-for list="{{depts}}" as="d" hint-placeholder-count="6"><button class="{{d.cls}}" onClick="{{d.pick}}" aria-pressed="{{d.on}}">{{d.label}}</button></sc-for></div>
+    <div class="row" style="gap: 8px">
+      <select class="inp" style="height: 36px; border-radius: 18px; font-size: 13px; font-weight: 550; padding: 0 10px; flex: 1" value="{{fSkill}}" onChange="{{onSkill}}" aria-label="Filter by skill"><sc-for list="{{skillOpts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.l}}</option></sc-for></select>
+      <select class="inp" style="height: 36px; border-radius: 18px; font-size: 13px; font-weight: 550; padding: 0 10px; flex: 1" value="{{fRole}}" onChange="{{onRole}}" aria-label="Filter by role"><sc-for list="{{roleOpts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.l}}</option></sc-for></select>
+      <select class="inp" style="height: 36px; border-radius: 18px; font-size: 13px; font-weight: 550; padding: 0 10px; flex: 1" value="{{fLoc}}" onChange="{{onLoc}}" aria-label="Filter by location"><sc-for list="{{locOpts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.l}}</option></sc-for></select>
+    </div>
     <div class="seg" style="grid-template-columns: repeat(4, minmax(0, 1fr))"><sc-for list="{{bands}}" as="b" hint-placeholder-count="4"><button class="{{b.cls}}" onClick="{{b.pick}}" aria-pressed="{{b.on}}">{{b.label}}</button></sc-for></div>
   </div>
   <div class="sc" style="padding-top: 0; gap: 12px">
@@ -29,7 +34,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
     <sc-for list="{{people}}" as="p" hint-placeholder-count="4">
       <div class="card">
         <div class="row" style="gap: 10px">
-          <button onClick="{{p.open}}" aria-label="Open {{p.name}}" style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; background: none; border: 0; padding: 0; text-align: left; font: inherit; color: inherit; cursor: pointer"><span class="{{p.avCls}}">{{p.ini}}</span><span class="sp"><span class="t-h3" style="display: block">{{p.name}}</span><span class="t-s mut">{{p.title}} · {{p.dept}}</span></span></button>
+          <button onClick="{{p.open}}" aria-label="Open {{p.name}}" style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; background: none; border: 0; padding: 0; text-align: left; font: inherit; color: inherit; cursor: pointer"><span class="{{p.avCls}}" data-ini="{{p.ini}}">{{p.ini}}</span><span class="sp"><span class="t-h3" style="display: block">{{p.name}}</span><span class="t-s mut">{{p.title}} · {{p.dept}}</span><span class="row" style="gap: 10px; margin-top: 4px; flex-wrap: wrap"><sc-if value="{{p.isHiring}}" hint-placeholder-val="{{ false }}"><span class="hire-badge">Currently hiring</span></sc-if><sc-if value="{{p.hasAvail}}" hint-placeholder-val="{{ true }}"><span class="{{p.availCls}}">{{p.availText}}</span></sc-if><sc-if value="{{p.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{p.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{p.mutText}}</span></span></sc-if></span></span></button>
           <sc-if value="{{p.following}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s btn-sm" onClick="{{p.toggleFollow}}" aria-pressed="true" aria-label="Following {{p.name}} — tap to unfollow" style="background: #F7F2FB; border-color: #B79AD6; color: #4A1F73">Following</button></sc-if>
           <sc-if value="{{p.notFollowing}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s btn-sm" onClick="{{p.toggleFollow}}" aria-pressed="false" aria-label="Follow {{p.name}}">Follow</button></sc-if>
         </div>
@@ -42,18 +47,19 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </div>
 
   <nav class="nav" aria-label="Main">
-    <a class="on" href="PosterHome.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
-    <a href="DiscoverFeed.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
-    <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
-    <a href="MyJobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>My Jobs</a>
-    <a href="PosterProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-3h4v3"></path></svg></span>Profile</a>
+    <a class="on" href="SeekerHome.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+    <a href="Jobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>Jobs</a>
+    <a class="post" href="CreateJob.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.4"><path d="M12 5v14M5 12h14"></path></svg></span>Post a job</a>
+    <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
+    <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
   </nav>
 
   <sc-if value="{{hasSel}}" hint-placeholder-val="{{ false }}">
     <div class="scrim">
       <div class="sheet" role="dialog" aria-label="Candidate details">
         <div class="grab"></div>
-        <div class="row" style="gap: 14px"><div class="av lg">{{sel.ini}}</div><div class="sp"><div class="t-h1">{{sel.name}}</div><div class="t-s mut">{{sel.title}} · {{sel.dept}}</div></div><button class="iconbtn" onClick="{{close}}" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+        <div class="row" style="gap: 14px"><div class="av lg" data-ini="{{sel.ini}}">{{sel.ini}}</div><div class="sp"><div class="t-h1">{{sel.name}}</div><div class="t-s mut">{{sel.title}} · {{sel.dept}}</div><div class="row" style="gap: 10px; margin-top: 4px; flex-wrap: wrap"><sc-if value="{{sel.hasAvail}}" hint-placeholder-val="{{ true }}"><span class="{{sel.availCls}}">{{sel.availText}}</span></sc-if></div></div><button class="iconbtn" onClick="{{close}}" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+        <sc-if value="{{sel.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{sel.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{sel.mutText}}</span></span></sc-if>
         <div class="chips"><span class="badge b-p">{{sel.band}}</span><span class="badge b-n">{{sel.yrs}} years</span><span class="badge b-n">{{sel.city}}</span></div>
         <div class="row" style="gap: 10px">
           <sc-if value="{{selFollowing}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" onClick="{{selToggle}}" style="flex: 1; background: #F7F2FB; border-color: #B79AD6; color: #4A1F73">Following</button></sc-if>
@@ -75,6 +81,21 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
+  net(n) {
+    const N = { 'Meera Joshi': [12, 'av'], 'Arjun Kulkarni': [4, 'tb'], 'Sana Mirza': [7, 'av'], 'Farhan Siddiqui': [9, 'un'], 'Ananya Iyer': [3, 'av'], 'Vikram Bhosle': [15, 'tb'], 'Kavya Menon': [18, ''], 'Northlight Studios': [6, ''], 'Reelhouse Camera Rentals': [11, ''], 'Kilowatt Lighting Co.': [2, ''], 'Nisha Verma': [5, 'av'], 'Aditya Rao': [8, 'av'], 'Priya Nair': [10, 'av'], 'Rohan D’Souza': [1, 'un'], 'Karthik Subramanian': [0, 'av'], 'Imran Shaikh': [2, 'av'] };
+    const pool = ['FS', 'AI', 'MJ', 'VB', 'AK', 'SM', 'KM', 'NV'];
+    const e = N[n] || [0, ''];
+    const me = n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const m = e[0];
+    const AV = { av: ['Available', 'avail a-av'], un: ['Unavailable', 'avail a-un'], tb: ['Tentatively booked', 'avail a-tb'] };
+    return {
+      isHiring: ['Kavya Menon', 'Vikram Bhosle', 'Nisha Verma'].indexOf(n) >= 0,
+      mutN: m, hasMut: m > 0, noMut: m === 0,
+      mutText: m === 0 ? 'No mutual connections' : m + (m === 1 ? ' mutual connection' : ' mutual connections'),
+      mutAv: pool.filter((x) => x !== me).slice(0, Math.min(3, m)),
+      hasAvail: !!e[1], availText: e[1] ? AV[e[1]][0] : '', availCls: e[1] ? AV[e[1]][1] : ''
+    };
+  }
   constructor(p) {
     super(p);
     this.data = [
@@ -85,27 +106,32 @@ class Component extends DCLogic {
       { name: 'Ananya Iyer', title: 'Editor', dept: 'Editing', band: 'Junior', yrs: 2, city: 'Bengaluru', s1: 'Premiere Pro', s2: 'DaVinci Resolve', s3: 'Assembly cuts', bio: 'Editor for short films and branded content, looking for assistant editor roles on long-form.' },
       { name: 'Vikram Bhosle', title: 'Gaffer', dept: 'Lighting', band: 'Senior', yrs: 18, city: 'Mumbai', s1: 'Lighting design', s2: 'HMI', s3: 'LED walls', bio: 'Gaffer on TVCs and features for nearly two decades; leads crews of up to 12.' }
     ];
-    this.state = { q: '', dept: 'All', band: 'Any', sel: null, fol: { 'Meera Joshi': true } };
+    this.state = { fSkill: 'Any', fRole: 'Any', fLoc: 'Any', q: '', dept: 'All', band: 'Any', sel: null, fol: { 'Meera Joshi': true } };
   }
   renderVals() {
     const s = this.state, q = s.q.trim().toLowerCase();
-    const list = this.data.filter((p) => (s.dept === 'All' || p.dept === s.dept) && (s.band === 'Any' || p.band.startsWith(s.band)) && (!q || (p.name + p.title + p.s1 + p.s2 + p.s3).toLowerCase().includes(q)));
+    const list = this.data.filter((p) => (s.fSkill === 'Any' || [p.s1, p.s2, p.s3].indexOf(s.fSkill) >= 0) && (s.fRole === 'Any' || p.title === s.fRole) && (s.fLoc === 'Any' || p.city === s.fLoc) && (s.dept === 'All' || p.dept === s.dept) && (s.band === 'Any' || p.band.startsWith(s.band)) && (!q || (p.name + p.title + p.s1 + p.s2 + p.s3).toLowerCase().includes(q)));
     const sel = s.sel !== null ? this.data[s.sel] : null;
     const st = this.props.store, act = this.props.act;
     // Unified prototype: Follow state is shared through the store prop.
     const fol = st ? st.follow : s.fol;
     const tog = (n) => (st && act ? act('follow', n, !fol[n]) : this.setState({ fol: { ...s.fol, [n]: !s.fol[n] } }));
     const ini = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const opt = (name, arr) => [{ v: 'Any', l: name }].concat(arr.map((x) => ({ v: x, l: x })));
     return {
+      fSkill: s.fSkill, fRole: s.fRole, fLoc: s.fLoc,
+      onSkill: (e) => this.setState({ fSkill: e.target.value }), onRole: (e) => this.setState({ fRole: e.target.value }), onLoc: (e) => this.setState({ fLoc: e.target.value }),
+      skillOpts: opt('Skill', Array.from(new Set([].concat(...this.data.map((p) => [p.s1, p.s2, p.s3]))))),
+      roleOpts: opt('Role', Array.from(new Set(this.data.map((p) => p.title)))), locOpts: opt('Location', Array.from(new Set(this.data.map((p) => p.city)))),
       q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
       depts: ['All', 'Camera', 'Sound', 'Art', 'Editing', 'Lighting'].map((d) => ({ label: d, on: s.dept === d, cls: s.dept === d ? 'chip on' : 'chip', pick: () => this.setState({ dept: d }) })),
       bands: ['Any', 'Junior', 'Mid', 'Senior'].map((b) => ({ label: b, on: s.band === b, cls: s.band === b ? 'on' : '', pick: () => this.setState({ band: b }) })),
-      people: list.map((p, i) => ({ ...p, ini: ini(p.name), avCls: i % 2 ? 'av g' : 'av', open: () => this.setState({ sel: this.data.indexOf(p) }), following: !!fol[p.name], notFollowing: !fol[p.name], toggleFollow: () => tog(p.name) })),
+      people: list.map((p, i) => ({ ...p, ...this.net(p.name), ini: ini(p.name), avCls: i % 2 ? 'av g' : 'av', open: () => this.setState({ sel: this.data.indexOf(p) }), following: !!fol[p.name], notFollowing: !fol[p.name], toggleFollow: () => tog(p.name) })),
       selFollowing: !!(sel && fol[sel.name]), selNotFollowing: !(sel && fol[sel.name]),
       selToggle: () => sel && tog(sel.name),
       count: list.length, countWord: list.length === 1 ? 'professional' : 'professionals', empty: list.length === 0,
       reset: () => this.setState({ q: '', dept: 'All', band: 'Any' }),
-      hasSel: !!sel, sel: sel ? { ...sel, ini: ini(sel.name) } : {},
+      hasSel: !!sel, sel: sel ? { ...sel, ...this.net(sel.name), ini: ini(sel.name) } : {},
       close: () => this.setState({ sel: null })
     };
   }

@@ -22,13 +22,13 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
     <div style="flex: none; background: #2E1248; color: #fff; padding: 10px 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600">
       <svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
       <span class="sp">Preview — this is your public page</span>
-      <a href="VendorHome.dc.html" style="color: #B79AD6; font-weight: 700; min-height: 32px; display: flex; align-items: center">Exit</a>
+      <a href="SeekerProfile.dc.html" style="color: #B79AD6; font-weight: 700; min-height: 32px; display: flex; align-items: center">Exit</a>
     </div>
   </sc-if>
   <div class="bar"><a class="iconbtn" href="Discover.dc.html" aria-label="Back to discover"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">Vendor</div></div>
   <div class="sc" style="gap: 16px">
     <div class="card" style="gap: 12px">
-      <div class="row" style="gap: 14px"><div class="sq g" style="width: 56px; height: 56px; border-radius: 16px"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg></div><div class="sp"><div class="t-h1">Reelhouse Camera Rentals</div><div class="t-s mut">Camera &amp; lenses</div></div></div>
+      <div class="row" style="gap: 14px"><div class="sq g" style="width: 56px; height: 56px; border-radius: 16px"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg></div><div class="sp"><div class="t-h1">{{bizName}}</div><div class="t-s mut">Camera &amp; lenses</div></div></div>
       <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Goregaon East, Mumbai</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path></svg>Rent &amp; buy</span></div>
       <p class="t-s">Camera bodies, cine lenses and monitoring for features, series and ads since 2016. Prepped kits, pickup from our Goregaon store or delivery across Mumbai.</p>
     </div>
@@ -64,7 +64,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"preview":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"preview":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   constructor(p) { super(p); this.state = { phase: 'idle', toast: false }; }
   componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.b); }
@@ -72,6 +72,7 @@ class Component extends DCLogic {
     const s = this.state;
     return {
       preview: this.props.preview ?? true,
+      bizName: ((this.props.preview ?? true) && this.props.store && this.props.store.bizName) || 'Reelhouse Camera Rentals',
       revealed: s.phase === 'done', notRevealed: s.phase !== 'done', loading: s.phase === 'loading', idle: s.phase === 'idle', toast: s.toast,
       items: [
         { name: 'ARRI Alexa Mini LF — full kit', cat: 'Camera bodies', price: '₹28,000', mode: 'per day' },

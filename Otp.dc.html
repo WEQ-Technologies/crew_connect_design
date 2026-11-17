@@ -17,13 +17,13 @@ body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
 </style>
 </helmet>
-<div class="ph">
+<div class="ph bg-alt">
   <div class="bar"><a class="iconbtn" href="SignUp.dc.html" aria-label="Back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl"></div></div>
   <div class="sc" style="padding: 16px 24px 24px; gap: 24px">
     <div style="display: flex; flex-direction: column; gap: 10px">
       <div class="sq" style="width: 52px; height: 52px; border-radius: 16px"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></div>
       <h1 class="t-d" style="margin-top: 6px">Check your email</h1>
-      <p class="t-b mut">We sent a six-digit code to <b style="color: #1A1820">priya.nair@gmail.com</b>. <a href="SignUp.dc.html" style="font-weight: 700">Change email</a></p>
+      <p class="t-b mut">We sent a six-digit code to <b style="color: #1A1820">{{emailShow}}</b>. <a href="SignUp.dc.html" style="font-weight: 700">Change email</a></p>
     </div>
 
     <div style="display: flex; flex-direction: column; gap: 10px">
@@ -64,7 +64,8 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 
   <div style="flex: none; padding: 12px 24px 36px">
     <sc-if value="{{isSuccess}}" hint-placeholder-val="{{ false }}">
-      <a class="btn btn-g w100" href="{{nextHref}}">Continue</a>
+      <button class="btn btn-g w100" aria-busy="true"><span class="spin"></span>Verified · taking you in…</button>
+      <a ref="{{goRef}}" href="{{nextHref}}" style="display: none" aria-hidden="true" tabindex="-1">Continue</a>
     </sc-if>
     <sc-if value="{{isVerifying}}" hint-placeholder-val="{{ false }}">
       <button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>Verifying…</button>
@@ -75,7 +76,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"next":{"editor":null},"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"email":{"editor":"text","default":""},"next":{"editor":null},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   constructor(p) { super(p); this.state = { code: '', phase: 'idle', cooldown: 30, toast: false }; }
   componentDidMount() {
@@ -89,7 +90,7 @@ class Component extends DCLogic {
     const boxes = [0, 1, 2, 3, 4, 5].map((i) => {
       const ch = code[i] || '';
       const active = !ok && i === Math.min(code.length, 5) && phase !== 'verifying';
-      let border = ch ? '#B79AD6' : '#D4D0DC', ring = 'none', bg = '#FFFFFF';
+      let border = ch ? '#B79AD6' : '#D4D0DC', ring = 'none', bg = 'rgba(255,255,255,.78)';
       if (active) { border = '#5B2A8C'; ring = '0 0 0 3px #EFE7F7'; }
       if (err) { border = '#B42318'; ring = 'none'; bg = '#FFFFFF'; }
       if (ok) { border = '#367A22'; bg = '#F3F9EE'; ring = 'none'; }
@@ -99,7 +100,7 @@ class Component extends DCLogic {
     return {
       code, boxes,
       // Returning users (login) go straight to their home; new sign-ups go to role selection.
-      nextHref: (this.props.next || 'RoleSelect') + '.dc.html',
+      nextHref: (this.props.next || 'RoleSelect') + '.dc.html', goRef: (el) => { this.goEl = el; }, emailShow: this.props.email || 'your email',
       successText: this.props.next && this.props.next !== 'RoleSelect' ? 'Welcome back.' : 'Let’s set up your account.',
       showErr: err,
       errText: phase === 'incomplete' ? 'Enter all 6 digits of the code.' : "That code doesn't match. Check the latest email and try again.",
@@ -120,7 +121,7 @@ class Component extends DCLogic {
         if (code === '000000') return this.setState({ phase: 'invalid' });
         if (code === '111111') return this.setState({ phase: 'expired' });
         this.setState({ phase: 'verifying' });
-        this.v = setTimeout(() => this.setState({ phase: 'success' }), 1100);
+        this.v = setTimeout(() => { this.setState({ phase: 'success' }); this.g = setTimeout(() => { if (this.goEl) this.goEl.click(); }, 700); }, 1100);
       },
       resend: () => {
         this.setState({ code: '', phase: 'idle', cooldown: 30, toast: true });

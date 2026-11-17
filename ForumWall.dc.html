@@ -20,7 +20,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 <div class="ph">
   <div class="bar"><a class="iconbtn" href="SeekerHome.dc.html" aria-label="Back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">Forum</div></div>
   <div style="flex: none; padding: 0 20px 12px; display: flex; flex-direction: column; gap: 10px">
-    <div><div class="t-h1">Association notices</div><p class="t-s mut" style="margin-top: 2px">Official updates from registered associations. Read-only.</p></div>
+    <div class="row" style="align-items: flex-start; gap: 10px"><div class="sp"><div class="t-h1">Association notices</div><p class="t-s mut" style="margin-top: 2px">Official updates from registered associations. Read-only.</p></div><a href="Associations.dc.html" class="btn btn-s btn-sm">All associations</a></div>
     <div class="chips x"><sc-for list="{{assocs}}" as="a" hint-placeholder-count="5"><button class="{{a.cls}}" onClick="{{a.pick}}" aria-pressed="{{a.on}}">{{a.label}}</button></sc-for></div>
   </div>
   <div class="sc" style="padding-top: 0; gap: 12px">

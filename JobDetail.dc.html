@@ -22,36 +22,36 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 
   <div class="sc" style="gap: 20px">
     <sc-if value="{{fromNote}}" hint-placeholder-val="{{ false }}">
-      <div class="card" style="gap: 10px; background: #F3F9EE; border-color: #E6F2DC">
-        <div class="t-over" style="color: #2C6619">Your application</div>
-        <div class="row" style="gap: 12px"><span class="av">KM</span><div class="sp"><div class="t-s"><b>Kavya Menon</b> shortlisted your job application.</div><div class="t-c mut" style="margin-top: 2px">Lantern Pictures · 2h ago</div></div></div>
-        <div class="row" style="gap: 8px"><span class="t-c mut">Applied 26 Oct 2026</span><span class="sp"></span><span class="badge b-g">{{status}}</span></div>
+      <div class="card" style="{{appCardStyle}}">
+        <div class="t-over" style="{{appOverStyle}}">Your application</div>
+        <sc-if value="{{isShort}}" hint-placeholder-val="{{ false }}"><div class="row" style="gap: 12px"><span class="av" data-ini="KM">KM</span><div class="sp"><div class="t-s"><b>Kavya Menon</b> shortlisted your job application.</div><div class="t-c mut" style="margin-top: 2px">Lantern Pictures · 2h ago</div></div></div></sc-if>
+        <sc-if value="{{notShort}}" hint-placeholder-val="{{ false }}"><div class="t-s">{{appMsg}}</div></sc-if>
+        <div class="row" style="gap: 8px"><span class="t-c mut">Applied {{j.applied}}</span><span class="sp"></span><span class="{{statusCls}}">{{status}}</span></div>
       </div>
     </sc-if>
     <div style="display: flex; flex-direction: column; gap: 8px">
-      <div class="chips"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle></svg>Open</span><span class="badge b-n">Posted 2 days ago</span></div>
-      <h1 class="t-h1">Focus Puller — Feature Film (Hindi), 32-day schedule</h1>
-      <div class="t-s mut">Lantern Pictures · Posted by Kavya Menon</div>
+      <div class="chips"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle></svg>Open</span><span class="badge b-n">Posted 2 days ago</span><span class="badge b-n">{{j.durShort}}</span></div>
+      <h1 class="t-h1">{{j.title}}</h1>
+      <div class="t-s mut">{{j.org}} · Posted by {{j.poster}}, {{j.desig}}</div>
+      <sc-if value="{{j.disc}}" hint-placeholder-val="{{ false }}"><div class="alert a-w" role="note"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"></path><path d="M12 10v4M12 17v.01"></path></svg><div><b>Disclaimer:</b> The poster may not belong to the same production house as this job. Check details with {{j.org}} before sharing documents.</div></div></sc-if>
     </div>
 
     <div class="card" style="padding: 4px 16px; gap: 0">
-      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"></path></svg><span class="t-s mut" style="width: 112px; flex: none">Project type</span><span class="t-s b sp">Feature Film</span></div>
-      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-3h4v3"></path></svg><span class="t-s mut" style="width: 112px; flex: none">Production house</span><span class="t-s b sp">Lantern Pictures</span></div>
-      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5B2A8C"><rect x="4" y="4" width="7" height="7" rx="1"></rect><rect x="13" y="4" width="7" height="7" rx="1"></rect><rect x="4" y="13" width="7" height="7" rx="1"></rect><rect x="13" y="13" width="7" height="7" rx="1"></rect></svg><span class="t-s mut" style="width: 112px; flex: none">Category</span><span class="t-s b sp">Camera</span></div>
-      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5B2A8C"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span class="t-s mut" style="width: 112px; flex: none">Location</span><span class="t-s b sp">Film City, Goregaon East, Mumbai</span></div>
-      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><span class="t-s mut" style="width: 112px; flex: none">Duration</span><span class="t-s b sp">32 shooting days · 4 Nov – 12 Dec 2026</span></div>
-      <div class="row" style="padding: 12px 0; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5B2A8C"><path d="M7 5h10M7 9h10M13 19 7 12h2.5a3.5 3.5 0 0 0 0-7"></path></svg><span class="t-s mut" style="width: 112px; flex: none">Fee / budget</span><span class="t-s b sp">₹8,000 – ₹12,000 per day</span></div>
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"></path></svg><span class="t-s mut" style="width: 112px; flex: none">Project type</span><span class="t-s b sp">{{j.ptype}}</span></div>
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-3h4v3"></path></svg><span class="t-s mut" style="width: 112px; flex: none">Posted on behalf of</span><span class="t-s b sp">{{j.org}}</span></div>
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5B2A8C"><rect x="4" y="4" width="7" height="7" rx="1"></rect><rect x="13" y="4" width="7" height="7" rx="1"></rect><rect x="4" y="13" width="7" height="7" rx="1"></rect><rect x="13" y="13" width="7" height="7" rx="1"></rect></svg><span class="t-s mut" style="width: 112px; flex: none">Category</span><span class="t-s b sp">{{j.cat}}</span></div>
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5B2A8C"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span class="t-s mut" style="width: 112px; flex: none">Location</span><span class="t-s b sp">{{j.loc}}</span></div>
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E8E5EE; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><span class="t-s mut" style="width: 112px; flex: none">Duration</span><span class="t-s b sp">{{j.dur}}</span></div>
+      <div class="row" style="padding: 12px 0; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5B2A8C"><path d="M7 5h10M7 9h10M13 19 7 12h2.5a3.5 3.5 0 0 0 0-7"></path></svg><span class="t-s mut" style="width: 112px; flex: none">Fee / budget</span><span class="t-s b sp">{{j.pay}}</span></div>
     </div>
 
     <div style="display: flex; flex-direction: column; gap: 10px">
       <h2 class="t-h2">About the job</h2>
-      <p class="t-b">We're looking for an experienced focus puller for the A-camera unit on an untitled Hindi feature. Principal photography runs 32 days across Film City studios and two outdoor schedules in Goa.</p>
-      <p class="t-b">You'll work closely with the DOP and camera operator on a large-format setup, maintain focus marks for blocking-heavy scenes, and lead camera prep on day zero.</p>
+      <p class="t-b">{{j.a1}}</p>
+      <p class="t-b">{{j.a2}}</p>
       <h3 class="t-h3" style="margin-top: 4px">What we need</h3>
       <div class="t-b" style="display: flex; flex-direction: column; gap: 6px">
-        <div class="row" style="align-items: flex-start"><span style="color: #367A22; padding-top: 1px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span><span>3+ years pulling focus on features or long-form</span></div>
-        <div class="row" style="align-items: flex-start"><span style="color: #367A22; padding-top: 1px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span><span>Comfortable with ARRI Alexa 35 and wireless follow-focus</span></div>
-        <div class="row" style="align-items: flex-start"><span style="color: #367A22; padding-top: 1px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span><span>Available 4 Nov – 12 Dec, including Goa travel</span></div>
+        <sc-for list="{{j.needs}}" as="nd" hint-placeholder-count="3"><div class="row" style="align-items: flex-start"><span style="color: #367A22; padding-top: 1px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span><span>{{nd}}</span></div></sc-for>
       </div>
     </div>
 
@@ -59,7 +59,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <h2 class="t-h2">Additional job details</h2>
       <div class="file">
         <div class="fico">PDF</div>
-        <div class="sp"><div class="t-h3 trunc">Focus-Puller-Brief-Lantern.pdf</div><div class="t-c mut">PDF · 248 KB · Added by Kavya Menon</div></div>
+        <div class="sp"><div class="t-h3 trunc">{{j.pdf}}</div><div class="t-c mut">PDF · {{j.pdfSize}} · Added by {{j.poster}}</div></div>
         <button class="iconbtn" aria-label="View PDF"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
         <button class="iconbtn" aria-label="Download PDF"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"></path></svg></button>
       </div>
@@ -67,17 +67,20 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 
     <div class="card" style="gap: 8px">
       <div class="t-over">Posted by</div>
-      <div class="row"><div class="sq"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M10 21v-3h4v3"></path></svg></div><div class="sp"><div class="t-h3">Lantern Pictures</div><div class="t-s mut">Production house · Mumbai</div></div></div>
-      <div class="kv" style="padding: 0"><span>Job poster</span><span>Kavya Menon</span></div>
+      <div class="row"><div class="sq"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M10 21v-3h4v3"></path></svg></div><div class="sp"><div class="t-h3">{{j.org}}</div><div class="t-s mut">Production house</div></div></div>
+      <div class="kv" style="padding: 0"><span>Job poster</span><span>{{j.poster}} · {{j.desig}}</span></div>
       <a href="#" class="t-s b row" style="gap: 6px">lanternpictures.in<svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
     </div>
   </div>
 
   <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
-    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>Application sent to Lantern Pictures</div>
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>Application sent to {{j.org}}</div>
   </sc-if>
 
   <div class="foot" style="flex-direction: column; gap: 10px">
+    <sc-if value="{{isOwn}}" hint-placeholder-val="{{ false }}">
+      <div class="row" style="gap: 12px"><div class="sp"><div class="row" style="gap: 6px"><span class="badge b-p">This is your post</span></div><div class="t-c mut" style="margin-top: 4px">You can't apply to your own job.</div></div><a class="btn btn-p btn-sm" href="Applicants.dc.html">Manage applicants</a></div>
+    </sc-if>
     <sc-if value="{{notApplied}}" hint-placeholder-val="{{ true }}">
       <button class="btn btn-p w100" onClick="{{openSheet}}">Apply now</button>
     </sc-if>
@@ -95,8 +98,8 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
         <div class="grab"></div>
         <div class="t-h2">Apply with your profile</div>
         <div class="t-s mut">Lantern Pictures will see the details below. You can't edit an application after sending it.</div>
-        <div class="card" style="gap: 8px; background: #F7F6FA">
-          <div class="row"><div class="av">PN</div><div class="sp"><div class="t-h3">Priya Nair</div><div class="t-s mut">Focus Puller · Camera · Mid-Level · 6 yrs</div></div></div>
+        <div class="card" style="gap: 8px; background: rgba(255,255,255,.45)">
+          <div class="row"><div class="av" data-ini="PN">PN</div><div class="sp"><div class="t-h3">Priya Nair</div><div class="t-s mut">Focus Puller · Camera · Mid-Level · 6 yrs</div></div></div>
           <div class="chips"><span class="tag">Focus pulling</span><span class="tag">ARRI Alexa</span><span class="tag">Sony Venice</span></div>
           <div class="t-c mut">Includes email, phone, IMDb and portfolio links</div>
         </div>
@@ -109,24 +112,52 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"app":{"editor":"text","default":""},"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"variant":{"editor":"enum","options":["main","disc","tvc","mv","own"],"default":"main"},"app":{"editor":"text","default":""},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   constructor(p) { super(p); this.state = { applied: false, sheet: false, sending: false, toast: false }; }
   componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.b); }
   renderVals() {
     const s = this.state;
+    const J = {
+      main: { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', poster: 'Kavya Menon', desig: 'Line Producer', disc: false, ptype: 'Feature Film', cat: 'Camera', loc: 'Film City, Goregaon East, Mumbai', dur: '32 days · 4 Nov – 12 Dec 2026', durShort: '32 days', pay: '₹8,000 – ₹12,000 per day',
+        a1: 'We\'re looking for an experienced focus puller for the A-camera unit on an untitled Hindi feature. Principal photography runs 32 days across Film City studios and two outdoor schedules in Goa.',
+        a2: 'You\'ll work closely with the DOP and camera operator on a large-format setup, maintain focus marks for blocking-heavy scenes, and lead camera prep on day zero.',
+        applied: '26 Oct 2026', needs: ['3+ years pulling focus on features or long-form', 'Comfortable with ARRI Alexa 35 and wireless follow-focus', 'Available 4 Nov – 12 Dec, including Goa travel'], pdf: 'Focus-Puller-Brief-Lantern.pdf', pdfSize: '248 KB' },
+      disc: { title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', poster: 'Imran Shaikh', desig: 'Stunt Coordinator', disc: true, ptype: 'Feature Film', cat: 'Camera', loc: 'Ramoji Film City, Hyderabad', dur: '18 days · 10 – 27 Nov 2026', durShort: '18 days', pay: '₹10,000 – ₹14,000 per day',
+        a1: 'Second unit camera operator for the action unit of an upcoming Telugu–Hindi feature, working alongside the stunt team on chase and fight sequences.',
+        a2: 'You\'ll operate on gimbal and handheld rigs and coordinate closely with the stunt coordinator on safety marks.',
+        applied: '29 Oct 2026', needs: ['4+ years operating on action or sports content', 'Gimbal and handheld experience', 'Available 10 – 27 Nov in Hyderabad'], pdf: 'Second-Unit-Brief.pdf', pdfSize: '196 KB' }
+    };
+    J.tvc = { title: 'Focus Puller — TVC, 2-day shoot', org: 'Pinewood Ads', poster: 'Rahul Mehta', desig: 'Production Manager', disc: false, ptype: 'Advertisement', cat: 'Camera', loc: 'Bandra, Mumbai', dur: '2 days · 14 – 15 Nov 2026', durShort: '2 days', pay: '₹9,000 per day', applied: '1 Nov 2026',
+      a1: 'Focus puller for a two-day car commercial shoot on a studio floor in Bandra.', a2: 'High-speed and macro inserts on day two.', needs: ['Experience on commercials', 'Comfortable with high-speed setups'], pdf: 'Pinewood-TVC-Callsheet.pdf', pdfSize: '120 KB' };
+    J.mv = { title: 'Camera Operator — Music Video', org: 'Bluebird Records', poster: 'Nisha Verma', desig: 'Producer', disc: false, ptype: 'Other · Music video', cat: 'Camera', loc: 'Versova, Mumbai', dur: '3 days · 18 – 20 Oct 2026', durShort: '3 days', pay: '₹7,000 per day', applied: '9 Oct 2026',
+      a1: 'Operator for a three-day independent music video shoot in Versova.', a2: 'Gimbal-heavy performance coverage.', needs: ['Gimbal operation', 'Music video experience'], pdf: 'Bluebird-MV-Brief.pdf', pdfSize: '98 KB' };
+    const own = ((this.props.store && this.props.store.crew && this.props.store.crew.posts) || []).find((x) => x.st === 'Active');
+    if (own) J.own = { title: own.title, org: own.house, poster: 'Priya Nair', desig: (this.props.store.crew.hiring || {}).desig || 'Focus Puller', disc: !!own.disc, ptype: own.ptype, cat: own.cat, loc: own.loc, dur: own.dur + ' · ' + own.dates, durShort: own.dur, pay: own.pay, applied: '',
+      a1: 'Looking for crew to join the camera department on this project.', a2: 'Schedule and call times are shared with shortlisted applicants.', needs: ['Relevant experience in the camera department', 'Available for the full schedule'], pdf: 'Job-details.pdf', pdfSize: '120 KB' };
+    const isOwn = this.props.variant === 'own' && !!J.own;
+    const j = J[J[this.props.variant] ? this.props.variant : 'main'];
     const app = this.props.app || '';
-    const applied = s.applied || !!app;
+    // Crew modes: a Job Poster tapping Apply goes to “Turn on Job Seeker to apply”; the application is kept and sent after opting in.
+    const stx = this.props.store || {};
+    const seekOn = ((stx.modes || { seek: true }).seek !== false) && !!(stx.roles || { crew: true }).crew;
+    const inApps = seekOn && ((stx.crew && stx.crew.apps) || []).some((x) => x.title === j.title);
+    const payload = { variant: this.props.variant || 'main', title: j.title, org: j.org, loc: j.loc, dur: j.durShort, status: 'Applied', applied: '3 Nov 2026' };
+    const applied = s.applied || !!app || inApps;
     return {
-      fromNote: !!app, status: app || 'Applied', statusCls: app ? 'badge b-g' : 'badge b-n',
-      appliedText: app ? 'You applied on 26 Oct 2026' : 'You applied today',
-      applied, notApplied: !applied, sheet: s.sheet, sending: s.sending, notSending: !s.sending, toast: s.toast,
-      openSheet: () => this.setState({ sheet: true }),
+      j, fromNote: !!app, isShort: app === 'Shortlisted', notShort: !!app && app !== 'Shortlisted',
+      appMsg: { 'Applied': j.org + ' has your application. You\'ll be notified when the status changes.', 'Under Review': j.org + ' is reviewing your application.', 'On Hold': j.org + ' has put your application on hold.', 'Selected': 'You\'ve been selected for this role.', 'Rejected': j.org + ' isn\'t moving forward with your application.' }[app] || '',
+      appCardStyle: 'gap:10px;' + (app === 'Rejected' ? 'background:#FDECEA;border-color:#F6C9C3' : app === 'Shortlisted' || app === 'Selected' ? 'background:#F3F9EE;border-color:#E6F2DC' : 'background:#F7F2FB;border-color:#EFE7F7'),
+      appOverStyle: app === 'Rejected' ? 'color:#B42318' : app === 'Shortlisted' || app === 'Selected' ? 'color:#2C6619' : 'color:#5B2A8C', status: app || 'Applied', statusCls: ({ Shortlisted: 'badge b-g', Selected: 'badge b-g', 'Under Review': 'badge b-p', 'On Hold': 'badge b-w', Rejected: 'badge b-e' })[app] || 'badge b-n',
+      appliedText: app ? 'You applied on ' + j.applied : 'You applied today',
+      isOwn, applied: applied && !isOwn, notApplied: !applied && !isOwn, sheet: s.sheet, sending: s.sending, notSending: !s.sending, toast: s.toast,
+      openSheet: () => { if (!seekOn && this.props.act) return this.props.act('apply', payload); this.setState({ sheet: true }); },
       closeSheet: () => this.setState({ sheet: false }),
       confirm: () => {
         this.setState({ sending: true });
         this.a = setTimeout(() => {
           this.setState({ sending: false, sheet: false, applied: true, toast: true });
+          if (this.props.act) this.props.act('apply', { variant: this.props.variant || 'main', title: j.title, org: j.org, loc: j.loc, dur: j.durShort, status: 'Applied', applied: '3 Nov 2026' });
           this.b = setTimeout(() => this.setState({ toast: false }), 2600);
         }, 1000);
       }

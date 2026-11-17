@@ -64,11 +64,10 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </div>
 
   <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
-    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>Saved as draft</div>
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>Saved</div>
   </sc-if>
 
   <div class="foot">
-    <button class="btn btn-s" onClick="{{saveDraft}}" style="flex: 1">Save draft</button>
     <sc-if value="{{valid}}" hint-placeholder-val="{{ true }}"><a class="btn btn-p" href="InvoiceDetail.dc.html" style="flex: 1.5">Preview invoice</a></sc-if>
     <sc-if value="{{invalid}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" onClick="{{tryPreview}}" style="flex: 1.5">Preview invoice</button></sc-if>
   </div>
@@ -120,8 +119,7 @@ class Component extends DCLogic {
       sub: inr(sub), tax: inr(tax), total: inr(sub + tax),
       valid, invalid: !valid, showErr: s.tried && !valid,
       tryPreview: () => this.setState({ tried: true }),
-      toast: s.toast,
-      saveDraft: () => { this.setState({ toast: true }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: false }), 2200); }
+      toast: s.toast
     };
   }
 }

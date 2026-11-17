@@ -21,10 +21,19 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   <div style="flex: none; padding: 20px 20px 8px; display: flex; align-items: center; gap: 12px">
     <div class="sp"><div class="t-s mut">Hello,</div><div class="t-h1">Kavya</div></div>
     <a href="ForumWall.dc.html" class="iconbtn" aria-label="Association notices"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a3 3 0 0 1 0 6M18 6a7 7 0 0 1 0 12"></path></svg></a>
-    <a href="Notifications.dc.html" class="iconbtn" aria-label="Notifications, 2 unread" style="position: relative"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span style="position: absolute; top: 6px; right: 6px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: #B42318; color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center" aria-hidden="true">2</span></a>
+    <a href="Notifications.dc.html" class="iconbtn" aria-label="Notifications, 3 unread" style="position: relative"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span style="position: absolute; top: 6px; right: 6px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: #B42318; color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center" aria-hidden="true">3</span></a>
     <a href="PosterProfile.dc.html" class="sq" aria-label="Open company page" style="text-decoration: none"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M10 21v-3h4v3"></path></svg></a>
   </div>
 
+  <sc-if value="{{banner}}" hint-placeholder-val="{{ true }}">
+    <div style="position: absolute; left: 12px; right: 12px; top: 76px; z-index: 7">
+      <div class="card" role="status" style="flex-direction: row; align-items: center; gap: 12px; padding: 12px 12px 12px 14px; background: #2A1145; border-color: #2A1145; color: #fff; box-shadow: 0 12px 32px rgba(26,24,32,.24)">
+        <span class="sq" style="width: 40px; height: 40px; background: rgba(255,255,255,.12); color: #fff; border-color: transparent"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg></span>
+        <a href="Applicants.dc.html" class="sp" style="color: #fff; text-decoration: none; min-width: 0"><div class="t-s b">Focus Puller — Feature Film passed 5 applications</div><div class="t-c" style="color: #CDB9E6">New applicants are waiting · View applicants</div></a>
+        <button class="iconbtn" onClick="{{dismiss}}" aria-label="Dismiss" style="color: #fff; width: 32px; height: 32px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+      </div>
+    </div>
+  </sc-if>
   <div class="sc" style="gap: 20px; padding-top: 8px">
     <div class="card" style="gap: 14px">
       <div class="row"><div class="sp"><div class="t-h3">Lantern Pictures</div><div class="t-s mut">Production house · Mumbai</div></div><span class="badge b-n">Free plan</span></div>
@@ -39,16 +48,16 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 
     <div class="sec"><h2>Active jobs</h2><a href="MyJobs.dc.html" class="btn btn-t btn-sm">Manage</a></div>
     <div class="list">
-      <a class="li" href="PosterJobDetail.dc.html"><div class="sp"><div class="t-h3 trunc">Focus Puller — Feature Film (Hindi)</div><div class="t-c mut" style="margin-top: 2px">Camera · Film City · Posted 2d ago</div></div><span class="badge b-p">18</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
-      <a class="li" href="Applicants.dc.html"><div class="sp"><div class="t-h3 trunc">Production Designer — Period Drama Pilot</div><div class="t-c mut" style="margin-top: 2px">Art · Mumbai · Posted 6d ago</div></div><span class="badge b-p">9</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
-      <a class="li" href="Applicants.dc.html"><div class="sp"><div class="t-h3 trunc">Spot Boy / Set Assistant (4 positions)</div><div class="t-c mut" style="margin-top: 2px">Production · Goa · Posted today</div></div><span class="badge b-n">0</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
+      <a class="li" href="PosterJobDetail.dc.html"><div class="sp"><div class="t-h3 trunc">Focus Puller — Feature Film (Hindi)</div><div class="t-c mut" style="margin-top: 2px">Camera · Film City · 32 days · Posted 2d ago</div></div><span class="badge b-p">18</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
+      <a class="li" href="Applicants.dc.html"><div class="sp"><div class="t-h3 trunc">Production Designer — Period Drama Pilot</div><div class="t-c mut" style="margin-top: 2px">Art · Mumbai · 6 weeks · Posted 6d ago</div></div><span class="badge b-p">9</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
+      <a class="li" href="Applicants.dc.html"><div class="sp"><div class="t-h3 trunc">Spot Boy / Set Assistant (4 positions)</div><div class="t-c mut" style="margin-top: 2px">Production · Goa · 10 days · Posted today</div></div><span class="badge b-n">0</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
     </div>
 
     <div class="sec"><h2>Recent applicant activity</h2></div>
     <div class="list">
-      <a class="li" href="ApplicantDetail.dc.html"><div class="av">AR</div><div class="sp"><div class="t-s b">Aditya Rao applied</div><div class="t-c mut">Focus Puller · 2h ago</div></div><span class="badge b-n"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>Applied</span></a>
-      <a class="li" href="ApplicantDetail.dc.html"><div class="av g">SM</div><div class="sp"><div class="t-s b">Sana Mirza applied</div><div class="t-c mut">Production Designer · 5h ago</div></div><span class="badge b-n"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>Applied</span></a>
-      <a class="li" href="ApplicantDetail.dc.html"><div class="av">PN</div><div class="sp"><div class="t-s b">Priya Nair</div><div class="t-c mut">Focus Puller · yesterday</div></div><span class="badge b-p"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>Under Review</span></a>
+      <a class="li" href="ApplicantDetail.dc.html"><div class="av" data-ini="AR">AR</div><div class="sp"><div class="t-s b">Aditya Rao applied</div><div class="t-c mut">Focus Puller · 2h ago</div></div><span class="badge b-n"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>Applied</span></a>
+      <a class="li" href="ApplicantDetail.dc.html"><div class="av g" data-ini="SM">SM</div><div class="sp"><div class="t-s b">Sana Mirza applied</div><div class="t-c mut">Production Designer · 5h ago</div></div><span class="badge b-n"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>Applied</span></a>
+      <a class="li" href="ApplicantDetail.dc.html"><div class="av" data-ini="PN">PN</div><div class="sp"><div class="t-s b">Priya Nair</div><div class="t-c mut">Focus Puller · yesterday</div></div><span class="badge b-p"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>Under Review</span></a>
     </div>
 
     <a href="Talent.dc.html" class="card" style="text-decoration: none; flex-direction: row; align-items: center; gap: 12px">
@@ -75,7 +84,10 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  constructor(p) { super(p); this.state = { banner: true }; }
+  componentDidMount() { this.t = setTimeout(() => this.setState({ banner: false }), 6000); }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() { return { banner: this.state.banner, dismiss: () => this.setState({ banner: false }) }; }
 }
 </script>
 </body>

@@ -27,7 +27,8 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
         <span class="badge b-n">{{posted}}</span><span class="badge b-p">{{ptype}}</span>
       </div>
       <h1 class="t-h1">{{title}}</h1>
-      <div class="t-s mut">{{house}} · Posted by {{poster}}</div>
+      <div class="t-s mut">{{house}} · Posted by {{poster}}, {{desig}}</div>
+      <sc-if value="{{disc}}" hint-placeholder-val="{{ false }}"><div class="alert a-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"></path><path d="M12 10v4M12 17v.01"></path></svg><div>The poster may not belong to the same production house as this job.</div></div></sc-if>
     </div>
 
     <sc-if value="{{notNew}}" hint-placeholder-val="{{ true }}">
@@ -48,12 +49,13 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 
     <div class="card" style="gap: 2px">
       <div class="kv"><span>Project type</span><span>{{ptype}}</span></div>
-      <div class="kv"><span>Production house</span><span>{{house}}</span></div>
+      <div class="kv"><span>Posted on behalf of</span><span>{{house}}</span></div>
       <div class="kv"><span>Category</span><span>{{cat}}</span></div>
       <div class="kv"><span>Location</span><span>{{loc}}</span></div>
+      <div class="kv"><span>Dates</span><span>{{dates}}</span></div>
       <div class="kv"><span>Duration</span><span>{{dur}}</span></div>
       <div class="kv"><span>Fee / budget</span><span>{{pay}}</span></div>
-      <div class="kv"><span>Job poster</span><span>{{poster}}</span></div>
+      <div class="kv"><span>Job poster</span><span>{{poster}} · {{desig}}</span></div>
     </div>
 
     <div class="card">
@@ -93,7 +95,7 @@ class Component extends DCLogic {
   componentWillUnmount() { clearTimeout(this.t); }
   renderVals() {
     const s = this.state;
-    const d = { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', ptype: 'Feature Film', house: 'Lantern Pictures', poster: 'Kavya Menon', cat: 'Camera', loc: 'Film City, Mumbai', dur: '32 shooting days · 4 Nov – 12 Dec 2026', pay: '₹8,000 – ₹12,000 per day', desc: 'A-camera focus puller for an untitled Hindi feature. 32 shooting days across Film City and Goa, 4 Nov – 12 Dec.\n\nNeed 3+ years on features and comfort with ARRI Alexa 35.', pdf: 'Focus-Puller-Brief-Lantern.pdf', pdfSize: '248 KB' };
+    const d = { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', ptype: 'Feature Film', house: 'Lantern Pictures', poster: 'Kavya Menon', desig: 'Line Producer', disc: false, cat: 'Camera', loc: 'Film City, Mumbai', dates: '4 Nov 2026 – 12 Dec 2026', dur: '39 days', pay: '₹8,000 – ₹12,000 per day', desc: 'A-camera focus puller for an untitled Hindi feature. 32 shooting days across Film City and Goa, 4 Nov – 12 Dec.\n\nNeed 3+ years on features and comfort with ARRI Alexa 35.', pdf: 'Focus-Puller-Brief-Lantern.pdf', pdfSize: '248 KB' };
     const j = this.props.job ? { ...d, ...this.props.job } : d;
     return {
       ...j, hasPdf: !!j.pdf, isNew: !!this.props.job, notNew: !this.props.job, posted: this.props.job ? 'Posted just now' : 'Posted 18 Oct 2026',

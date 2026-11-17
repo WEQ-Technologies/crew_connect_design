@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Turn on a Crew mode</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+.am-scrim{animation:amfade .2s ease both}
+@keyframes amfade{from{opacity:0}to{opacity:1}}
+.am-sheet{animation:amup .5s cubic-bezier(.34,1.3,.64,1) both}
+@keyframes amup{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.am-st{opacity:0;transform:translateY(10px);animation:amin .45s cubic-bezier(.22,.8,.2,1) forwards}
+@keyframes amin{to{opacity:1;transform:none}}
+.am-pop{animation:ampop .55s cubic-bezier(.34,1.45,.64,1) both}
+@keyframes ampop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.am-sheet,.am-st,.am-pop{animation:amfade .15s ease both;opacity:1;transform:none}}
+</style>
+</helmet>
+<div class="ph bg-alt">
+
+  <!-- 1 · OPT-IN SHEET (spring up over the screen) -->
+  <sc-if value="{{stIntro}}" hint-placeholder-val="{{ true }}">
+    <div class="am-scrim" style="position: absolute; inset: 0; background: rgba(29,20,40,.26); display: flex; flex-direction: column; justify-content: flex-end; z-index: 5">
+      <div class="sheet am-sheet" role="dialog" aria-modal="true" aria-labelledby="am-title" style="position: relative; border-radius: 28px 28px 0 0; padding: 12px 22px 34px; display: flex; flex-direction: column; gap: 16px">
+        <div class="grab"></div>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <div class="row" style="gap: 10px"><span class="{{introSq}}" style="width: 48px; height: 48px; border-radius: 14px">
+            <sc-if value="{{isSeek}}" hint-placeholder-val="{{ true }}"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></sc-if>
+            <sc-if value="{{isPost}}" hint-placeholder-val="{{ false }}"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M19 8v6M16 11h6"></path></svg></sc-if>
+          </span><span class="badge b-p">{{modeName}}</span></div>
+          <h1 id="am-title" class="t-h1">{{introTitle}}</h1>
+          <p class="t-s mut">{{introSub}}</p>
+        </div>
+        <div class="list">
+          <sc-for list="{{gains}}" as="g" hint-placeholder-count="4"><div class="li" style="cursor: default; min-height: 50px"><span class="{{g.sq}}" style="width: 30px; height: 30px; border-radius: 9px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span><div class="sp"><div class="t-s b">{{g.t}}</div><div class="t-c mut">{{g.d}}</div></div></div></sc-for>
+        </div>
+        <sc-if value="{{needPro}}" hint-placeholder-val="{{ false }}"><div class="alert a-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg><div>Applying uses your Professional information. You can add it after turning this on.</div></div></sc-if>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <button class="btn btn-p w100" onClick="{{introGo}}">{{introCta}}</button>
+          <a class="btn btn-t w100" href="{{backHref}}" aria-label="Back">Not now</a>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- STEP HEADER -->
+  <sc-if value="{{inSteps}}" hint-placeholder-val="{{ false }}">
+    <div class="bar">
+      <a class="iconbtn" href="{{backHref}}" aria-label="Back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a>
+      <div class="ttl">{{barTitle}}</div>
+    </div>
+  </sc-if>
+
+  <!-- 2 · JOB POSTER: quick hiring setup (required to unlock) -->
+  <sc-if value="{{stHire}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 14px; gap: 18px">
+      <div class="am-st"><span class="badge b-p">Job Poster · quick hiring setup</span><div class="t-h1" style="margin-top: 8px">Who are you hiring as?</div><p class="t-s mut" style="margin-top: 4px">Shown on your job posts and your profile header. Saving this turns on Job Poster.</p></div>
+      <sc-if value="{{hasDraft}}" hint-placeholder-val="{{ false }}"><div class="alert a-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg><div>We kept what you entered last time. Save to turn on Job Poster.</div></div></sc-if>
+      <div class="fld"><label class="lbl" for="dg">Your designation <span class="req">*</span></label><input id="dg" class="{{dgCls}}" placeholder="e.g. Line Producer, DOP, 1st AD" value="{{desig}}" onChange="{{onDesig}}" aria-invalid="{{dgErr}}">
+        <div class="chips"><sc-for list="{{desigSugg}}" as="d" hint-placeholder-count="4"><button class="chip" onClick="{{d.pick}}">{{d.label}}</button></sc-for></div>
+        <sc-if value="{{dgErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Enter the designation you hire as.</span></sc-if>
+      </div>
+      <div class="fld"><label class="lbl" for="co">Company / production house <span class="req">*</span></label><input id="co" class="{{coCls}}" placeholder="e.g. Lantern Pictures" value="{{comp}}" onChange="{{onComp}}" aria-invalid="{{coErr}}">
+        <sc-if value="{{coErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Enter the company or production house you post for.</span></sc-if>
+      </div>
+      <div class="fld"><label class="lbl" for="ot">Other companies you post for <span class="opt">(optional)</span></label>
+        <div class="row" style="gap: 8px"><input id="ot" class="inp sp" placeholder="Add a company" value="{{other}}" onChange="{{onOther}}"><button class="btn btn-s" onClick="{{addOther}}">Add</button></div>
+        <sc-if value="{{hasOthers}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{others}}" as="o" hint-placeholder-count="2"><span class="chip on">{{o.label}}<button onClick="{{o.remove}}" aria-label="Remove {{o.label}}" style="border: 0; background: none; color: inherit; padding: 0; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+        <span class="help">You pick which company each job is for when you post it.</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 2 · JOB SEEKER: optional availability -->
+  <sc-if value="{{stAvail}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 14px; gap: 18px">
+      <div class="am-st"><span class="badge b-n">Optional</span><div class="t-h1" style="margin-top: 8px">Set your availability</div><p class="t-s mut" style="margin-top: 4px">Shown on your profile and to posters reviewing applicants. Fine-tune dates any time in More › Calendar.</p></div>
+      <div class="list" role="radiogroup" aria-label="Availability"><sc-for list="{{avail}}" as="a" hint-placeholder-count="3"><button class="li" onClick="{{a.pick}}" role="radio" aria-checked="{{a.on}}" style="min-height: 56px"><span class="{{a.dot}}">{{a.label}}</span><span class="sp"></span><span class="{{a.radio}}"></span></button></sc-for></div>
+      <a class="row t-s b" href="Calendar.dc.html" style="gap: 6px; text-decoration: none"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg>Mark specific dates in Calendar</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{inSteps}}" hint-placeholder-val="{{ false }}">
+    <div class="foot" style="flex-direction: column; gap: 8px">
+      <sc-if value="{{saving}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>Saving…</button></sc-if>
+      <sc-if value="{{notSaving}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{save}}">{{saveLabel}}</button></sc-if>
+      <sc-if value="{{canSkip}}" hint-placeholder-val="{{ false }}"><button class="btn btn-t w100" onClick="{{skip}}" style="min-height: 40px">Skip for now</button></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- 3 · SUCCESS -->
+  <sc-if value="{{stDone}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="justify-content: center; align-items: center; text-align: center; gap: 20px; padding: 40px 28px">
+      <div class="am-pop" style="{{doneRing}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 40px; height: 40px; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg></div>
+      <div class="am-st" style="display: flex; flex-direction: column; gap: 8px; animation-delay: .15s" role="status"><h1 class="t-d">{{doneTitle}}</h1><p class="t-b mut">{{doneSub}}</p></div>
+      <div class="card am-st" style="width: 100%; gap: 6px; text-align: left; animation-delay: .3s">
+        <div class="t-over">Now in your app</div>
+        <sc-for list="{{gains}}" as="g" hint-placeholder-count="4"><div class="row t-s" style="gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg><span>{{g.t}}</span></div></sc-for>
+      </div>
+    </div>
+    <div style="flex: none; padding: 12px 24px 36px; display: flex; flex-direction: column; gap: 10px">
+      <a class="btn btn-p w100" href="{{primaryHref}}" data-tab="{{primaryTab}}">{{primaryLabel}}</a>
+      <a class="btn btn-s w100" href="Jobs.dc.html" data-tab="{{backTab}}">Back to Jobs</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status" style="bottom: 140px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"act":{"editor":null},"store":{"editor":null},"mode":{"editor":"enum","options":["post","seek"],"default":"post"},"gate":{"editor":"enum","options":["","apply","post","talent"],"default":""},"demo":{"editor":"enum","options":["","form","error","saving","draft","avail","done"],"default":""},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    const d = p.demo || '', mode = p.mode || 'post';
+    const st = p.store || {};
+    const dr = st.hireDraft || (d === 'draft' ? { desig: 'Line Producer', comp: '', others: [] } : null);
+    const at = mode === 'post' ? ({ form: 'hire', error: 'hire', saving: 'hire', draft: 'hire', done: 'done' }[d] || 'intro') : ({ avail: 'avail', done: 'done' }[d] || 'intro');
+    this.state = { at, tried: d === 'error', saving: d === 'saving', toast: '', av: 'Available', touched: false,
+      desig: dr ? dr.desig || '' : '', comp: dr ? dr.comp || '' : '', others: dr ? dr.others || [] : [], other: '', draft: !!dr };
+  }
+  componentWillUnmount() { clearTimeout(this.t); clearTimeout(this.t2); }
+  flash(m) { this.setState({ toast: m }); clearTimeout(this.t2); this.t2 = setTimeout(() => this.setState({ toast: '' }), 2200); }
+  renderVals() {
+    const s = this.state, act = this.props.act || (() => {});
+    const st = this.props.store || {};
+    const mode = this.props.mode || 'post', post = mode === 'post';
+    const gate = this.props.gate || '';
+    const prof = st.prof || { pro: true };
+    // Keep what was typed as a draft in the shared store, so leaving the setup keeps Job Poster locked but nothing is lost.
+    const keep = (patch) => { const v = { desig: s.desig, comp: s.comp, others: s.others, ...patch }; this.setState({ ...patch, touched: true }); act('hireDraft', v); };
+    const okHire = !!s.desig.trim() && !!s.comp.trim();
+    const gateT = { apply: 'Turn on Job Seeker to apply', post: 'Turn on Job Poster to post a job', talent: 'Turn on Job Poster to use Find talent' }[gate];
+    const gains = (post
+      ? [['Post jobs', 'Create, review and publish job posts'], ['Review applicants', 'Statuses, shortlists and applicant profiles'], ['Find talent', 'Search the crew directory and connect'], ['“Currently hiring” badge', 'On your profile while posts are active']]
+      : [['Find Jobs', 'Recommended and saved jobs, search and filters'], ['Applications', 'Track Applied, Under Review, Shortlisted'], ['Jobs for you on Home', 'Matched to your work titles and skills'], ['Your applications on Home', 'Status updates at a glance, like Your active posts']]).map((g) => ({ t: g[0], d: g[1], sq: post ? 'sq g' : 'sq' }));
+    const finish = () => this.setState({ at: 'done', saving: false });
+    const primary = post
+      ? (gate === 'talent' ? ['Open Find talent', 'Talent.dc.html', ''] : ['Post your first job', 'CreateJob.dc.html', ''])
+      : (gate === 'apply' ? ['Back to the job', 'JobDetail.dc.html', ''] : ['Find jobs', 'Jobs.dc.html', 'find']);
+    return {
+      isSeek: !post, isPost: post, modeName: post ? 'Job Poster' : 'Job Seeker', introSq: post ? 'sq g' : 'sq',
+      stIntro: s.at === 'intro', inSteps: s.at === 'hire' || s.at === 'avail', stHire: s.at === 'hire', stAvail: s.at === 'avail', stDone: s.at === 'done',
+      introTitle: gateT || (post ? 'Hiring for a production?' : 'Looking for work too?'),
+      introSub: post ? 'Turn on Job Poster to post jobs and find talent. A quick hiring setup and you are ready.' : (gate === 'apply' ? 'Your Professional information is already on your profile. You’ll come straight back to this job.' : 'Turn on Job Seeker to find jobs and apply. Your Professional information is already filled in.'),
+      introCta: post ? 'Continue' : 'Turn on Job Seeker',
+      needPro: !post && !prof.pro,
+      gains, backHref: gate === 'apply' ? 'JobDetail.dc.html' : 'Jobs.dc.html',
+      introGo: () => {
+        if (post) return this.setState({ at: 'hire' });
+        // Job Seeker needs no form: confirming turns it on, then availability is offered.
+        act('addMode', 'seek');
+        this.setState({ at: 'avail' });
+        this.flash('Job Seeker is on');
+      },
+      barTitle: post ? 'Quick hiring setup' : 'Availability',
+      hasDraft: s.draft && !s.touched,
+      desig: s.desig, comp: s.comp, other: s.other,
+      onDesig: (e) => keep({ desig: e.target.value }), onComp: (e) => keep({ comp: e.target.value }), onOther: (e) => this.setState({ other: e.target.value }),
+      desigSugg: ['Producer', 'Line Producer', 'Director', 'DOP'].map((l) => ({ label: l, pick: () => keep({ desig: l }) })),
+      addOther: () => { const v = s.other.trim(); if (v && s.others.indexOf(v) < 0) { keep({ others: s.others.concat([v]) }); this.setState({ other: '' }); } },
+      hasOthers: s.others.length > 0, others: s.others.map((o) => ({ label: o, remove: () => keep({ others: s.others.filter((x) => x !== o) }) })),
+      dgErr: s.tried && !s.desig.trim(), coErr: s.tried && !s.comp.trim(),
+      dgCls: s.tried && !s.desig.trim() ? 'inp bad' : 'inp', coCls: s.tried && !s.comp.trim() ? 'inp bad' : 'inp',
+      avail: [['Available', 'avail a-av'], ['Tentatively booked', 'avail a-tb'], ['Unavailable', 'avail a-un']].map((a) => ({ label: a[0], dot: a[1], on: s.av === a[0], radio: s.av === a[0] ? 'radio on' : 'radio', pick: () => this.setState({ av: a[0] }) })),
+      saving: s.saving, notSaving: !s.saving,
+      saveLabel: post ? 'Save & turn on Job Poster' : 'Save availability',
+      canSkip: s.at === 'avail' && !s.saving,
+      save: () => {
+        if (s.at === 'hire') {
+          if (!okHire) return this.setState({ tried: true });
+          this.setState({ saving: true });
+          clearTimeout(this.t);
+          this.t = setTimeout(() => { act('addMode', 'post', { desig: s.desig.trim(), companies: [s.comp.trim()].concat(s.others) }); finish(); this.flash('Job Poster is on'); }, 700);
+          return;
+        }
+        act('profile', { availability: s.av });
+        finish();
+      },
+      skip: () => finish(),
+      doneRing: 'width:88px;height:88px;border-radius:44px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 0 0 6px rgba(255,255,255,.8),0 18px 36px -14px rgba(46,18,72,.45);background:' + (post ? 'linear-gradient(180deg,#3F8A28,#367A22)' : 'linear-gradient(180deg,#6A35A0,#5B2A8C)'),
+      doneTitle: post ? 'Job Poster is on.' : 'Job Seeker is on.',
+      doneSub: post ? (gate === 'talent' ? 'Find talent is ready. Jobs now shows My Posts too.' : 'Jobs now shows My Posts. Post your first job when you are ready.') : (gate === 'apply' ? 'Your application has been sent. Track it in Jobs › Applications.' : 'Jobs now shows Find Jobs and Applications next to My Posts.'),
+      primaryLabel: primary[0], primaryHref: primary[1], primaryTab: primary[2], backTab: post ? 'posts' : 'find',
+      toast: !!s.toast, toastText: s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

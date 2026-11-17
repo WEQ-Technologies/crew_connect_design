@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewConnect — Interactive journeys</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;overflow:hidden}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+.jn-seg{display:grid;gap:4px;padding:4px;border-radius:14px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.jn-seg button{border:0;background:transparent;border-radius:10px;padding:9px 8px;font:600 13px/16px Inter,system-ui,sans-serif;color:#5E5A66;cursor:pointer;text-align:center;transition:background .2s,color .2s,box-shadow .2s}
+.jn-seg button:hover{background:rgba(255,255,255,.7);color:#4A1F73}
+.jn-seg button.on{background:#fff;color:#4A1F73;box-shadow:0 6px 14px -8px rgba(46,18,72,.35)}
+.jn-seg button small{display:block;font-weight:500;font-size:11px;color:#8A8594;margin-top:2px}
+.jn-step{display:flex;gap:10px;align-items:flex-start;padding:7px 10px;border-radius:12px;transition:background .2s}
+.jn-step.cur{background:rgba(91,42,140,.09)}
+.jn-dot{width:22px;height:22px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;font:700 11px Inter,system-ui,sans-serif;border:1.5px solid #CFC8DA;color:#8A8594;background:#fff;margin-top:1px}
+.jn-step.done .jn-dot{background:#367A22;border-color:#367A22;color:#fff}
+.jn-step.cur .jn-dot{background:#5B2A8C;border-color:#5B2A8C;color:#fff;box-shadow:0 0 0 4px rgba(91,42,140,.15)}
+.jn-btn{display:flex;align-items:center;gap:10px;width:100%;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.55);border-radius:12px;padding:8px 10px;font:600 13px/16px Inter,system-ui,sans-serif;color:#1A1820;cursor:pointer;text-align:left;transition:background .18s,border-color .18s,box-shadow .18s}
+.jn-btn:hover{background:#fff;border-color:rgba(183,154,214,.7)}
+.jn-btn.on{background:#fff;border-color:#5B2A8C;box-shadow:0 6px 14px -8px rgba(46,18,72,.35)}
+.jn-btn b{width:24px;height:24px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;background:#EFE7F7;color:#4A1F73;font-size:12px}
+.jn-btn.on b{background:#5B2A8C;color:#fff}
+.jn-btn small{display:block;font-weight:500;font-size:11px;color:#8A8594}
+.jn-list{display:flex;flex-direction:column;gap:2px;overflow-y:auto;scrollbar-width:none;min-height:0}
+.jn-list::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){.jn-seg button,.jn-step{transition:none}}
+</style>
+</helmet>
+<div style="width: 1080px; height: 1040px; box-sizing: border-box; display: flex; gap: 16px; padding: 20px 0 0 32px; font-family: Inter, system-ui, sans-serif; color: #1A1820; background: linear-gradient(160deg, #F6F1FD 0%, #EEF6EA 100%); overflow: hidden">
+  <aside style="width: 500px; flex: none; display: flex; flex-direction: column; gap: 12px; padding: 16px 0 36px; box-sizing: border-box; height: 1020px" aria-label="Reviewer controls (prototype only)">
+    <div><div class="row" style="gap: 8px"><span class="badge b-w">Reviewer controls · prototype only</span></div><div class="t-h1" style="margin-top: 6px">CrewConnect — interactive journeys</div><p class="t-c mut" style="margin-top: 4px">Not part of the app. Pick a flow or preset; the phone restarts there. Steps tick off as you reach each screen.</p></div>
+    <div class="jn-seg" style="grid-template-columns: repeat(4, minmax(0, 1fr))"><sc-for list="{{groups}}" as="g" hint-placeholder-count="2"><button class="{{g.cls}}" onClick="{{g.pick}}" aria-pressed="{{g.on}}">{{g.label}}<small>{{g.sub}}</small></button></sc-for></div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px"><sc-for list="{{opts}}" as="o" hint-placeholder-count="8"><button class="{{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}"><b>{{o.tag}}</b><span class="sp" style="min-width: 0">{{o.label}}<small>{{o.sub}}</small></span></button></sc-for></div>
+    <div class="row" style="gap: 8px"><span class="t-c b mut" style="width: 78px">Completion</span><div class="jn-seg" style="grid-template-columns: 1fr 1fr; flex: 1; padding: 3px"><sc-for list="{{completes}}" as="o" hint-placeholder-count="2"><button class="{{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="padding: 6px 8px">{{o.label}}</button></sc-for></div></div>
+    <div class="row" style="gap: 8px"><span class="t-c b mut" style="width: 78px">Sample data</span><div class="jn-seg" style="grid-template-columns: 1fr 1fr; flex: 1; padding: 3px"><sc-for list="{{samples}}" as="o" hint-placeholder-count="2"><button class="{{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="padding: 6px 8px">{{o.label}}</button></sc-for></div></div>
+    <div class="card" style="gap: 8px; flex: 1; min-height: 0; padding: 12px 10px 10px">
+      <div class="row" style="gap: 8px; padding: 0 6px"><div class="sp"><div class="t-h3">{{title}}</div><div class="t-c mut">{{doneN}} of {{stepN}} steps reached · now on <b style="color: #1A1820">{{curTitle}}</b></div></div><button class="btn btn-s btn-sm" onClick="{{restart}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.6-4.5L4 8M4 4v4h4"></path></svg>Restart</button></div>
+      <div style="height: 6px; border-radius: 3px; background: #EFE7F7; overflow: hidden; margin: 0 6px"><div style="{{barStyle}}"></div></div>
+      <div class="jn-list" role="list"><sc-for list="{{steps}}" as="s" hint-placeholder-count="8"><div class="{{s.cls}}" role="listitem"><span class="jn-dot">{{s.n}}</span><span class="sp" style="min-width: 0"><span class="t-s b" style="display: block">{{s.label}}</span><span class="t-c mut" style="display: block">{{s.hint}}</span></span></div></sc-for></div>
+    </div>
+    <button class="btn btn-t btn-sm" onClick="{{resetAll}}" style="align-self: flex-start">Reset to a fresh new user</button>
+  </aside>
+  <div style="width: 498px; height: 999px; flex: none; position: relative">
+    <sc-if value="{{alive}}" hint-placeholder-val="{{ true }}">
+      <div>
+        <sc-if value="{{k.A}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="seeker" entry="new" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.B}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="poster" entry="new" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.C}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="crewboth" entry="new" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.D}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="poster" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.E}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="seeker" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.pS}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="seeker" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.pP}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="poster" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.pB}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="crewboth" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.rS}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="seeker" entry="returning" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.rP}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="poster" entry="returning" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.reset}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="" entry="new" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.pV}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="vendor" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.S1}}" hint-placeholder-val="{{ true }}"><dc-import name="Prototype" journey="seeker" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.S2}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="poster" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.S3}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="crewboth" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.S4}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="vendor" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.S5}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="seeker" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.H1}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="seeker" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.H2}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="seeker" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.H3}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="poster" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.H4}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="crewboth" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.H5}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="vendor" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.H6}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="seeker" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.r_crew_new}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="crew" entry="new" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.r_vendor_new}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="vendor" entry="new" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.r_crew_add}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="crew" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.r_vendor_add}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="vendor" entry="home" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+        <sc-if value="{{k.r_vendor_ret}}" hint-placeholder-val="{{ false }}"><dc-import name="Prototype" journey="vendor" entry="returning" sample="{{sample}}" complete="{{complete}}" onScreen="{{onScreen}}" hint-size="498px,999px"></dc-import></sc-if>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1080,"height":1040}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = { g: 'slider', id: 'S1', sample: 'has', complete: '', alive: true, cur: '', seen: {} };
+    this.onScreen = (k) => { if (k === this.state.cur) return; this.setState({ cur: k, seen: { ...this.state.seen, [k]: true } }); };
+    const S = (k, label, hint) => ({ k, label, hint });
+    const signup = (role, mode) => [S('Splash', 'Splash', 'Opens on its own'), S('Onboarding', 'Onboarding', 'Swipe or tap Skip'), S('Welcome', 'Welcome', 'Tap Create account'), S('SignUp', 'Sign up', 'Any email · Continue'), S('Otp', 'Verify email', 'Any six digits'), S('RoleChoice', 'How will you use CrewConnect?', role)].concat(mode ? [S('ModeChoice', 'As Crew, what will you do?', mode)] : []).concat([S('SetupBasic', 'Stage 1 · Basic profile', 'Name and photo · Continue'), S('SetupDone', 'Profile set up', 'Continue filling profile')]);
+    this.O = {
+      A: ['A', 'Flow A · Job Seeker only', 'sign-up to Home', signup('Pick I’m Crew', 'Pick Find work').concat([S('CompleteProfile', 'Stage 2', 'Save Professional information · availability is optional'), S('SeekerHome', 'Home · Job Seeker', 'Jobs for you, no posts module'), S('Jobs', 'Jobs · Find Jobs + Applications', 'No My Posts · opt-in card above the bar'), S('JobSearch', 'Search and filters', 'Tap the search field'), S('JobDetail', 'Job details', 'Apply → Send application'), S('Notifications', 'Notifications', 'Status changes · no applicant alerts'), S('JobDigest', 'Premium job digest', 'Home › Jobs for you › digest')])],
+      B: ['B', 'Flow B · Job Poster only', 'sign-up to Home', signup('Pick I’m Crew', 'Pick Hire crew').concat([S('CompleteProfile', 'Stage 2', 'Professional information, references'), S('SeekerHome', 'Home · Job Poster', 'Your active posts · no Jobs for you'), S('CreateJob', 'First job post', 'Hiring setup → details → review → publish'), S('Jobs', 'Jobs · My Posts only', 'New post on top · Become a Job Seeker card'), S('PosterJobDetail', 'Job (poster view)', 'Open your post'), S('Talent', 'Find talent', 'Home › Find talent → Connect'), S('SeekerProfile', 'Profile', 'Hires as … · Looking for work? row')])],
+      C: ['C', 'Flow C · Both modes', 'sign-up to Home', signup('Pick I’m Crew', 'Pick Both').concat([S('CompleteProfile', 'Stage 2', 'Professional information, references'), S('SeekerHome', 'Home · both', 'Jobs for you + Your active posts'), S('Jobs', 'Jobs · all three views', 'No opt-in card or chip'), S('JobDetail', 'Apply to a job', 'From Find Jobs'), S('CreateJob', 'Post a job', 'Jobs › Post a job'), S('SeekerProfile', 'Profile', 'My applications and My posts')])],
+      D: ['D', 'Flow D · Poster → also Seeker', 'Apply gate, then live update', [S('SeekerHome', 'Home · Job Poster', 'From your network › Kavya shared a job'), S('JobDetail', 'Shared job', 'Tap Apply'), S('AddMode', 'Turn on Job Seeker to apply', 'Turn on → availability (optional) → success'), S('JobDetail', 'Back to the job', 'Application sent'), S('Jobs', 'Jobs · all three views', 'Applications shows it · card and chip gone'), S('Calendar', 'More › Calendar', 'Open to all Crew'), S('SeekerProfile', 'Profile', 'Availability line + My applications')]],
+      E: ['E', 'Flow E · Seeker → also Poster', 'hiring setup, first post', [S('SeekerHome', 'Home · Job Seeker', 'Tap + › Hire crew? Become a Job Poster'), S('AddMode', 'Quick hiring setup', 'Designation + company · Save'), S('CreateJob', 'Post your first job', 'From the success screen · publish'), S('Jobs', 'Jobs · all three views', 'My Posts with the new post'), S('Talent', 'Find talent', 'Home › Your active posts › Find talent'), S('SeekerProfile', 'Profile', 'Hires as … · Currently hiring')]],
+      pS: ['S', 'Preset · Job Seeker only', 'signed in at Home', [S('SeekerHome', 'Home', 'Jobs for you'), S('Jobs', 'Jobs', 'Not now → chip in header → tap to reopen'), S('Talent', 'Find talent gate', 'Any Find talent entry opens Become a Job Poster'), S('SeekerProfile', 'Profile', 'Hiring? Turn on Job Poster row')]],
+      pP: ['P', 'Preset · Job Poster only', 'signed in at Home', [S('SeekerHome', 'Home', 'Your active posts · new applicants'), S('Applicants', 'Applicants', 'Tap a post'), S('ApplicantDetail', 'Applicant detail', 'Update the status'), S('Jobs', 'Jobs · My Posts only', 'Become a Job Seeker card'), S('Calendar', 'More › Calendar', 'Open to Job Posters too'), S('SeekerProfile', 'Profile', 'Looking for work? Turn on Job Seeker')]],
+      pB: ['2', 'Preset · Both modes', 'signed in at Home', [S('SeekerHome', 'Home', 'Posts first when applicants are waiting'), S('Jobs', 'Jobs', 'All three views'), S('Notifications', 'Notifications', 'Applications + My Posts'), S('Subscription', 'Subscription', 'All rows'), S('SeekerProfile', 'Profile', 'Everything')]],
+      rS: ['↺', 'Returning · Job Seeker', 'log in, no mode question', [S('LogIn', 'Log in', 'Email prefilled · Continue'), S('Otp', 'Verify email', 'Any six digits'), S('SeekerHome', 'Home in Seeker layout', 'Mode selection is not shown again'), S('Jobs', 'Jobs', 'Find Jobs + Applications')]],
+      rP: ['↺', 'Returning · Job Poster', 'log in, no mode question', [S('LogIn', 'Log in', 'Email prefilled · Continue'), S('Otp', 'Verify email', 'Any six digits'), S('SeekerHome', 'Home in Poster layout', 'Mode selection is not shown again'), S('Jobs', 'Jobs', 'My Posts only')]],
+      r_crew_new: ['1', 'Crew only · new user', 'roles: sign-up', signup('Pick I’m Crew', 'Pick any mode').concat([S('SeekerHome', 'Home · Crew only', 'Listings is browse-only')])],
+      r_vendor_new: ['2', 'Vendor only · new user', 'roles: sign-up', signup('Pick I’m a Vendor', '').concat([S('AddRole', 'Business details', 'Tap Add your first listing'), S('ListingForm', 'First listing', 'Publish'), S('SeekerHome', 'Home · Vendor only', 'Listings, reveals, invoices')])],
+      r_crew_add: ['3', 'Crew → Vendor', 'roles: add a role', [S('SeekerHome', 'Home', 'Tap + › List your equipment'), S('AddRole', 'Add a vendor profile', 'Intro → Business details → Contact & GST'), S('ListingForm', 'First listing', 'From the success screen'), S('MyListings', 'Listings', 'Now My listings')]],
+      r_vendor_add: ['4', 'Vendor → Crew', 'roles: add a role', [S('SeekerHome', 'Home', 'Work on productions too?'), S('AddRole', 'Add a crew profile', 'Professional info → refs → availability'), S('Jobs', 'Jobs', 'Jobs tab appears')]],
+      r_vendor_ret: ['↺', 'Returning · Vendor', 'roles: log in', [S('LogIn', 'Log in', 'Email prefilled'), S('Otp', 'Verify email', 'Any six digits'), S('SeekerHome', 'Home · Vendor only', 'Vendor layout')]],
+      pV: ['V', 'Preset · Vendor only', 'signed in at Home', [S('SeekerHome', 'Home', 'Explore: Listings, Invoices, Crew (Turn on)'), S('MyListings', 'Listings', 'My listings'), S('AddRole', 'Crew tile', 'Turn on Crew')]],
+      H1: ['1', 'Rent/Buy · browse and contact', 'Job Seeker only', [S('SeekerHome', 'Home', 'Tap the Rent/Buy tab (tag icon)'), S('MyListings', 'Rent or buy gear', 'Rent / Buy chips, categories, search “pune”'), S('VendorPublic', 'Vendor page', 'Open a listing → Show contact details'), S('Discover', 'Browse vendors', 'Header button on Rent/Buy')]],
+      H2: ['2', 'Catalog · Job Seeker', 'tiles and Turn on', [S('SeekerHome', 'Explore CrewConnect', 'Rent/Buy, Calendar, Invoices, Job Poster, Vendor'), S('Calendar', 'Calendar tile', 'Opens the availability calendar'), S('Invoices', 'Invoices tile', 'Opens the invoice list'), S('AddMode', 'Job Poster tile (Turn on)', 'Hiring setup → Job Poster is on'), S('Jobs', 'Job Poster tile again', 'Now opens My Posts; bar says Listings'), S('AddRole', 'Vendor tile (Turn on)', 'Vendor opt-in (out of scope)')]],
+      H3: ['3', 'Catalog · Job Poster', 'tiles and Turn on', [S('SeekerHome', 'Explore CrewConnect', 'Listings, Calendar, Invoices, Job Seeker, Vendor'), S('Calendar', 'Calendar tile', 'Now open to Job Posters too'), S('MyListings', 'Listings tile', 'Same label as the bar'), S('AddMode', 'Job Seeker tile (Turn on)', 'Turn on → Your applications appears on Home')]],
+      H4: ['4', 'Catalog · Both modes', 'both cards stacked', [S('SeekerHome', 'Home', 'Your active posts first (applicants waiting), then Your applications'), S('Jobs', 'Job Poster tile', 'Opens My Posts'), S('Applicants', 'Post row', 'From Your active posts')]],
+      H5: ['5', 'Catalog · Vendor only', 'tiles', [S('SeekerHome', 'Home', 'Listings (Manage your listings), Invoices, Crew'), S('MyListings', 'Listings tile', 'My listings'), S('AddRole', 'Crew tile (Turn on)', 'Add a crew profile')]],
+      H6: ['6', 'Your applications card', 'Job Seeker only', [S('SeekerHome', 'Your applications', '2 active · 1 new update (Shortlisted)'), S('JobDetail', 'Open the Shortlisted row', 'Status shown; pill clears on return'), S('Jobs', 'Applications link', 'Jobs › Applications (Rejected only here)'), S('JobDetail', 'Apply to another job', 'Find jobs → Apply → back on Home: count rises')]],
+      S1: ['1', 'Slider · Job Seeker', 'below the completion card', [S('SeekerHome', 'Home', 'Swipe Explore CrewConnect; dots follow'), S('Calendar', 'Calendar card', 'Open'), S('Invoices', 'Invoices card', 'Open'), S('AddMode', 'Job Poster card · Turn on', 'Hiring setup → Job Poster is on'), S('SeekerHome', 'Back on Home', 'Card says Open; Your applications became Your jobs with tabs')]],
+      S2: ['2', 'Slider · Job Poster', 'Listings, Calendar, Job Seeker', [S('SeekerHome', 'Home', 'Explore slider, then Your active posts'), S('MyListings', 'Listings card', 'Open'), S('Calendar', 'Calendar card', 'Open for Job Posters too'), S('AddMode', 'Job Seeker card · Turn on', 'Turn on → availability → success'), S('Jobs', 'Back to Jobs', 'Then Home: Your jobs tabs with a New badge')]],
+      S3: ['3', 'Your jobs tabs', 'Both modes', [S('SeekerHome', 'Your jobs', 'Tap Job posts, swipe back to Applications; badges show new counts'), S('Applicants', 'Job posts row', 'Opens Applicants'), S('JobDetail', 'Applications row', 'Job details with the status'), S('Jobs', 'Header link', 'Applications or My Posts, per tab'), S('CreateJob', 'Post a job', 'Publish → Home: Job posts count rises')]],
+      S4: ['4', 'Slider · Vendor only', 'three cards', [S('SeekerHome', 'Home', 'Listings · Invoices · Crew (Turn on)'), S('MyListings', 'Listings card', 'My listings'), S('AddRole', 'Crew card · Turn on', 'Add a crew profile')]],
+      S5: ['5', 'Invoices without Profile', 'More dock and slider', [S('SeekerProfile', 'Profile › Account', 'No Invoices row'), S('Invoices', 'More › Invoices', 'From the bottom bar'), S('SeekerHome', 'Home', 'Explore › Invoices card opens it too')]],
+      reset: ['0', 'Fresh new user', 'nothing preset', [S('Splash', 'Splash', 'Start from scratch'), S('RoleChoice', 'Role selection', 'Pick anything'), S('SeekerHome', 'Home', 'Layout follows your picks')]]
+    };
+    this.G = { slider: ['S1', 'S2', 'S3', 'S4', 'S5', 'pS', 'pP', 'pB', 'pV'], home: ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'pS', 'pP', 'pB', 'pV'], modes: ['A', 'B', 'C', 'D', 'E', 'rS', 'rP'], roles: ['r_crew_new', 'r_vendor_new', 'r_crew_add', 'r_vendor_add', 'r_vendor_ret', 'reset'] };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  go(patch) {
+    clearTimeout(this.t);
+    this.setState({ ...patch, alive: false, cur: '', seen: {} });
+    this.t = setTimeout(() => this.setState({ alive: true }), 30);
+  }
+  renderVals() {
+    const s = this.state;
+    const o = this.O[s.id], list = o[3];
+    const keys = [];
+    list.forEach((x) => { if (keys.indexOf(x.k) < 0) keys.push(x.k); });
+    const doneN = list.filter((x) => s.seen[x.k]).length;
+    const k = {};
+    Object.keys(this.O).forEach((id) => { k[id] = s.id === id; });
+    const T = { Splash: 'Splash', Onboarding: 'Onboarding', Welcome: 'Welcome', SignUp: 'Sign up', LogIn: 'Log in', Otp: 'Email verification', RoleChoice: 'Role selection', ModeChoice: 'Mode selection', AddRole: 'Add a role', AddMode: 'Turn on a Crew mode', SetupBasic: 'Basic profile', SetupDone: 'Profile set up', CompleteProfile: 'Complete profile', SeekerHome: 'Home', Jobs: 'Jobs', JobSearch: 'Job search', JobDetail: 'Job details', MyListings: 'Listings', ListingForm: 'Listing form', SeekerProfile: 'Profile', Notifications: 'Notifications', Invoices: 'Invoices', DiscoverFeed: 'Network', Calendar: 'Calendar', CreateJob: 'Post a job', Talent: 'Find talent', Applicants: 'Applicants', ApplicantDetail: 'Applicant', PosterJobDetail: 'Job (poster view)', JobDigest: 'Job digest', Subscription: 'Subscription' };
+    return {
+      k, alive: s.alive, onScreen: this.onScreen,
+      completes: [['', 'Below 100%'], ['full', '100% (card hidden)']].map(([v, l]) => ({ label: l, on: s.complete === v, cls: s.complete === v ? 'on' : '', pick: () => this.go({ complete: v }) })), complete: s.complete,
+      samples: [['has', 'Has activity'], ['none', 'No activity']].map(([v, l]) => ({ label: l, on: s.sample === v, cls: s.sample === v ? 'on' : '', pick: () => this.go({ sample: v }) })), sample: s.sample,
+      groups: [['slider', 'Slider & Your jobs', 'this round'], ['home', 'Rent/Buy & Home', 'previous'], ['modes', 'Crew modes', 'Flows A–E'], ['roles', 'Crew & Vendor', 'roles']].map(([g, l, sub]) => ({ label: l, sub, on: s.g === g, cls: s.g === g ? 'on' : '', pick: () => this.go({ g, id: this.G[g][0] }) })),
+      opts: this.G[s.g].map((id) => ({ tag: this.O[id][0], label: this.O[id][1], sub: this.O[id][2], on: s.id === id, cls: 'jn-btn' + (s.id === id ? ' on' : ''), pick: () => this.go({ id }) })),
+      title: o[1],
+      steps: list.map((x, i) => ({ ...x, n: s.seen[x.k] ? '✓' : String(i + 1), cls: 'jn-step' + (x.k === s.cur ? ' cur' : s.seen[x.k] ? ' done' : '') })),
+      doneN, stepN: list.length,
+      barStyle: 'height:100%;border-radius:3px;background:linear-gradient(90deg,#5B2A8C,#367A22);transition:width .3s;width:' + Math.round((doneN / list.length) * 100) + '%',
+      curTitle: T[s.cur] || s.cur || '—',
+      restart: () => this.go({}),
+      resetAll: () => this.go({ g: 'roles', id: 'reset' })
+    };
+  }
+}
+</script>
+</body>
+</html>
