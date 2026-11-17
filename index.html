@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <title>CrewConnect — Interactive iPhone prototype</title>
 <script>
-  if (/\/prototype(\.dc\.html)?$/i.test(window.location.pathname)) {
-    window.location.replace('./' + window.location.search + window.location.hash);
+  if (/(prototype\.dc\.html|index\.html)$/i.test(window.location.pathname)) {
+    history.replaceState(null, '', './' + window.location.search + window.location.hash);
   }
 </script>
 <script src="./vendor/react.js"></script>
@@ -18,11 +18,27 @@
 <helmet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
-body{margin:0}
+html,body{margin:0;overflow:hidden}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
+/* Device viewport: the app runs edge to edge on the whole 390×891 screen, like an installed app.
+   Backgrounds extend under the status bar, Dynamic Island and home indicator; content keeps iOS safe areas
+   (47px top, 34px bottom). Only the prototype frame applies this — the standalone 390×844 artboards are unchanged. */
+.pv-app .ph{height:891px;padding-top:47px;box-sizing:border-box}
+.pv-app .nav{height:96px;padding-bottom:34px}
+.pv-app .foot{padding-bottom:34px}
+.pv-app .fab{bottom:112px!important}
+.pv-app [role="menu"][aria-label="Create"]{bottom:180px!important}
+/* Role-aware shell: on tab screens the prototype draws ONE bottom bar shaped by the account's roles (RoleNav).
+   The screen's own bar keeps its space but is hidden, so layouts do not shift. */
+.pv-shell .ph nav.nav{visibility:hidden!important}
+.pv-coach{position:absolute;left:16px;right:16px;bottom:108px;z-index:40;padding:14px 16px;border-radius:18px;background:rgba(36,18,56,.92);color:#fff;box-shadow:0 18px 40px -12px rgba(36,18,56,.55);font-family:Inter,system-ui,sans-serif;animation:pvCoach .45s cubic-bezier(.2,.9,.3,1.2) both}
+.pv-coach:after{content:'';position:absolute;bottom:-7px;width:14px;height:14px;background:rgba(36,18,56,.92);transform:rotate(45deg);left:var(--ca,50%);margin-left:-7px;border-radius:2px}
+.pv-coach button{margin-top:10px;border:0;border-radius:10px;padding:8px 14px;background:#fff;color:#4A1F73;font:600 13px Inter,system-ui,sans-serif;cursor:pointer}
+@keyframes pvCoach{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.pv-coach{animation:none}}
 </style>
 </helmet>
-<div style="width: 1280px; height: 1040px; box-sizing: border-box; background: #ECE9EF; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1A1820; display: flex; align-items: center; justify-content: center; gap: 72px; padding: 40px">
+<div style="width: 498px; height: 999px; box-sizing: border-box; background: transparent; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1A1820; display: flex; padding: 40px; overflow: hidden">
 
   <!-- iPhone -->
   <div style="position: relative; flex: none; width: 418px; height: 919px; border-radius: 64px; background: #1A1820; padding: 14px; box-sizing: border-box; box-shadow: 0 0 0 2px #3A3740, 0 30px 80px rgba(29,27,34,.28)">
@@ -31,9 +47,9 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
     <span style="position: absolute; left: -4px; top: 302px; width: 4px; height: 62px; border-radius: 2px 0 0 2px; background: #2C2932" aria-hidden="true"></span>
     <span style="position: absolute; right: -4px; top: 250px; width: 4px; height: 96px; border-radius: 0 2px 2px 0; background: #2C2932" aria-hidden="true"></span>
 
-    <div style="position: relative; width: 390px; height: 891px; border-radius: 50px; overflow: hidden; background: #F7F6FA">
+    <div style="position: relative; width: 390px; height: 891px; border-radius: 50px; overflow: hidden; background: #F6F1FD">
       <!-- Status bar -->
-      <div style="position: absolute; left: 0; right: 0; top: 0; height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px 0 38px; box-sizing: border-box; background: #F7F6FA; z-index: 3; font-size: 16px; font-weight: 700; letter-spacing: -0.01em" aria-hidden="true">
+      <div style="position: absolute; left: 0; right: 0; top: 0; height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px 0 38px; box-sizing: border-box; background: transparent; z-index: 3; font-size: 16px; font-weight: 700; letter-spacing: -0.01em" aria-hidden="true">
         <span>9:41</span>
         <span style="display: flex; align-items: center; gap: 6px">
           <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#1A1820"></rect><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#1A1820"></rect><rect x="10" y="3" width="3" height="9" rx="1" fill="#1A1820"></rect><rect x="15" y="0" width="3" height="12" rx="1" fill="#1A1820"></rect></svg>
@@ -45,52 +61,62 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <div style="position: absolute; top: 11px; left: 50%; margin-left: -63px; width: 126px; height: 37px; border-radius: 19px; background: #000; z-index: 4" aria-hidden="true"></div>
 
       <!-- App viewport -->
-      <div ref="{{screenRef}}" style="position: absolute; left: 0; top: 47px; width: 390px; height: 844px; overflow: hidden; background: #F7F6FA">
+      <div ref="{{screenRef}}" class="{{appCls}}" style="position: absolute; left: 0; top: 0; width: 390px; height: 891px; overflow: hidden; background: #F6F1FD">
         <sc-if value="{{m.Splash}}" hint-placeholder-val="{{ true }}"><div style="{{d.Splash}}"><dc-import name="Splash" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Onboarding}}" hint-placeholder-val="{{ false }}"><div style="{{d.Onboarding}}"><dc-import name="Onboarding" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.Welcome}}" hint-placeholder-val="{{ false }}"><div style="{{d.Welcome}}"><dc-import name="Welcome" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.SignUp}}" hint-placeholder-val="{{ false }}"><div style="{{d.SignUp}}"><dc-import name="SignUp" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.LogIn}}" hint-placeholder-val="{{ false }}"><div style="{{d.LogIn}}"><dc-import name="LogIn" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.Otp}}" hint-placeholder-val="{{ false }}"><div style="{{d.Otp}}"><dc-import name="Otp" next="{{otpNext}}" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.RoleSelect}}" hint-placeholder-val="{{ false }}"><div style="{{d.RoleSelect}}"><dc-import name="RoleSelect" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.SetupSeeker}}" hint-placeholder-val="{{ false }}"><div style="{{d.SetupSeeker}}"><dc-import name="SetupSeeker" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SignUp}}" hint-placeholder-val="{{ false }}"><div style="{{d.SignUp}}"><dc-import name="SignUp" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.LogIn}}" hint-placeholder-val="{{ false }}"><div style="{{d.LogIn}}"><dc-import name="LogIn" act="{{act}}" email="{{store.email}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Otp}}" hint-placeholder-val="{{ false }}"><div style="{{d.Otp}}"><dc-import name="Otp" email="{{store.email}}" next="{{otpNext}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.RoleChoice}}" hint-placeholder-val="{{ false }}"><div style="{{d.RoleChoice}}"><dc-import name="RoleChoice" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.AddRole}}" hint-placeholder-val="{{ false }}"><div style="{{d.AddRole}}"><dc-import name="AddRole" role="{{addRole}}" gate="{{addGate}}" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.ModeChoice}}" hint-placeholder-val="{{ false }}"><div style="{{d.ModeChoice}}"><dc-import name="ModeChoice" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.AddMode}}" hint-placeholder-val="{{ false }}"><div style="{{d.AddMode}}"><dc-import name="AddMode" mode="{{addMode}}" gate="{{modeGate}}" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SetupBasic}}" hint-placeholder-val="{{ false }}"><div style="{{d.SetupBasic}}"><dc-import name="SetupBasic" act="{{act}}" email="{{store.email}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SetupDone}}" hint-placeholder-val="{{ false }}"><div style="{{d.SetupDone}}"><dc-import name="SetupDone" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.CompleteProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.CompleteProfile}}"><dc-import name="CompleteProfile" act="{{act}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.SetupPoster}}" hint-placeholder-val="{{ false }}"><div style="{{d.SetupPoster}}"><dc-import name="SetupPoster" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.SetupVendor}}" hint-placeholder-val="{{ false }}"><div style="{{d.SetupVendor}}"><dc-import name="SetupVendor" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.SeekerHome}}" hint-placeholder-val="{{ false }}"><div style="{{d.SeekerHome}}"><dc-import name="SeekerHome" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SeekerHome}}" hint-placeholder-val="{{ false }}"><div style="{{d.SeekerHome}}"><dc-import name="SeekerHome" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.JobSearch}}" hint-placeholder-val="{{ false }}"><div style="{{d.JobSearch}}"><dc-import name="JobSearch" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.JobDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.JobDetail}}"><dc-import name="JobDetail" app="{{jobApp}}" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.SeekerProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.SeekerProfile}}"><dc-import name="SeekerProfile" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.Calendar}}" hint-placeholder-val="{{ false }}"><div style="{{d.Calendar}}"><dc-import name="Calendar" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.JobDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.JobDetail}}"><dc-import name="JobDetail" app="{{jobApp}}" variant="{{jobVariant}}" act="{{act}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SeekerProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.SeekerProfile}}"><dc-import name="SeekerProfile" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Calendar}}" hint-placeholder-val="{{ false }}"><div style="{{d.Calendar}}"><dc-import name="Calendar" extra="{{store.crew.avail}}" fresh="{{calFresh}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.PosterHome}}" hint-placeholder-val="{{ false }}"><div style="{{d.PosterHome}}"><dc-import name="PosterHome" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.CreateJob}}" hint-placeholder-val="{{ false }}"><div style="{{d.CreateJob}}"><dc-import name="CreateJob" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.CreateJob}}" hint-placeholder-val="{{ false }}"><div style="{{d.CreateJob}}"><dc-import name="CreateJob" act="{{act}}" me="{{store.name}}" hiring="{{store.crew.hiring}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.MyJobs}}" hint-placeholder-val="{{ false }}"><div style="{{d.MyJobs}}"><dc-import name="MyJobs" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.PosterJobDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.PosterJobDetail}}"><dc-import name="PosterJobDetail" job="{{newJob}}" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.Applicants}}" hint-placeholder-val="{{ false }}"><div style="{{d.Applicants}}"><dc-import name="Applicants" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Applicants}}" hint-placeholder-val="{{ false }}"><div style="{{d.Applicants}}"><dc-import name="Applicants" store="{{store}}" act="{{act}}" job="{{appsJob}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.ApplicantDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.ApplicantDetail}}"><dc-import name="ApplicantDetail" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.Talent}}" hint-placeholder-val="{{ false }}"><div style="{{d.Talent}}"><dc-import name="Talent" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.PosterProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.PosterProfile}}"><dc-import name="PosterProfile" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.VendorHome}}" hint-placeholder-val="{{ false }}"><div style="{{d.VendorHome}}"><dc-import name="VendorHome" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.MyListings}}" hint-placeholder-val="{{ false }}"><div style="{{d.MyListings}}"><dc-import name="MyListings" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.ListingForm}}" hint-placeholder-val="{{ false }}"><div style="{{d.ListingForm}}"><dc-import name="ListingForm" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.VendorPublic}}" hint-placeholder-val="{{ false }}"><div style="{{d.VendorPublic}}"><dc-import name="VendorPublic" preview="{{isVendor}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.MyListings}}" hint-placeholder-val="{{ false }}"><div style="{{d.MyListings}}"><dc-import name="MyListings" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.ListingForm}}" hint-placeholder-val="{{ false }}"><div style="{{d.ListingForm}}"><dc-import name="ListingForm" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.VendorPublic}}" hint-placeholder-val="{{ false }}"><div style="{{d.VendorPublic}}"><dc-import name="VendorPublic" preview="{{vpPreview}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.Discover}}" hint-placeholder-val="{{ false }}"><div style="{{d.Discover}}"><dc-import name="Discover" role="{{appRole}}" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.VendorProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.VendorProfile}}"><dc-import name="VendorProfile" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.Subscription}}" hint-placeholder-val="{{ false }}"><div style="{{d.Subscription}}"><dc-import name="Subscription" role="{{appRole}}" plan="{{plan}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Subscription}}" hint-placeholder-val="{{ false }}"><div style="{{d.Subscription}}"><dc-import name="Subscription" role="{{appRole}}" roles="{{roles}}" modes="{{modes}}" plan="{{plan}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.Invoices}}" hint-placeholder-val="{{ false }}"><div style="{{d.Invoices}}"><dc-import name="Invoices" role="{{appRole}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.InvoiceCreate}}" hint-placeholder-val="{{ false }}"><div style="{{d.InvoiceCreate}}"><dc-import name="InvoiceCreate" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.InvoiceDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.InvoiceDetail}}"><dc-import name="InvoiceDetail" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.DiscoverFeed}}" hint-placeholder-val="{{ false }}"><div style="{{d.DiscoverFeed}}"><dc-import name="DiscoverFeed" role="{{feedRole}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.Associations}}" hint-placeholder-val="{{ false }}"><div style="{{d.Associations}}"><dc-import name="Associations" role="{{appRole}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.MyApplications}}" hint-placeholder-val="{{ false }}"><div style="{{d.MyApplications}}"><dc-import name="MyApplications" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.JobDigest}}" hint-placeholder-val="{{ false }}"><div style="{{d.JobDigest}}"><dc-import name="JobDigest" plan="{{seekerPlan}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Jobs}}" hint-placeholder-val="{{ false }}"><div style="{{d.Jobs}}"><dc-import name="Jobs" store="{{store}}" act="{{act}}" tab="{{jobsTab}}" tabKey="{{jobsKey}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.UserProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.UserProfile}}"><dc-import name="UserProfile" person="{{person}}" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.FollowList}}" hint-placeholder-val="{{ false }}"><div style="{{d.FollowList}}"><dc-import name="FollowList" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.FollowingFeed}}" hint-placeholder-val="{{ false }}"><div style="{{d.FollowingFeed}}"><dc-import name="FollowingFeed" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.Connections}}" hint-placeholder-val="{{ false }}"><div style="{{d.Connections}}"><dc-import name="Connections" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
-        <sc-if value="{{m.Notifications}}" hint-placeholder-val="{{ false }}"><div style="{{d.Notifications}}"><dc-import name="Notifications" store="{{store}}" act="{{act}}" role="{{appRole}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Notifications}}" hint-placeholder-val="{{ false }}"><div style="{{d.Notifications}}"><dc-import name="Notifications" store="{{store}}" act="{{act}}" role="{{appRole}}" cat="{{notifCat}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.ForumWall}}" hint-placeholder-val="{{ false }}"><div style="{{d.ForumWall}}"><dc-import name="ForumWall" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.NoticeDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.NoticeDetail}}"><dc-import name="NoticeDetail" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.AssociationProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.AssociationProfile}}"><dc-import name="AssociationProfile" assoc="{{assoc}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.AssocLogin}}" hint-placeholder-val="{{ false }}"><div style="{{d.AssocLogin}}"><dc-import name="AssocLogin" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.AssocNotices}}" hint-placeholder-val="{{ false }}"><div style="{{d.AssocNotices}}"><dc-import name="AssocNotices" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
         <sc-if value="{{m.NoticeForm}}" hint-placeholder-val="{{ false }}"><div style="{{d.NoticeForm}}"><dc-import name="NoticeForm" mode="{{noticeMode}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <!-- One role-aware bottom bar for every tab screen -->
+        <sc-if value="{{showNav}}" hint-placeholder-val="{{ false }}"><div style="position: absolute; left: 0; right: 0; bottom: 0; height: 96px; z-index: 30"><dc-import name="RoleNav" roles="{{roles}}" modes="{{modes}}" active="{{navActive}}" tall="{{navTall}}" hint-size="390px,96px"></dc-import></div></sc-if>
+        <!-- Coach mark after a role is added -->
+        <sc-if value="{{showCoach}}" hint-placeholder-val="{{ false }}"><div class="pv-coach" role="dialog" aria-label="What is new" style="{{coachStyle}}"><div style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .7">New for you</div><div style="font-size: 15px; font-weight: 700; margin-top: 4px">{{coachTitle}}</div><div style="font-size: 13px; line-height: 18px; opacity: .85; margin-top: 4px">{{coachBody}}</div><button type="button" onClick="{{dismissCoach}}">Got it</button></div></sc-if>
       </div>
 
       <!-- Home indicator -->
@@ -98,39 +124,41 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
     </div>
   </div>
 
-  <!-- Prototype controls -->
-  <div style="width: 380px; flex: none; display: flex; flex-direction: column; gap: 18px">
-    <div style="display: flex; flex-direction: column; gap: 6px">
-      <img src="./assets/355ec2b06936564ed2a3b7d93c03e5e1.png" alt="" style="width: 40px; height: 42px; object-fit: contain; margin-bottom: 4px">
-      <div class="t-over">Interactive prototype</div>
-      <div style="font-size: 30px; line-height: 36px; font-weight: 800; letter-spacing: -0.02em"><span style="color: #5B2A8C">Crew</span><span style="color: #367A22">Connect</span> on iPhone</div>
-      <p class="t-s mut">Tap inside the phone to use the app. Follow, Connect and request states are shared across every screen.</p>
-    </div>
-  </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1040}}'>
+<script type="text/x-dc" data-dc-script data-props='{"journey":{"editor":"enum","options":["","crew","vendor","both","seeker","poster","crewboth"],"default":""},"entry":{"editor":"enum","options":["new","returning","home"],"default":"new"},"sample":{"editor":"enum","options":["has","none"],"default":"has"},"complete":{"editor":"enum","options":["","full"],"default":""},"$preview":{"width":498,"height":999}}'>
 class Component extends DCLogic {
   constructor(p) {
     super(p);
-    this.SCREENS = ['Splash', 'Welcome', 'SignUp', 'LogIn', 'Otp', 'RoleSelect', 'SetupSeeker', 'SetupPoster', 'SetupVendor',
+    this.SCREENS = ['Splash', 'Welcome', 'SignUp', 'LogIn', 'Otp', 'Onboarding', 'RoleChoice', 'ModeChoice', 'AddRole', 'AddMode', 'SetupBasic', 'SetupDone', 'CompleteProfile', 'SetupPoster',
       'SeekerHome', 'JobSearch', 'JobDetail', 'SeekerProfile', 'Calendar',
       'PosterHome', 'CreateJob', 'MyJobs', 'PosterJobDetail', 'Applicants', 'ApplicantDetail', 'Talent', 'PosterProfile',
-      'VendorHome', 'MyListings', 'ListingForm', 'VendorPublic', 'Discover', 'VendorProfile',
+      'MyListings', 'ListingForm', 'VendorPublic', 'Discover',
       'Subscription', 'Invoices', 'InvoiceCreate', 'InvoiceDetail',
       'UserProfile', 'FollowList', 'FollowingFeed', 'Connections', 'Notifications',
-      'DiscoverFeed', 'Associations', 'ForumWall', 'NoticeDetail', 'AssociationProfile', 'AssocLogin', 'AssocNotices', 'NoticeForm'];
-    this.TITLES = { Splash: 'Splash', Welcome: 'Welcome', SignUp: 'Sign up', LogIn: 'Log in', Otp: 'Email verification', RoleSelect: 'Choose role',
-      SetupSeeker: 'Profile setup', SetupPoster: 'Company setup', SetupVendor: 'Vendor setup', SeekerHome: 'Home', JobSearch: 'Discover jobs', JobDetail: 'Job details',
+      'DiscoverFeed', 'Associations', 'Jobs', 'MyApplications', 'JobDigest', 'ForumWall', 'NoticeDetail', 'AssociationProfile', 'AssocLogin', 'AssocNotices', 'NoticeForm'];
+    this.TITLES = { Splash: 'Splash', Welcome: 'Welcome', SignUp: 'Sign up', LogIn: 'Log in', Otp: 'Email verification', RoleSelect: 'Set up account',
+      SetupPoster: 'Company setup', SetupVendor: 'Edit vendor profile', SeekerHome: 'Home', JobSearch: 'Discover jobs', JobDetail: 'Job details',
       SeekerProfile: 'Profile', Calendar: 'Unavailability', PosterHome: 'Home', CreateJob: 'Post a job', MyJobs: 'My jobs', PosterJobDetail: 'Job (poster view)',
       Applicants: 'Applicants', ApplicantDetail: 'Applicant', Talent: 'Find talent', PosterProfile: 'Company page', VendorHome: 'Home', MyListings: 'My listings',
       ListingForm: 'Listing', VendorPublic: 'Vendor page', Discover: 'Discover vendors', VendorProfile: 'Vendor profile', Subscription: 'Subscription',
       Invoices: 'Invoices', InvoiceCreate: 'New invoice', InvoiceDetail: 'Invoice', UserProfile: 'User profile', FollowList: 'Followers & following',
-      FollowingFeed: 'Following feed', Connections: 'Connections', Notifications: 'Notifications', ForumWall: 'Forum', DiscoverFeed: 'Discover', Associations: 'Associations', NoticeDetail: 'Notice',
+      FollowingFeed: 'Following feed', Connections: 'Connections', Notifications: 'Notifications', ForumWall: 'Forum', DiscoverFeed: 'Discover', Jobs: 'Jobs', MyApplications: 'My applications', JobDigest: 'Job digest', Associations: 'Associations', NoticeDetail: 'Notice',
       AssociationProfile: 'Association', AssocLogin: 'Association login', AssocNotices: 'My notices', NoticeForm: 'Notice editor' };
-    this.HOMES = { SeekerHome: 'seeker', PosterHome: 'poster', VendorHome: 'vendor', AssocNotices: 'association' };
-    this.HOME_OF = { seeker: 'SeekerHome', poster: 'PosterHome', vendor: 'VendorHome', association: 'AssocNotices', guest: 'Welcome' };
+    Object.assign(this.TITLES, { ModeChoice: 'As Crew, what will you do?', AddMode: 'Turn on a Crew mode', RoleChoice: 'How will you use CrewConnect?', AddRole: 'Add a role', Invoices: 'Invoices', Calendar: 'Calendar', Onboarding: 'Onboarding', SetupBasic: 'Basic profile', SetupDone: 'Profile set up', CompleteProfile: 'Complete profile', SeekerProfile: 'Profile', MyListings: 'Listings' });
+    // One unified profile: Crew Member and Vendor share a single home, navigation and profile.
+    this.HOMES = { SeekerHome: 'seeker', PosterHome: 'poster', AssocNotices: 'association' };
+    this.HOME_OF = { seeker: 'SeekerHome', poster: 'PosterHome', association: 'AssocNotices', guest: 'Welcome' };
+    // Role-based shell. Tab screens get the role-aware bar; Crew-only screens gate to the add-a-role flow.
+    this.NAV_TAB = { SeekerHome: 'home', Jobs: 'jobs', JobSearch: 'jobs', MyListings: 'listings', SeekerProfile: 'profile', Invoices: 'invoices', Calendar: 'calendar', DiscoverFeed: 'network', Associations: '' };
+    this.CREW_GATE = { Jobs: '', JobSearch: '', MyApplications: '', JobDigest: '', Calendar: '', CreateJob: 'post', MyJobs: 'post', PosterJobDetail: 'post', Applicants: 'post', ApplicantDetail: 'post', Talent: 'talent' };
+    // Crew modes. A locked mode's screens open that mode's opt-in (Flow D: Job Seeker, Flow E: Job Poster), then return.
+    // Availability calendar is open to all Crew Members (client decision), so it is not gated.
+    this.SEEK_GATE = { JobSearch: '', MyApplications: '', JobDigest: '' };
+    this.POST_GATE = { CreateJob: 'post', MyJobs: 'post', PosterJobDetail: 'post', Applicants: 'post', ApplicantDetail: 'post', Talent: 'talent' };
+    this.MJ = { seeker: { seek: true, post: false }, poster: { seek: false, post: true }, crewboth: { seek: true, post: true } };
     this.state = { stack: ['Splash'], role: 'guest', person: 'Meera Joshi', hide: null, noticeMode: 'create', store: this.initialStore() };
+    this.boot(p);
     this.screenEl = null;
     this.onClick = this.onClick.bind(this);
     this.screenRef = (el) => {
@@ -145,8 +173,62 @@ class Component extends DCLogic {
       if (type === 'conn') this.setState({ store: { ...s, conn: { ...s.conn, [name]: val } } });
       if (type === 'job') this.setState({ store: { ...s, lastJob: name } });
       if (type === 'post') this.setState({ store: { ...s, posts: [name].concat(s.posts || []) } });
+      const c = s.crew;
+      if (type === 'name') this.setState({ store: { ...s, name: name } });
+      if (type === 'email') this.setState({ store: { ...s, email: name } });
+      if (type === 'hiring') this.setState({ store: { ...s, crew: { ...c, hiring: name } } });
+      if (type === 'crewPost') this.setState({ store: { ...s, crew: { ...c, posts: [{ ...name, id: 'n' + Date.now(), st: 'Active', apps: 0, newA: 0, posted: 'Just now' }].concat(c.posts), flash: name } } });
+      if (type === 'flash') this.setState({ store: { ...s, crew: { ...c, flash: null } } });
+      if (type === 'postSt') this.setState({ store: { ...s, crew: { ...c, posts: c.posts.map((x) => (x.id === name ? { ...x, st: val } : x)) } } });
+      if (type === 'save') this.setState({ store: { ...s, crew: { ...c, saved: { ...c.saved, [name]: !c.saved[name] } } } });
+      const MD = s.modes || { seek: true, post: true };
+      if (type === 'apply' && (s.roles || {}).crew && (s.prof || {}).pro && MD.seek) this.setState({ store: { ...s, crew: { ...c, apps: [name].concat(c.apps.filter((x) => x.title !== name.title)) } } });
+      if (type === 'avail') this.setState({ store: { ...s, crew: { ...c, avail: { ...(c.avail || {}), ...name }, flash: null } } });
       if (type === 'plan') this.setState({ store: { ...s, plans: { ...s.plans, [name]: val } } });
+      if (type === 'photo') this.setState({ store: { ...s, photo: !!name } });
+      // Single source of truth for profile details: every screen reads store.name / photo / phone / bizName.
+      if (type === 'profile') this.setState({ store: { ...s, ...name } });
+      if (type === 'prof') this.setState({ store: { ...s, ...(val || {}), prof: { ...(s.prof || {}), [name]: true } } });
+      // Roles on one account. Picked once after OTP; added later, never removed.
+      if (type === 'roles') this.setState({ store: { ...s, roles: { crew: !!name.crew, vendor: !!name.vendor } } });
+      if (type === 'draft') this.setState({ store: { ...s, drafts: { ...(s.drafts || {}), [name]: true } } });
+      // Coach marks show once per session: dismissing one remembers it.
+      if (type === 'coach') this.setState({ store: { ...s, coach: null, coachSeen: { ...(s.coachSeen || {}), [s.coach]: true } } });
+      // Your jobs (both modes): last-viewed tab, remembered for the session.
+      if (type === 'homeTab') this.setState({ store: { ...s, homeTab: name } });
+      // Crew modes: picked at sign-up (ModeChoice), turned on later (AddMode), never removed [TBC].
+      if (type === 'modes') this.setState({ store: { ...s, modes: { seek: !!name.seek, post: !!name.post } } });
+      if (type === 'hireDraft') this.setState({ store: { ...s, hireDraft: name } });
+      // Your applications card: opening a row (or the Applications link, '*') clears its update pill.
+      if (type === 'appSeen') this.setState({ store: { ...s, crew: { ...c, apps: c.apps.map((x) => (name === '*' || x.title === name ? { ...x, isNew: false } : x)) } } });
+      if (type === 'optin') this.setState({ store: { ...s, optinCollapsed: !!name } });
+      if (type === 'addMode') {
+        const seen = (s.coachSeen || {})[name];
+        let crewNow = c;
+        if (name === 'post') crewNow = { ...c, hiring: { setup: true, desig: (val || {}).desig || c.hiring.desig, companies: (val || {}).companies || c.hiring.companies } };
+        if (name === 'seek' && s.pendingApply && (s.prof || {}).pro) crewNow = { ...c, apps: [s.pendingApply].concat(c.apps.filter((x) => x.title !== s.pendingApply.title)) };
+        this.setState({ store: { ...s, crew: crewNow, modes: { ...MD, [name]: true }, hireDraft: name === 'post' ? null : s.hireDraft,
+          pendingApply: name === 'seek' && (s.prof || {}).pro ? null : s.pendingApply, coach: seen ? s.coach : name, optinCollapsed: false,
+          homeTab: name === 'seek' ? 'apps' : 'posts' } });
+      }
+      if (type === 'addRole') {
+        const had = !!(s.roles || {})[name];
+        const dr = { ...(s.drafts || {}) }; delete dr[name];
+        const crewNow = name === 'crew' && s.pendingApply ? { ...c, apps: [s.pendingApply].concat(c.apps.filter((x) => x.title !== s.pendingApply.title)) } : c;
+        this.setState({ store: { ...s, ...(val || {}), crew: crewNow, pendingApply: null, drafts: dr, coach: had ? s.coach : name, justAdded: had ? s.justAdded : name,
+          roles: { ...(s.roles || {}), [name]: true }, prof: { ...(s.prof || {}), [name === 'vendor' ? 'biz' : 'pro']: true } } });
+      }
+      // Applying needs the Crew role: keep the application, unlock Crew, then come back to the job.
+      if (type === 'apply' && (s.roles || {}).crew && !MD.seek) {
+        // Job Poster only: Apply opens “Turn on Job Seeker to apply”, then returns here and submits.
+        this.setState({ store: { ...s, pendingApply: name } });
+        this.go('AddMode', { extra: { addMode: 'seek', modeGate: 'apply' } });
+      } else if (type === 'apply' && !((s.roles || {}).crew && (s.prof || {}).pro)) {
+        this.setState({ store: { ...s, pendingApply: name } });
+        this.go('AddRole', { extra: { addRole: 'crew', addGate: 'apply' } });
+      }
     };
+    this.dismissCoach = () => this.act('coach');
   }
   initialStore() {
     const meta = {
@@ -167,9 +249,71 @@ class Component extends DCLogic {
         'Vikram Bhosle': 'received', 'Northlight Studios': 'received', 'Sana Mirza': 'pending', 'Kilowatt Lighting Co.': 'pending' },
       follow: { 'Meera Joshi': true, 'Kavya Menon': true, 'Reelhouse Camera Rentals': true, 'Northlight Studios': true, 'Kilowatt Lighting Co.': true },
       followers: { 'Meera Joshi': true, 'Kavya Menon': true, 'Vikram Bhosle': true, 'Ananya Iyer': true, 'Kilowatt Lighting Co.': true },
-      plans: { seeker: 'free', poster: 'free', vendor: 'expiring' },
-      posts: [], lastJob: null,
+      plans: { seeker: 'expiring', poster: 'free', vendor: 'expiring' },
+      roles: { crew: true, vendor: true }, drafts: {}, coach: null, justAdded: null, pendingApply: null,
+      modes: { seek: true, post: true }, coachSeen: {}, optinCollapsed: false, hireDraft: null, availability: 'Available',
+      listings: { total: 12, rent: 9, buy: 3 },
+      reveals: [
+        { name: 'Kavya Menon', sub: 'Producer · Lantern Pictures', when: '12 min ago', isNew: true },
+        { name: 'Farhan Siddiqui', sub: '1st Assistant Camera', when: '2h ago', isNew: true },
+        { name: 'Northlight Studios', sub: 'Production house', when: 'Yesterday' },
+        { name: 'Arjun Kulkarni', sub: 'Sound Recordist', when: '2 days ago' }
+      ],
+      posts: [], lastJob: null, photo: false, phone: '98765 43210', bizName: 'Reelhouse Camera Rentals', prof: { pro: true, refs: true, biz: true, contact: false },
+      crew: this.crewData('active'),
       notes: { 'Vikram Bhosle': 'We were both on the Pinewood TVC last month — would be good to stay connected for future shoots.' }
+    };
+  }
+  // Journey presets: Crew only / Vendor only / Both, starting as a new user (sign-up), a returning user (log in) or signed in at Home.
+  journeyRoles() { const j = this.props.journey || ''; if (this.MJ[j]) return { crew: true, vendor: false }; return j ? { crew: j !== 'vendor', vendor: j !== 'crew' } : null; }
+  // Reviewer control: profile completion below 100% (one section left) or at 100% (completion card hidden).
+  profFor(roles, complete) { const f = complete === 'full'; return { pro: !!roles.crew, refs: !!roles.crew && f, biz: !!roles.vendor, contact: !!roles.vendor && f }; }
+  journeyModes() { return this.MJ[this.props.journey || ''] || null; }
+  crewFor(md) { const a = this.crewData('active'); return { ...a, posts: md.post ? a.posts : [], apps: md.seek ? a.apps : [], hiring: md.post ? a.hiring : { setup: false, desig: '', companies: [] } }; }
+  journeyName() { return (this.props.journey || '') === 'vendor' ? 'Rahul Mehta' : 'Priya Nair'; }
+  boot(p) {
+    const j = p.journey || '', en = p.entry || 'new';
+    if (!j) return;
+    const md = this.MJ[j] || null;
+    const roles = md ? { crew: true, vendor: false } : { crew: j !== 'vendor', vendor: j !== 'crew' };
+    const base = { ...this.state.store, modes: md || { seek: true, post: true } };
+    const email = { vendor: 'rahul.vendor@reelhouse.in', crew: 'priya.crew@gmail.com', seeker: 'priya.seeker@gmail.com', poster: 'priya.hires@gmail.com', crewboth: 'priya.crew@gmail.com' }[j] || 'priya.nair@gmail.com';
+    if (en === 'returning') { this.state = { ...this.state, stack: ['Welcome', 'LogIn'], role: 'guest', store: { ...base, email } }; return; }
+    if (en === 'home' && p.sample === 'none') {
+      // Reviewer sample data: “no applications yet”.
+      const cr = md ? this.crewFor(md) : this.crewData(roles.crew ? 'active' : 'new');
+      this.state = { ...this.state, stack: ['SeekerHome'], role: 'seeker', lastRole: 'seeker',
+        store: { ...base, email, roles, name: j === 'vendor' ? 'Rahul Mehta' : 'Priya Nair', crew: { ...cr, apps: [], posts: [] }, prof: this.profFor(roles, p.complete) } };
+      return;
+    }
+    if (en === 'home') {
+      this.state = { ...this.state, stack: ['SeekerHome'], role: 'seeker', lastRole: 'seeker',
+        store: { ...base, email, roles, name: j === 'vendor' ? 'Rahul Mehta' : 'Priya Nair', crew: md ? this.crewFor(md) : this.crewData(roles.crew ? 'active' : 'new'), prof: this.profFor(roles, p.complete) } };
+    }
+  }
+  postJob(p) {
+    if (!p) return null;
+    const h = this.state.store.crew.hiring;
+    return { title: p.title, ptype: p.ptype, house: p.house, poster: this.state.store.name || 'Priya Nair', desig: h.desig || 'Focus Puller', disc: !!p.disc, cat: p.cat, loc: p.loc, dates: p.dates, dur: p.dur, pay: p.pay,
+      desc: p.desc || 'Looking for crew to join the camera department on this project. Schedule and call times shared with shortlisted applicants.', pdf: '', pdfSize: '', apps: p.apps, st: p.st };
+  }
+  crewData(kind) {
+    if (kind === 'new') return { hiring: { setup: false, desig: '', companies: [] }, posts: [], apps: [], saved: {}, flash: null, avail: {} };
+    return {
+      hiring: { setup: true, desig: 'Focus Puller', companies: ['Lantern Pictures', 'Third Bell Collective'] },
+      posts: [
+        { id: 'p1', title: '2nd Assistant Camera — Feature Film', house: 'Lantern Pictures', ptype: 'Feature Film', cat: 'Camera', loc: 'Film City, Mumbai', dur: '32 days', dates: '4 Nov 2026 – 12 Dec 2026', start: '2026-11-04', end: '2026-12-12', pay: '₹4,000 – ₹6,000 per day', st: 'Active', apps: 7, newA: 3, posted: '2d ago' },
+        { id: 'p2', title: '1st Assistant Camera — Short Film', house: 'Third Bell Collective', ptype: 'Short Film', cat: 'Camera', loc: 'Pune', dur: '4 days', dates: '20 Nov 2026 – 23 Nov 2026', start: '2026-11-20', end: '2026-11-23', pay: '₹5,000 per day', st: 'Active', apps: 2, newA: 0, posted: '5d ago' },
+        { id: 'p3', title: 'Camera Trainee — Short Film', house: 'Third Bell Collective', ptype: 'Short Film', cat: 'Camera', loc: 'Pune', dur: '4 days', dates: '20 Nov 2026 – 23 Nov 2026', start: '2026-11-20', end: '2026-11-23', pay: '₹2,500 per day', st: 'Active', apps: 0, newA: 0, posted: 'Yesterday' },
+        { id: 'p4', title: 'DIT — Web Series (6 episodes)', house: 'Lantern Pictures', ptype: 'Web Series', cat: 'Camera', loc: 'Andheri West, Mumbai', dur: '5 weeks', dates: '1 Dec 2026 – 4 Jan 2027', start: '2026-12-01', end: '2027-01-04', pay: '₹6,000 – ₹8,000 per day', st: 'Active', apps: 0, newA: 0, posted: 'Today' }
+      ],
+      apps: [
+        { variant: 'main', title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', loc: 'Film City, Mumbai', dur: '32 days', status: 'Shortlisted', applied: '26 Oct 2026', isNew: true },
+        { variant: 'disc', title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', loc: 'Ramoji Film City, Hyderabad', dur: '18 days', status: 'Under Review', applied: '29 Oct 2026' },
+        { variant: 'tvc', title: 'Focus Puller — TVC, 2-day shoot', org: 'Pinewood Ads', loc: 'Bandra, Mumbai', dur: '2 days', status: 'Applied', applied: '1 Nov 2026' },
+        { variant: 'mv', title: 'Camera Operator — Music Video', org: 'Bluebird Records', loc: 'Versova, Mumbai', dur: '3 days', status: 'Rejected', applied: '9 Oct 2026' }
+      ],
+      saved: { 'Gaffer — TVC, 2-day shoot': true }, flash: null, avail: {}
     };
   }
   componentWillUnmount() { if (this.screenEl) this.screenEl.removeEventListener('click', this.onClick, true); clearTimeout(this.rt); }
@@ -194,6 +338,8 @@ class Component extends DCLogic {
     const href = a.getAttribute('href') || '';
     if (/^https?:/i.test(href)) return;
     e.preventDefault();
+    // Close any open footer "More" menu (Calendar · Invoices) so screens kept in the back stack come back collapsed.
+    if (this.screenEl) this.screenEl.querySelectorAll('.nm-t:checked').forEach((x) => { x.checked = false; });
     const m = href.match(/([A-Za-z0-9_-]+)\.dc\.html/);
     if (!m) return;
     e.stopPropagation();
@@ -204,9 +350,17 @@ class Component extends DCLogic {
     const inTabBar = !!a.closest('nav.nav');
     const extra = {};
     if (target === 'UserProfile') extra.person = this.personFrom(a);
-    if (target === 'JobDetail') extra.jobApp = a.getAttribute('data-app') || '';
+    if (target === 'JobDetail') { extra.jobApp = a.getAttribute('data-app') || ''; extra.jobVariant = a.getAttribute('data-job') || ''; }
     if (target === 'AssociationProfile') extra.assoc = a.getAttribute('data-assoc') || 'CTG';
+    if (target === 'Jobs') { extra.jobsTab = a.getAttribute('data-tab') || ''; extra.jobsKey = (this.state.jobsKey || 0) + 1; }
+    if (target === 'PosterJobDetail') extra.postId = a.getAttribute('data-post') || '';
+    if (target === 'Applicants') extra.appsJob = a.getAttribute('data-post') || '';
+    if (target === 'VendorPublic') extra.vpPreview = /preview/i.test(a.textContent);
     if (target === 'NoticeForm') extra.noticeMode = /edit/i.test(a.textContent) ? 'edit' : 'create';
+    if (target === 'AddRole') { extra.addRole = a.getAttribute('data-role') || 'vendor'; extra.addGate = a.getAttribute('data-gate') || ''; }
+    if (target === 'AddMode') { extra.addMode = a.getAttribute('data-mode') || 'post'; extra.modeGate = a.getAttribute('data-gate') || ''; }
+    if (target === 'Notifications') extra.notifCat = a.getAttribute('data-cat') || '';
+    if (a.getAttribute('data-seen')) this.act('appSeen', a.getAttribute('data-seen'));
     this.go(target, { isBack, inTabBar, extra });
   }
 
@@ -215,11 +369,37 @@ class Component extends DCLogic {
     const stack = s.stack.slice();
     const cur = stack[stack.length - 1];
     const patch = { ...(o && o.extra) };
-    if (target === 'PosterJobDetail') patch.newJob = cur === 'CreateJob';
+    if (target === 'PosterJobDetail') { patch.newJob = cur === 'CreateJob'; if (!(o && o.extra && o.extra.postId)) patch.postId = ''; }
     if (o && o.isBack && stack.length > 1) { stack.pop(); return this.setState({ ...patch, stack }); }
+    // Gates: an action that needs a role the account does not have opens the add-a-role flow, then returns.
+    const R = s.store.roles || { crew: true, vendor: true };
+    if (s.role === 'seeker' && !R.crew && this.CREW_GATE[target] !== undefined) { patch.addRole = 'crew'; patch.addGate = this.CREW_GATE[target]; patch.gateTo = target; target = 'AddRole'; }
+    else if (s.role === 'seeker' && (!R.vendor || !(s.store.prof || {}).biz) && target === 'ListingForm') { patch.addRole = 'vendor'; patch.addGate = 'listing'; patch.gateTo = target; target = 'AddRole'; }
+    // Crew modes: hidden features open the matching opt-in instead of an error or a blank screen.
+    const MD = s.store.modes || { seek: true, post: true };
+    if (target !== 'AddRole' && s.role === 'seeker' && R.crew) {
+      if (!MD.seek && this.SEEK_GATE[target] !== undefined) { patch.addMode = 'seek'; patch.modeGate = this.SEEK_GATE[target]; target = 'AddMode'; }
+      else if (!MD.post && this.POST_GATE[target] !== undefined) { patch.addMode = 'post'; patch.modeGate = this.POST_GATE[target]; target = 'AddMode'; }
+    }
+    // Leaving an add-a-role or turn-on-a-mode flow forwards replaces it, so Back goes to where the person started.
+    if ((cur === 'AddRole' && target !== 'AddRole') || (cur === 'AddMode' && target !== 'AddMode')) stack.pop();
+    if (target === 'RoleChoice' && cur === 'Otp') patch.store = { ...s.store, crew: this.crewData('new'), name: '', photo: false, phone: '', bizName: '', roles: { crew: false, vendor: false }, modes: { seek: false, post: false }, coachSeen: {}, optinCollapsed: false, hireDraft: null, drafts: {}, coach: null, justAdded: null, prof: { pro: false, refs: false, biz: false, contact: false } };
+    if (target === 'SetupBasic' && cur === 'Otp') patch.store = { ...s.store, crew: this.crewData('new'), name: '', photo: false, phone: '', bizName: '', prof: { pro: false, refs: false, biz: false, contact: false } };
+    if (target === 'SeekerHome' && cur === 'Otp') {
+      // Returning user: roles come from the account, never asked again. Demo: an email with "crew" or "vendor" logs into a single-role account.
+      const em = (s.store.email || '').toLowerCase();
+      const roles = this.journeyRoles() || (/vendor/.test(em) ? { crew: false, vendor: true } : /crew/.test(em) ? { crew: true, vendor: false } : (s.store.roles && (s.store.roles.crew || s.store.roles.vendor) ? s.store.roles : { crew: true, vendor: true }));
+      const md = this.journeyModes() || (/seeker/.test(em) ? this.MJ.seeker : /hires|poster/.test(em) ? this.MJ.poster : (s.store.modes && (s.store.modes.seek || s.store.modes.post) ? s.store.modes : this.MJ.crewboth));
+      patch.store = { ...s.store, roles, modes: md, crew: roles.crew ? this.crewFor(md) : this.crewData('new'), name: roles.crew ? 'Priya Nair' : 'Rahul Mehta', coach: null, justAdded: null, prof: { ...(s.store.prof || {}), pro: !!roles.crew, refs: !!roles.crew, biz: !!roles.vendor } };
+    }
+    if (target === 'Jobs' && cur === 'CreateJob') return this.setState({ ...patch, stack: [this.HOME_OF[s.role] || 'SeekerHome', 'Jobs'] });
     if (target === 'Welcome') return this.setState({ ...patch, stack: ['Welcome'], role: 'guest' });
     if (this.HOMES[target]) {
       const i = stack.indexOf(target);
+      // Reaching a home means that account exists for this login (Individual = SeekerHome, Vendor = VendorHome).
+      const ak = target === 'VendorHome' ? 'vendor' : target === 'SeekerHome' ? 'individual' : null;
+      const base = patch.store || s.store;
+      if (ak && !(base.accts || {})[ak]) patch.store = { ...base, accts: { ...(base.accts || {}), [ak]: true } };
       return this.setState({ ...patch, role: this.HOMES[target], lastRole: this.HOMES[target], stack: i >= 0 ? stack.slice(0, i + 1) : [target] });
     }
     if (o && o.inTabBar) {
@@ -241,20 +421,43 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const cur = s.stack[s.stack.length - 1];
+    // Report the visible screen to a host board (Interactive journeys) so it can tick off journey steps.
+    if (this.props.onScreen && cur !== this.rep) { this.rep = cur; const f = this.props.onScreen; setTimeout(() => f(cur), 0); }
     const m = {}, d = {};
     this.SCREENS.forEach((k) => {
       m[k] = s.stack.indexOf(k) >= 0 && s.hide !== k;
       d[k] = 'position:absolute;inset:0;' + (k === cur ? 'display:block' : 'display:none');
     });
     const appRole = s.role === 'poster' ? 'poster' : s.role === 'vendor' ? 'vendor' : 'seeker';
+    const roles = s.store.roles || { crew: true, vendor: true };
+    const tab = this.NAV_TAB[cur];
+    const showNav = s.role === 'seeker' && tab !== undefined;
+    const vOnly = roles.vendor && !roles.crew;
+    const coach = showNav && s.store.coach && (cur === 'SeekerHome' || cur === 'MyListings' || cur === 'Jobs') ? s.store.coach : null;
+    const modes = s.store.modes || { seek: true, post: true };
+    const CM = {
+      vendor: ['Listings now holds your gear', vOnly ? 'Manage listings, see who revealed your contact on Home, and track invoices.' : 'Open Listings to add gear and manage it. Contact reveals now show on Home, and + can create a listing.', vOnly ? '--ca:30%' : '--ca:70%'],
+      crew: ['Jobs is now in your bar', 'Find and apply to jobs, post a job with +, and set availability in More › Calendar.', '--ca:30%'],
+      seek: ['Your jobs now has two tabs', 'Applications is new next to Job posts on Home. Tap or swipe the card to switch; Jobs shows all three views.', '--ca:30%'],
+      post: ['Your jobs now has two tabs', 'Job posts is new next to Applications on Home. Tap or swipe the card to switch; post a job with +.', '--ca:30%']
+    }[coach] || ['', '', ''];
     const pendingIn = Object.values(s.store.conn).filter((v) => v === 'received').length;
     return {
-      m, d, store: s.store, act: this.act, person: s.person, screenRef: this.screenRef, noticeMode: s.noticeMode,
+      notifCat: s.notifCat || '',
+      appCls: showNav ? 'pv-app pv-shell' : 'pv-app', showNav, roles, navActive: tab || '', navTall: true,
+      addRole: s.addRole || 'vendor', addGate: s.addGate || '',
+      showCoach: !!coach, dismissCoach: this.dismissCoach,
+      coachTitle: CM[0], coachBody: CM[1], coachStyle: CM[2],
+      modes, addMode: s.addMode || 'post', modeGate: s.modeGate || '',
+      m, d, store: s.store, act: this.act, person: s.person, screenRef: this.screenRef, noticeMode: s.noticeMode, vpPreview: !!s.vpPreview,
       appRole, isVendor: s.role === 'vendor',
       // Login (returning user) → last-used home; sign-up → role selection.
-      otpNext: s.stack.indexOf('LogIn') >= 0 ? (this.HOME_OF[s.lastRole] || 'SeekerHome') : 'RoleSelect',
+      otpNext: s.stack.indexOf('LogIn') >= 0 ? (this.HOME_OF[s.lastRole] || 'SeekerHome') : 'RoleChoice',
       plan: s.store.plans[appRole],
-      jobApp: s.jobApp || '', assoc: s.assoc || 'CTG', newJob: s.newJob ? (s.store.lastJob || null) : null,
+      jobApp: s.jobApp || '', jobVariant: s.jobVariant || '', seekerPlan: s.store.plans.seeker, assoc: s.assoc || 'CTG', newJob: s.postId ? this.postJob(s.store.crew.posts.find((x) => x.id === s.postId)) : s.newJob ? (s.store.lastJob || null) : null,
+      appsJob: s.appsJob || '', switching: !!s.switching, switched: !!s.switched, switchMsg: 'You\'re now using your ' + (s.switchLabel || '').toLowerCase(), switchingMsg: 'Switching to your ' + (s.switchLabel || '').toLowerCase() + '…',
+      calFresh: !s.store.crew.apps.length && !s.store.crew.hiring.setup,
+      jobsTab: s.jobsTab || '', jobsKey: s.jobsKey || 0,
       feedRole: s.role === 'association' ? 'association' : appRole,
       roleLabel: { guest: 'Signed out', seeker: 'Job Seeker', poster: 'Job Poster', vendor: 'Vendor', association: 'Association' }[s.role],
       screenTitle: (this.TITLES[cur] || cur) + (cur === 'UserProfile' ? ' · ' + s.person : ''),

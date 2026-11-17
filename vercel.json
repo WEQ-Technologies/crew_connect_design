@@ -2,31 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": false,
   "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/Prototype.dc.html",
-      "destination": "/",
-      "permanent": false
-    },
-    {
-      "source": "/prototype.dc.html",
-      "destination": "/",
-      "permanent": false
-    },
+  "rewrites": [
     {
       "source": "/prototype",
-      "destination": "/",
-      "permanent": false
+      "destination": "/"
     },
     {
       "source": "/Prototype",
-      "destination": "/",
-      "permanent": false
-    },
-    {
-      "source": "/index.html",
-      "destination": "/",
-      "permanent": false
+      "destination": "/"
     }
   ],
   "headers": [
