@@ -71,5 +71,12 @@ reference a script puts together while the page runs (for example
 
 ## Viewing
 
-Serve the folder (e.g. `python3 -m http.server`) and open `Prototype.dc.html`;
+Serve the folder (e.g. `python3 -m http.server`) and open `http://localhost:8000/` (or `Prototype.dc.html`);
 some browsers block the scripts over file://.
+
+## Deployment (Vercel)
+
+This repository is configured for static hosting on Vercel:
+- `index.html` — Main entry point serving the interactive prototype directly at root (`https://www.crewconnect.review-link.in/`).
+- `Prototype.dc.html` — Original exported design artboard component.
+- `vercel.json` — Configures headers, MIME types, caching, and redirects (`/Prototype.dc.html` → `/`).
