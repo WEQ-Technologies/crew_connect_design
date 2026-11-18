@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -67,9 +67,9 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 
   <nav class="nav" aria-label="Main">
     <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
-    <a href="JobSearch.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>Discover</a>
+    <a href="DiscoverFeed.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>Discover</a>
+    <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>Associations</a>
     <a class="on" href="Calendar.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
-    <a href="Invoices.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>Invoices</a>
     <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
   </nav>
 
@@ -110,7 +110,7 @@ class Component extends DCLogic {
       else if (bl) st += 'background:#FDECEA;color:#B42318;font-weight:700;border:1px solid #F0B6AF;text-decoration:line-through;';
       else if (isT) st += 'background:#fff;color:#5B2A8C;font-weight:800;border:2px solid #5B2A8C;';
       else if (past) st += 'background:transparent;color:#ADA7B3;border:0;cursor:not-allowed;';
-      else st += 'background:transparent;color:#1D1B22;font-weight:500;border:0;';
+      else st += 'background:transparent;color:#1A1820;font-weight:500;border:0;';
       cells.push({
         label: d, style: st, disabled: past, sel,
         aria: this.fmt(k) + (bl ? ', unavailable' : '') + (isT ? ', today' : ''),

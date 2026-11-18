@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -35,9 +35,9 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <div><div class="t-h1">{{p.name}}</div><div class="t-s mut">{{p.sub}}</div></div>
       <div class="chips" style="justify-content: center"><span class="badge b-n">{{p.roleLabel}}</span><span class="badge b-n">{{p.city}}</span></div>
       <div class="row" style="gap: 0; justify-content: center; width: 100%; margin-top: 2px">
-        <a href="FollowList.dc.html" style="flex: 1; color: #1D1B22; text-decoration: none; padding: 6px 0"><div class="t-h2">{{followers}}</div><div class="t-c mut">Followers</div></a>
-        <span style="width: 1px; height: 32px; background: #E7E3EA"></span>
-        <a href="FollowList.dc.html" style="flex: 1; color: #1D1B22; text-decoration: none; padding: 6px 0"><div class="t-h2">{{p.following}}</div><div class="t-c mut">Following</div></a>
+        <a href="FollowList.dc.html" style="flex: 1; color: #1A1820; text-decoration: none; padding: 6px 0"><div class="t-h2">{{followers}}</div><div class="t-c mut">Followers</div></a>
+        <span style="width: 1px; height: 32px; background: #E8E5EE"></span>
+        <a href="FollowList.dc.html" style="flex: 1; color: #1A1820; text-decoration: none; padding: 6px 0"><div class="t-h2">{{p.following}}</div><div class="t-c mut">Following</div></a>
       </div>
       <div class="row" style="gap: 10px; width: 100%">
         <sc-if value="{{notFollowing}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s" onClick="{{follow}}" style="flex: 1" aria-pressed="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"></circle><path d="M2 21a7 7 0 0 1 14 0"></path><path d="M19 8v6M16 11h6"></path></svg>Follow</button></sc-if>
@@ -46,20 +46,20 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
         <sc-if value="{{isNone}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" onClick="{{openConnect}}" style="flex: 1"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><path d="M9 12h6"></path></svg>Connect</button></sc-if>
         <sc-if value="{{isPending}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" onClick="{{openCancel}}" style="flex: 1; border-style: dashed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Request sent</button></sc-if>
         <sc-if value="{{isReceived}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" onClick="{{accept}}" style="flex: 1">Accept request</button></sc-if>
-        <sc-if value="{{isConnected}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" onClick="{{openMenu}}" style="flex: 1; background: #F1F9F4; border-color: #9FD3B3; color: #17663A"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Connected</button></sc-if>
+        <sc-if value="{{isConnected}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" onClick="{{openMenu}}" style="flex: 1; background: #F3F9EE; border-color: #9FD3B3; color: #2C6619"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Connected</button></sc-if>
       </div>
       <div class="t-c mut">{{statusLine}}</div>
     </div>
 
     <sc-if value="{{isVendor}}" hint-placeholder-val="{{ false }}">
-      <a class="card" href="VendorPublic.dc.html" style="text-decoration: none; flex-direction: row; align-items: center; gap: 12px"><span class="sq g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><span class="sp"><span class="t-h3" style="display: block">Listings &amp; business contact</span><span class="t-s mut">Opens the vendor page</span></span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6E6876"><path d="m9 18 6-6-6-6"></path></svg></a>
+      <a class="card" href="VendorPublic.dc.html" style="text-decoration: none; flex-direction: row; align-items: center; gap: 12px"><span class="sq g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><span class="sp"><span class="t-h3" style="display: block">Listings &amp; business contact</span><span class="t-s mut">Opens the vendor page</span></span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
     </sc-if>
 
     <div class="card"><div class="t-over">About</div><p class="t-s">{{p.bio}}</p>
       <div class="chips"><span class="tag">{{p.s1}}</span><span class="tag">{{p.s2}}</span><span class="tag">{{p.s3}}</span></div>
     </div>
     <div class="list">
-      <a class="li" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6E6876"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg><span class="sp t-s b">{{p.link}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6E6876"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
+      <a class="li" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg><span class="sp t-s b">{{p.link}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
     </div>
   </div>
 

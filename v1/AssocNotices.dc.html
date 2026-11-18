@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -19,7 +19,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
 </helmet>
 <div class="ph">
   <div style="flex: none; padding: 20px 20px 8px; display: flex; align-items: center; gap: 12px">
-    <span style="width: 44px; height: 44px; border-radius: 12px; background: #EFE7F7; color: #4A1F73; border: 1px solid #E7E3EA; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex: none" role="img" aria-label="Association logo">CTG</span>
+    <span style="width: 44px; height: 44px; border-radius: 12px; background: #EFE7F7; color: #4A1F73; border: 1px solid #E8E5EE; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex: none" role="img" aria-label="Association logo">CTG</span>
     <div class="sp" style="min-width: 0"><div class="t-c mut">Association account</div><div class="t-h3 trunc">Cine Technicians Guild of Maharashtra</div></div>
     <a class="iconbtn" href="Welcome.dc.html" aria-label="Log out"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"></path></svg></a>
   </div>
@@ -28,7 +28,8 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <div class="card" style="gap: 12px">
         <div class="row"><span class="t-s b sp">Posting access</span><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Granted</span></div>
         <a class="btn btn-p w100" href="NoticeForm.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Create notice</a>
-        <a class="btn btn-s w100" href="AssociationProfile.dc.html">View public profile</a>
+        <a class="btn btn-s w100" href="AssociationProfile.dc.html" data-assoc="CTG">View public profile</a>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px"><a class="btn btn-t btn-sm" href="ForumWall.dc.html">Forum wall</a><a class="btn btn-t btn-sm" href="DiscoverFeed.dc.html">Discover feed</a></div>
       </div>
     </sc-if>
     <sc-if value="{{revoked}}" hint-placeholder-val="{{ false }}">
@@ -72,7 +73,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"postingAccess":{"editor":"enum","options":["granted","revoked"],"default":"granted"},"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"postingAccess":{"editor":"enum","options":["granted","revoked"],"default":"granted"},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   constructor(p) {
     super(p);
@@ -93,12 +94,14 @@ class Component extends DCLogic {
     const s = this.state;
     const access = this.props.postingAccess ?? 'granted';
     const inTab = (n) => (s.tab === 'Published' ? n.st === 'Published' : n.st !== 'Published');
-    const list = s.items.filter(inTab);
+    const mine = ((this.props.store && this.props.store.posts) || []).map((n, i) => ({ id: 'new' + i, title: n.title, st: 'Published', date: 'Today', edited: '', pdf: !!n.pdf }));
+    const all = mine.concat(s.items);
+    const list = all.filter(inTab);
     const c = s.confirm;
     const bc = { Published: 'badge b-g', Withdrawn: 'badge b-n', Removed: 'badge b-e' };
     return {
       canPost: access === 'granted', revoked: access !== 'granted',
-      tabs: [['Published', 'Published · ' + s.items.filter((n) => n.st === 'Published').length], ['Other', 'Withdrawn & removed · ' + s.items.filter((n) => n.st !== 'Published').length]].map(([k, l]) => ({ label: l, on: s.tab === k, cls: s.tab === k ? 'on' : '', pick: () => this.setState({ tab: k }) })),
+      tabs: [['Published', 'Published · ' + all.filter((n) => n.st === 'Published').length], ['Other', 'Withdrawn & removed · ' + all.filter((n) => n.st !== 'Published').length]].map(([k, l]) => ({ label: l, on: s.tab === k, cls: s.tab === k ? 'on' : '', pick: () => this.setState({ tab: k }) })),
       rows: list.map((n) => ({
         ...n, status: n.st, badge: bc[n.st], isPub: n.st === 'Published' && access === 'granted',
         dateLine: (n.st === 'Published' ? 'Published ' : 'Published ') + n.date, removedByAdmin: n.st === 'Removed',

@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -24,35 +24,44 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <div class="chips">
         <sc-if value="{{open}}" hint-placeholder-val="{{ true }}"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle></svg>Published</span></sc-if>
         <sc-if value="{{closed}}" hint-placeholder-val="{{ false }}"><span class="badge b-n"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Closed</span></sc-if>
-        <span class="badge b-n">Posted 18 Oct 2026</span>
+        <span class="badge b-n">{{posted}}</span><span class="badge b-p">{{ptype}}</span>
       </div>
-      <h1 class="t-h1">Focus Puller — Feature Film (Hindi), 32-day schedule</h1>
+      <h1 class="t-h1">{{title}}</h1>
+      <div class="t-s mut">{{house}} · Posted by {{poster}}</div>
     </div>
 
+    <sc-if value="{{notNew}}" hint-placeholder-val="{{ true }}">
     <a href="Applicants.dc.html" class="card" style="text-decoration: none; gap: 12px">
       <div class="row"><div class="t-h3 sp">Applicants</div><span class="t-s b" style="color: #5B2A8C">View all 18</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #5B2A8C"><path d="m9 18 6-6-6-6"></path></svg></div>
       <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; text-align: center">
         <div><div class="t-h2">9</div><div class="t-c mut" style="font-size: 11px">Applied</div></div>
         <div><div class="t-h2" style="color: #4A1F73">5</div><div class="t-c mut" style="font-size: 11px">Review</div></div>
         <div><div class="t-h2" style="color: #8A5300">2</div><div class="t-c mut" style="font-size: 11px">On Hold</div></div>
-        <div><div class="t-h2" style="color: #17663A">1</div><div class="t-c mut" style="font-size: 11px">Selected</div></div>
+        <div><div class="t-h2" style="color: #2C6619">1</div><div class="t-c mut" style="font-size: 11px">Selected</div></div>
         <div><div class="t-h2" style="color: #B42318">1</div><div class="t-c mut" style="font-size: 11px">Rejected</div></div>
       </div>
     </a>
+    </sc-if>
+    <sc-if value="{{isNew}}" hint-placeholder-val="{{ false }}">
+      <div class="card" style="gap: 4px"><div class="t-h3">Applicants</div><div class="t-s mut">No applicants yet. They’ll appear here as Job Seekers apply.</div></div>
+    </sc-if>
 
     <div class="card" style="gap: 2px">
-      <div class="kv"><span>Category</span><span>Camera</span></div>
-      <div class="kv"><span>Location</span><span>Film City, Mumbai</span></div>
-      <div class="kv"><span>Payment</span><span>₹8,000 – ₹12,000 / day</span></div>
+      <div class="kv"><span>Project type</span><span>{{ptype}}</span></div>
+      <div class="kv"><span>Production house</span><span>{{house}}</span></div>
+      <div class="kv"><span>Category</span><span>{{cat}}</span></div>
+      <div class="kv"><span>Location</span><span>{{loc}}</span></div>
+      <div class="kv"><span>Duration</span><span>{{dur}}</span></div>
+      <div class="kv"><span>Fee / budget</span><span>{{pay}}</span></div>
+      <div class="kv"><span>Job poster</span><span>{{poster}}</span></div>
     </div>
 
     <div class="card">
-      <div class="t-over">Description</div>
-      <p class="t-s">A-camera focus puller for an untitled Hindi feature. 32 shooting days across Film City and Goa, 4 Nov – 12 Dec.</p>
-      <p class="t-s">Need 3+ years on features and comfort with ARRI Alexa 35.</p>
+      <div class="t-over">Job description</div>
+      <p class="t-s" style="white-space: pre-line">{{desc}}</p>
     </div>
 
-    <div class="file"><div class="fico">PDF</div><div class="sp"><div class="t-h3 trunc">Focus-Puller-Brief-Lantern.pdf</div><div class="t-c mut">248 KB</div></div><button class="iconbtn" aria-label="Download PDF"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"></path></svg></button></div>
+    <sc-if value="{{hasPdf}}" hint-placeholder-val="{{ true }}"><div class="file"><div class="fico">PDF</div><div class="sp"><div class="t-h3 trunc">{{pdf}}</div><div class="t-c mut">{{pdfSize}} · Additional job details</div></div><button class="iconbtn" aria-label="Download PDF"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"></path></svg></button></div></sc-if>
 
     <sc-if value="{{open}}" hint-placeholder-val="{{ true }}">
       <button class="btn btn-d w100" onClick="{{ask}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Close job to new applicants</button>
@@ -78,13 +87,16 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"job":{"editor":null},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   constructor(p) { super(p); this.state = { closed: false, dlg: false, toast: false }; }
   componentWillUnmount() { clearTimeout(this.t); }
   renderVals() {
     const s = this.state;
+    const d = { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', ptype: 'Feature Film', house: 'Lantern Pictures', poster: 'Kavya Menon', cat: 'Camera', loc: 'Film City, Mumbai', dur: '32 shooting days · 4 Nov – 12 Dec 2026', pay: '₹8,000 – ₹12,000 per day', desc: 'A-camera focus puller for an untitled Hindi feature. 32 shooting days across Film City and Goa, 4 Nov – 12 Dec.\n\nNeed 3+ years on features and comfort with ARRI Alexa 35.', pdf: 'Focus-Puller-Brief-Lantern.pdf', pdfSize: '248 KB' };
+    const j = this.props.job ? { ...d, ...this.props.job } : d;
     return {
+      ...j, hasPdf: !!j.pdf, isNew: !!this.props.job, notNew: !this.props.job, posted: this.props.job ? 'Posted just now' : 'Posted 18 Oct 2026',
       open: !s.closed, closed: s.closed, dlg: s.dlg, toast: s.toast,
       ask: () => this.setState({ dlg: true }),
       cancel: () => this.setState({ dlg: false }),

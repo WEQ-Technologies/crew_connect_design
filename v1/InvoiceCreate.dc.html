@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -21,8 +21,11 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   <div class="bar"><a class="iconbtn" href="Invoices.dc.html" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a><div class="ttl">New invoice</div><span class="t-s mut b" style="padding-right: 14px">INV-2026-015</span></div>
   <div class="sc" style="gap: 18px">
     <sc-if value="{{showErr}}" hint-placeholder-val="{{ false }}">
-      <div class="alert a-e" role="alert"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg><div>Add a client name and a rate and number of days for every line item.</div></div>
+      <div class="alert a-e" role="alert"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg><div>Add a project name, a client name and a rate and number of days for every line item.</div></div>
     </sc-if>
+    <div class="t-over">Project</div>
+    <div class="fld"><label class="lbl" for="pj">Project name <span class="req">*</span></label><input id="pj" class="{{pjCls}}" placeholder="e.g. the film or series you worked on" value="{{project}}" onChange="{{onProject}}"><span class="help">Shown as its own header on the invoice.</span></div>
+    <div class="hr"></div>
     <div class="t-over">Bill to</div>
     <div class="fld"><label class="lbl" for="cl">Client name <span class="req">*</span></label><input id="cl" class="{{clCls}}" placeholder="Company or person" value="{{client}}" onChange="{{onClient}}"></div>
     <div class="fld"><label class="lbl" for="ce">Client email <span class="opt">(optional)</span></label><input id="ce" class="inp" type="email" value="accounts@lanternpictures.in"></div>
@@ -56,7 +59,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <div class="kv"><span>Subtotal</span><span>{{sub}}</span></div>
       <div class="kv"><span>GST ({{gst}}%)</span><span>{{tax}}</span></div>
       <div class="hr" style="margin: 6px 0"></div>
-      <div class="kv" style="font-size: 17px"><span style="color: #1D1B22; font-weight: 700">Total</span><span style="font-weight: 800">{{total}}</span></div>
+      <div class="kv" style="font-size: 17px"><span style="color: #1A1820; font-weight: 700">Total</span><span style="font-weight: 800">{{total}}</span></div>
     </div>
   </div>
 
@@ -77,7 +80,7 @@ class Component extends DCLogic {
     super(p);
     this.nextId = 3;
     this.state = {
-      client: 'Lantern Pictures', gst: '18', tried: false, toast: false,
+      client: 'Lantern Pictures', project: 'Untitled Hindi Feature', gst: '18', tried: false, toast: false,
       items: [
         { id: 1, desc: 'Focus pulling — principal photography', rate: '10000', days: '6' },
         { id: 2, desc: 'Camera prep day', rate: '5000', days: '1' }
@@ -92,10 +95,11 @@ class Component extends DCLogic {
     const upd = (id, k, v) => this.setState({ items: s.items.map((x) => (x.id === id ? { ...x, [k]: v } : x)) });
     const sub = s.items.reduce((a, x) => a + num(x.rate) * num(x.days), 0);
     const tax = sub * num(s.gst) / 100;
-    const valid = !!s.client.trim() && s.items.length > 0 && s.items.every((x) => num(x.rate) > 0 && num(x.days) > 0);
+    const valid = !!s.project.trim() && (!!s.client.trim() && s.items.length > 0 && s.items.every((x) => num(x.rate) > 0 && num(x.days) > 0));
     return {
       client: s.client, gst: s.gst,
       clCls: s.tried && !s.client.trim() ? 'inp bad' : 'inp',
+      pjCls: s.tried && !s.project.trim() ? 'inp bad' : 'inp', project: s.project, onProject: (e) => this.setState({ project: e.target.value }),
       onClient: (e) => this.setState({ client: e.target.value }),
       onGst: (e) => this.setState({ gst: e.target.value }),
       itemCount: s.items.length + (s.items.length === 1 ? ' item' : ' items'),

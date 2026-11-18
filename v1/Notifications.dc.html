@@ -11,7 +11,7 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#5B2A8C}a:hover{color:#4A1F73}
@@ -30,11 +30,15 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
               <a href="UserProfile.dc.html" class="{{n.av}}" style="text-decoration: none">{{n.ini}}</a>
               <span style="{{n.typeStyle}}" aria-hidden="true">
                 <sc-if value="{{n.isReq}}" hint-placeholder-val="{{ true }}"><svg class="i" viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke-width: 2.6"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><path d="M9 12h6"></path></svg></sc-if>
+                <sc-if value="{{n.isShort}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 11px; height: 11px; stroke-width: 2.6"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path></svg></sc-if>
                 <sc-if value="{{n.isAcc}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></sc-if>
               </span>
             </div>
             <div class="sp" style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
               <div><div class="t-s"><b>{{n.name}}</b> {{n.text}}</div><div class="t-c mut" style="margin-top: 2px">{{n.when}}</div></div>
+              <sc-if value="{{n.isShort}}" hint-placeholder-val="{{ false }}">
+                <a href="JobDetail.dc.html" data-app="Shortlisted" class="card" style="padding: 10px 12px; gap: 2px; flex-direction: row; align-items: center; text-decoration: none; background: #FFFFFF"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.job}}</span><span class="t-c mut">{{n.org}} · View application</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+              </sc-if>
               <sc-if value="{{n.showActions}}" hint-placeholder-val="{{ false }}">
                 <div class="row" style="gap: 8px"><button class="btn btn-s btn-sm" onClick="{{n.decline}}" style="flex: 1">Decline</button><button class="btn btn-p btn-sm" onClick="{{n.accept}}" style="flex: 1">Accept</button></div>
               </sc-if>
@@ -47,7 +51,7 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
       <a href="Connections.dc.html" class="btn btn-s w100">View all connection requests</a>
     </sc-if>
     <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
-      <div class="empty" style="padding-top: 80px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg></div><div class="t-h2">You're all caught up</div><div class="t-s mut">Connection requests and acceptances will show up here.</div></div>
+      <div class="empty" style="padding-top: 80px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg></div><div class="t-h2">You're all caught up</div><div class="t-s mut">Application updates and connection requests will show up here.</div></div>
     </sc-if>
   </div>
   <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
@@ -55,13 +59,14 @@ a{color:#5B2A8C}a:hover{color:#4A1F73}
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"empty":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"empty":{"editor":"boolean","default":false},"role":{"editor":"enum","options":["seeker","poster","vendor"],"default":"seeker"},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   constructor(p) {
     super(p);
     this.state = {
       toast: '',
       items: [
+        { id: 0, type: 'short', name: 'Kavya Menon', when: '2h ago', unread: true, done: null, job: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures' },
         { id: 1, type: 'req', name: 'Vikram Bhosle', when: '2h ago', unread: true, done: null },
         { id: 2, type: 'acc', name: 'Farhan Siddiqui', when: '5h ago', unread: true, done: null },
         { id: 3, type: 'req', name: 'Northlight Studios', when: 'Yesterday', unread: false, done: null, vendorish: false },
@@ -80,18 +85,19 @@ class Component extends DCLogic {
     const st = this.props.store, act = this.props.act;
     // Unified prototype: request outcomes follow the shared connection store.
     const doneOf = (n) => (st && n.type === 'req' ? (st.conn[n.name] === 'received' ? null : st.conn[n.name] === 'connected' ? 'accepted' : 'declined') : n.done);
-    const list = empty ? [] : s.items.map((n) => ({ ...n, done: doneOf(n) }));
+    const role = this.props.role ?? 'seeker';
+    const list = empty ? [] : s.items.filter((n) => n.type !== 'short' || role === 'seeker').map((n) => ({ ...n, done: doneOf(n) }));
     return {
       hasItems: list.length > 0, empty: list.length === 0,
       hasUnread: list.some((x) => x.unread),
       markAll: () => this.setState({ items: s.items.map((x) => ({ ...x, unread: false })) }),
       items: list.map((n) => {
-        const isReq = n.type === 'req';
+        const isReq = n.type === 'req', isShort = n.type === 'short';
         return {
-          ...n, ini: ini(n.name), av: n.v ? 'av g' : 'av', isReq, isAcc: !isReq,
-          text: isReq ? 'sent you a connection request.' : 'accepted your connection request. You’re now connected.',
+          ...n, ini: ini(n.name), av: n.v ? 'av g' : 'av', isReq, isShort, isAcc: n.type === 'acc',
+          text: isShort ? 'shortlisted your job application.' : isReq ? 'sent you a connection request.' : 'accepted your connection request. You’re now connected.',
           rowStyle: 'cursor:default;align-items:flex-start;' + (n.unread ? 'background:#F7F2FB;' : ''),
-          typeStyle: 'position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:10px;border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;background:' + (isReq ? '#5B2A8C' : '#1E7D47'),
+          typeStyle: 'position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:10px;border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;background:' + (isReq ? '#5B2A8C' : isShort ? '#8A5300' : '#367A22'),
           showActions: isReq && !n.done,
           resolved: isReq && !!n.done,
           resolvedText: n.done === 'accepted' ? 'Accepted' : 'Declined',
