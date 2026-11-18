@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Set up your professional profile</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar">
+    <sc-if value="{{isFirst}}" hint-placeholder-val="{{ true }}"><a class="iconbtn" href="RoleSelect.dc.html" aria-label="Back to role selection"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a></sc-if>
+    <sc-if value="{{notFirst}}" hint-placeholder-val="{{ false }}"><button class="iconbtn" onClick="{{back}}" aria-label="Previous step"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button></sc-if>
+    <div class="ttl">Job Seeker profile</div>
+    <span class="t-s mut b" style="padding-right: 12px">Step {{stepNo}} of 3</span>
+  </div>
+  <div style="padding: 0 20px 4px"><div class="stepper"><div class="{{s1}}"></div><div class="{{s2}}"></div><div class="{{s3}}"></div></div></div>
+
+  <div class="sc" style="padding-top: 20px; gap: 18px">
+    <!-- Step 1 -->
+    <sc-if value="{{st1}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <div><div class="t-h1">Basic information</div><p class="t-s mut" style="margin-top: 4px">Fields marked <span style="color: #B42318">*</span> are required.</p></div>
+        <div class="fld"><label class="lbl" for="nm">Full name <span class="req">*</span></label><input id="nm" class="{{nameCls}}" placeholder="e.g. Priya Nair" value="{{name}}" onChange="{{onName}}" autocomplete="name">
+          <sc-if value="{{nameErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Enter your full name.</span></sc-if>
+        </div>
+        <div class="fld"><label class="lbl" for="em">Email</label><input id="em" class="inp ro" value="priya.nair@gmail.com" readonly><span class="help">Verified — used to log in.</span></div>
+        <div class="fld"><label class="lbl" for="pn">Phone number <span class="opt">(optional)</span></label><div class="pre"><span>+91</span><input id="pn" type="tel" inputmode="tel" placeholder="98765 43210"></div><span class="help">Shown to Job Posters as contact information only.</span></div>
+        <div class="fld"><label class="lbl" for="ds">Professional introduction</label><textarea id="ds" class="inp" placeholder="Two or three lines about your work, recent projects and what you're looking for."></textarea><span class="help" style="text-align: right">0 / [LIMIT TBC]</span></div>
+      </div>
+    </sc-if>
+
+    <!-- Step 2 -->
+    <sc-if value="{{st2}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <div><div class="t-h1">Professional information</div><p class="t-s mut" style="margin-top: 4px">This is what Job Posters filter on in the talent directory.</p></div>
+        <div class="fld"><label class="lbl" for="dp">Department <span class="req">*</span></label>
+          <select id="dp" class="{{deptCls}}" value="{{dept}}" onChange="{{onDept}}">
+            <option value="">Select department</option><option>Camera</option><option>Direction</option><option>Editing &amp; Post</option><option>Sound</option><option>Lighting &amp; Grip</option><option>Art &amp; Production Design</option><option>Cast / Acting</option><option>Production</option><option>Costume &amp; Make-up</option><option>VFX</option>
+          </select>
+          <sc-if value="{{deptErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Choose your department.</span></sc-if>
+        </div>
+        <div class="fld"><label class="lbl" for="tt">Primary work title <span class="req">*</span></label><input id="tt" class="{{titleCls}}" placeholder="e.g. Focus Puller" value="{{title}}" onChange="{{onTitle}}">
+          <sc-if value="{{titleErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Enter the title you're best known for.</span></sc-if>
+        </div>
+        <div class="fld"><span class="lbl">Skills <span class="opt">· select all that apply</span></span>
+          <div class="chips">
+            <sc-for list="{{skills}}" as="s" hint-placeholder-count="8"><button class="{{s.cls}}" onClick="{{s.toggle}}" aria-pressed="{{s.on}}">{{s.label}}</button></sc-for>
+          </div>
+          <span class="help">Skills taxonomy is placeholder — final list per department [TAXONOMY TBC].</span>
+        </div>
+        <div class="fld"><label class="lbl" for="yr">Years of experience <span class="req">*</span></label><input id="yr" class="inp" type="number" inputmode="numeric" value="6" style="width: 120px"></div>
+        <div class="fld"><span class="lbl">Experience band <span class="req">*</span></span>
+          <div class="seg" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+            <sc-for list="{{bands}}" as="b" hint-placeholder-count="3"><button class="{{b.cls}}" onClick="{{b.pick}}" aria-pressed="{{b.on}}">{{b.label}}</button></sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- Step 3 -->
+    <sc-if value="{{st3}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <div><div class="t-h1">External references</div><p class="t-s mut" style="margin-top: 4px">Optional. Links open outside CrewConnect — we don't host reels or portfolios.</p></div>
+        <div class="fld"><label class="lbl" for="im">IMDb link <span class="opt">(optional)</span></label><input id="im" class="inp" type="url" placeholder="https://www.imdb.com/name/…" value="{{imdb}}" onChange="{{onImdb}}"></div>
+        <div class="fld"><label class="lbl" for="pf">Portfolio link <span class="opt">(optional)</span></label><input id="pf" class="{{pfCls}}" type="url" placeholder="https://yourname.com" value="{{pf}}" onChange="{{onPf}}">
+          <sc-if value="{{pfErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Enter a full web address starting with https://</span></sc-if>
+        </div>
+        <div class="card" style="gap: 6px; background: #F7F2FB; border-color: #EFE7F7">
+          <div class="t-over" style="color: #5B2A8C">Profile summary</div>
+          <div class="t-h3">{{nameShow}}</div>
+          <div class="t-s mut">{{titleShow}} · {{deptShow}} · {{band}}</div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div class="foot">
+    <sc-if value="{{notLast}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{next}}">Continue</button></sc-if>
+    <sc-if value="{{lastBad}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" onClick="{{next}}">Finish profile</button></sc-if>
+    <sc-if value="{{lastOk}}" hint-placeholder-val="{{ false }}"><a class="btn btn-g w100" href="SeekerHome.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Finish profile</a></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = { step: 1, tried: {}, name: '', dept: '', title: '', band: 'Mid-Level', skills: { 'Focus pulling': true }, imdb: '', pf: '' };
+  }
+  renderVals() {
+    const s = this.state, t = s.tried;
+    const nameErr = t[1] && !s.name.trim();
+    const deptErr = t[2] && !s.dept;
+    const titleErr = t[2] && !s.title.trim();
+    const pfBad = s.pf.trim() && !/^https?:\/\/\S+\.\S+/.test(s.pf.trim());
+    const pfErr = t[3] && pfBad;
+    const valid = { 1: !!s.name.trim(), 2: !!s.dept && !!s.title.trim(), 3: !pfBad };
+    const cls = (st, i) => (st > i ? 'done' : st === i ? 'on' : '');
+    const skillList = ['Focus pulling', 'ARRI Alexa', 'RED', 'Sony Venice', 'Steadicam', 'Gimbal ops', 'Lens tech', 'Camera prep'];
+    return {
+      stepNo: s.step, isFirst: s.step === 1, notFirst: s.step > 1,
+      s1: cls(s.step, 1), s2: cls(s.step, 2), s3: cls(s.step, 3),
+      st1: s.step === 1, st2: s.step === 2, st3: s.step === 3,
+      name: s.name, dept: s.dept, title: s.title, imdb: s.imdb, pf: s.pf, band: s.band,
+      nameErr, deptErr, titleErr, pfErr,
+      nameCls: nameErr ? 'inp bad' : 'inp', deptCls: deptErr ? 'inp bad' : 'inp', titleCls: titleErr ? 'inp bad' : 'inp', pfCls: pfErr ? 'inp bad' : 'inp',
+      nameShow: s.name.trim() || 'Your name', titleShow: s.title.trim() || 'Work title', deptShow: s.dept || 'Department',
+      onName: (e) => this.setState({ name: e.target.value }),
+      onDept: (e) => this.setState({ dept: e.target.value }),
+      onTitle: (e) => this.setState({ title: e.target.value }),
+      onImdb: (e) => this.setState({ imdb: e.target.value }),
+      onPf: (e) => this.setState({ pf: e.target.value }),
+      skills: skillList.map((l) => ({ label: l, on: !!s.skills[l], cls: s.skills[l] ? 'chip on' : 'chip', toggle: () => this.setState({ skills: { ...s.skills, [l]: !s.skills[l] } }) })),
+      bands: ['Junior', 'Mid-Level', 'Senior'].map((b) => ({ label: b, on: s.band === b, cls: s.band === b ? 'on' : '', pick: () => this.setState({ band: b }) })),
+      notLast: s.step < 3, lastOk: s.step === 3 && valid[3], lastBad: s.step === 3 && !valid[3],
+      next: () => {
+        if (!valid[s.step]) return this.setState({ tried: { ...t, [s.step]: true } });
+        if (s.step < 3) this.setState({ step: s.step + 1 });
+      },
+      back: () => this.setState({ step: Math.max(1, s.step - 1) })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Set up your vendor profile</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar">
+    <sc-if value="{{isFirst}}" hint-placeholder-val="{{ true }}"><a class="iconbtn" href="RoleSelect.dc.html" aria-label="Back to role selection"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a></sc-if>
+    <sc-if value="{{notFirst}}" hint-placeholder-val="{{ false }}"><button class="iconbtn" onClick="{{back}}" aria-label="Previous step"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button></sc-if>
+    <div class="ttl">Vendor profile</div>
+    <span class="t-s mut b" style="padding-right: 12px">Step {{stepNo}} of 2</span>
+  </div>
+  <div style="padding: 0 20px 4px"><div class="stepper"><div class="{{s1}}"></div><div class="{{s2}}"></div></div></div>
+
+  <div class="sc" style="padding-top: 20px; gap: 18px">
+    <sc-if value="{{st1}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <div><div class="t-h1">Business details</div><p class="t-s mut" style="margin-top: 4px">This appears on your public vendor page.</p></div>
+        <div class="fld"><label class="lbl" for="bn">Business name <span class="req">*</span></label><input id="bn" class="{{bnCls}}" placeholder="e.g. Reelhouse Camera Rentals" value="{{bn}}" onChange="{{onBn}}">
+          <sc-if value="{{bnErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Enter your business name.</span></sc-if>
+        </div>
+        <div class="fld"><label class="lbl" for="ct">Primary category <span class="req">*</span></label>
+          <select id="ct" class="{{ctCls}}" value="{{ct}}" onChange="{{onCt}}">
+            <option value="">Select category</option><option>Camera &amp; lenses</option><option>Lighting &amp; grip</option><option>Sound equipment</option><option>Drones &amp; aerial</option><option>Costume &amp; props</option><option>Post-production gear</option><option>Production vehicles</option>
+          </select>
+          <sc-if value="{{ctErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Choose the category you mainly supply.</span></sc-if>
+        </div>
+        <div class="fld"><span class="lbl">You offer equipment for <span class="req">*</span></span>
+          <div class="seg" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+            <sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button class="{{m.cls}}" onClick="{{m.pick}}" aria-pressed="{{m.on}}">{{m.label}}</button></sc-for>
+          </div>
+        </div>
+        <div class="fld"><label class="lbl" for="cy">City <span class="req">*</span></label><input id="cy" class="inp" value="Goregaon East, Mumbai"></div>
+        <div class="fld"><label class="lbl" for="ab">About your business</label><textarea id="ab" class="inp" placeholder="What you stock, how long you've been supplying productions, delivery and pickup terms."></textarea></div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{st2}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <div><div class="t-h1">Contact &amp; GST</div><p class="t-s mut" style="margin-top: 4px">Contact details stay hidden until a user taps <b>Show contact details</b> on your page.</p></div>
+        <div class="fld"><label class="lbl" for="cp">Contact person <span class="req">*</span></label><input id="cp" class="inp" value="Rahul Mehta"></div>
+        <div class="fld"><label class="lbl" for="ph">Business phone <span class="req">*</span></label><div class="pre"><span>+91</span><input id="ph" type="tel" value="98201 44120"></div></div>
+        <div class="fld"><label class="lbl" for="be">Business email <span class="req">*</span></label><input id="be" class="inp" type="email" value="rent@reelhouse.in"></div>
+        <div class="fld"><label class="lbl" for="bw">Website <span class="opt">(optional)</span></label><input id="bw" class="inp" type="url" placeholder="https://"></div>
+        <div class="fld"><label class="lbl" for="bg">GSTIN <span class="opt">(optional)</span></label><input id="bg" class="inp" placeholder="15-character GSTIN" maxlength="15" style="text-transform: uppercase"></div>
+        <div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg><div>You can preview your public page any time from <b>Profile</b>.</div></div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div class="foot">
+    <sc-if value="{{st1}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{next}}">Continue</button></sc-if>
+    <sc-if value="{{st2}}" hint-placeholder-val="{{ false }}"><a class="btn btn-g w100" href="VendorHome.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Save vendor profile</a></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { step: 1, tried: false, bn: '', ct: '', mode: 'Rent & buy' }; }
+  renderVals() {
+    const s = this.state;
+    const bnErr = s.tried && !s.bn.trim();
+    const ctErr = s.tried && !s.ct;
+    const cls = (st, i) => (st > i ? 'done' : st === i ? 'on' : '');
+    return {
+      stepNo: s.step, isFirst: s.step === 1, notFirst: s.step > 1,
+      s1: cls(s.step, 1), s2: cls(s.step, 2), st1: s.step === 1, st2: s.step === 2,
+      bn: s.bn, ct: s.ct, bnErr, ctErr,
+      bnCls: bnErr ? 'inp bad' : 'inp', ctCls: ctErr ? 'inp bad' : 'inp',
+      onBn: (e) => this.setState({ bn: e.target.value }),
+      onCt: (e) => this.setState({ ct: e.target.value }),
+      modes: ['Rent', 'Buy', 'Rent & buy'].map((m) => ({ label: m, on: s.mode === m, cls: s.mode === m ? 'on' : '', pick: () => this.setState({ mode: m }) })),
+      next: () => {
+        if (!s.bn.trim() || !s.ct) return this.setState({ tried: true });
+        this.setState({ step: 2 });
+      },
+      back: () => this.setState({ step: 1 })
+    };
+  }
+}
+</script>
+</body>
+</html>

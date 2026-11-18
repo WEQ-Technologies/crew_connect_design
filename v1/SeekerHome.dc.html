@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Job Seeker home</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div style="flex: none; padding: 20px 20px 8px; display: flex; align-items: center; gap: 12px">
+    <div class="sp">
+      <div class="t-s mut">Good morning,</div>
+      <div class="t-h1">Priya</div>
+    </div>
+    <a href="ForumWall.dc.html" class="iconbtn" aria-label="Association notices"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a3 3 0 0 1 0 6M18 6a7 7 0 0 1 0 12"></path></svg></a>
+    <a href="Notifications.dc.html" class="iconbtn" aria-label="Notifications, 2 unread" style="position: relative"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span style="position: absolute; top: 6px; right: 6px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: #B42318; color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center" aria-hidden="true">2</span></a>
+    <a href="SeekerProfile.dc.html" class="av" aria-label="Open your profile" style="text-decoration: none">PN</a>
+  </div>
+
+  <div class="sc" style="gap: 20px; padding-top: 8px">
+    <a href="JobSearch.dc.html" class="srch" style="text-decoration: none">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <span class="sp" style="font-size: 15px; color: #6E6876">Search jobs, roles or locations</span>
+      <span class="iconbtn" style="width: 40px; height: 40px; color: #5B2A8C" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg></span>
+    </a>
+
+    <div class="chips x">
+      <a class="chip" href="JobSearch.dc.html">Camera</a>
+      <a class="chip" href="JobSearch.dc.html">Editing &amp; Post</a>
+      <a class="chip" href="JobSearch.dc.html">Sound</a>
+      <a class="chip" href="JobSearch.dc.html">Cast</a>
+      <a class="chip" href="JobSearch.dc.html">Lighting &amp; Grip</a>
+      <a class="chip" href="JobSearch.dc.html">Direction</a>
+    </div>
+
+    <a href="SeekerProfile.dc.html" class="card" style="text-decoration: none; background: #F7F2FB; border-color: #EFE7F7; gap: 10px">
+      <div class="row"><div class="sp"><div class="t-h3">Your profile is 80% complete</div><div class="t-s mut">Add your IMDb link so Job Posters can check your credits.</div></div><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5B2A8C"><path d="m9 18 6-6-6-6"></path></svg></div>
+      <div class="prog" style="background: #fff"><div style="width: 80%"></div></div>
+    </a>
+
+    <div class="sec"><h2>Recently posted</h2><a href="JobSearch.dc.html" class="btn btn-t btn-sm">See all</a></div>
+    <sc-for list="{{jobs}}" as="j" hint-placeholder-count="4">
+      <a href="JobDetail.dc.html" class="card" style="text-decoration: none">
+        <div class="row" style="align-items: flex-start; gap: 12px">
+          <div class="sp"><div class="t-h3 clamp2">{{j.title}}</div><div class="t-s mut" style="margin-top: 2px">{{j.org}}</div></div>
+          <span class="t-c mut" style="white-space: nowrap; padding-top: 2px">{{j.ago}}</span>
+        </div>
+        <div class="meta">
+          <span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"></rect><rect x="13" y="4" width="7" height="7" rx="1"></rect><rect x="4" y="13" width="7" height="7" rx="1"></rect><rect x="13" y="13" width="7" height="7" rx="1"></rect></svg>{{j.cat}}</span>
+          <span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{j.loc}}</span>
+        </div>
+        <div class="row"><span class="pay">{{j.pay}}</span><span class="sp"></span><sc-if value="{{j.pdf}}" hint-placeholder-val="{{ false }}"><span class="tag"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Brief PDF</span></sc-if></div>
+      </a>
+    </sc-for>
+  </div>
+
+  <nav class="nav" aria-label="Main">
+    <a class="on" href="SeekerHome.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+    <a href="JobSearch.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>Discover</a>
+    <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
+    <a href="Invoices.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>Invoices</a>
+    <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      jobs: [
+        { title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', cat: 'Camera', loc: 'Film City, Mumbai', pay: '₹8,000 – ₹12,000 / day', ago: '2d ago', pdf: true },
+        { title: 'Assistant Editor — Web Series (8 episodes)', org: 'Northlight Studios', cat: 'Editing & Post', loc: 'Andheri West, Mumbai', pay: '₹55,000 – ₹70,000 / month', ago: '3d ago', pdf: false },
+        { title: 'Location Sound Recordist — Wildlife Documentary', org: 'Kite & Kettle Films', cat: 'Sound', loc: 'Leh, Ladakh (travel)', pay: '₹6,000 – ₹9,000 / day', ago: '4d ago', pdf: true },
+        { title: 'Gaffer — TVC, 2-day shoot', org: 'Pinewood Ads', cat: 'Lighting & Grip', loc: 'Bandra, Mumbai', pay: 'Payment not specified', ago: '5d ago', pdf: false },
+        { title: 'Supporting Actor (Male, 30–40) — Short Film', org: 'Third Bell Collective', cat: 'Cast', loc: 'Pune, Maharashtra', pay: '₹15,000 flat', ago: '1w ago', pdf: false }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invoice INV-2026-014</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="Invoices.dc.html" aria-label="Back to invoices"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">INV-2026-014</div>
+    <sc-if value="{{paid}}" hint-placeholder-val="{{ false }}"><span class="badge b-g" style="margin-right: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Paid</span></sc-if>
+    <sc-if value="{{sent}}" hint-placeholder-val="{{ true }}"><span class="badge b-p" style="margin-right: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>Sent</span></sc-if>
+  </div>
+  <div class="sc" style="gap: 14px; background: #F3F1F4; padding-top: 12px">
+    <div style="background: #fff; border-radius: 12px; border: 1px solid #E7E3EA; padding: 20px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 1px 2px rgba(29,27,34,.06)">
+      <div class="row" style="align-items: flex-start">
+        <div class="sp"><div class="t-over" style="color: #5B2A8C">Tax invoice</div><div class="t-h2" style="margin-top: 4px">Priya Nair</div><div class="t-c mut">Focus Puller · Mumbai</div><div class="t-c mut">priya.nair@gmail.com</div></div>
+        <div style="text-align: right"><div class="t-c mut">Invoice no.</div><div class="t-s b">INV-2026-014</div></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+        <div><div class="t-c mut">Bill to</div><div class="t-s b">Lantern Pictures</div><div class="t-c mut">GSTIN 27AABCL4821F1Z6</div></div>
+        <div style="text-align: right"><div class="t-c mut">Issued · Due</div><div class="t-s b">18 Oct · 2 Nov 2026</div></div>
+      </div>
+      <div style="border: 1px solid #E7E3EA; border-radius: 10px; overflow: hidden">
+        <div class="row t-c" style="background: #F3F1F4; padding: 8px 10px; font-weight: 700; color: #58535F"><span class="sp">Item</span><span style="width: 62px; text-align: right">Rate</span><span style="width: 34px; text-align: right">Days</span><span style="width: 66px; text-align: right">Amount</span></div>
+        <div class="row t-c" style="padding: 10px; border-top: 1px solid #E7E3EA; align-items: flex-start"><span class="sp" style="font-size: 12px; line-height: 16px">Focus pulling — principal photography</span><span style="width: 62px; text-align: right">₹10,000</span><span style="width: 34px; text-align: right">6</span><span style="width: 66px; text-align: right; font-weight: 700">₹60,000</span></div>
+        <div class="row t-c" style="padding: 10px; border-top: 1px solid #E7E3EA"><span class="sp" style="font-size: 12px">Camera prep day</span><span style="width: 62px; text-align: right">₹5,000</span><span style="width: 34px; text-align: right">1</span><span style="width: 66px; text-align: right; font-weight: 700">₹5,000</span></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <div class="kv" style="font-size: 13px"><span>Subtotal</span><span>₹65,000</span></div>
+        <div class="kv" style="font-size: 13px"><span>GST @ 18%</span><span>₹11,700</span></div>
+        <div class="hr" style="margin: 6px 0"></div>
+        <div class="kv"><span style="color: #1D1B22; font-weight: 800">Total</span><span style="font-weight: 800; font-size: 18px">₹76,700</span></div>
+        <div class="t-c mut" style="text-align: right">Rupees seventy-six thousand seven hundred only</div>
+      </div>
+      <div class="t-c mut" style="border-top: 1px dashed #D3CDD8; padding-top: 10px">Payment details and terms: <span class="ph-tag">[TBC]</span></div>
+    </div>
+
+    <div class="file" style="background: #fff"><div class="fico">PDF</div><div class="sp"><div class="t-h3 trunc">INV-2026-014.pdf</div><div class="t-c mut">Generated from this invoice</div></div></div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status" style="bottom: 150px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div>
+  </sc-if>
+
+  <div class="foot" style="flex-direction: column; gap: 10px">
+    <div class="row" style="gap: 10px">
+      <button class="btn btn-s" onClick="{{openShare}}" style="flex: 1"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><circle cx="18" cy="19" r="2.5"></circle><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"></path></svg>Share</button>
+      <sc-if value="{{downloading}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" style="flex: 1" aria-busy="true"><span class="spin d"></span>Preparing…</button></sc-if>
+      <sc-if value="{{notDownloading}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s" onClick="{{download}}" style="flex: 1"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"></path></svg>Download PDF</button></sc-if>
+    </div>
+    <sc-if value="{{sent}}" hint-placeholder-val="{{ true }}"><button class="btn btn-g w100" onClick="{{askPaid}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Mark as paid</button></sc-if>
+  </div>
+
+  <sc-if value="{{share}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim">
+      <div class="sheet" role="dialog" aria-label="Share invoice">
+        <div class="grab"></div>
+        <div class="t-h2">Share invoice</div>
+        <div class="t-s mut">Send INV-2026-014.pdf to Lantern Pictures.</div>
+        <div class="list">
+          <button class="li" onClick="{{shareEmail}}"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></span><span class="sp" style="text-align: left"><span class="t-s b" style="display: block">Email to client</span><span class="t-c mut">accounts@lanternpictures.in</span></span></button>
+          <button class="li" onClick="{{shareOther}}"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><circle cx="18" cy="19" r="2.5"></circle><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"></path></svg></span><span class="sp" style="text-align: left"><span class="t-s b" style="display: block">Share PDF via other apps</span><span class="t-c mut">Opens your phone's share options</span></span></button>
+        </div>
+        <button class="btn btn-t w100" onClick="{{closeShare}}">Cancel</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{confirmPaid}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c">
+      <div class="dlg" role="alertdialog" aria-label="Mark as paid">
+        <div class="sq g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></div>
+        <div class="t-h2">Mark ₹76,700 as paid?</div>
+        <div class="t-s mut">Record that Lantern Pictures has paid INV-2026-014. Payment is recorded manually — CrewConnect doesn't process it.</div>
+        <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{cancelPaid}}" style="flex: 1">Cancel</button><button class="btn btn-g" onClick="{{markPaid}}" style="flex: 1">Mark paid</button></div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { status: 'Sent', share: false, confirmPaid: false, downloading: false, toast: '' }; }
+  componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.t); }
+  flash(m) { this.setState({ toast: m }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    const s = this.state;
+    return {
+      paid: s.status === 'Paid', sent: s.status === 'Sent',
+      share: s.share, confirmPaid: s.confirmPaid,
+      downloading: s.downloading, notDownloading: !s.downloading,
+      toast: !!s.toast, toastText: s.toast,
+      openShare: () => this.setState({ share: true }),
+      closeShare: () => this.setState({ share: false }),
+      shareEmail: () => { this.setState({ share: false }); this.flash('Invoice emailed to Lantern Pictures'); },
+      shareOther: () => { this.setState({ share: false }); this.flash('Share options opened'); },
+      download: () => { this.setState({ downloading: true }); this.a = setTimeout(() => { this.setState({ downloading: false }); this.flash('Saved INV-2026-014.pdf to Downloads'); }, 1000); },
+      askPaid: () => this.setState({ confirmPaid: true }),
+      cancelPaid: () => this.setState({ confirmPaid: false }),
+      markPaid: () => { this.setState({ confirmPaid: false, status: 'Paid' }); this.flash('Invoice marked as paid'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

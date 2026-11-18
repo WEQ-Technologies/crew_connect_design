@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Unavailability calendar</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><div class="ttl" style="padding-left: 12px; font-size: 20px">Unavailability</div></div>
+  <div class="sc" style="gap: 16px; padding-top: 0">
+    <p class="t-s mut">Tap dates you can't work, then mark them unavailable. Job Posters see these dates as blocked.</p>
+    <div class="card" style="gap: 12px; padding: 12px 12px 14px">
+      <div class="row">
+        <button class="iconbtn" onClick="{{prev}}" aria-label="Previous month"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+        <div class="sp t-h2" style="text-align: center">{{monthLabel}}</div>
+        <button class="iconbtn" onClick="{{next}}" aria-label="Next month"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; text-align: center">
+        <span class="t-c mut b">Mon</span><span class="t-c mut b">Tue</span><span class="t-c mut b">Wed</span><span class="t-c mut b">Thu</span><span class="t-c mut b">Fri</span><span class="t-c mut b">Sat</span><span class="t-c mut b">Sun</span>
+        <sc-for list="{{cells}}" as="c" hint-placeholder-count="35">
+          <button style="{{c.style}}" onClick="{{c.tap}}" disabled="{{c.disabled}}" aria-label="{{c.aria}}" aria-pressed="{{c.sel}}">{{c.label}}</button>
+        </sc-for>
+      </div>
+      <div class="chips t-c" style="gap: 14px; padding: 0 4px">
+        <span class="row" style="gap: 6px"><span style="width: 14px; height: 14px; border-radius: 4px; border: 2px solid #5B2A8C"></span>Today</span>
+        <span class="row" style="gap: 6px"><span style="width: 14px; height: 14px; border-radius: 4px; background: #5B2A8C"></span>Selected</span>
+        <span class="row" style="gap: 6px"><span style="width: 14px; height: 14px; border-radius: 4px; background: #FDECEA; border: 1px solid #F0B6AF"></span>Unavailable</span>
+      </div>
+    </div>
+
+    <div class="sec"><h2>Blocked dates</h2><span class="t-c mut">{{blockedCount}} total</span></div>
+    <sc-if value="{{hasBlocked}}" hint-placeholder-val="{{ true }}">
+      <div class="list">
+        <sc-for list="{{blockedList}}" as="b" hint-placeholder-count="3">
+          <div class="li" style="cursor: default"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px; background: #FDECEA; color: #B42318; border-color: #F6C9C3"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18M9 14l6 4M15 14l-6 4"></path></svg></span><span class="sp b t-s">{{b.label}}</span><button class="btn btn-t btn-sm" onClick="{{b.remove}}" aria-label="Remove {{b.label}}">Remove</button></div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{noBlocked}}" hint-placeholder-val="{{ false }}">
+      <div class="card" style="align-items: center; text-align: center"><div class="t-s mut">No blocked dates. You show as available every day.</div></div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{hasSel}}" hint-placeholder-val="{{ false }}">
+    <div class="foot" style="align-items: center">
+      <div class="sp"><div class="t-s b">{{selCount}} selected</div><button class="btn btn-t btn-sm" onClick="{{clearSel}}" style="padding: 0; min-height: 24px">Clear</button></div>
+      <sc-if value="{{canBlock}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" onClick="{{block}}">Mark unavailable</button></sc-if>
+      <sc-if value="{{canFree}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" onClick="{{askFree}}">Make available</button></sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div>
+  </sc-if>
+
+  <nav class="nav" aria-label="Main">
+    <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>Home</a>
+    <a href="JobSearch.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>Discover</a>
+    <a class="on" href="Calendar.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>Calendar</a>
+    <a href="Invoices.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>Invoices</a>
+    <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Profile</a>
+  </nav>
+
+  <sc-if value="{{confirm}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c">
+      <div class="dlg" role="alertdialog" aria-label="Confirm">
+        <div class="t-h2">Make {{confirmCount}} available again?</div>
+        <div class="t-s mut">{{confirmText}} will no longer show as blocked to Job Posters.</div>
+        <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{cancelConfirm}}" style="flex: 1">Cancel</button><button class="btn btn-p" onClick="{{doFree}}" style="flex: 1">Make available</button></div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = { y: 2026, m: 9, blocked: ['2026-10-24', '2026-10-25', '2026-11-06'], sel: [], confirm: null, toast: '' };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  key(y, m, d) { return y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0'); }
+  fmt(k) { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); }
+  flash(msg) { this.setState({ toast: msg }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    const s = this.state;
+    const today = '2026-10-20';
+    const first = new Date(s.y, s.m, 1);
+    const lead = (first.getDay() + 6) % 7;
+    const days = new Date(s.y, s.m + 1, 0).getDate();
+    const cells = [];
+    for (let i = 0; i < lead; i++) cells.push({ label: '', style: 'height:44px;border:0;background:transparent', disabled: true, tap: null, aria: 'empty', sel: false });
+    for (let d = 1; d <= days; d++) {
+      const k = this.key(s.y, s.m, d);
+      const past = k < today, isT = k === today, bl = s.blocked.includes(k), sel = s.sel.includes(k);
+      let st = 'height:44px;border-radius:12px;font:inherit;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;';
+      if (sel) st += 'background:#5B2A8C;color:#fff;font-weight:700;border:0;';
+      else if (bl) st += 'background:#FDECEA;color:#B42318;font-weight:700;border:1px solid #F0B6AF;text-decoration:line-through;';
+      else if (isT) st += 'background:#fff;color:#5B2A8C;font-weight:800;border:2px solid #5B2A8C;';
+      else if (past) st += 'background:transparent;color:#ADA7B3;border:0;cursor:not-allowed;';
+      else st += 'background:transparent;color:#1D1B22;font-weight:500;border:0;';
+      cells.push({
+        label: d, style: st, disabled: past, sel,
+        aria: this.fmt(k) + (bl ? ', unavailable' : '') + (isT ? ', today' : ''),
+        tap: () => this.setState({ sel: sel ? s.sel.filter((x) => x !== k) : [...s.sel, k] })
+      });
+    }
+    const allBlocked = s.sel.length > 0 && s.sel.every((k) => s.blocked.includes(k));
+    const blockedSorted = [...s.blocked].sort();
+    const cf = s.confirm || [];
+    return {
+      monthLabel: first.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }),
+      cells,
+      prev: () => this.setState(s.m === 0 ? { m: 11, y: s.y - 1 } : { m: s.m - 1 }),
+      next: () => this.setState(s.m === 11 ? { m: 0, y: s.y + 1 } : { m: s.m + 1 }),
+      blockedCount: s.blocked.length, hasBlocked: s.blocked.length > 0, noBlocked: s.blocked.length === 0,
+      blockedList: blockedSorted.map((k) => ({ label: this.fmt(k), remove: () => this.setState({ confirm: [k] }) })),
+      hasSel: s.sel.length > 0, selCount: s.sel.length + (s.sel.length === 1 ? ' date' : ' dates'),
+      canBlock: !allBlocked, canFree: allBlocked,
+      clearSel: () => this.setState({ sel: [] }),
+      block: () => {
+        const nb = Array.from(new Set([...s.blocked, ...s.sel]));
+        const n = s.sel.length;
+        this.setState({ blocked: nb, sel: [] });
+        this.flash(n + (n === 1 ? ' date' : ' dates') + ' marked unavailable');
+      },
+      askFree: () => this.setState({ confirm: s.sel }),
+      confirm: !!s.confirm,
+      confirmCount: cf.length === 1 ? 'this date' : cf.length + ' dates',
+      confirmText: cf.length === 1 ? this.fmt(cf[0] || today) : 'These dates',
+      cancelConfirm: () => this.setState({ confirm: null }),
+      doFree: () => {
+        this.setState({ blocked: s.blocked.filter((k) => !cf.includes(k)), sel: s.sel.filter((k) => !cf.includes(k)), confirm: null });
+        this.flash('Marked available again');
+      },
+      toast: !!s.toast, toastText: s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

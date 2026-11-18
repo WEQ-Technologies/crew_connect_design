@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add or edit listing</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <!-- FORM -->
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="bar"><a class="iconbtn" href="MyListings.dc.html" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a><div class="ttl">{{heading}}</div></div>
+  </sc-if>
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="sc" style="gap: 18px">
+      <sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg><div>You're editing a published listing. Changes go live when you save.</div></div></sc-if>
+      <div class="fld"><label class="lbl" for="n">Product name <span class="req">*</span></label><input id="n" class="{{nCls}}" placeholder="e.g. ARRI Alexa Mini LF — full kit" value="{{name}}" onChange="{{onName}}">
+        <sc-if value="{{nErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Add a product name.</span></sc-if>
+      </div>
+      <div class="fld"><label class="lbl" for="c">Category <span class="req">*</span></label><select id="c" class="inp"><option>Camera bodies</option><option>Lenses</option><option>Monitoring</option><option>Lighting</option><option>Grip</option><option>Sound</option><option>Accessories</option></select></div>
+      <div class="fld"><span class="lbl">Available to <span class="req">*</span></span>
+        <div class="seg" style="grid-template-columns: repeat(3, minmax(0, 1fr))"><sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button class="{{m.cls}}" onClick="{{m.pick}}" aria-pressed="{{m.on}}">{{m.label}}</button></sc-for></div>
+      </div>
+      <div class="fld"><label class="lbl" for="p">{{priceLabel}} <span class="req">*</span></label>
+        <div class="row" style="gap: 8px"><div class="pre sp"><span>₹</span><input id="p" inputmode="numeric" value="{{price}}" onChange="{{onPrice}}" placeholder="0"></div><span class="t-s mut" style="width: 92px">{{priceUnit}}</span></div>
+        <sc-if value="{{pErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Enter a price, or write “on request” in the description [PRICING RULE TBC].</span></sc-if>
+      </div>
+      <div class="fld"><span class="lbl">Condition <span class="opt">(optional)</span></span><div class="chips"><button class="chip on">New</button><button class="chip">Used — like new</button><button class="chip">Used — good</button></div></div>
+      <div class="fld"><label class="lbl" for="d">Description <span class="req">*</span></label><textarea id="d" class="{{dCls}}" style="min-height: 120px" placeholder="What's included, accessories, deposit, pickup and delivery terms." onChange="{{onDesc}}">{{desc}}</textarea>
+        <sc-if value="{{dErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Describe what's included (at least 30 characters).</span></sc-if>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="foot"><button class="btn btn-p w100" onClick="{{review}}">Review listing</button></div>
+  </sc-if>
+
+  <!-- REVIEW -->
+  <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+    <div class="bar"><button class="iconbtn" onClick="{{toForm}}" aria-label="Back to edit"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button><div class="ttl">Review listing</div></div>
+  </sc-if>
+  <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="gap: 16px">
+      <p class="t-s mut">This is how the listing appears on your public vendor page.</p>
+      <div class="card" style="gap: 10px">
+        <div class="row" style="align-items: flex-start"><div class="sp t-h2">{{name}}</div><span class="tag">{{mode}}</span></div>
+        <div class="t-c mut">Camera bodies · New</div>
+        <div class="pay" style="font-size: 18px">₹{{priceFmt}} <span class="t-s mut" style="font-weight: 500">{{priceUnit}}</span></div>
+        <div class="hr"></div>
+        <p class="t-s" style="white-space: pre-line">{{desc}}</p>
+        <div class="hr"></div>
+        <div class="row t-c mut" style="gap: 6px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg>Reelhouse Camera Rentals · Goregaon East, Mumbai</div>
+      </div>
+      <button class="btn btn-s w100" onClick="{{toForm}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>Edit details</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+    <div class="foot">
+      <button class="btn btn-s" onClick="{{saveDraft}}" style="flex: 1">Save draft</button>
+      <sc-if value="{{saving}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" style="flex: 1.6" aria-busy="true"><span class="spin"></span>Publishing…</button></sc-if>
+      <sc-if value="{{notSaving}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" style="flex: 1.6" onClick="{{publish}}">{{publishLabel}}</button></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- DONE -->
+  <sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="justify-content: center; align-items: center; text-align: center; gap: 14px; padding: 32px">
+      <div style="width: 80px; height: 80px; border-radius: 40px; background: #E3F3E9; color: #1E7D47; display: flex; align-items: center; justify-content: center"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 40px; height: 40px; stroke-width: 2.2"><path d="m5 12 5 5 9-10"></path></svg></div>
+      <div class="t-h1">{{doneTitle}}</div>
+      <div class="t-b mut">“{{name}}” is visible on your public vendor page.</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 10px">
+        <a class="btn btn-p w100" href="VendorPublic.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>Preview public page</a>
+        <button class="btn btn-s w100" onClick="{{editAgain}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>Edit this listing</button>
+        <a class="btn btn-t w100" href="MyListings.dc.html">Back to my listings</a>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>Saved as draft</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = {
+      phase: 'form', editing: false, tried: false, saving: false, toast: false, mode: 'Rent',
+      name: 'Sony FX3 cinema camera kit', price: '4500',
+      desc: 'Body, 3 batteries, charger, 2 × 160 GB CFexpress Type A cards and cage.\nRefundable deposit applies. Pickup from Goregaon East or delivery within Mumbai.'
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.b); }
+  renderVals() {
+    const s = this.state, tr = s.tried;
+    const nE = !s.name.trim(), pE = !(Number(String(s.price).replace(/[^0-9]/g, '')) > 0), dE = s.desc.trim().length < 30;
+    const unit = s.mode === 'Buy' ? 'one-time' : 'per day';
+    return {
+      isForm: s.phase === 'form', isReview: s.phase === 'review', isDone: s.phase === 'done',
+      editing: s.editing, heading: s.editing ? 'Edit listing' : 'Add listing',
+      name: s.name, price: s.price, desc: s.desc, mode: s.mode,
+      priceLabel: s.mode === 'Buy' ? 'Sale price' : s.mode === 'Rent' ? 'Rental rate' : 'Rental rate (sale price on request)',
+      priceUnit: unit, priceFmt: (Number(String(s.price).replace(/[^0-9]/g, '')) || 0).toLocaleString('en-IN'),
+      nErr: tr && nE, pErr: tr && pE, dErr: tr && dE,
+      nCls: tr && nE ? 'inp bad' : 'inp', dCls: tr && dE ? 'inp bad' : 'inp',
+      modes: ['Rent', 'Buy', 'Both'].map((m) => ({ label: m, on: s.mode === m, cls: s.mode === m ? 'on' : '', pick: () => this.setState({ mode: m }) })),
+      onName: (e) => this.setState({ name: e.target.value }),
+      onPrice: (e) => this.setState({ price: e.target.value }),
+      onDesc: (e) => this.setState({ desc: e.target.value }),
+      review: () => (nE || pE || dE ? this.setState({ tried: true }) : this.setState({ phase: 'review' })),
+      toForm: () => this.setState({ phase: 'form' }),
+      saving: s.saving, notSaving: !s.saving,
+      publishLabel: s.editing ? 'Save changes' : 'Publish listing',
+      doneTitle: s.editing ? 'Listing updated' : 'Listing published',
+      publish: () => { this.setState({ saving: true }); this.a = setTimeout(() => this.setState({ saving: false, phase: 'done' }), 1000); },
+      editAgain: () => this.setState({ phase: 'form', editing: true, tried: false }),
+      toast: s.toast,
+      saveDraft: () => { this.setState({ toast: true }); clearTimeout(this.b); this.b = setTimeout(() => this.setState({ toast: false }), 2200); }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Association notices</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#5B2A8C}a:hover{color:#4A1F73}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="SeekerHome.dc.html" aria-label="Back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">Forum</div></div>
+  <div style="flex: none; padding: 0 20px 12px; display: flex; flex-direction: column; gap: 10px">
+    <div><div class="t-h1">Association notices</div><p class="t-s mut" style="margin-top: 2px">Official updates from registered associations. Read-only.</p></div>
+    <div class="chips x"><sc-for list="{{assocs}}" as="a" hint-placeholder-count="5"><button class="{{a.cls}}" onClick="{{a.pick}}" aria-pressed="{{a.on}}">{{a.label}}</button></sc-for></div>
+  </div>
+  <div class="sc" style="padding-top: 0; gap: 12px">
+    <div class="row t-c mut"><span class="sp">{{count}}</span><span>Newest first</span></div>
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 12px" aria-busy="true">
+        <div class="card"><div class="row" style="gap: 10px"><div class="skel" style="width: 40px; height: 40px; border-radius: 10px"></div><div class="sp" style="display: flex; flex-direction: column; gap: 6px"><div class="skel" style="height: 12px; width: 65%"></div><div class="skel" style="height: 10px; width: 30%"></div></div></div><div class="skel" style="height: 14px; width: 85%"></div><div class="skel" style="height: 12px; width: 95%"></div></div>
+        <div class="card"><div class="row" style="gap: 10px"><div class="skel" style="width: 40px; height: 40px; border-radius: 10px"></div><div class="sp" style="display: flex; flex-direction: column; gap: 6px"><div class="skel" style="height: 12px; width: 55%"></div><div class="skel" style="height: 10px; width: 25%"></div></div></div><div class="skel" style="height: 14px; width: 75%"></div><div class="skel" style="height: 12px; width: 90%"></div></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <sc-for list="{{notices}}" as="n" hint-placeholder-count="4">
+          <div class="card" style="gap: 10px">
+            <a href="AssociationProfile.dc.html" class="row" style="gap: 10px; text-decoration: none; color: #1D1B22">
+              <span style="{{n.logo}}" role="img" aria-label="{{n.assoc}} logo">{{n.mono}}</span>
+              <span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.assoc}}</span><span class="t-c mut">{{n.date}}</span></span>
+            </a>
+            <a href="NoticeDetail.dc.html" style="text-decoration: none; color: #1D1B22; display: flex; flex-direction: column; gap: 6px">
+              <span class="t-h3">{{n.title}}</span>
+              <span class="t-s mut clamp2">{{n.preview}}</span>
+            </a>
+            <div class="row" style="gap: 8px">
+              <sc-if value="{{n.pdf}}" hint-placeholder-val="{{ false }}"><span class="tag"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>PDF attached</span></sc-if>
+              <span class="sp"></span>
+              <a href="NoticeDetail.dc.html" class="btn btn-t btn-sm">Read notice</a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty" style="padding-top: 40px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a3 3 0 0 1 0 6M18 6a7 7 0 0 1 0 12"></path></svg></div><div class="t-h2">No notices yet</div><div class="t-s mut" style="max-width: 260px">{{emptyText}}</div><button class="btn btn-s" onClick="{{showAll}}">Show all associations</button></div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.A = {
+      CTG: { name: 'Cine Technicians Guild of Maharashtra', short: 'Cine Technicians Guild', bg: '#EFE7F7', fg: '#4A1F73' },
+      WLA: { name: 'Western India Film Lighting Association', short: 'Film Lighting Assn.', bg: '#E3F3E9', fg: '#17663A' },
+      SSP: { name: 'Screen Sound Professionals Forum', short: 'Screen Sound Forum', bg: '#FFF2DB', fg: '#8A5300' },
+      IPC: { name: 'Independent Producers Council', short: 'Producers Council', bg: '#F3F1F4', fg: '#1D1B22' }
+    };
+    this.data = [
+      { a: 'CTG', date: '27 Oct 2026', title: 'Revised minimum day rates for camera and lighting crew — effective 1 December', preview: 'Following the general body meeting on 20 October, the revised minimum day rates for camera assistants, focus pullers and lighting technicians are published below. Members should quote these rates on all new engagements.', pdf: true },
+      { a: 'WLA', date: '25 Oct 2026', title: 'Mandatory electrical safety refresher — November batches open', preview: 'All member gaffers and best boys working on sets above 50 kW must complete the annual safety refresher. Four batches will run at Goregaon in November.', pdf: true },
+      { a: 'SSP', date: '22 Oct 2026', title: 'Wireless frequency guidance for outdoor shoots in Mumbai', preview: 'Members have reported interference near Film City during evening schedules. We recommend the frequency plan in the attached note until further notice.', pdf: false },
+      { a: 'CTG', date: '18 Oct 2026', title: 'Office closed for Diwali, 7–10 November', preview: 'The Guild office and helpline will be closed from 7 to 10 November. Emergency on-set grievances can still be raised by email.', pdf: false },
+      { a: 'WLA', date: '12 Oct 2026', title: 'New member registration window: 1–30 November', preview: 'Applications for new members open on 1 November. Bring two references from existing members and proof of three credits.', pdf: true }
+    ];
+    this.state = { f: 'All', loading: false };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state;
+    const list = this.data.filter((n) => s.f === 'All' || n.a === s.f);
+    const keys = ['All', 'CTG', 'WLA', 'SSP', 'IPC'];
+    return {
+      assocs: keys.map((k) => ({ label: k === 'All' ? 'All associations' : this.A[k].short, on: s.f === k, cls: s.f === k ? 'chip on' : 'chip', pick: () => { this.setState({ f: k, loading: true }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ loading: false }), 500); } })),
+      notices: list.map((n) => {
+        const A = this.A[n.a];
+        return { ...n, assoc: A.name, mono: n.a, logo: 'width:40px;height:40px;border-radius:10px;flex:none;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;letter-spacing:.04em;border:1px solid #E7E3EA;background:' + A.bg + ';color:' + A.fg };
+      }),
+      count: s.loading ? 'Loading…' : list.length + (list.length === 1 ? ' notice' : ' notices'),
+      loading: s.loading, ready: !s.loading && list.length > 0, empty: !s.loading && list.length === 0,
+      emptyText: s.f === 'All' ? 'Notices from associations will appear here.' : this.A[s.f].name + ' hasn’t published any notices yet.',
+      showAll: () => this.setState({ f: 'All' })
+    };
+  }
+}
+</script>
+</body>
+</html>
