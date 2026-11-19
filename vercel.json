@@ -4,7 +4,7 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "/v2",
+      "destination": "/v3",
       "permanent": false
     },
     {
@@ -13,122 +13,171 @@
       "permanent": false
     },
     {
+      "source": "/v2",
+      "destination": "/v2/",
+      "permanent": false
+    },
+    {
+      "source": "/v3",
+      "destination": "/v3/",
+      "permanent": false
+    },
+    {
       "source": "/Prototype.dc.html",
-      "destination": "/v2",
+      "destination": "/v3",
       "permanent": false
     },
     {
       "source": "/prototype.dc.html",
-      "destination": "/v2",
+      "destination": "/v3",
       "permanent": false
     },
     {
       "source": "/prototype",
-      "destination": "/v2",
+      "destination": "/v3",
       "permanent": false
     },
     {
       "source": "/Prototype",
-      "destination": "/v2",
+      "destination": "/v3",
       "permanent": false
     },
     {
       "source": "/Journeys.dc.html",
-      "destination": "/v2",
+      "destination": "/v3",
       "permanent": false
     },
     {
       "source": "/journeys.dc.html",
-      "destination": "/v2",
+      "destination": "/v3",
       "permanent": false
-},
-{
-  "source": "/v1/Prototype.dc.html",
-  "destination": "/v1/",
-  "permanent": false
-},
-{
-  "source": "/v1/prototype.dc.html",
-  "destination": "/v1/",
-  "permanent": false
-}
-],
+    },
+    {
+    "source": "/v1/Prototype.dc.html",
+    "destination": "/v1/",
+    "permanent": false
+  },
+  {
+    "destination": "/v1/",
+    "permanent": false
+  }
 "rewrites": [
-{
-  "source": "/:screen.dc.html",
-  "destination": "/v1/:screen.dc.html"
-},
-{
+  {
+    "destination": "/v1/:screen.dc.html"
+  },
+  {
   "source": "/_blob/:id",
   "destination": "/assets/:id.png"
 },
 {
-  "source": "/v2/_blob/:id",
-  "destination": "/v2/assets/:id.png"
+"source": "/v3/_blob/:id",
+"destination": "/v3/assets/:id.png"
 },
 {
-  "source": "/v1/_blob/:id",
-  "destination": "/v1/assets/:id.png"
+"destination": "/v2/assets/:id.png"
+},
+{
+"source": "/v1/_blob/:id",
+"destination": "/v1/assets/:id.png"
 }
 ],
 "headers": [
 {
-  "source": "/(.*)",
-  "headers": [
-    {
-      "key": "Access-Control-Allow-Origin",
-      "value": "*"
-    }
-  ]
+"headers": [
+{
+  "key": "Access-Control-Allow-Origin",
+  "value": "*"
+}
+]
 },
 {
-  "source": "/v1/(.*)",
-  "headers": [
-    {
-      "key": "Cache-Control",
-      "value": "public, max-age=0, must-revalidate"
-    }
-  ]
+"source": "/v1/(.*)",
+"headers": [
+{
+  "key": "Cache-Control",
+  "value": "public, max-age=0, must-revalidate"
+}
+]
 },
 {
-  "source": "/v2",
-  "headers": [
-    {
-      "key": "Content-Type",
-      "value": "text/html; charset=utf-8"
-    },
-    {
-      "key": "Cache-Control",
-      "value": "public, max-age=0, must-revalidate"
-    }
-  ]
+"source": "/v2",
+"headers": [
+{
+  "key": "Content-Type",
+  "value": "text/html; charset=utf-8"
 },
 {
-  "source": "/assets/(.*)",
-  "headers": [
-    {
-      "key": "Cache-Control",
-      "value": "public, max-age=31536000, immutable"
-    }
-  ]
+  "key": "Cache-Control",
+  "value": "public, max-age=0, must-revalidate"
+}
+]
 },
 {
-  "source": "/v1/assets/(.*)",
-  "headers": [
-    {
-      "key": "Cache-Control",
-      "value": "public, max-age=31536000, immutable"
-    }
-  ]
+"source": "/v2/(.*)",
+"headers": [
+{
+  "key": "Cache-Control",
+  "value": "public, max-age=0, must-revalidate"
+}
+]
 },
 {
-  "source": "/v2/assets/(.*)",
-  "headers": [
-    {
-      "key": "Cache-Control",
-      "value": "public, max-age=31536000, immutable"
-    }
-  ]
+"source": "/v3",
+"headers": [
+{
+  "key": "Content-Type",
+  "value": "text/html; charset=utf-8"
+},
+{
+  "key": "Cache-Control",
+  "value": "public, max-age=0, must-revalidate"
+}
+]
+},
+{
+"source": "/v3/(.*)",
+"headers": [
+{
+  "key": "Cache-Control",
+  "value": "public, max-age=0, must-revalidate"
+}
+]
+},
+{
+"source": "/assets/(.*)",
+"headers": [
+{
+  "key": "Cache-Control",
+  "value": "public, max-age=31536000, immutable"
+}
+]
+},
+{
+"source": "/v1/assets/(.*)",
+"headers": [
+{
+  "key": "Cache-Control",
+  "value": "public, max-age=31536000, immutable"
+}
+]
+},
+{
+"source": "/v2/assets/(.*)",
+"headers": [
+{
+  "key": "Cache-Control",
+  "value": "public, max-age=31536000, immutable"
+}
+]
+},
+{
+"source": "/v3/assets/(.*)",
+"headers": [
+{
+  "key": "Cache-Control",
+  "value": "public, max-age=31536000, immutable"
+}
+]
 }
 ]
 }
