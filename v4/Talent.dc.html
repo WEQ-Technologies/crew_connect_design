@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Find talent</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><div class="ttl" style="padding-left: 12px; font-size: 20px">{{cct.r2.find_talent_vendors}}</div><span class="badge b-y" style="margin-right: 12px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 8 4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg>{{cct.common.premium}}</span></div>
+  <div style="flex: none; padding: 4px 20px 12px; display: flex; flex-direction: column; gap: 10px">
+    <div class="seg" role="tablist" aria-label="{{cct.r2.search_for}}" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+      <sc-for list="{{whoTabs}}" as="w" hint-placeholder-count="3"><button role="tab" class="{{w.cls}}" aria-selected="{{w.on}}" onClick="{{w.pick}}">{{w.label}}</button></sc-for>
+    </div>
+    <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{qPh}}" value="{{q}}" onChange="{{onQ}}" aria-label="{{cct.r2.search_crew_members_and_vendors}}"></div>
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <span class="t-c mut" id="sin-l">{{cct.r2.search_in}}</span>
+      <div class="chips x" role="radiogroup" aria-labelledby="sin-l"><sc-for list="{{fields}}" as="f" hint-placeholder-count="6"><button class="{{f.cls}}" role="radio" aria-checked="{{f.on}}" onClick="{{f.pick}}">{{f.label}}</button></sc-for></div>
+    </div>
+    <div class="row" style="gap: 10px"><button class="{{fBtnCls}}" onClick="{{openF}}" aria-label="{{cct.talent.open_filters}}{{fN}}{{cct.talent.selected}}" style="display: inline-flex; align-items: center; gap: 6px; flex: none"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>{{cct.common.filters}}<sc-if value="{{fHasN}}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #fff; color: #7C3AED; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">{{fN}}</span></sc-if></button><sc-if value="{{noApplied}}" hint-placeholder-val="{{ true }}"><span class="t-c mut trunc sp">{{fSummary}}</span></sc-if><sc-if value="{{hasApplied}}" hint-placeholder-val="{{ false }}"><div class="chips x sp" style="min-width: 0" aria-label="Applied filters"><sc-for list="{{applied}}" as="a" hint-placeholder-count="2"><button class="chip on" onClick="{{a.remove}}" aria-label="Remove filter {{a.label}}" style="flex: none">{{a.label}}<svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></sc-for><button class="btn btn-t btn-sm" onClick="{{reset}}" style="flex: none">Clear all</button></div></sc-if></div>
+  </div>
+  <div class="sc" style="padding-top: 0; gap: 12px">
+    <div class="t-s mut" role="status"><b style="color: #1A1820">{{count}}</b> {{countWord}}</div>
+    <sc-for list="{{people}}" as="p" hint-placeholder-count="4">
+      <div class="card">
+        <div class="row" style="gap: 10px">
+          <button onClick="{{p.open}}" aria-label="{{cct.talent.open}}{{p.name}}" style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; background: none; border: 0; padding: 0; text-align: left; font: inherit; color: inherit; cursor: pointer"><span class="{{p.avCls}}" data-ini="{{p.ini}}">{{p.ini}}</span><span class="sp"><span class="t-h3" style="display: block">{{p.name}}</span><span class="t-s mut">{{p.subLine}}</span><span class="row" style="gap: 10px; margin-top: 4px; flex-wrap: wrap"><sc-if value="{{p.isHiring}}" hint-placeholder-val="{{ false }}"><span class="hire-badge">{{cct.common.currently_hiring}}</span></sc-if><sc-if value="{{p.hasAvail}}" hint-placeholder-val="{{ true }}"><span class="{{p.availCls}}">{{p.availText}}</span></sc-if><sc-if value="{{p.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{p.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{p.mutText}}</span></span></sc-if></span></span></button>
+          <sc-if value="{{p.following}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s btn-sm" onClick="{{p.toggleFollow}}" aria-pressed="true" aria-label="{{cct.talent.following}}{{p.name}}{{cct.talent.tap_to_unfollow}}" style="background: #F6F3FF; border-color: #C4B1FA; color: #6527C8">{{cct.common.following}}</button></sc-if>
+          <sc-if value="{{p.notFollowing}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s btn-sm" onClick="{{p.toggleFollow}}" aria-pressed="false" aria-label="{{cct.talent.follow}}{{p.name}}">{{cct.common.follow}}</button></sc-if>
+        </div>
+        <sc-if value="{{p.hasHit}}" hint-placeholder-val="{{ false }}"><div class="t-c" style="color: #2C6619">{{cct.r2.matched_on}} {{p.hit}}</div></sc-if>
+        <sc-if value="{{p.hasPro}}" hint-placeholder-val="{{ true }}"><div class="chips"><span class="badge b-p">{{p.band}}</span><span class="tag">{{p.yrs}}{{cct.talent.yrs}}</span><sc-for list="{{p.tags}}" as="t" hint-placeholder-count="2"><span class="tag">{{t}}</span></sc-for><sc-if value="{{p.verified}}" hint-placeholder-val="{{ false }}"><span class="badge b-g">{{p.verText}}</span></sc-if></div></sc-if><sc-if value="{{p.real}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{p.links}}" as="l" hint-placeholder-count="2"><span class="tag">{{l.kind}}</span></sc-for></div><div class="t-c mut">{{p.noPro}}</div></sc-if>
+      </div>
+    </sc-for>
+    <sc-for list="{{vendors}}" as="v" hint-placeholder-count="2">
+      <div class="card">
+        <a href="VendorPublic.dc.html" class="row" style="gap: 12px; text-decoration: none; color: #1A1820" aria-label="{{cct.r2.open_vendor}} {{v.name}}">
+          <span class="av g" data-ini="{{v.ini}}" style="border-radius: 12px">{{v.ini}}</span>
+          <span class="sp" style="min-width: 0"><span class="t-h3 trunc" style="display: block">{{v.name}}</span><span class="t-s mut trunc" style="display: block">{{v.cat}} · {{v.city}}</span></span>
+          <span class="badge b-g">{{cct.r2.vendor}}</span>
+        </a>
+        <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{v.offices}}</span></div>
+        <sc-if value="{{v.hasClients}}" hint-placeholder-val="{{ true }}"><div class="t-c mut">{{cct.r2.clients}} {{v.clients}}</div></sc-if><sc-if value="{{v.hasEq}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{v.eq}}" as="e" hint-placeholder-count="2"><span class="tag">{{e}}</span></sc-for></div></sc-if>
+      </div>
+    </sc-for>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></div><div class="t-h3">{{cct.talent.no_one_matches_these_filters}}</div><div class="t-s mut">{{cct.talent.try_another_department_or_experience}}</div><button class="btn btn-s btn-sm" onClick="{{reset}}">{{cct.talent.reset_filters}}</button></div>
+    </sc-if>
+  </div>
+
+  <nav class="nav" aria-label="{{cct.common.main}}">
+    <a class="on" href="SeekerHome.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>{{cct.common.home}}</a>
+    <a href="Jobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>{{cct.common.jobs}}</a>
+    <a class="post" href="CreateJob.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.4"><path d="M12 5v14M5 12h14"></path></svg></span>{{cct.common.post_a_job}}</a>
+    <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>{{cct.common.calendar}}</a>
+    <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>{{cct.common.profile}}</a>
+  </nav>
+
+  <sc-if value="{{fOpen}}" hint-placeholder-val="{{ false }}"><dc-import name="FiltersPage" title="{{fTitle}}" sections="{{fSecs}}" value="{{fVal}}" preview="{{fPrev}}" noun="{{fNoun}}" onApply="{{fApply}}" onClose="{{fClose}}" hint-size="390px,844px" style="position: absolute; inset: 0; z-index: 60"></dc-import></sc-if>
+  <sc-if value="{{hasSel}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim">
+      <div class="sheet" role="dialog" aria-label="{{cct.talent.candidate_details}}">
+        <div class="grab"></div>
+        <div class="row" style="gap: 14px"><div class="av lg" data-ini="{{sel.ini}}">{{sel.ini}}</div><div class="sp"><div class="t-h1">{{sel.name}}</div><div class="t-s mut">{{sel.subLine}}</div><div class="row" style="gap: 10px; margin-top: 4px; flex-wrap: wrap"><sc-if value="{{sel.hasAvail}}" hint-placeholder-val="{{ true }}"><span class="{{sel.availCls}}">{{sel.availText}}</span></sc-if></div></div><button class="iconbtn" onClick="{{close}}" aria-label="{{cct.common.close}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+        <sc-if value="{{sel.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{sel.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{sel.mutText}}</span></span></sc-if>
+        <sc-if value="{{sel.hasPro}}" hint-placeholder-val="{{ true }}"><div class="chips"><span class="badge b-p">{{sel.band}}</span><span class="badge b-n">{{sel.yrs}}{{cct.talent.years}}</span><span class="badge b-n">{{sel.city}}</span></div></sc-if><sc-if value="{{sel.real}}" hint-placeholder-val="{{ false }}"><div class="chips"><span class="badge b-n">{{sel.city}}</span></div></sc-if>
+        <div class="row" style="gap: 10px">
+          <sc-if value="{{selFollowing}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" onClick="{{selToggle}}" style="flex: 1; background: #F6F3FF; border-color: #C4B1FA; color: #6527C8">{{cct.common.following}}</button></sc-if>
+          <sc-if value="{{selNotFollowing}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s" onClick="{{selToggle}}" style="flex: 1">{{cct.common.follow}}</button></sc-if>
+          <a class="btn btn-p" href="UserProfile.dc.html" style="flex: 1">{{cct.talent.view_profile_and_connect}}</a>
+        </div>
+        <sc-if value="{{sel.hasPro}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 10px">
+        <div class="t-over">Work title</div><div class="chips"><sc-for list="{{sel.titleTags}}" as="t" hint-placeholder-count="2"><span class="{{t.cls}}">{{t.l}}</span></sc-for></div>
+        <div class="t-over">Equipment / Software</div><div class="chips"><sc-for list="{{sel.skillTags}}" as="x" hint-placeholder-count="3"><span class="tag">{{x}}</span></sc-for></div>
+        <div style="display: flex; flex-direction: column"><sc-for list="{{sel.kv}}" as="r" hint-placeholder-count="6"><div class="kv"><span>{{r.k}}</span><span>{{r.v}}</span></div></sc-for></div>
+        <sc-if value="{{sel.hasReel}}" hint-placeholder-val="{{ false }}"><div class="list"><a class="li" href="{{sel.reel}}" target="_blank" rel="noopener noreferrer"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg><span class="sp t-s b">Portfolio / Showreel</span></a></div></sc-if>
+        </div></sc-if>
+        <sc-if value="{{sel.real}}" hint-placeholder-val="{{ false }}"><p class="t-s mut">{{sel.noProLong}}</p><div class="t-over">{{sel.linksTitle}}</div><div class="list"><sc-for list="{{sel.links}}" as="l" hint-placeholder-count="2"><a class="li" href="{{l.url}}" target="_blank" rel="noopener noreferrer" aria-label="{{l.aria}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg><span class="sp t-s b">{{l.label}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a></sc-for></div></sc-if>
+        <div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.01"></path></svg><div>{{cct.talent.contact_details_in_the_directory}} <span class="ph-tag">{{cct.talent.visibility_rule_tbc}}</span></div></div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* R5: real sample profiles (crewconnect_content.json › sample_profiles). Only supplied, verified fields; everything else stays empty. */
+var RP = (function (w) { if (w.__ccReal) return w.__ccReal;
+  var d = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.sample_profiles) || {"about": "Real public profiles used as sample data (Revision 5). Only the details WEQ supplied are shown: name, city and profile links. The LinkedIn and IMDb pages could not be read automatically (they block automated access), so designation, bio, experience, skills, departments and photo are left empty until verified from the source. Do not fill them with generic content.", "labels": {"noPro": "Role, skills and bio not added yet", "noProLong": "Designation, bio, experience and skills haven't been added to this profile yet. See the public profiles below.", "links": "Public profiles"}, "people": [{"id": "ria", "name": "Ria Bhavsar", "city": "Mumbai", "photo": null, "designation": null, "bio": null, "experience": [], "skills": [], "departments": [], "links": [{"kind": "LinkedIn", "url": "https://www.linkedin.com/in/ria-bhavsar-a1755268/"}]}, {"id": "varun", "name": "Varun Khandelwal", "city": "Mumbai", "photo": null, "designation": null, "bio": null, "experience": [], "skills": [], "departments": [], "links": [{"kind": "LinkedIn", "url": "https://www.linkedin.com/in/varun-hemraj-khandelwal-236214134/"}, {"kind": "IMDb", "url": "https://www.imdb.com/name/nm5496914/"}]}]};
+  var by = {}; d.people.forEach(function (p) { by[p.name] = p; });
+  return (w.__ccReal = { d: d, people: d.people, labels: d.labels, byName: function (n) { return by[n] || null; } }); })(window);
+
+/* R8: profile master (crewconnect_content.json › profile_master, loaded from the client's workbook). One helper for dropdowns, cascades and filters. */
+var PM = (function (w) { if (w.__ccPM) return w.__ccPM;
+  var m = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.profile_master) || {"about": "Revision 8 — profile dropdowns & filters. Source of truth: 'CrewConnect – design sample set dropdowns filters.xlsx' (sheets: Field UI, Vertical-Dept-Title, Dropdown lists, Sample profiles, Filter scenarios), loaded verbatim. Keys are kept so a backend can map 1:1. This is a design sample set: the full dataset sizes are listed per field (optionsInFullDataset).", "fields": [{"id": "F01", "field": "Profile ID", "control": "System (hidden)", "selection": "—", "required": "—", "dependsOn": "No", "searchable": "No", "placeholder": "—", "helper": "—", "optionsInFullDataset": "Generated on sign-up", "note": null}, {"id": "F02", "field": "Primary Vertical", "control": "Dropdown + chips", "selection": "Multi-select", "required": "Required", "dependsOn": "No", "searchable": "Yes", "placeholder": "Select industry", "helper": "Pick every industry you work in", "optionsInFullDataset": 40, "note": "Parent of Department"}, {"id": "F03", "field": "Department", "control": "Dependent dropdown + chips", "selection": "Multi-select", "required": "Required", "dependsOn": "Primary Vertical", "searchable": "Yes", "placeholder": "Select department", "helper": "Shows departments for the industries you picked", "optionsInFullDataset": 471, "note": "Disabled until a vertical is chosen"}, {"id": "F04", "field": "Designation (Work title)", "control": "Dependent searchable dropdown", "selection": "Multi-select; mark one as primary", "required": "Required", "dependsOn": "Department", "searchable": "Yes", "placeholder": "Search work title", "helper": "Choose your main title, then add others", "optionsInFullDataset": 2719, "note": "Show department next to each result"}, {"id": "F05", "field": "Alternate / Credit Title", "control": "Text field with suggestions", "selection": "Free text", "required": "Optional", "dependsOn": "Work title", "searchable": "Typeahead", "placeholder": "e.g. DOP, First AC", "helper": "The exact title on call sheets or credits", "optionsInFullDataset": 28, "note": "Stored verbatim"}, {"id": "F06", "field": "Specialisation", "control": "Searchable dropdown + chips", "selection": "Multi-select", "required": "Optional", "dependsOn": "— (VFX: specialisation → software)", "searchable": "Yes", "placeholder": "Add specialisation", "helper": "Niche skills, e.g. roto, pyro, tabla", "optionsInFullDataset": 134, "note": "V4-only lists"}, {"id": "F07", "field": "Equipment / Software", "control": "Searchable dropdown + chips, proficiency per item", "selection": "Multi-select", "required": "Optional", "dependsOn": "Equipment: group → category → model", "searchable": "Yes", "placeholder": "Add skill or equipment", "helper": "Add proficiency and when you last used it", "optionsInFullDataset": 761, "note": "Skills are not filtered by work title"}, {"id": "F08", "field": "Experience (years)", "control": "Number stepper + seniority dropdown", "selection": "Number / Single-select", "required": "Required", "dependsOn": "—", "searchable": "No", "placeholder": "Years", "helper": "Seniority is separate from your title", "optionsInFullDataset": 12, "note": "Range slider in filters"}, {"id": "F09", "field": "Credits / Projects", "control": "Repeating card (add credit)", "selection": "Repeating group", "required": "Optional", "dependsOn": "Role uses Department → Work title", "searchable": "Credit type: yes", "placeholder": "Project name", "helper": "Add proof or a link where you can", "optionsInFullDataset": 66, "note": null}, {"id": "F10", "field": "Location / Work Radius", "control": "City + state fields, radius slider, travel toggle", "selection": "Free text / Number", "required": "Required", "dependsOn": "—", "searchable": "City: typeahead (no master list yet)", "placeholder": "City", "helper": "Where you are based and how far you travel", "optionsInFullDataset": "—", "note": "No city master list yet"}, {"id": "F11", "field": "Languages", "control": "Searchable dropdown + chips (fluency per language)", "selection": "Multi-select", "required": "Optional", "dependsOn": "—", "searchable": "Yes", "placeholder": "Add language", "helper": "Languages you work in", "optionsInFullDataset": 18, "note": "Fluency levels not yet defined"}, {"id": "F12", "field": "Availability", "control": "Status segmented control + date range; engagement chips", "selection": "Single-select / Multi-select", "required": "Optional", "dependsOn": "—", "searchable": "No", "placeholder": "Availability", "helper": "Update this when you are booked", "optionsInFullDataset": 17, "note": null}, {"id": "F13", "field": "Portfolio / Showreel", "control": "URL field + upload", "selection": "Free text", "required": "Optional", "dependsOn": "—", "searchable": "No", "placeholder": "Paste a link", "helper": "Showreel, website or work samples", "optionsInFullDataset": "—", "note": null}], "verticals": [{"k": "VERT-001", "l": "Film production"}, {"k": "VERT-014", "l": "Music recording / production"}, {"k": "VERT-022", "l": "Post-production"}, {"k": "VERT-024", "l": "Gaming / interactive entertainment"}], "departments": [{"k": "DEPT-0002", "l": "Direction", "v": "VERT-001"}, {"k": "DEPT-0008", "l": "Camera", "v": "VERT-001"}, {"k": "DEPT-0010", "l": "Lighting / electrical", "v": "VERT-001"}, {"k": "DEPT-0012", "l": "Sound production", "v": "VERT-001"}, {"k": "DEPT-0016", "l": "Costume", "v": "VERT-001"}, {"k": "DEPT-0177", "l": "Composition", "v": "VERT-014"}, {"k": "DEPT-0184", "l": "Vocals", "v": "VERT-014"}, {"k": "DEPT-0186", "l": "Mixing", "v": "VERT-014"}, {"k": "DEPT-0288", "l": "Sound editorial", "v": "VERT-022"}, {"k": "DEPT-0307", "l": "Game design", "v": "VERT-024"}, {"k": "DEPT-0311", "l": "Art", "v": "VERT-024"}], "titles": [{"k": "ROLE-00006", "l": "Director", "d": "DEPT-0002", "grade": "B"}, {"k": "ROLE-00007", "l": "Associate Director", "d": "DEPT-0002", "grade": "B"}, {"k": "ROLE-00008", "l": "Assistant Director", "d": "DEPT-0002", "grade": "B"}, {"k": "ROLE-00012", "l": "Script Supervisor / Continuity Supervisor", "d": "DEPT-0002", "grade": "B"}, {"k": "ROLE-00057", "l": "Director of Photography (DOP)", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00059", "l": "Camera Operator", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00062", "l": "Steadicam Operator", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00063", "l": "1st AC / Focus Puller", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00064", "l": "2nd AC", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00066", "l": "DIT", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00077", "l": "Gaffer", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00078", "l": "Best Boy Electric", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00080", "l": "Lighting Technician", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00083", "l": "Generator Operator", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00085", "l": "Console Programmer", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00097", "l": "Production Sound Mixer", "d": "DEPT-0012", "grade": "B"}, {"k": "ROLE-00098", "l": "Location Sound Recordist", "d": "DEPT-0012", "grade": "B"}, {"k": "ROLE-00099", "l": "Boom Operator", "d": "DEPT-0012", "grade": "B"}, {"k": "ROLE-00103", "l": "RF Technician", "d": "DEPT-0012", "grade": "B"}, {"k": "ROLE-00131", "l": "Costume Designer", "d": "DEPT-0016", "grade": "B"}, {"k": "ROLE-00132", "l": "Costume Stylist", "d": "DEPT-0016", "grade": "B"}, {"k": "ROLE-00134", "l": "Costume Supervisor", "d": "DEPT-0016", "grade": "B"}, {"k": "ROLE-00138", "l": "Tailor", "d": "DEPT-0016", "grade": "B"}, {"k": "ROLE-01102", "l": "Composer", "d": "DEPT-0177", "grade": "B"}, {"k": "ROLE-01104", "l": "Music Director", "d": "DEPT-0177", "grade": "B"}, {"k": "ROLE-01107", "l": "Lyricist", "d": "DEPT-0177", "grade": "B"}, {"k": "ROLE-01108", "l": "Arranger", "d": "DEPT-0177", "grade": "B"}, {"k": "ROLE-01147", "l": "Playback Singer", "d": "DEPT-0184", "grade": "B"}, {"k": "ROLE-01148", "l": "Lead Vocalist", "d": "DEPT-0184", "grade": "B"}, {"k": "ROLE-01149", "l": "Backing Vocalist", "d": "DEPT-0184", "grade": "B"}, {"k": "ROLE-01151", "l": "Classical Vocalist", "d": "DEPT-0184", "grade": "B"}, {"k": "ROLE-01164", "l": "Recording Engineer", "d": "DEPT-0186", "grade": "B"}, {"k": "ROLE-01166", "l": "Mix Engineer", "d": "DEPT-0186", "grade": "B"}, {"k": "ROLE-01167", "l": "Mastering Engineer", "d": "DEPT-0186", "grade": "B"}, {"k": "ROLE-01169", "l": "Pro Tools Operator", "d": "DEPT-0186", "grade": "B"}, {"k": "ROLE-01729", "l": "Sound Editor", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01730", "l": "Dialogue Editor", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01732", "l": "Foley Artist", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01734", "l": "Sound Designer", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01735", "l": "Re-recording Mixer", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01831", "l": "Game Designer", "d": "DEPT-0307", "grade": "B"}, {"k": "ROLE-01832", "l": "Level Designer", "d": "DEPT-0307", "grade": "B"}, {"k": "ROLE-01834", "l": "Narrative Designer", "d": "DEPT-0307", "grade": "B"}, {"k": "ROLE-01857", "l": "Art Director", "d": "DEPT-0311", "grade": "B"}, {"k": "ROLE-01858", "l": "Concept Artist", "d": "DEPT-0311", "grade": "B"}, {"k": "ROLE-01860", "l": "3D Artist", "d": "DEPT-0311", "grade": "B"}, {"k": "ROLE-01864", "l": "UI Artist", "d": "DEPT-0311", "grade": "B"}], "lists": {"Seniority": [{"k": "SEN-01", "l": "Trainee"}, {"k": "SEN-02", "l": "Intern"}, {"k": "SEN-03", "l": "Junior"}, {"k": "SEN-04", "l": "Assistant"}, {"k": "SEN-05", "l": "Technician / Operator"}, {"k": "SEN-06", "l": "Mid-level"}, {"k": "SEN-07", "l": "Senior"}, {"k": "SEN-08", "l": "Lead"}, {"k": "SEN-09", "l": "Supervisor"}, {"k": "SEN-10", "l": "Head of Department (HOD)"}, {"k": "SEN-11", "l": "Department Head / Director"}, {"k": "SEN-12", "l": "Owner / Founder / Partner"}], "Skills": [{"k": "SKL-0001", "l": "ARRI camera systems"}, {"k": "SKL-0002", "l": "Sony VENICE systems"}, {"k": "SKL-0015", "l": "Steadicam operation"}, {"k": "SKL-0014", "l": "Wireless focus systems"}, {"k": "SKL-0018", "l": "DIT workflow"}, {"k": "SKL-0022", "l": "DMX lighting control"}, {"k": "SKL-0025", "l": "LED lighting"}, {"k": "SKL-0033", "l": "Generator operation"}, {"k": "SKL-0035", "l": "Location sound recording"}, {"k": "SKL-0036", "l": "RF coordination"}, {"k": "SKL-0038", "l": "Timecode / sync"}, {"k": "SKL-0039", "l": "Pro Tools"}, {"k": "SKL-0042", "l": "DaVinci Resolve"}, {"k": "SKL-0058", "l": "Dolby Atmos workflows"}, {"k": "SKL-0059", "l": "Foley recording"}, {"k": "SKL-0050", "l": "Unreal Engine"}, {"k": "SKL-0051", "l": "Unity"}, {"k": "SKL-0049", "l": "Blender"}, {"k": "SKL-0099", "l": "Script breakdown"}, {"k": "SKL-0104", "l": "Continuity"}, {"k": "SKL-0126", "l": "Costume tailoring"}, {"k": "SKL-0136", "l": "Music arrangement"}, {"k": "SKL-0135", "l": "Playback singing"}, {"k": "SKL-0139", "l": "Indian classical vocal"}, {"k": "SKL-0137", "l": "Orchestration"}], "Languages": [{"k": "LANG-01", "l": "Hindi"}, {"k": "LANG-02", "l": "Tamil"}, {"k": "LANG-03", "l": "Telugu"}, {"k": "LANG-04", "l": "Malayalam"}, {"k": "LANG-05", "l": "Kannada"}, {"k": "LANG-06", "l": "Bengali"}, {"k": "LANG-07", "l": "Marathi"}, {"k": "LANG-08", "l": "Gujarati"}, {"k": "LANG-09", "l": "Punjabi"}, {"k": "LANG-10", "l": "Odia"}, {"k": "LANG-11", "l": "Assamese"}, {"k": "LANG-12", "l": "Urdu"}, {"k": "LANG-13", "l": "English"}, {"k": "LANG-14", "l": "Manipuri"}, {"k": "LANG-15", "l": "Konkani"}, {"k": "LANG-16", "l": "Bhojpuri"}, {"k": "LANG-17", "l": "Rajasthani"}, {"k": "LANG-18", "l": "Haryanvi"}], "Engagement preference": [{"k": "ENG-01", "l": "Full-time employee"}, {"k": "ENG-03", "l": "Freelancer"}, {"k": "ENG-04", "l": "Daily-wage / day player"}, {"k": "ENG-05", "l": "Project-based contract"}, {"k": "ENG-07", "l": "Consultant"}, {"k": "ENG-13", "l": "Gig / per-show / per-event"}], "Availability status": [{"k": "AVL-01", "l": "Available"}, {"k": "AVL-02", "l": "Booked"}, {"k": "AVL-03", "l": "Unavailable"}], "Verification status": [{"k": "VST-01", "l": "Unverified"}, {"k": "VST-02", "l": "Document checked"}, {"k": "VST-03", "l": "Credit checked"}, {"k": "VST-04", "l": "Reference checked"}], "Proficiency": [{"k": "PRF-01", "l": "Beginner"}, {"k": "PRF-02", "l": "Working"}, {"k": "PRF-03", "l": "Advanced"}, {"k": "PRF-04", "l": "Specialist"}], "Credit type": [{"k": "CRD-0001", "l": "Directed by"}, {"k": "CRD-0013", "l": "Director of photography"}, {"k": "CRD-0015", "l": "Focus puller"}, {"k": "CRD-0018", "l": "Gaffer"}, {"k": "CRD-0021", "l": "Production sound mixer"}, {"k": "CRD-0026", "l": "Costume designed by"}, {"k": "CRD-0031", "l": "Music by"}, {"k": "CRD-0035", "l": "Playback vocals"}, {"k": "CRD-0037", "l": "Edited by"}, {"k": "CRD-0042", "l": "Sound design"}], "VFX specialisation": [{"k": "VFXS-01", "l": "Roto / Paint / Prep"}, {"k": "VFXS-02", "l": "Matchmove / Tracking / Layout"}, {"k": "VFXS-03", "l": "Compositing"}, {"k": "VFXS-04", "l": "Modelling / Texture / Lookdev"}, {"k": "VFXS-05", "l": "Rigging / Character FX"}], "VFX software (depends on specialisation)": [{"k": "VFXT-001", "l": "Silhouette", "p": ["VFXS-01", "VFXS-03"]}, {"k": "VFXT-002", "l": "Nuke", "p": ["VFXS-01", "VFXS-03"]}, {"k": "VFXT-003", "l": "Mocha", "p": ["VFXS-01"]}, {"k": "VFXT-004", "l": "3DEqualizer", "p": ["VFXS-02"]}, {"k": "VFXT-005", "l": "PFTrack", "p": ["VFXS-02"]}, {"k": "VFXT-006", "l": "Maya", "p": ["VFXS-02", "VFXS-04", "VFXS-05"]}, {"k": "VFXT-007", "l": "Blender", "p": ["VFXS-04"]}, {"k": "VFXT-008", "l": "ZBrush", "p": ["VFXS-04"]}, {"k": "VFXT-009", "l": "Mari", "p": ["VFXS-04"]}, {"k": "VFXT-010", "l": "Substance 3D", "p": ["VFXS-04"]}, {"k": "VFXT-011", "l": "Houdini", "p": ["VFXS-05"]}], "Instrument family": [{"k": "IFAM-01", "l": "Indian percussion"}, {"k": "IFAM-02", "l": "Western / global percussion"}, {"k": "IFAM-03", "l": "Indian string instruments"}], "Instrument (depends on family)": [{"k": "INST-001", "l": "Tabla", "p": ["IFAM-01"]}, {"k": "INST-002", "l": "Dholak", "p": ["IFAM-01"]}, {"k": "INST-003", "l": "Mridangam", "p": ["IFAM-01"]}, {"k": "INST-004", "l": "Pakhawaj", "p": ["IFAM-01"]}, {"k": "INST-025", "l": "Drum Kit", "p": ["IFAM-02"]}, {"k": "INST-026", "l": "Cajón", "p": ["IFAM-02"]}, {"k": "INST-027", "l": "Congas", "p": ["IFAM-02"]}, {"k": "INST-028", "l": "Bongos", "p": ["IFAM-02"]}, {"k": "INST-047", "l": "Sitar", "p": ["IFAM-03"]}, {"k": "INST-048", "l": "Sarod", "p": ["IFAM-03"]}, {"k": "INST-049", "l": "Sarangi", "p": ["IFAM-03"]}, {"k": "INST-050", "l": "Santoor", "p": ["IFAM-03"]}], "Equipment group": [{"k": "EQG-01", "l": "Camera bodies"}, {"k": "EQG-03", "l": "Lighting fixtures"}, {"k": "EQG-06", "l": "Live event systems"}], "Equipment category (depends on group)": [{"k": "EQC-001", "l": "Digital cinema - Super 35", "p": ["EQG-01"]}, {"k": "EQC-002", "l": "Digital cinema - Large Format / Full Frame", "p": ["EQG-01"]}, {"k": "EQC-020", "l": "LED soft / panel", "p": ["EQG-03"]}, {"k": "EQC-021", "l": "LED COB / point source", "p": ["EQG-03"]}, {"k": "EQC-045", "l": "Digital audio consoles", "p": ["EQG-06"]}, {"k": "EQC-046", "l": "PA / loudspeaker systems", "p": ["EQG-06"]}], "Equipment make / model (depends on category)": [{"k": "EQM-0001", "l": "ARRI ALEXA 35", "p": ["EQC-001"]}, {"k": "EQM-0002", "l": "ARRI ALEXA Mini", "p": ["EQC-001"]}, {"k": "EQM-0003", "l": "ARRI ALEXA SXT", "p": ["EQC-001"]}, {"k": "EQM-0009", "l": "ARRI ALEXA LF", "p": ["EQC-002"]}, {"k": "EQM-0010", "l": "ARRI ALEXA Mini LF", "p": ["EQC-002"]}, {"k": "EQM-0011", "l": "ARRI ALEXA 265", "p": ["EQC-002"]}, {"k": "EQM-0168", "l": "ARRI SkyPanel S30-C", "p": ["EQC-020"]}, {"k": "EQM-0169", "l": "ARRI SkyPanel S60-C", "p": ["EQC-020"]}, {"k": "EQM-0170", "l": "ARRI SkyPanel S120-C", "p": ["EQC-020"]}, {"k": "EQM-0176", "l": "Aputure STORM 80c", "p": ["EQC-021"]}, {"k": "EQM-0177", "l": "Aputure STORM 300x", "p": ["EQC-021"]}, {"k": "EQM-0178", "l": "Aputure STORM 400x", "p": ["EQC-021"]}, {"k": "EQM-0455", "l": "DiGiCo SD7", "p": ["EQC-045"]}, {"k": "EQM-0456", "l": "DiGiCo SD10", "p": ["EQC-045"]}, {"k": "EQM-0457", "l": "DiGiCo SD12", "p": ["EQC-045"]}, {"k": "EQM-0470", "l": "L-Acoustics K1", "p": ["EQC-046"]}, {"k": "EQM-0471", "l": "L-Acoustics K2", "p": ["EQC-046"]}, {"k": "EQM-0472", "l": "L-Acoustics K3", "p": ["EQC-046"]}]}, "profiles": [{"id": "CC-P-0001", "name": "Ananya Rao", "vert": ["VERT-001"], "dept": ["DEPT-0008"], "t1": "ROLE-00057", "t2": null, "sen": "SEN-10", "yrs": 14, "skills": ["SKL-0001", "SKL-0002", "SKL-0018"], "langs": ["LANG-13", "LANG-01", "LANG-05"], "city": "Mumbai", "state": "Maharashtra", "radius": 500, "avl": "AVL-01", "eng": ["ENG-03", "ENG-05"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0001"}, {"id": "CC-P-0002", "name": "Vikram Iyer", "vert": ["VERT-001"], "dept": ["DEPT-0008"], "t1": "ROLE-00063", "t2": "ROLE-00064", "sen": "SEN-07", "yrs": 8, "skills": ["SKL-0014", "SKL-0001"], "langs": ["LANG-02", "LANG-13"], "city": "Chennai", "state": "Tamil Nadu", "radius": 300, "avl": "AVL-02", "eng": ["ENG-03", "ENG-04"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0002"}, {"id": "CC-P-0003", "name": "Rahul Deshmukh", "vert": ["VERT-001"], "dept": ["DEPT-0008"], "t1": "ROLE-00062", "t2": "ROLE-00059", "sen": "SEN-07", "yrs": 10, "skills": ["SKL-0015", "SKL-0001"], "langs": ["LANG-07", "LANG-01"], "city": "Pune", "state": "Maharashtra", "radius": 800, "avl": "AVL-01", "eng": ["ENG-03", "ENG-13"], "ver": "VST-04", "reel": "https://example.com/reel/cc-p-0003"}, {"id": "CC-P-0004", "name": "Farhan Qureshi", "vert": ["VERT-001"], "dept": ["DEPT-0010"], "t1": "ROLE-00077", "t2": null, "sen": "SEN-10", "yrs": 18, "skills": ["SKL-0022", "SKL-0025", "SKL-0033"], "langs": ["LANG-01", "LANG-12"], "city": "Mumbai", "state": "Maharashtra", "radius": 1000, "avl": "AVL-01", "eng": ["ENG-05"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0004"}, {"id": "CC-P-0005", "name": "Suresh Kumar", "vert": ["VERT-001"], "dept": ["DEPT-0010"], "t1": "ROLE-00080", "t2": "ROLE-00083", "sen": "SEN-05", "yrs": 6, "skills": ["SKL-0025", "SKL-0033"], "langs": ["LANG-03", "LANG-01"], "city": "Hyderabad", "state": "Telangana", "radius": 200, "avl": "AVL-03", "eng": ["ENG-04"], "ver": "VST-01", "reel": "https://example.com/reel/cc-p-0005"}, {"id": "CC-P-0006", "name": "Meera Nair", "vert": ["VERT-001"], "dept": ["DEPT-0012"], "t1": "ROLE-00097", "t2": null, "sen": "SEN-08", "yrs": 12, "skills": ["SKL-0035", "SKL-0036", "SKL-0038"], "langs": ["LANG-04", "LANG-13", "LANG-02"], "city": "Kochi", "state": "Kerala", "radius": 600, "avl": "AVL-01", "eng": ["ENG-03", "ENG-05"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0006"}, {"id": "CC-P-0007", "name": "Arjun Mehta", "vert": ["VERT-001"], "dept": ["DEPT-0002"], "t1": "ROLE-00008", "t2": "ROLE-00012", "sen": "SEN-04", "yrs": 4, "skills": ["SKL-0099", "SKL-0104"], "langs": ["LANG-01", "LANG-08", "LANG-13"], "city": "Mumbai", "state": "Maharashtra", "radius": 250, "avl": "AVL-01", "eng": ["ENG-03", "ENG-05"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0007"}, {"id": "CC-P-0008", "name": "Priyanka Sen", "vert": ["VERT-001"], "dept": ["DEPT-0016"], "t1": "ROLE-00131", "t2": null, "sen": "SEN-07", "yrs": 9, "skills": ["SKL-0126"], "langs": ["LANG-06", "LANG-01", "LANG-13"], "city": "Kolkata", "state": "West Bengal", "radius": 400, "avl": "AVL-02", "eng": ["ENG-05", "ENG-07"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0008"}, {"id": "CC-P-0009", "name": "Kavya Reddy", "vert": ["VERT-022"], "dept": ["DEPT-0288"], "t1": "ROLE-01734", "t2": "ROLE-01735", "sen": "SEN-07", "yrs": 11, "skills": ["SKL-0039", "SKL-0058", "SKL-0059"], "langs": ["LANG-03", "LANG-13"], "city": "Hyderabad", "state": "Telangana", "radius": 0, "avl": "AVL-01", "eng": ["ENG-03", "ENG-07"], "ver": "VST-04", "reel": "https://example.com/reel/cc-p-0009"}, {"id": "CC-P-0010", "name": "Aditya Bose", "vert": ["VERT-014"], "dept": ["DEPT-0186"], "t1": "ROLE-01166", "t2": "ROLE-01167", "sen": "SEN-07", "yrs": 13, "skills": ["SKL-0039", "SKL-0058"], "langs": ["LANG-06", "LANG-01", "LANG-13"], "city": "Mumbai", "state": "Maharashtra", "radius": 0, "avl": "AVL-02", "eng": ["ENG-03", "ENG-07"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0010"}, {"id": "CC-P-0011", "name": "Shreya Pillai", "vert": ["VERT-014"], "dept": ["DEPT-0184"], "t1": "ROLE-01147", "t2": "ROLE-01151", "sen": "SEN-06", "yrs": 7, "skills": ["SKL-0135", "SKL-0139"], "langs": ["LANG-01", "LANG-04", "LANG-02", "LANG-03"], "city": "Chennai", "state": "Tamil Nadu", "radius": 2000, "avl": "AVL-01", "eng": ["ENG-13", "ENG-03"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0011"}, {"id": "CC-P-0012", "name": "Nikhil Sharma", "vert": ["VERT-014"], "dept": ["DEPT-0177"], "t1": "ROLE-01108", "t2": "ROLE-01102", "sen": "SEN-06", "yrs": 6, "skills": ["SKL-0136", "SKL-0137", "SKL-0039"], "langs": ["LANG-01", "LANG-09", "LANG-13"], "city": "Delhi", "state": "Delhi", "radius": 500, "avl": "AVL-01", "eng": ["ENG-05", "ENG-03"], "ver": "VST-01", "reel": "https://example.com/reel/cc-p-0012"}, {"id": "CC-P-0013", "name": "Rohan Kapoor", "vert": ["VERT-024"], "dept": ["DEPT-0307"], "t1": "ROLE-01832", "t2": null, "sen": "SEN-06", "yrs": 5, "skills": ["SKL-0050", "SKL-0051"], "langs": ["LANG-13", "LANG-01"], "city": "Bengaluru", "state": "Karnataka", "radius": 0, "avl": "AVL-01", "eng": ["ENG-01", "ENG-05"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0013"}, {"id": "CC-P-0014", "name": "Divya Menon", "vert": ["VERT-024"], "dept": ["DEPT-0311"], "t1": "ROLE-01860", "t2": "ROLE-01858", "sen": "SEN-03", "yrs": 2, "skills": ["SKL-0049", "SKL-0050"], "langs": ["LANG-04", "LANG-13", "LANG-05"], "city": "Bengaluru", "state": "Karnataka", "radius": 0, "avl": "AVL-01", "eng": ["ENG-01", "ENG-03"], "ver": "VST-01", "reel": "https://example.com/reel/cc-p-0014"}, {"id": "CC-P-0015", "name": "Sameer Khan", "vert": ["VERT-001"], "dept": ["DEPT-0008"], "t1": "ROLE-00066", "t2": "ROLE-00063", "sen": "SEN-05", "yrs": 5, "skills": ["SKL-0018", "SKL-0042", "SKL-0002"], "langs": ["LANG-01", "LANG-12", "LANG-13"], "city": "Mumbai", "state": "Maharashtra", "radius": 300, "avl": "AVL-02", "eng": ["ENG-03", "ENG-04"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0015"}], "scenarios": [{"scenario": "Department only", "filters": "Department = Camera (Film production)", "keys": "DEPT-0008", "count": 4, "matching": "CC-P-0001, CC-P-0002, CC-P-0003, CC-P-0015"}, {"scenario": "Work title", "filters": "Work title = 1st AC / Focus Puller (primary or secondary)", "keys": "ROLE-00063", "count": 2, "matching": "CC-P-0002, CC-P-0015"}, {"scenario": "One skill", "filters": "Skill = Pro Tools", "keys": "SKL-0039", "count": 3, "matching": "CC-P-0009, CC-P-0010, CC-P-0012"}, {"scenario": "Multiple skills — ANY", "filters": "Pro Tools OR Dolby Atmos workflows", "keys": "SKL-0039|SKL-0058", "count": 3, "matching": "CC-P-0009, CC-P-0010, CC-P-0012"}, {"scenario": "Multiple skills — ALL", "filters": "Pro Tools AND Dolby Atmos workflows", "keys": "SKL-0039&SKL-0058", "count": 2, "matching": "CC-P-0009, CC-P-0010"}, {"scenario": "Department + Title + Skill", "filters": "Camera + 1st AC / Focus Puller + ARRI camera systems", "keys": "DEPT-0008 + ROLE-00063 + SKL-0001", "count": 1, "matching": "CC-P-0002"}, {"scenario": "Vertical + availability", "filters": "Film production + Available now", "keys": "VERT-001 + AVL-01", "count": 5, "matching": "CC-P-0001, CC-P-0003, CC-P-0004, CC-P-0006, CC-P-0007"}, {"scenario": "Language + city", "filters": "Telugu speakers in Hyderabad", "keys": "LANG-03 + city", "count": 2, "matching": "CC-P-0005, CC-P-0009"}, {"scenario": "Seniority + years", "filters": "HOD seniority with 10+ years", "keys": "SEN-10 + years ≥ 10", "count": 2, "matching": "CC-P-0001, CC-P-0004"}, {"scenario": "Verified only", "filters": "Verification = Reference checked", "keys": "VST-04", "count": 2, "matching": "CC-P-0003, CC-P-0009"}, {"scenario": "No match", "filters": "Gaming + Costume tailoring", "keys": "VERT-024 + SKL-0126", "count": 0, "matching": "— none (show empty state)"}], "jobTags": {"_note": "Existing sample jobs tagged with workbook keys only where the job title names them. Jobs with no matching department/title in the sample set stay untagged (they show in unfiltered results and keyword search only).", "focus_puller": {"vert": ["VERT-001"], "dept": ["DEPT-0008"], "title": ["ROLE-00063"], "skills": []}, "second_unit": {"vert": ["VERT-001"], "dept": ["DEPT-0008"], "title": ["ROLE-00059"], "skills": []}, "assistant_editor": {"vert": [], "dept": [], "title": [], "skills": []}, "location_sound": {"vert": ["VERT-001"], "dept": ["DEPT-0012"], "title": ["ROLE-00098"], "skills": []}, "gaffer": {"vert": ["VERT-001"], "dept": ["DEPT-0010"], "title": ["ROLE-00077"], "skills": []}, "colourist": {"vert": [], "dept": [], "title": [], "skills": ["SKL-0042"]}, "actor": {"vert": [], "dept": [], "title": [], "skills": []}, "first_ad": {"vert": ["VERT-001"], "dept": ["DEPT-0002"], "title": ["ROLE-00008"], "skills": []}}, "vendorTags": {"_note": "Vendor discovery uses the Equipment group → category lists. Vendor House = Camera bodies; Kilowatt Lighting Co. = Lighting fixtures. Soundbox Audio Hire is mapped to Live event systems as the closest sound group in the sample set — confirm.", "Vendor House": {"group": ["EQG-01"], "cat": ["EQC-001", "EQC-002"]}, "Kilowatt Lighting Co.": {"group": ["EQG-03"], "cat": ["EQC-020", "EQC-021"]}, "Soundbox Audio Hire": {"group": ["EQG-06"], "cat": ["EQC-045", "EQC-046"]}}, "flags": ["F05 Alternate / Credit Title: the sample set has no suggestion list (28 in the full dataset) — shown as free text with the placeholder only.", "F06 Specialisation: design note says 'V4-only lists'; the vertical it refers to is unclear, so the specialisation list is shown to everyone.", "F07 Equipment / Software: 'when you last used it' has no list or format in the workbook — only proficiency is captured.", "F10 Location: no city master list yet — City is a free-text field; State is free text.", "F11 Languages: fluency levels are not yet defined — only the language is captured.", "F12 Availability: the date range is handled by the existing Calendar; only status and engagement are captured here.", "Departments in the sample are specific to a vertical (e.g. 'Art' exists only under Gaming). Existing sample jobs in Editing, Colour and Cast have no matching department in the sample set.", "Soundbox Audio Hire mapped to 'Live event systems' (closest group) — confirm."]};
+  var L = {}, lab = {};
+  function put(o) { lab[o.k] = o.l; }
+  m.verticals.forEach(put); m.departments.forEach(put); m.titles.forEach(put);
+  Object.keys(m.lists).forEach(function (n) { m.lists[n].forEach(put); });
+  var LN = { sen: 'Seniority', skills: 'Skills', langs: 'Languages', eng: 'Engagement preference', avl: 'Availability status', ver: 'Verification status', prof: 'Proficiency', credit: 'Credit type',
+    vfxs: 'VFX specialisation', vfxt: 'VFX software (depends on specialisation)', ifam: 'Instrument family', inst: 'Instrument (depends on family)', eqg: 'Equipment group', eqc: 'Equipment category (depends on group)', eqm: 'Equipment make / model (depends on category)' };
+  Object.keys(LN).forEach(function (k) { L[k] = m.lists[LN[k]] || []; });
+  var dept = {}; m.departments.forEach(function (d) { dept[d.k] = d; });
+  var title = {}; m.titles.forEach(function (t) { title[t.k] = t; });
+  var field = {}; m.fields.forEach(function (f) { field[f.id] = f; });
+  function label(k) { return lab[k] || k || ''; }
+  function any(a, b) { a = a || []; b = b || []; for (var i = 0; i < a.length; i++) if (b.indexOf(a[i]) >= 0) return true; return false; }
+  function all(need, have) { have = have || []; for (var i = 0; i < need.length; i++) if (have.indexOf(need[i]) < 0) return false; return true; }
+  // Options per field, with parent keys (p) so screens can cascade: Vertical → Department → Work title; VFX specialisation → software; family → instrument; group → category → model.
+  function opts(f) {
+    if (f === 'vert') return m.verticals.map(function (v) { return { v: v.k, l: v.l }; });
+    if (f === 'dept') return m.departments.map(function (d) { return { v: d.k, l: d.l, s: label(d.v), p: [d.v], g: label(d.v) }; });
+    if (f === 'title') return m.titles.map(function (t) { return { v: t.k, l: t.l, s: label(t.d), p: [t.d], g: label(t.d) }; });
+    if (f === 'spec') return L.vfxs.map(function (o) { return { v: o.k, l: o.l, g: 'VFX specialisation' }; }).concat(L.inst.map(function (o) { return { v: o.k, l: o.l, p: o.p, g: 'Instruments · ' + label(o.p[0]) }; }));
+    if (f === 'equip') return L.skills.map(function (o) { return { v: o.k, l: o.l, g: 'Skills' }; })
+      .concat(L.vfxt.map(function (o) { return { v: o.k, l: o.l, p: o.p, g: 'VFX software', s: o.p.map(label).join(' · ') }; }))
+      .concat(L.eqm.map(function (o) { var c = L.eqc.filter(function (x) { return x.k === o.p[0]; })[0] || { p: [] }; return { v: o.k, l: o.l, p: o.p, g: label(c.p[0]) + ' › ' + label(o.p[0]) }; }));
+    var k = { sen: 'sen', skills: 'skills', langs: 'langs', eng: 'eng', avl: 'avl', ver: 'ver', prof: 'prof', credit: 'credit', eqg: 'eqg', eqc: 'eqc' }[f];
+    return k ? L[k].map(function (o) { return { v: o.k, l: o.l, p: o.p, s: o.p ? o.p.map(label).join(' · ') : '' }; }) : [];
+  }
+  // Workbook sample profiles → result cards. Work title matches primary or secondary; skills match ANY (default) or ALL.
+  function profiles() { return m.profiles; }
+  function match(p, f) {
+    f = f || {};
+    var titles = [p.t1, p.t2].filter(Boolean);
+    return (!(f.vert || []).length || any(f.vert, p.vert)) && (!(f.dept || []).length || any(f.dept, p.dept)) && (!(f.title || []).length || any(f.title, titles)) &&
+      (!(f.skills || []).length || (f.skillMode === 'all' ? all(f.skills, p.skills) : any(f.skills, p.skills))) &&
+      (!(f.sen || []).length || f.sen.indexOf(p.sen) >= 0) && (!(+f.yrs) || p.yrs >= +f.yrs) && (!(f.avl || []).length || f.avl.indexOf(p.avl) >= 0) &&
+      (!(f.langs || []).length || any(f.langs, p.langs)) && (!(f.city || []).length || f.city.indexOf(p.city) >= 0) && (!(f.ver || []).length || f.ver.indexOf(p.ver) >= 0) &&
+      (!(f.eng || []).length || any(f.eng, p.eng));
+  }
+  return (w.__ccPM = { m: m, L: L, label: label, opts: opts, profiles: profiles, match: match, field: function (id) { return field[id] || {}; }, dept: function (k) { return dept[k]; }, title: function (k) { return title[k]; },
+    jobTag: function (id) { return (m.jobTags || {})[id] || null; }, vendorTag: function (n) { return (m.vendorTags || {})[n] || null; }, any: any }); })(window);
+
+
+class Component extends DCLogic {
+  net(n) {
+    const N = { 'Meera Joshi': [12, 'av'], 'Arjun Kulkarni': [4, 'tb'], 'Sana Mirza': [7, 'av'], 'Farhan Siddiqui': [9, 'un'], 'Ananya Iyer': [3, 'av'], 'Vikram Bhosle': [15, 'tb'], 'Kavya Menon': [18, ''], 'Northlight Studios': [6, ''], 'Vendor House': [11, ''], 'Kilowatt Lighting Co.': [2, ''], 'Nisha Verma': [5, 'av'], 'Aditya Rao': [8, 'av'], 'Priya Nair': [10, 'av'], 'Rohan D’Souza': [1, 'un'], 'Karthik Subramanian': [0, 'av'], 'Imran Shaikh': [2, 'av'] };
+    const pool = ['FS', 'AI', 'MJ', 'VB', 'AK', 'SM', 'KM', 'NV'];
+    const e = N[n] || [0, ''];
+    const me = n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const m = e[0];
+    const AV = { av: [cc("common.available"), 'avail a-av'], un: ['Unavailable', 'avail a-un'], tb: ['Tentatively booked', 'avail a-tb'] };
+    return {
+      isHiring: ['Kavya Menon', 'Vikram Bhosle', 'Nisha Verma'].indexOf(n) >= 0,
+      mutN: m, hasMut: m > 0, noMut: m === 0,
+      mutText: m === 0 ? cc("common.no_mutual_connections") : m + (m === 1 ? cc("talent.mutual_connection") : cc("talent.mutual_connections")),
+      mutAv: pool.filter((x) => x !== me).slice(0, Math.min(3, m)),
+      hasAvail: !!e[1], availText: e[1] ? AV[e[1]][0] : '', availCls: e[1] ? AV[e[1]][1] : ''
+    };
+  }
+  constructor(p) {
+    super(p);
+    // R8: crew results come from the workbook's sample profiles (crewconnect_content.json › profile_master.profiles); the two real sample profiles stay, with verified fields only.
+    const L = PM.label;
+    this.data = PM.profiles().map((x) => ({ px: x, name: x.name, title: L(x.t1), dept: L(x.dept[0]), band: L(x.sen), yrs: x.yrs, city: x.city, cities: [], xs: [], s1: '', s2: '', s3: '' }))
+      .concat(RP.people.map((r) => ({ name: r.name, title: '', dept: '', band: '', yrs: '', city: r.city, xs: [], cities: [], projects: '', s1: '', s2: '', s3: '', bio: '', real: true, links: r.links })));
+    this.vend = [
+      { name: 'Vendor House', cat: cc("r2.camera_lenses"), city: cc("common.mumbai"), offices: ['Mumbai', 'Hyderabad'], clients: cc("r2.lantern_pictures_northlight_studios"), dept: 'Camera' },
+      { name: 'Kilowatt Lighting Co.', cat: cc("r2.lighting_grip"), city: cc("common.mumbai"), offices: ['Mumbai', 'Pune', 'Goa'], clients: cc("r2.pinewood_ads_redline_motion_pictures"), dept: cc("common.lighting") },
+      { name: 'Soundbox Audio Hire', cat: cc("r2.sound_equipment"), city: cc("common.bengaluru"), offices: ['Bengaluru', 'Chennai'], clients: cc("r2.bluebird_records"), dept: 'Sound' }
+    ].map((v) => ({ ...v, tag: PM.vendorTag(v.name) || { group: [], cat: [] } }));
+    this.F0 = { vert: [], dept: [], title: [], skills: [], skillMode: 'any', sen: [], yrs: 0, avl: [], langs: [], city: [], ver: [], eng: [], eqg: [], eqc: [] };
+    this.state = { who: 'all', field: 'all', q: '', f: { ...this.F0 }, sel: null, fol: {} };
+  }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase(), F = s.f || this.F0, L = PM.label;
+    const CREW = ['vert', 'dept', 'title', 'skills', 'sen', 'yrs', 'avl', 'langs', 'ver', 'eng'], VEND = ['eqg', 'eqc'];
+    const setOn = (f, k) => (k === 'yrs' ? +f.yrs > 0 : (f[k] || []).length > 0);
+    const crewOn = (f) => CREW.some((k) => setOn(f, k)), vendOn = (f) => VEND.some((k) => setOn(f, k));
+    // Search in: the field picked under the search bar (client flow: type → pick field → results).
+    const FIELDS = { all: cc("r2.all_fields"), name: cc("r2.name"), title: 'Work title', skills: 'Equipment / Software', dept: cc("common.department"), loc: cc("common.location"), vcat: cc("r2.vendor_category"), clients: cc("r2.clientele") };
+    const hay = (p, k) => {
+      const x = p.px;
+      if (p.tag) return ({ name: p.name, dept: p.dept, loc: [p.city].concat(p.offices || []).join(' '), vcat: p.cat + ' ' + p.tag.group.concat(p.tag.cat).map(L).join(' '), clients: p.clients || '' })[k] || '';
+      return ({ name: p.name, title: x ? [x.t1, x.t2].filter(Boolean).map(L).join(' ') : '', skills: x ? x.skills.map(L).join(' ') : '', dept: x ? x.dept.map(L).join(' ') + ' ' + x.vert.map(L).join(' ') : '', loc: [p.city, x ? x.state : ''].join(' ') })[k] || '';
+    };
+    const fieldsFor = () => (s.field === 'all' ? Object.keys(FIELDS).filter((k) => k !== 'all') : [s.field]);
+    const hit = (p) => (q ? fieldsFor().find((k) => hay(p, k).toLowerCase().includes(q)) : '');
+    // A crew filter hides vendors and a vendor filter hides crew, so results never mix unrelated cards. City applies to both.
+    const okP = (p, f) => !vendOn(f) && (!(f.city || []).length || f.city.indexOf(p.city) >= 0) && (!crewOn(f) || (!!p.px && PM.match(p.px, f))) && (!q || !!hit(p));
+    const okV = (v, f) => !crewOn(f) && (!(f.city || []).length || f.city.indexOf(v.city) >= 0 || v.offices.some((o) => f.city.indexOf(o) >= 0)) &&
+      (!(f.eqg || []).length || PM.any(f.eqg, v.tag.group)) && (!(f.eqc || []).length || PM.any(f.eqc, v.tag.cat)) && (!q || !!hit(v));
+    const list = s.who === 'vendors' ? [] : this.data.filter((p) => okP(p, F));
+    const vlist = s.who === 'crew' ? [] : this.vend.filter((v) => okV(v, F));
+    const sel = s.sel !== null ? this.data[s.sel] : null;
+    const st = this.props.store, act = this.props.act;
+    const fol = st ? st.follow : s.fol;
+    const tog = (n) => (st && act ? act('follow', n, !fol[n]) : this.setState({ fol: { ...s.fol, [n]: !s.fol[n] } }));
+    const ini = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const O = (f) => PM.opts(f);
+    const cities = Array.from(new Set(this.data.map((p) => p.city).concat(...this.vend.map((v) => [v.city].concat(v.offices))))).filter(Boolean).sort();
+    // Filters page: the workbook's mapped fields for this context — crew discovery (recruiter) or vendor discovery.
+    const crewSecs = [
+      { k: 'vert', title: 'Primary Vertical', multi: true, def: [], opts: O('vert') },
+      { k: 'dept', title: cc("common.department"), multi: true, def: [], parent: 'vert', grouped: true, opts: O('dept') },
+      { k: 'title', title: 'Designation (Work title)', multi: true, def: [], parent: 'dept', grouped: true, search: true, searchPh: 'Search work title', opts: O('title') },
+      { k: 'skills', title: 'Equipment / Software', multi: true, def: [], search: true, searchPh: 'Search skills', opts: O('skills') },
+      { k: 'skillMode', title: 'Match skills', multi: false, def: 'any', chip: false, toggle: false, hint: 'Any = at least one selected skill · All = every selected skill', opts: [{ v: 'any', l: 'Any' }, { v: 'all', l: 'All' }] },
+      { k: 'sen', title: 'Seniority', multi: true, def: [], opts: O('sen') },
+      { k: 'yrs', title: 'Experience (years)', type: 'range', def: 0, min: 0, max: 20, step: 1, fmt: (v) => (+v ? v + '+ years' : 'Any') },
+      { k: 'avl', title: 'Availability', multi: true, def: [], opts: O('avl') },
+      { k: 'langs', title: 'Languages', multi: true, def: [], search: true, searchPh: 'Search language', opts: O('langs') },
+      { k: 'eng', title: 'Engagement preference', multi: true, def: [], opts: O('eng') },
+      { k: 'ver', title: 'Verification', multi: true, def: [], opts: O('ver') }
+    ];
+    const citySec = { k: 'city', title: 'City', multi: true, def: [], opts: cities.map((c) => ({ v: c, l: c })), hint: 'Where people are based / vendor offices' };
+    const vendSecs = [
+      { k: 'eqg', title: 'Equipment group', multi: true, def: [], opts: O('eqg') },
+      { k: 'eqc', title: 'Equipment category', multi: true, def: [], parent: 'eqg', grouped: false, showSub: true, opts: O('eqc') }
+    ];
+    const fSecs = s.who === 'vendors' ? vendSecs.concat([citySec]) : s.who === 'crew' ? crewSecs.concat([citySec]) : crewSecs.concat([citySec], vendSecs);
+    const fVal = { ...F };
+    const counted = fSecs.filter((g) => g.chip !== false);
+    const vals = (g, f) => (g.type === 'range' ? (+f[g.k] ? [f[g.k]] : []) : g.multi ? (f[g.k] || []) : (f[g.k] !== g.def ? [f[g.k]] : []));
+    const fN = counted.reduce((t, g) => t + vals(g, F).length, 0);
+    const lab = (g, v) => (g.type === 'range' ? g.fmt(v) : ((g.opts.find((o) => o.v === v) || { l: v }).l));
+    const applied = [];
+    counted.forEach((g) => vals(g, F).forEach((v) => applied.push({ label: lab(g, v), remove: () => {
+      let nf = { ...F, [g.k]: g.type === 'range' ? 0 : g.multi ? F[g.k].filter((x) => x !== v) : g.def };
+      // removing a parent value also removes children that only belonged to it
+      if (g.k === 'vert' && nf.vert.length) nf.dept = nf.dept.filter((d) => nf.vert.indexOf((PM.dept(d) || {}).v) >= 0);
+      if ((g.k === 'vert' || g.k === 'dept') && nf.dept.length) nf.title = nf.title.filter((t) => nf.dept.indexOf((PM.title(t) || {}).d) >= 0);
+      if (g.k === 'eqg' && nf.eqg.length) nf.eqc = nf.eqc.filter((c) => PM.any(nf.eqg, (O('eqc').find((o) => o.v === c) || { p: [] }).p));
+      this.setState({ f: nf });
+    } })));
+    const fMatch = (d) => (s.who === 'vendors' ? 0 : this.data.filter((p) => okP(p, d)).length) + (s.who === 'crew' ? 0 : this.vend.filter((v) => okV(v, d)).length);
+    const AVC = { 'AVL-01': 'avail a-av', 'AVL-02': 'avail a-tb', 'AVL-03': 'avail a-un' };
+    const R5 = (p) => ({ real: !!p.real, hasPro: !p.real, subLine: p.real ? p.city : p.title + ' · ' + p.dept + ' · ' + p.city, noPro: RP.labels.noPro, noProLong: RP.labels.noProLong, linksTitle: RP.labels.links,
+      links: (p.links || []).map((l) => ({ ...l, label: l.kind + ' profile', aria: l.kind + ' profile of ' + p.name + ' (opens in a new tab)' })) });
+    const XL = (p) => { const x = p.px; if (!x) return { tags: [], verified: false };
+      return { tags: x.skills.slice(0, 2).map(L), verified: x.ver !== 'VST-01', verText: L(x.ver), hasAvail: true, availText: L(x.avl), availCls: AVC[x.avl] || 'avail a-av' }; };
+    const detail = (p) => { const x = p.px; if (!x) return {};
+      return { titleTags: [x.t1, x.t2].filter(Boolean).map((t, i) => ({ l: L(t) + (i === 0 ? ' · primary' : ''), cls: i === 0 ? 'badge b-p' : 'tag' })), skillTags: x.skills.map(L),
+        kv: [['Primary Vertical', x.vert.map(L).join(', ')], [cc("common.department"), x.dept.map(L).join(', ')], ['Seniority', L(x.sen)], ['Experience (years)', String(x.yrs)], ['Languages', x.langs.map(L).join(', ')],
+          ['Location', x.city + ', ' + x.state], ['Travel radius', x.radius ? x.radius + ' km' : 'Local only'], ['Engagement', x.eng.map(L).join(', ')], ['Verification', L(x.ver)]].map(([k, v]) => ({ k, v })),
+        reel: x.reel, hasReel: !!x.reel }; };
+    return {
+      fOpen: !!s.fOpen, openF: () => this.setState({ fOpen: true }), fClose: () => this.setState({ fOpen: false }),
+      fSecs, fVal, fN, fHasN: fN > 0, fBtnCls: fN ? 'chip on' : 'chip', fSummary: cc("common.no_filters_applied"), fTitle: cc("common.find_talent"), fNoun: cc("talent.professionals"),
+      fPrev: fMatch, fApply: (d) => this.setState({ f: { ...this.F0, ...d }, fOpen: false }),
+      applied, hasApplied: applied.length > 0, noApplied: applied.length === 0,
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      whoTabs: [['all', cc("r2.all")], ['crew', cc("r2.crew_members")], ['vendors', cc("r2.vendors")]].map(([k, l]) => ({ label: l, on: s.who === k, cls: s.who === k ? 'on' : '', pick: () => this.setState({ who: k }) })),
+      fields: Object.keys(FIELDS).filter((k) => !(s.who === 'crew' && (k === 'vcat' || k === 'clients')) && !(s.who === 'vendors' && (k === 'title' || k === 'skills'))).map((k) => ({ label: FIELDS[k], on: s.field === k, cls: s.field === k ? 'chip on' : 'chip', pick: () => this.setState({ field: k }) })),
+      qPh: s.field === 'all' ? cc("r2.search_by_name_role_skill_city_project") : cc("r2.search_by") + ' ' + FIELDS[s.field].toLowerCase(),
+      vendors: vlist.map((v) => ({ ...v, hasClients: !!v.clients, ini: v.name.split(' ').map((x) => x[0]).join('').slice(0, 2), offices: v.offices.join(' · '), eq: v.tag.group.map(L), hasEq: v.tag.group.length > 0 })),
+      people: list.map((p, i) => ({ ...p, ...this.net(p.name), ...R5(p), ...XL(p), hasHit: !!q && !!hit(p), hit: q && hit(p) ? FIELDS[hit(p)] : '', ini: ini(p.name), avCls: i % 2 ? 'av g' : 'av', open: () => this.setState({ sel: this.data.indexOf(p) }), following: !!fol[p.name], notFollowing: !fol[p.name], toggleFollow: () => tog(p.name) })),
+      selFollowing: !!(sel && fol[sel.name]), selNotFollowing: !(sel && fol[sel.name]),
+      selToggle: () => sel && tog(sel.name),
+      count: list.length + vlist.length, countWord: list.length + vlist.length === 1 ? cc("r2.result") : cc("r2.results"), empty: list.length + vlist.length === 0,
+      reset: () => this.setState({ q: '', field: 'all', f: { ...this.F0 } }),
+      hasSel: !!sel, sel: sel ? { ...sel, ...this.net(sel.name), ...R5(sel), ...XL(sel), ...detail(sel), ini: ini(sel.name) } : {},
+      close: () => this.setState({ sel: null })
+    };
+  }
+}
+ccHook(Component, ["q","fTitle","fSecs","fVal","fPrev","fNoun","fApply","fClose"]);
+</script>
+</body>
+</html>

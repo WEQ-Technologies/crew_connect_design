@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Complete your profile</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph bg-alt">
+  <div class="bar">
+    <a class="iconbtn" href="{{backHref}}" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a>
+    <div class="ttl">{{cct.common.complete_your_profile}}</div>
+    <span class="t-s mut b" style="padding-right: 12px">{{cct.complete_profile.step_2_of_2}}</span>
+  </div>
+  <div style="padding: 0 20px 4px"><div class="stepper"><div class="done"></div><div class="on"></div></div></div>
+
+  <div class="sc" style="padding-top: 18px; gap: 14px">
+    <div class="card" style="gap: 10px">
+      <div class="row"><div class="sp"><div class="t-h3">{{cct.complete_profile.your_profile_is}}{{pct}}{{cct.common.complete}}</div><div class="t-c mut">{{cct.complete_profile.basic_profile_done}}{{doneN}}{{cct.complete_profile.of}}{{secN}}{{cct.complete_profile.sections_complete_fill_them_in}}</div></div><span class="t-h2" style="color: #7C3AED">{{pct}}%</span></div>
+      <div class="glass-track" style="height: 8px; border-radius: 4px; overflow: hidden"><div style="{{barStyle}}"></div></div>
+    </div>
+
+    <!-- Unsaved section: shown when the person tries to leave or switch section with filled-in but unsaved fields -->
+    <sc-if value="{{showWarn}}" hint-placeholder-val="{{ false }}">
+      <div class="alert a-e" role="alert" style="align-items: flex-start"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg><div class="sp"><b>{{warnName}}{{cct.complete_profile.isn_t_saved}}</b> {{cct.complete_profile.you_ve_filled_in_this}} <b>{{cct.complete_profile.save_section}}</b> {{cct.complete_profile.to_keep_your_changes}}</div></div>
+    </sc-if>
+
+    <!-- CREW MEMBER (only when the account has the Crew role) -->
+    <sc-if value="{{hasCrew}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 14px">
+    <div class="t-over" style="margin-top: 6px">{{crewHead}}</div>
+
+    <!-- 1 · Professional information -->
+    <div class="card" style="padding: 0; gap: 0; overflow: hidden">
+      <button onClick="{{tPro}}" aria-expanded="{{oPro}}" class="row" style="gap: 12px; padding: 14px 16px; width: 100%; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer; min-height: 64px">
+        <span class="sq" style="width: 40px; height: 40px; border-radius: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>
+        <span class="sp" style="display: flex; flex-direction: column; gap: 2px"><span class="t-h3">{{cct.common.professional_information}}</span><span class="t-c mut">{{cct.complete_profile.introduction_department_work_titles_skills}}</span></span>
+        <span class="{{bPro}}">{{lPro}}</span>
+      </button>
+      <sc-if value="{{oPro}}" hint-placeholder-val="{{ true }}">
+        <div class="cc-reveal" style="display: flex; flex-direction: column; gap: 18px; padding: 4px 16px 16px; border-top: 1px solid rgba(101,39,200,.1)">
+          <div class="fld" style="margin-top: 12px"><label class="lbl" for="ds">{{cct.r2.professional_bio_introduction}}</label><span class="help" id="ds-help" style="margin-top: -2px">{{cct.r2.a_short_introduction_to_who_you_are}}</span><textarea id="ds" class="inp" aria-describedby="ds-help" placeholder="{{cct.complete_profile.two_or_three_lines_about}}"></textarea><span class="help" style="text-align: right">{{cct.complete_profile.t_0_limit_tbc}}</span></div>
+          <!-- R8 · mapped profile fields (workbook › Field UI). Cascades: Primary Vertical → Department → Designation (Work title). -->
+          <div class="pf-grp"><div class="t-over">Work</div>
+          <div class="fld"><span class="lbl">{{pfv.vert.label}}<sc-if value="{{pfv.vert.req}}" hint-placeholder-val="{{ true }}"> <span class="req">*</span></sc-if><sc-if value="{{pfv.vert.notReq}}" hint-placeholder-val="{{ false }}"> <span class="opt">Optional</span></sc-if></span>
+            <button class="{{pfv.vert.btnCls}}" onClick="{{pfv.vert.open}}" disabled="{{pfv.vert.disabled}}" aria-haspopup="dialog" style="display: flex; align-items: center; justify-content: space-between; text-align: left; cursor: pointer; font: inherit"><span class="{{pfv.vert.btnTxtCls}}">{{pfv.vert.btnText}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <sc-if value="{{pfv.vert.hasChips}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{pfv.vert.chips}}" as="c" hint-placeholder-count="2"><span class="chip on">{{c.l}}<button onClick="{{c.remove}}" aria-label="Remove {{c.l}}" style="border: 0; background: none; color: inherit; padding: 0 0 0 4px; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+            <sc-if value="{{pfv.vert.err}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{pfv.vert.errText}}</span></sc-if>
+            <sc-if value="{{pfv.vert.hasHelp}}" hint-placeholder-val="{{ true }}"><span class="help">{{pfv.vert.help}}</span></sc-if>
+          </div>
+          <div class="fld"><span class="lbl">{{pfv.dept.label}}<sc-if value="{{pfv.dept.req}}" hint-placeholder-val="{{ true }}"> <span class="req">*</span></sc-if><sc-if value="{{pfv.dept.notReq}}" hint-placeholder-val="{{ false }}"> <span class="opt">Optional</span></sc-if></span>
+            <button class="{{pfv.dept.btnCls}}" onClick="{{pfv.dept.open}}" disabled="{{pfv.dept.disabled}}" aria-haspopup="dialog" style="display: flex; align-items: center; justify-content: space-between; text-align: left; cursor: pointer; font: inherit"><span class="{{pfv.dept.btnTxtCls}}">{{pfv.dept.btnText}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <sc-if value="{{pfv.dept.hasChips}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{pfv.dept.chips}}" as="c" hint-placeholder-count="2"><span class="chip on">{{c.l}}<button onClick="{{c.remove}}" aria-label="Remove {{c.l}}" style="border: 0; background: none; color: inherit; padding: 0 0 0 4px; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+            <sc-if value="{{pfv.dept.err}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{pfv.dept.errText}}</span></sc-if>
+            <sc-if value="{{pfv.dept.hasHelp}}" hint-placeholder-val="{{ true }}"><span class="help">{{pfv.dept.help}}</span></sc-if>
+          </div>
+          <div class="fld"><span class="lbl">{{pfv.titles.label}}<sc-if value="{{pfv.titles.req}}" hint-placeholder-val="{{ true }}"> <span class="req">*</span></sc-if><sc-if value="{{pfv.titles.notReq}}" hint-placeholder-val="{{ false }}"> <span class="opt">Optional</span></sc-if></span>
+            <button class="{{pfv.titles.btnCls}}" onClick="{{pfv.titles.open}}" disabled="{{pfv.titles.disabled}}" aria-haspopup="dialog" style="display: flex; align-items: center; justify-content: space-between; text-align: left; cursor: pointer; font: inherit"><span class="{{pfv.titles.btnTxtCls}}">{{pfv.titles.btnText}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <sc-if value="{{pfv.titles.hasChips}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{pfv.titles.chips}}" as="c" hint-placeholder-count="2"><span class="{{c.cls}}"><button onClick="{{c.makePrimary}}" aria-label="Make {{c.l}} your primary title" aria-pressed="{{c.isP}}" style="border: 0; background: none; color: inherit; padding: 0; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font: inherit"><sc-if value="{{c.isP}}" hint-placeholder-val="{{ true }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg></sc-if>{{c.l}}</button><button onClick="{{c.remove}}" aria-label="Remove {{c.l}}" style="border: 0; background: none; color: inherit; padding: 0 0 0 4px; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+            <sc-if value="{{pfv.titles.err}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{pfv.titles.errText}}</span></sc-if>
+            <sc-if value="{{pfv.titles.hasHelp}}" hint-placeholder-val="{{ true }}"><span class="help">{{pfv.titles.help}}</span></sc-if>
+          </div>
+          <sc-if value="{{pfv.titles.hasPrimary}}" hint-placeholder-val="{{ false }}"><span class="help" style="margin-top: -10px">{{pfv.titles.primaryHint}}</span></sc-if>
+          <div class="fld"><label class="lbl" for="pf-alt">Alternate / Credit Title <span class="opt">Optional</span></label><input id="pf-alt" class="inp" placeholder="{{pfv.altPh}}" value="{{pfv.alt}}" onChange="{{pfv.onAlt}}"><span class="help">{{pfv.altHelp}}</span></div>
+          <div class="row" style="gap: 12px; align-items: flex-start"><div class="fld" style="width: 132px; flex: none"><label class="lbl" for="pf-yrs">Experience (years) <span class="req">*</span></label><div class="row pf-step"><button class="iconbtn" onClick="{{pfv.yrsDec}}" aria-label="Fewer years">−</button><input id="pf-yrs" class="{{pfv.yrsCls}}" inputmode="numeric" placeholder="Years" value="{{pfv.yrs}}" onChange="{{pfv.onYrs}}" style="text-align: center; padding: 0 4px"><button class="iconbtn" onClick="{{pfv.yrsInc}}" aria-label="More years">+</button></div></div>
+          <div class="sp"><div class="fld"><span class="lbl">{{pfv.sen.label}}<sc-if value="{{pfv.sen.req}}" hint-placeholder-val="{{ true }}"> <span class="req">*</span></sc-if><sc-if value="{{pfv.sen.notReq}}" hint-placeholder-val="{{ false }}"> <span class="opt">Optional</span></sc-if></span>
+            <button class="{{pfv.sen.btnCls}}" onClick="{{pfv.sen.open}}" disabled="{{pfv.sen.disabled}}" aria-haspopup="dialog" style="display: flex; align-items: center; justify-content: space-between; text-align: left; cursor: pointer; font: inherit"><span class="{{pfv.sen.btnTxtCls}}">{{pfv.sen.btnText}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <sc-if value="{{pfv.sen.err}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{pfv.sen.errText}}</span></sc-if>
+            <sc-if value="{{pfv.sen.hasHelp}}" hint-placeholder-val="{{ true }}"><span class="help">{{pfv.sen.help}}</span></sc-if>
+          </div>
+          </div></div>
+          </div>
+          <div class="pf-grp"><div class="t-over">Skills</div>
+          <div class="fld"><span class="lbl">{{pfv.spec.label}}<sc-if value="{{pfv.spec.req}}" hint-placeholder-val="{{ true }}"> <span class="req">*</span></sc-if><sc-if value="{{pfv.spec.notReq}}" hint-placeholder-val="{{ false }}"> <span class="opt">Optional</span></sc-if></span>
+            <button class="{{pfv.spec.btnCls}}" onClick="{{pfv.spec.open}}" disabled="{{pfv.spec.disabled}}" aria-haspopup="dialog" style="display: flex; align-items: center; justify-content: space-between; text-align: left; cursor: pointer; font: inherit"><span class="{{pfv.spec.btnTxtCls}}">{{pfv.spec.btnText}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <sc-if value="{{pfv.spec.hasChips}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{pfv.spec.chips}}" as="c" hint-placeholder-count="2"><span class="chip on">{{c.l}}<button onClick="{{c.remove}}" aria-label="Remove {{c.l}}" style="border: 0; background: none; color: inherit; padding: 0 0 0 4px; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+            <sc-if value="{{pfv.spec.err}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{pfv.spec.errText}}</span></sc-if>
+            <sc-if value="{{pfv.spec.hasHelp}}" hint-placeholder-val="{{ true }}"><span class="help">{{pfv.spec.help}}</span></sc-if>
+          </div>
+          <div class="fld"><span class="lbl">{{pfv.equip.label}}<sc-if value="{{pfv.equip.req}}" hint-placeholder-val="{{ true }}"> <span class="req">*</span></sc-if><sc-if value="{{pfv.equip.notReq}}" hint-placeholder-val="{{ false }}"> <span class="opt">Optional</span></sc-if></span>
+            <button class="{{pfv.equip.btnCls}}" onClick="{{pfv.equip.open}}" disabled="{{pfv.equip.disabled}}" aria-haspopup="dialog" style="display: flex; align-items: center; justify-content: space-between; text-align: left; cursor: pointer; font: inherit"><span class="{{pfv.equip.btnTxtCls}}">{{pfv.equip.btnText}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <sc-if value="{{pfv.equip.hasChips}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{pfv.equip.chips}}" as="c" hint-placeholder-count="2"><span class="chip on"><button onClick="{{c.cycle}}" aria-label="{{c.l}}: proficiency {{c.prof}}. Tap to change" style="border: 0; background: none; color: inherit; padding: 0; cursor: pointer; font: inherit">{{c.l}} · <b>{{c.prof}}</b></button><button onClick="{{c.remove}}" aria-label="Remove {{c.l}}" style="border: 0; background: none; color: inherit; padding: 0 0 0 4px; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+            <sc-if value="{{pfv.equip.err}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{pfv.equip.errText}}</span></sc-if>
+            <sc-if value="{{pfv.equip.hasHelp}}" hint-placeholder-val="{{ true }}"><span class="help">{{pfv.equip.help}}</span></sc-if>
+          </div>
+          <sc-if value="{{pfv.equip.hasChips}}" hint-placeholder-val="{{ false }}"><span class="help" style="margin-top: -10px">{{pfv.equip.profHint}}</span></sc-if>
+          <div class="fld"><span class="lbl">{{pfv.langs.label}}<sc-if value="{{pfv.langs.req}}" hint-placeholder-val="{{ true }}"> <span class="req">*</span></sc-if><sc-if value="{{pfv.langs.notReq}}" hint-placeholder-val="{{ false }}"> <span class="opt">Optional</span></sc-if></span>
+            <button class="{{pfv.langs.btnCls}}" onClick="{{pfv.langs.open}}" disabled="{{pfv.langs.disabled}}" aria-haspopup="dialog" style="display: flex; align-items: center; justify-content: space-between; text-align: left; cursor: pointer; font: inherit"><span class="{{pfv.langs.btnTxtCls}}">{{pfv.langs.btnText}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <sc-if value="{{pfv.langs.hasChips}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{pfv.langs.chips}}" as="c" hint-placeholder-count="2"><span class="chip on">{{c.l}}<button onClick="{{c.remove}}" aria-label="Remove {{c.l}}" style="border: 0; background: none; color: inherit; padding: 0 0 0 4px; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+            <sc-if value="{{pfv.langs.err}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{pfv.langs.errText}}</span></sc-if>
+            <sc-if value="{{pfv.langs.hasHelp}}" hint-placeholder-val="{{ true }}"><span class="help">{{pfv.langs.help}}</span></sc-if>
+          </div>
+          </div>
+          <div class="pf-grp"><div class="t-over">Location / Work radius</div>
+          <div class="row" style="gap: 10px; align-items: flex-start"><div class="fld sp"><label class="lbl" for="pf-city">City <span class="req">*</span></label><input id="pf-city" class="{{pfv.cityCls}}" placeholder="City" value="{{pfv.city}}" onChange="{{pfv.onCity}}" autocomplete="address-level2"></div><div class="fld sp"><label class="lbl" for="pf-state">State</label><input id="pf-state" class="inp" placeholder="State" value="{{pfv.state}}" onChange="{{pfv.onState}}" autocomplete="address-level1"></div></div>
+          <sc-if value="{{pfv.cityErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Add the city you are based in</span></sc-if>
+          <div class="fld"><span class="lbl row" style="gap: 8px"><span class="sp">Travel radius</span><b class="t-s">{{pfv.radiusLabel}}</b></span><input class="pf-range" type="range" min="0" max="2000" step="50" value="{{pfv.radius}}" onChange="{{pfv.onRadius}}" aria-label="Travel radius in kilometres"></div>
+          <div class="row" style="gap: 12px"><div class="sp"><div class="t-s b">Willing to travel</div><div class="t-c mut">{{pfv.locHelp}}</div></div><button class="{{pfv.travelCls}}" role="switch" aria-checked="{{pfv.travel}}" aria-label="Willing to travel" onClick="{{pfv.toggleTravel}}"><span></span></button></div>
+          </div>
+          <div class="fld"><label class="lbl" for="locN">{{cct.r2.native_city}} <span class="opt">{{cct.r2.optional_2}}</span></label><input id="locN" class="inp" value="{{locN}}" onChange="{{onLocN}}" placeholder="{{cct.r2.e_g_kochi}}"></div>
+          <div class="fld"><span class="lbl">{{cct.r2.other_cities_you_can_work_in}} <span class="opt">{{cct.r2.optional_2}}</span></span>
+            <sc-if value="{{hasCities}}" hint-placeholder-val="{{ true }}"><div class="chips"><sc-for list="{{cityTags}}" as="c" hint-placeholder-count="2"><span class="chip on">{{c.label}}<button onClick="{{c.remove}}" aria-label="{{cct.complete_profile.remove}}{{c.label}}" style="border: 0; background: none; color: inherit; padding: 0; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+            <div class="row" style="gap: 8px"><input class="inp sp" placeholder="{{cct.r2.add_a_city_e_g_hyderabad}}" value="{{cityIn}}" onChange="{{onCityIn}}" aria-label="{{cct.r2.add_a_city_you_can_work_in}}"><button class="btn btn-s" onClick="{{addCity}}">{{cct.common.add}}</button></div>
+            <span class="help">{{cct.r2.job_posters_searching_these_cities_will_find}}</span>
+          </div>
+          <div class="pf-grp"><div class="t-over">Availability</div>
+          <div class="seg" style="grid-template-columns: repeat(3, minmax(0, 1fr))" role="radiogroup" aria-label="Availability"><sc-for list="{{pfv.avl}}" as="a" hint-placeholder-count="3"><button class="{{a.cls}}" role="radio" aria-checked="{{a.on}}" onClick="{{a.pick}}">{{a.l}}</button></sc-for></div>
+          <span class="help" style="margin-top: -6px">{{pfv.avlHelp}}</span>
+          <div class="fld"><span class="lbl">Engagement preference <span class="opt">Optional</span></span><div class="chips"><sc-for list="{{pfv.eng}}" as="e" hint-placeholder-count="6"><button class="{{e.cls}}" aria-pressed="{{e.on}}" onClick="{{e.toggle}}">{{e.l}}</button></sc-for></div></div>
+          </div>
+          <div class="pf-grp"><div class="t-over">Portfolio &amp; credits</div>
+          <div class="fld"><label class="lbl" for="pf-reel">Portfolio / Showreel <span class="opt">Optional</span></label><input id="pf-reel" class="inp" type="url" placeholder="Paste a link" value="{{pfv.reel}}" onChange="{{pfv.onReel}}"><span class="help">{{pfv.reelHelp}}</span></div>
+          <div class="fld"><span class="lbl">Credits / Projects <span class="opt">Optional</span></span>
+          <sc-if value="{{pfv.hasCredits}}" hint-placeholder-val="{{ false }}"><div class="list"><sc-for list="{{pfv.credits}}" as="cr" hint-placeholder-count="1"><div class="li" style="cursor: default"><div class="sp"><div class="t-s b">{{cr.project}}</div><div class="t-c mut">{{cr.sub}}</div></div><button class="iconbtn" onClick="{{cr.remove}}" aria-label="Remove credit {{cr.project}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div></sc-for></div></sc-if>
+          <sc-if value="{{pfv.cfOpen}}" hint-placeholder-val="{{ false }}"><div class="card" style="gap: 10px; padding: 12px">
+            <input class="inp" placeholder="Project name" value="{{pfv.cf.project}}" onChange="{{pfv.cf.onProject}}" aria-label="Project name">
+            <sc-if value="{{pfv.cf.err}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>Add the project name</span></sc-if>
+            <button class="inp pf-dd" onClick="{{pfv.cf.pickType}}" style="display: flex; align-items: center; justify-content: space-between; text-align: left; cursor: pointer; font: inherit"><span class="{{pfv.cf.typeCls}}">{{pfv.cf.typeText}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <button class="inp pf-dd" onClick="{{pfv.cf.pickRole}}" style="display: flex; align-items: center; justify-content: space-between; text-align: left; cursor: pointer; font: inherit"><span class="{{pfv.cf.roleCls}}">{{pfv.cf.roleText}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <div class="row" style="gap: 8px"><button class="btn btn-s btn-sm" onClick="{{pfv.cf.cancel}}" style="flex: 1">Cancel</button><button class="btn btn-p btn-sm" onClick="{{pfv.cf.add}}" style="flex: 1.4">Add credit</button></div>
+          </div></sc-if>
+          <sc-if value="{{pfv.cfClosed}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s w100" onClick="{{pfv.openCf}}" style="border-style: dashed">Add credit</button></sc-if>
+          <span class="help">{{pfv.creditHelp}}</span></div>
+          </div>
+          <div class="row" style="gap: 12px; padding: 12px 14px; border-radius: 14px; background: rgba(243,249,238,.8); border: 1px solid var(--g100)">
+            <div class="sp"><div class="t-s b">{{cct.r2.open_to_new_opportunities}}</div><div class="t-c mut">{{cct.r2.shows_an_open_to_work_tag_on}}</div></div>
+            <button class="{{owCls}}" role="switch" aria-checked="{{ow}}" aria-label="{{cct.r2.open_to_new_opportunities}}" onClick="{{toggleOw}}"><span></span></button>
+          </div>
+          <div class="fld" role="radiogroup" aria-labelledby="cv-l"><span class="lbl" id="cv-l">{{cct.r2.who_can_see_your_contact_details}}</span>
+            <sc-for list="{{cvOpts}}" as="o" hint-placeholder-count="3"><button type="button" class="{{o.cls}}" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="padding: 12px"><span class="{{o.radio}}" aria-hidden="true"></span><span class="sp"><span class="t-s b" style="display: block">{{o.t}}</span><span class="t-c mut" style="display: block">{{o.d}}</span></span></button></sc-for>
+            <sc-if value="{{cvPick}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{cvPeople}}" as="p" hint-placeholder-count="4"><button class="{{p.cls}}" aria-pressed="{{p.on}}" onClick="{{p.toggle}}">{{p.label}}</button></sc-for></div></sc-if>
+            <span class="help">{{cct.r2.your_phone_and_email_are_never_shown}}</span>
+          </div>
+          <button class="btn btn-p w100" onClick="{{savePro}}">{{cct.complete_profile.save_section}}</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- 2 · External references -->
+    <div class="card" style="padding: 0; gap: 0; overflow: hidden">
+      <button onClick="{{tRefs}}" aria-expanded="{{oRefs}}" class="row" style="gap: 12px; padding: 14px 16px; width: 100%; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer; min-height: 64px">
+        <span class="sq" style="width: 40px; height: 40px; border-radius: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></span>
+        <span class="sp" style="display: flex; flex-direction: column; gap: 2px"><span class="t-h3">{{cct.common.external_references}}</span><span class="t-c mut">{{cct.complete_profile.imdb_resume_vimeo_soundcloud_optional}}</span></span>
+        <span class="{{bRefs}}">{{lRefs}}</span>
+      </button>
+      <sc-if value="{{oRefs}}" hint-placeholder-val="{{ false }}">
+        <div class="cc-reveal" style="display: flex; flex-direction: column; gap: 18px; padding: 4px 16px 16px; border-top: 1px solid rgba(101,39,200,.1)">
+          <p class="t-s mut" style="margin-top: 12px">{{cct.complete_profile.shown_on_your_profile_in}}</p>
+          <div class="fld"><label class="lbl row" for="im" style="gap: 10px"><span style="width:32px;height:32px;border-radius:8px;flex:none;display:inline-flex;align-items:center;justify-content:center;background:#F5C518;color:#000;font-size:10px;font-weight:800;letter-spacing:-.02em" aria-hidden="true">{{cct.common.imdb}}</span>{{cct.common.imdb_link}} <span class="opt">{{cct.common.optional}}</span></label><input id="im" class="inp" type="url" placeholder="{{cct.common.https_www_imdb_com_name}}" value="{{imdb}}" onChange="{{onImdb}}"></div>
+          <div class="fld"><span class="lbl row" style="gap: 10px"><span style="width:32px;height:32px;border-radius:8px;flex:none;display:inline-flex;align-items:center;justify-content:center;background:#EFEAFE;color:#7C3AED" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"></path><path d="M14 3v5h5M9 13h6M9 17h4"></path></svg></span>{{cct.common.resume}} <span class="opt">{{cct.complete_profile.optional_pdf}}</span></span>
+            <sc-if value="{{noCv}}" hint-placeholder-val="{{ true }}"><button class="file" onClick="{{addCv}}" style="border-style: dashed; cursor: pointer; width: 100%; font: inherit; color: inherit"><span class="sq" style="width: 40px; height: 40px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span><span class="sp" style="text-align: left"><span class="t-s b" style="display: block; color: #7C3AED">{{cct.common.upload_resume}}</span><span class="t-c mut">{{cct.common.pdf_only_max_size_tbc}}</span></span></button></sc-if>
+            <sc-if value="{{hasCv}}" hint-placeholder-val="{{ false }}"><div class="file"><div class="fico">{{cct.common.pdf}}</div><div class="sp"><div class="t-h3 trunc">{{cvName}}</div><div class="t-c mut">{{cct.common.t_184_kb}}</div></div><button class="iconbtn" onClick="{{rmCv}}" aria-label="{{cct.complete_profile.remove_resume}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div></sc-if>
+          </div>
+          <div class="fld"><label class="lbl row" for="vm" style="gap: 10px"><span style="width:32px;height:32px;border-radius:8px;flex:none;display:inline-flex;align-items:center;justify-content:center;background:#1AB7EA;color:#fff;font-size:17px;font-weight:800;font-style:italic;font-family:Georgia,serif" aria-hidden="true">{{cct.common.v}}</span>{{cct.common.vimeo_link}} <span class="opt">{{cct.common.optional}}</span></label><input id="vm" class="inp" type="url" placeholder="{{cct.common.https_vimeo_com}}" value="{{vimeo}}" onChange="{{onVimeo}}"></div>
+          <div class="fld"><label class="lbl row" for="sc" style="gap: 10px"><span style="width:32px;height:32px;border-radius:8px;flex:none;display:inline-flex;align-items:center;justify-content:center;background:#FF5500;color:#fff" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M9 17V9.5M7 17v-6M5 17v-4M3 17v-2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path><path d="M11 17V8.2a5 5 0 0 1 9.4 2.4A3.3 3.3 0 0 1 20.5 17z"></path></svg></span>{{cct.common.soundcloud_link}} <span class="opt">{{cct.common.optional}}</span></label><input id="sc" class="inp" type="url" placeholder="{{cct.common.https_soundcloud_com}}" value="{{sc}}" onChange="{{onSc}}"></div>
+          <button class="btn btn-p w100" onClick="{{saveRefs}}">{{cct.complete_profile.save_section}}</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- Optional availability step (Crew) — not counted in completion -->
+    <sc-if value="{{showAvailStep}}" hint-placeholder-val="{{ true }}"><a href="Calendar.dc.html" class="row ghost-glass" style="gap: 12px; padding: 12px 16px; text-decoration: none; color: #1A1820"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="sp t-s"><b>{{cct.common.set_your_availability}}</b> <span class="mut">{{cct.complete_profile.optional}}</span><br><span class="mut">{{cct.complete_profile.mark_dates_you_are_booked}}</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a></sc-if>
+    </div></sc-if>
+
+    <!-- VENDOR (only when the account has the Vendor role) -->
+    <sc-if value="{{hasVendor}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 14px">
+    <div class="t-over" style="margin-top: 6px">{{vendorHead}}</div>
+
+    <!-- 3 · Business details -->
+    <div class="card" style="padding: 0; gap: 0; overflow: hidden">
+      <button onClick="{{tBiz}}" aria-expanded="{{oBiz}}" class="row" style="gap: 12px; padding: 14px 16px; width: 100%; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer; min-height: 64px">
+        <span class="sq g" style="width: 40px; height: 40px; border-radius: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg></span>
+        <span class="sp" style="display: flex; flex-direction: column; gap: 2px"><span class="t-h3">{{cct.common.business_details}}</span><span class="t-c mut">{{cct.complete_profile.needed_to_post_listings_appears}}</span></span>
+        <span class="{{bBiz}}">{{lBiz}}</span>
+      </button>
+      <sc-if value="{{oBiz}}" hint-placeholder-val="{{ false }}">
+        <div class="cc-reveal" style="display: flex; flex-direction: column; gap: 18px; padding: 4px 16px 16px; border-top: 1px solid rgba(101,39,200,.1)">
+          <div class="fld" style="margin-top: 12px"><label class="lbl" for="bn">{{cct.common.business_name}} <span class="req">*</span></label><input id="bn" class="{{bnCls}}" placeholder="{{cct.common.e_g_reelhouse_camera_rentals}}" value="{{bn}}" onChange="{{onBn}}">
+            <sc-if value="{{bnErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.common.enter_your_business_name}}</span></sc-if>
+          </div>
+          <div class="fld"><label class="lbl" for="ct">{{cct.common.primary_category}} <span class="req">*</span></label>
+            <select id="ct" class="{{ctCls}}" value="{{ct}}" onChange="{{onCt}}">
+              <option value="">{{cct.common.select_category}}</option><option>{{cct.common.camera_and_lenses}}</option><option>{{cct.common.lighting_and_grip}}</option><option>{{cct.common.sound_equipment}}</option><option>{{cct.common.drones_and_aerial}}</option><option>{{cct.common.costume_and_props}}</option><option>{{cct.common.post_production_gear}}</option><option>{{cct.common.production_vehicles}}</option>
+            </select>
+            <sc-if value="{{ctErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.common.choose_the_category_you_mainly}}</span></sc-if>
+          </div>
+          <div class="fld"><span class="lbl">{{cct.common.you_offer_equipment_for}} <span class="req">*</span></span>
+            <div class="seg" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+              <sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button class="{{m.cls}}" onClick="{{m.pick}}" aria-pressed="{{m.on}}">{{m.label}}</button></sc-for>
+            </div>
+          </div>
+          <div class="fld"><span class="lbl">{{cct.r2.office_locations}} <span class="req">*</span></span>
+            <span class="help" style="margin-top: -2px">{{cct.r2.add_every_city_where_you_have_an_2}}</span>
+            <sc-if value="{{hasOffices}}" hint-placeholder-val="{{ true }}"><div class="list"><sc-for list="{{officeTags}}" as="o" hint-placeholder-count="2"><div class="li" style="align-items: flex-start; cursor: default"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span class="sp" style="min-width: 0"><span class="t-s b" style="display: block">{{o.city}}, {{o.state}}</span><span class="t-c mut" style="display: block">{{o.addr}}</span></span><button class="btn btn-t btn-sm" onClick="{{o.edit}}">{{cct.r2.edit}}</button><button class="iconbtn" onClick="{{o.remove}}" aria-label="{{cct.complete_profile.remove}}{{o.city}}" style="width: 36px; height: 36px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div></sc-for></div></sc-if>
+            <sc-if value="{{offFormOpen}}" hint-placeholder-val="{{ false }}"><div class="card" style="gap: 10px; padding: 12px">
+              <div class="t-s b">{{offFormTitle}}</div>
+              <div class="row" style="gap: 8px"><input class="inp sp" placeholder="{{cct.r2.city}}" value="{{ofCity}}" onChange="{{onOfCity}}" aria-label="{{cct.r2.city}}"><input class="inp sp" placeholder="{{cct.r2.state}}" value="{{ofState}}" onChange="{{onOfState}}" aria-label="{{cct.r2.state}}"></div>
+              <textarea class="inp" placeholder="{{cct.r2.office_address_building_street_area_pin}}" onChange="{{onOfAddr}}" value="{{ofAddr}}" aria-label="{{cct.r2.office_address}}"></textarea>
+              <sc-if value="{{ofErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert">{{cct.r2.add_the_city_state_and_office_address}}</span></sc-if>
+              <div class="row" style="gap: 8px"><button class="btn btn-s btn-sm" onClick="{{cancelOff}}" style="flex: 1">{{cct.common.cancel}}</button><button class="btn btn-p btn-sm" onClick="{{saveOff}}" style="flex: 1.4">{{cct.r2.save_location}}</button></div>
+            </div></sc-if>
+            <sc-if value="{{offFormClosed}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s w100" onClick="{{addOff}}" style="border-style: dashed"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{cct.r2.add_office_location}}</button></sc-if>
+          </div>
+          <div class="fld"><span class="lbl">{{cct.r2.past_clients_clientele}} <span class="opt">{{cct.r2.optional_2}}</span></span>
+            <sc-if value="{{hasClients}}" hint-placeholder-val="{{ true }}"><div class="chips"><sc-for list="{{clientTags}}" as="c" hint-placeholder-count="3"><span class="chip on">{{c.label}}<button onClick="{{c.remove}}" aria-label="{{cct.complete_profile.remove}}{{c.label}}" style="border: 0; background: none; color: inherit; padding: 0; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+            <div class="row" style="gap: 8px"><input class="inp sp" placeholder="{{cct.r2.client_name_e_g_lantern_pictures}}" value="{{clIn}}" onChange="{{onClIn}}" aria-label="{{cct.r2.add_a_client}}"><button class="btn btn-s" onClick="{{addCl}}">{{cct.common.add}}</button></div>
+            <span class="help">{{cct.r2.shown_as_clients_on_your_public_product}}</span>
+          </div>
+          <div class="fld"><label class="lbl" for="ab">{{cct.common.about_your_business}}</label><textarea id="ab" class="inp" placeholder="{{cct.complete_profile.what_you_stock_how_long}}"></textarea></div>
+          <button class="btn btn-p w100" onClick="{{saveBiz}}">{{cct.complete_profile.save_section}}</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- 4 · Contact & GST -->
+    <div class="card" style="padding: 0; gap: 0; overflow: hidden">
+      <button onClick="{{tCon}}" aria-expanded="{{oCon}}" class="row" style="gap: 12px; padding: 14px 16px; width: 100%; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer; min-height: 64px">
+        <span class="sq g" style="width: 40px; height: 40px; border-radius: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"></path></svg></span>
+        <span class="sp" style="display: flex; flex-direction: column; gap: 2px"><span class="t-h3">{{cct.common.business_contact_and_gst}}</span><span class="t-c mut">{{cct.complete_profile.hidden_until_a_user_taps}}</span></span>
+        <span class="{{bCon}}">{{lCon}}</span>
+      </button>
+      <sc-if value="{{oCon}}" hint-placeholder-val="{{ false }}">
+        <div class="cc-reveal" style="display: flex; flex-direction: column; gap: 18px; padding: 4px 16px 16px; border-top: 1px solid rgba(101,39,200,.1)">
+          <div class="fld" style="margin-top: 12px"><label class="lbl" for="cp">{{cct.common.contact_person}} <span class="req">*</span></label><input id="cp" class="inp" value="{{cpName}}"></div>
+          <div class="fld"><label class="lbl" for="ph">{{cct.common.business_phone}} <span class="req">*</span></label><div class="pre"><span>{{cct.common.t_91}}</span><input id="ph" type="tel" value="98201 44120"></div></div>
+          <div class="fld"><label class="lbl" for="be">{{cct.common.business_email}} <span class="req">*</span></label><input id="be" class="inp" type="email" value="{{cct.common.rent_reelhouse_in}}"></div>
+          <div class="fld"><label class="lbl" for="bw">{{cct.common.website}} <span class="opt">{{cct.common.optional}}</span></label><input id="bw" class="inp" type="url" placeholder="{{cct.common.https}}"></div>
+          <div class="fld"><label class="lbl" for="bg">{{cct.common.gstin}} <span class="opt">{{cct.common.optional}}</span></label><input id="bg" class="inp" placeholder="{{cct.common.t_15_character_gstin}}" maxlength="15" style="text-transform: uppercase"></div>
+          <div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg><div>{{cct.complete_profile.you_can_preview_your_public}} <b>{{cct.common.profile}}</b>.</div></div>
+          <button class="btn btn-p w100" onClick="{{saveCon}}">{{cct.complete_profile.save_section}}</button>
+        </div>
+      </sc-if>
+    </div>
+    </div></sc-if>
+  </div>
+
+  <div class="foot" style="flex-direction: column; gap: 8px">
+    <sc-if value="{{setupGo}}" hint-placeholder-val="{{ true }}"><a class="{{finishCls}}" href="SetupDone.dc.html">{{finishLabel}}</a></sc-if>
+    <sc-if value="{{homeGo}}" hint-placeholder-val="{{ false }}"><a class="{{homeCls}}" href="SeekerHome.dc.html">{{homeLabel}}</a></sc-if>
+    <sc-if value="{{anyDirty}}" hint-placeholder-val="{{ false }}"><button class="{{leaveCls}}" onClick="{{blockLeave}}">{{leaveLabel}}</button></sc-if>
+  </div>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status" style="bottom: 104px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div></sc-if>
+<!-- R8 · selection panel for mapped dropdowns: title, search, options, selected state, Done -->
+<sc-if value="{{pfv.panel.open}}" hint-placeholder-val="{{ false }}"><div class="scrim" style="z-index: 70">
+<div class="sheet pf-sheet" role="dialog" aria-modal="true" aria-label="{{pfv.panel.title}}">
+  <div class="grab"></div>
+  <div class="row" style="gap: 10px"><div class="sp"><div class="t-h2">{{pfv.panel.title}}</div><div class="t-c mut">{{pfv.panel.sub}}</div></div><button class="iconbtn" onClick="{{pfv.panel.close}}" aria-label="Close without saving"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+  <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{pfv.panel.ph}}" value="{{pfv.panel.q}}" onChange="{{pfv.panel.onQ}}" aria-label="{{pfv.panel.ph}}"></div>
+  <sc-if value="{{pfv.panel.hasChips}}" hint-placeholder-val="{{ false }}"><div class="chips pf-sel"><sc-for list="{{pfv.panel.chips}}" as="c" hint-placeholder-count="2"><span class="chip on">{{c.l}}<button onClick="{{c.remove}}" aria-label="Remove {{c.l}}" style="border: 0; background: none; color: inherit; padding: 0 0 0 4px; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+  <sc-if value="{{pfv.panel.hasHint}}" hint-placeholder-val="{{ false }}"><div class="t-c mut">{{pfv.panel.hint}}</div></sc-if>
+  <div class="pf-opts">
+    <sc-for list="{{pfv.panel.groups}}" as="gr" hint-placeholder-count="1"><div style="display: flex; flex-direction: column; gap: 6px"><sc-if value="{{gr.hasLabel}}" hint-placeholder-val="{{ false }}"><div class="t-over">{{gr.label}}</div></sc-if>
+      <div class="list" role="listbox" aria-multiselectable="{{pfv.panel.multi}}"><sc-for list="{{gr.opts}}" as="o" hint-placeholder-count="5"><button class="li" role="option" aria-selected="{{o.on}}" onClick="{{o.toggle}}" style="min-height: 48px"><span class="{{o.chk}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span><span class="sp" style="text-align: left; display: flex; flex-direction: column"><span class="t-s b">{{o.l}}</span><sc-if value="{{o.hasS}}" hint-placeholder-val="{{ false }}"><span class="t-c mut">{{o.s}}</span></sc-if></span></button></sc-for></div></div></sc-for>
+    <sc-if value="{{pfv.panel.empty}}" hint-placeholder-val="{{ false }}"><div class="t-s mut" style="text-align: center; padding: 24px 0">{{pfv.panel.emptyText}}</div></sc-if>
+  </div>
+  <div class="row" style="gap: 10px"><button class="btn btn-s" onClick="{{pfv.panel.clear}}" style="flex: 1">Clear</button><button class="btn btn-p" onClick="{{pfv.panel.done}}" style="flex: 2">{{pfv.panel.doneLabel}}</button></div>
+</div></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"act":{"editor":null},"store":{"editor":null},"setup":{"editor":"enum","options":["yes","no"],"default":"yes"},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* R7: sample accounts (crewconnect_content.json › accounts) — the one place names, roles and the vendor profile are defined. */
+var ACC = (function (w) { if (w.__ccAcc) return w.__ccAcc;
+  var d = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.accounts) || {"about": "Sample accounts (Revision 7). Single source of truth for who can log in, their roles and their vendor profile. Every screen reads this block (via the ACC helper); no screen hardcodes these names or roles. Log in with the account ID (crew01 / crew02) or its demo email. Personal details follow sample_profiles: only name, city and public links are shown; designation, skills, bio, phone and bank details are left empty until verified.", "default": "crew01", "list": [{"id": "crew01", "name": "Varun Khandelwal", "email": "crew01@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": false}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster"], "vendor": null}, {"id": "crew02", "name": "Ria Bhavsar", "email": "crew02@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": true}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster", "Vendor"], "vendor": "vendor-house"}], "vendors": [{"id": "vendor-house", "name": "Vendor House", "type": "Vendor", "owner": "crew02", "city": "Mumbai", "initials": "VH", "contact": {"person": "Ria Bhavsar", "phone": "", "email": "", "website": "", "gstin": ""}, "note": "Business category, description, offices (city level), clientele and listings are sample demo content carried over from the previous sample vendor. Contact identifiers (phone, email, website, GSTIN, street address) are not set."}], "labels": {"notAdded": "Not added yet", "demoHint": "Demo accounts: crew01 · crew02", "crewMember": "Crew Member"}};
+  var by = {}, vb = {}, vn = {}; d.list.forEach(function (a) { by[a.id] = a; }); d.vendors.forEach(function (v) { vb[v.id] = v; vn[v.name] = v; });
+  function byLogin(s) { s = String(s || '').trim().toLowerCase(); for (var i = 0; i < d.list.length; i++) { var a = d.list[i]; if (a.id === s || a.email === s) return a; } return null; }
+  function def() { return by[d.default]; }
+  function byName(n) { for (var i = 0; i < d.list.length; i++) if (d.list[i].name === n) return d.list[i]; return null; }
+  function vendorOf(a) { return a && a.vendor ? vb[a.vendor] || null : null; }
+  function forStore(st) { return st && st.acct ? by[st.acct] || null : (st && st.name ? byName(st.name) : null); }
+  // Standalone artboards have no logged-in store: pick the sample account whose roles match the artboard's (default: all roles → crew02).
+  function byRoles(r) { r = r || { crew: true, vendor: true }; for (var i = 0; i < d.list.length; i++) { var x = d.list[i]; if (!!x.roles.crew === !!r.crew && !!x.roles.vendor === !!r.vendor) return x; } return def(); }
+  function me(st) { st = st || {}; return forStore(st) || (st.name ? null : byRoles(st.roles)); }
+  function name(st) { st = st || {}; var a = me(st); return st.name || (a ? a.name : def().name); }
+  function storeFor(a) { var v = vendorOf(a); return { acct: a.id, name: a.name, email: a.email, roles: { crew: !!a.roles.crew, vendor: !!a.roles.vendor }, modes: { seek: !!a.modes.seek, post: !!a.modes.post },
+    bizName: v ? v.name : '', phone: '', photo: false, prof: { pro: !!a.roles.crew, refs: !!a.roles.crew, biz: !!v, contact: false } }; }
+  return (w.__ccAcc = { d: d, list: d.list, labels: d.labels, byId: function (i) { return by[i] || null; }, byLogin: byLogin, byName: byName, def: def,
+    vendorOf: vendorOf, vendorByName: function (n) { return vn[n] || null; }, ownerOf: function (v) { return v ? by[v.owner] || null : null; }, forStore: forStore, me: me, name: name, storeFor: storeFor }); })(window);
+
+/* R8: profile master (crewconnect_content.json › profile_master, loaded from the client's workbook). One helper for dropdowns, cascades and filters. */
+var PM = (function (w) { if (w.__ccPM) return w.__ccPM;
+  var m = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.profile_master) || {"about": "Revision 8 — profile dropdowns & filters. Source of truth: 'CrewConnect – design sample set dropdowns filters.xlsx' (sheets: Field UI, Vertical-Dept-Title, Dropdown lists, Sample profiles, Filter scenarios), loaded verbatim. Keys are kept so a backend can map 1:1. This is a design sample set: the full dataset sizes are listed per field (optionsInFullDataset).", "fields": [{"id": "F01", "field": "Profile ID", "control": "System (hidden)", "selection": "—", "required": "—", "dependsOn": "No", "searchable": "No", "placeholder": "—", "helper": "—", "optionsInFullDataset": "Generated on sign-up", "note": null}, {"id": "F02", "field": "Primary Vertical", "control": "Dropdown + chips", "selection": "Multi-select", "required": "Required", "dependsOn": "No", "searchable": "Yes", "placeholder": "Select industry", "helper": "Pick every industry you work in", "optionsInFullDataset": 40, "note": "Parent of Department"}, {"id": "F03", "field": "Department", "control": "Dependent dropdown + chips", "selection": "Multi-select", "required": "Required", "dependsOn": "Primary Vertical", "searchable": "Yes", "placeholder": "Select department", "helper": "Shows departments for the industries you picked", "optionsInFullDataset": 471, "note": "Disabled until a vertical is chosen"}, {"id": "F04", "field": "Designation (Work title)", "control": "Dependent searchable dropdown", "selection": "Multi-select; mark one as primary", "required": "Required", "dependsOn": "Department", "searchable": "Yes", "placeholder": "Search work title", "helper": "Choose your main title, then add others", "optionsInFullDataset": 2719, "note": "Show department next to each result"}, {"id": "F05", "field": "Alternate / Credit Title", "control": "Text field with suggestions", "selection": "Free text", "required": "Optional", "dependsOn": "Work title", "searchable": "Typeahead", "placeholder": "e.g. DOP, First AC", "helper": "The exact title on call sheets or credits", "optionsInFullDataset": 28, "note": "Stored verbatim"}, {"id": "F06", "field": "Specialisation", "control": "Searchable dropdown + chips", "selection": "Multi-select", "required": "Optional", "dependsOn": "— (VFX: specialisation → software)", "searchable": "Yes", "placeholder": "Add specialisation", "helper": "Niche skills, e.g. roto, pyro, tabla", "optionsInFullDataset": 134, "note": "V4-only lists"}, {"id": "F07", "field": "Equipment / Software", "control": "Searchable dropdown + chips, proficiency per item", "selection": "Multi-select", "required": "Optional", "dependsOn": "Equipment: group → category → model", "searchable": "Yes", "placeholder": "Add skill or equipment", "helper": "Add proficiency and when you last used it", "optionsInFullDataset": 761, "note": "Skills are not filtered by work title"}, {"id": "F08", "field": "Experience (years)", "control": "Number stepper + seniority dropdown", "selection": "Number / Single-select", "required": "Required", "dependsOn": "—", "searchable": "No", "placeholder": "Years", "helper": "Seniority is separate from your title", "optionsInFullDataset": 12, "note": "Range slider in filters"}, {"id": "F09", "field": "Credits / Projects", "control": "Repeating card (add credit)", "selection": "Repeating group", "required": "Optional", "dependsOn": "Role uses Department → Work title", "searchable": "Credit type: yes", "placeholder": "Project name", "helper": "Add proof or a link where you can", "optionsInFullDataset": 66, "note": null}, {"id": "F10", "field": "Location / Work Radius", "control": "City + state fields, radius slider, travel toggle", "selection": "Free text / Number", "required": "Required", "dependsOn": "—", "searchable": "City: typeahead (no master list yet)", "placeholder": "City", "helper": "Where you are based and how far you travel", "optionsInFullDataset": "—", "note": "No city master list yet"}, {"id": "F11", "field": "Languages", "control": "Searchable dropdown + chips (fluency per language)", "selection": "Multi-select", "required": "Optional", "dependsOn": "—", "searchable": "Yes", "placeholder": "Add language", "helper": "Languages you work in", "optionsInFullDataset": 18, "note": "Fluency levels not yet defined"}, {"id": "F12", "field": "Availability", "control": "Status segmented control + date range; engagement chips", "selection": "Single-select / Multi-select", "required": "Optional", "dependsOn": "—", "searchable": "No", "placeholder": "Availability", "helper": "Update this when you are booked", "optionsInFullDataset": 17, "note": null}, {"id": "F13", "field": "Portfolio / Showreel", "control": "URL field + upload", "selection": "Free text", "required": "Optional", "dependsOn": "—", "searchable": "No", "placeholder": "Paste a link", "helper": "Showreel, website or work samples", "optionsInFullDataset": "—", "note": null}], "verticals": [{"k": "VERT-001", "l": "Film production"}, {"k": "VERT-014", "l": "Music recording / production"}, {"k": "VERT-022", "l": "Post-production"}, {"k": "VERT-024", "l": "Gaming / interactive entertainment"}], "departments": [{"k": "DEPT-0002", "l": "Direction", "v": "VERT-001"}, {"k": "DEPT-0008", "l": "Camera", "v": "VERT-001"}, {"k": "DEPT-0010", "l": "Lighting / electrical", "v": "VERT-001"}, {"k": "DEPT-0012", "l": "Sound production", "v": "VERT-001"}, {"k": "DEPT-0016", "l": "Costume", "v": "VERT-001"}, {"k": "DEPT-0177", "l": "Composition", "v": "VERT-014"}, {"k": "DEPT-0184", "l": "Vocals", "v": "VERT-014"}, {"k": "DEPT-0186", "l": "Mixing", "v": "VERT-014"}, {"k": "DEPT-0288", "l": "Sound editorial", "v": "VERT-022"}, {"k": "DEPT-0307", "l": "Game design", "v": "VERT-024"}, {"k": "DEPT-0311", "l": "Art", "v": "VERT-024"}], "titles": [{"k": "ROLE-00006", "l": "Director", "d": "DEPT-0002", "grade": "B"}, {"k": "ROLE-00007", "l": "Associate Director", "d": "DEPT-0002", "grade": "B"}, {"k": "ROLE-00008", "l": "Assistant Director", "d": "DEPT-0002", "grade": "B"}, {"k": "ROLE-00012", "l": "Script Supervisor / Continuity Supervisor", "d": "DEPT-0002", "grade": "B"}, {"k": "ROLE-00057", "l": "Director of Photography (DOP)", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00059", "l": "Camera Operator", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00062", "l": "Steadicam Operator", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00063", "l": "1st AC / Focus Puller", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00064", "l": "2nd AC", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00066", "l": "DIT", "d": "DEPT-0008", "grade": "B"}, {"k": "ROLE-00077", "l": "Gaffer", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00078", "l": "Best Boy Electric", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00080", "l": "Lighting Technician", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00083", "l": "Generator Operator", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00085", "l": "Console Programmer", "d": "DEPT-0010", "grade": "B"}, {"k": "ROLE-00097", "l": "Production Sound Mixer", "d": "DEPT-0012", "grade": "B"}, {"k": "ROLE-00098", "l": "Location Sound Recordist", "d": "DEPT-0012", "grade": "B"}, {"k": "ROLE-00099", "l": "Boom Operator", "d": "DEPT-0012", "grade": "B"}, {"k": "ROLE-00103", "l": "RF Technician", "d": "DEPT-0012", "grade": "B"}, {"k": "ROLE-00131", "l": "Costume Designer", "d": "DEPT-0016", "grade": "B"}, {"k": "ROLE-00132", "l": "Costume Stylist", "d": "DEPT-0016", "grade": "B"}, {"k": "ROLE-00134", "l": "Costume Supervisor", "d": "DEPT-0016", "grade": "B"}, {"k": "ROLE-00138", "l": "Tailor", "d": "DEPT-0016", "grade": "B"}, {"k": "ROLE-01102", "l": "Composer", "d": "DEPT-0177", "grade": "B"}, {"k": "ROLE-01104", "l": "Music Director", "d": "DEPT-0177", "grade": "B"}, {"k": "ROLE-01107", "l": "Lyricist", "d": "DEPT-0177", "grade": "B"}, {"k": "ROLE-01108", "l": "Arranger", "d": "DEPT-0177", "grade": "B"}, {"k": "ROLE-01147", "l": "Playback Singer", "d": "DEPT-0184", "grade": "B"}, {"k": "ROLE-01148", "l": "Lead Vocalist", "d": "DEPT-0184", "grade": "B"}, {"k": "ROLE-01149", "l": "Backing Vocalist", "d": "DEPT-0184", "grade": "B"}, {"k": "ROLE-01151", "l": "Classical Vocalist", "d": "DEPT-0184", "grade": "B"}, {"k": "ROLE-01164", "l": "Recording Engineer", "d": "DEPT-0186", "grade": "B"}, {"k": "ROLE-01166", "l": "Mix Engineer", "d": "DEPT-0186", "grade": "B"}, {"k": "ROLE-01167", "l": "Mastering Engineer", "d": "DEPT-0186", "grade": "B"}, {"k": "ROLE-01169", "l": "Pro Tools Operator", "d": "DEPT-0186", "grade": "B"}, {"k": "ROLE-01729", "l": "Sound Editor", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01730", "l": "Dialogue Editor", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01732", "l": "Foley Artist", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01734", "l": "Sound Designer", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01735", "l": "Re-recording Mixer", "d": "DEPT-0288", "grade": "B"}, {"k": "ROLE-01831", "l": "Game Designer", "d": "DEPT-0307", "grade": "B"}, {"k": "ROLE-01832", "l": "Level Designer", "d": "DEPT-0307", "grade": "B"}, {"k": "ROLE-01834", "l": "Narrative Designer", "d": "DEPT-0307", "grade": "B"}, {"k": "ROLE-01857", "l": "Art Director", "d": "DEPT-0311", "grade": "B"}, {"k": "ROLE-01858", "l": "Concept Artist", "d": "DEPT-0311", "grade": "B"}, {"k": "ROLE-01860", "l": "3D Artist", "d": "DEPT-0311", "grade": "B"}, {"k": "ROLE-01864", "l": "UI Artist", "d": "DEPT-0311", "grade": "B"}], "lists": {"Seniority": [{"k": "SEN-01", "l": "Trainee"}, {"k": "SEN-02", "l": "Intern"}, {"k": "SEN-03", "l": "Junior"}, {"k": "SEN-04", "l": "Assistant"}, {"k": "SEN-05", "l": "Technician / Operator"}, {"k": "SEN-06", "l": "Mid-level"}, {"k": "SEN-07", "l": "Senior"}, {"k": "SEN-08", "l": "Lead"}, {"k": "SEN-09", "l": "Supervisor"}, {"k": "SEN-10", "l": "Head of Department (HOD)"}, {"k": "SEN-11", "l": "Department Head / Director"}, {"k": "SEN-12", "l": "Owner / Founder / Partner"}], "Skills": [{"k": "SKL-0001", "l": "ARRI camera systems"}, {"k": "SKL-0002", "l": "Sony VENICE systems"}, {"k": "SKL-0015", "l": "Steadicam operation"}, {"k": "SKL-0014", "l": "Wireless focus systems"}, {"k": "SKL-0018", "l": "DIT workflow"}, {"k": "SKL-0022", "l": "DMX lighting control"}, {"k": "SKL-0025", "l": "LED lighting"}, {"k": "SKL-0033", "l": "Generator operation"}, {"k": "SKL-0035", "l": "Location sound recording"}, {"k": "SKL-0036", "l": "RF coordination"}, {"k": "SKL-0038", "l": "Timecode / sync"}, {"k": "SKL-0039", "l": "Pro Tools"}, {"k": "SKL-0042", "l": "DaVinci Resolve"}, {"k": "SKL-0058", "l": "Dolby Atmos workflows"}, {"k": "SKL-0059", "l": "Foley recording"}, {"k": "SKL-0050", "l": "Unreal Engine"}, {"k": "SKL-0051", "l": "Unity"}, {"k": "SKL-0049", "l": "Blender"}, {"k": "SKL-0099", "l": "Script breakdown"}, {"k": "SKL-0104", "l": "Continuity"}, {"k": "SKL-0126", "l": "Costume tailoring"}, {"k": "SKL-0136", "l": "Music arrangement"}, {"k": "SKL-0135", "l": "Playback singing"}, {"k": "SKL-0139", "l": "Indian classical vocal"}, {"k": "SKL-0137", "l": "Orchestration"}], "Languages": [{"k": "LANG-01", "l": "Hindi"}, {"k": "LANG-02", "l": "Tamil"}, {"k": "LANG-03", "l": "Telugu"}, {"k": "LANG-04", "l": "Malayalam"}, {"k": "LANG-05", "l": "Kannada"}, {"k": "LANG-06", "l": "Bengali"}, {"k": "LANG-07", "l": "Marathi"}, {"k": "LANG-08", "l": "Gujarati"}, {"k": "LANG-09", "l": "Punjabi"}, {"k": "LANG-10", "l": "Odia"}, {"k": "LANG-11", "l": "Assamese"}, {"k": "LANG-12", "l": "Urdu"}, {"k": "LANG-13", "l": "English"}, {"k": "LANG-14", "l": "Manipuri"}, {"k": "LANG-15", "l": "Konkani"}, {"k": "LANG-16", "l": "Bhojpuri"}, {"k": "LANG-17", "l": "Rajasthani"}, {"k": "LANG-18", "l": "Haryanvi"}], "Engagement preference": [{"k": "ENG-01", "l": "Full-time employee"}, {"k": "ENG-03", "l": "Freelancer"}, {"k": "ENG-04", "l": "Daily-wage / day player"}, {"k": "ENG-05", "l": "Project-based contract"}, {"k": "ENG-07", "l": "Consultant"}, {"k": "ENG-13", "l": "Gig / per-show / per-event"}], "Availability status": [{"k": "AVL-01", "l": "Available"}, {"k": "AVL-02", "l": "Booked"}, {"k": "AVL-03", "l": "Unavailable"}], "Verification status": [{"k": "VST-01", "l": "Unverified"}, {"k": "VST-02", "l": "Document checked"}, {"k": "VST-03", "l": "Credit checked"}, {"k": "VST-04", "l": "Reference checked"}], "Proficiency": [{"k": "PRF-01", "l": "Beginner"}, {"k": "PRF-02", "l": "Working"}, {"k": "PRF-03", "l": "Advanced"}, {"k": "PRF-04", "l": "Specialist"}], "Credit type": [{"k": "CRD-0001", "l": "Directed by"}, {"k": "CRD-0013", "l": "Director of photography"}, {"k": "CRD-0015", "l": "Focus puller"}, {"k": "CRD-0018", "l": "Gaffer"}, {"k": "CRD-0021", "l": "Production sound mixer"}, {"k": "CRD-0026", "l": "Costume designed by"}, {"k": "CRD-0031", "l": "Music by"}, {"k": "CRD-0035", "l": "Playback vocals"}, {"k": "CRD-0037", "l": "Edited by"}, {"k": "CRD-0042", "l": "Sound design"}], "VFX specialisation": [{"k": "VFXS-01", "l": "Roto / Paint / Prep"}, {"k": "VFXS-02", "l": "Matchmove / Tracking / Layout"}, {"k": "VFXS-03", "l": "Compositing"}, {"k": "VFXS-04", "l": "Modelling / Texture / Lookdev"}, {"k": "VFXS-05", "l": "Rigging / Character FX"}], "VFX software (depends on specialisation)": [{"k": "VFXT-001", "l": "Silhouette", "p": ["VFXS-01", "VFXS-03"]}, {"k": "VFXT-002", "l": "Nuke", "p": ["VFXS-01", "VFXS-03"]}, {"k": "VFXT-003", "l": "Mocha", "p": ["VFXS-01"]}, {"k": "VFXT-004", "l": "3DEqualizer", "p": ["VFXS-02"]}, {"k": "VFXT-005", "l": "PFTrack", "p": ["VFXS-02"]}, {"k": "VFXT-006", "l": "Maya", "p": ["VFXS-02", "VFXS-04", "VFXS-05"]}, {"k": "VFXT-007", "l": "Blender", "p": ["VFXS-04"]}, {"k": "VFXT-008", "l": "ZBrush", "p": ["VFXS-04"]}, {"k": "VFXT-009", "l": "Mari", "p": ["VFXS-04"]}, {"k": "VFXT-010", "l": "Substance 3D", "p": ["VFXS-04"]}, {"k": "VFXT-011", "l": "Houdini", "p": ["VFXS-05"]}], "Instrument family": [{"k": "IFAM-01", "l": "Indian percussion"}, {"k": "IFAM-02", "l": "Western / global percussion"}, {"k": "IFAM-03", "l": "Indian string instruments"}], "Instrument (depends on family)": [{"k": "INST-001", "l": "Tabla", "p": ["IFAM-01"]}, {"k": "INST-002", "l": "Dholak", "p": ["IFAM-01"]}, {"k": "INST-003", "l": "Mridangam", "p": ["IFAM-01"]}, {"k": "INST-004", "l": "Pakhawaj", "p": ["IFAM-01"]}, {"k": "INST-025", "l": "Drum Kit", "p": ["IFAM-02"]}, {"k": "INST-026", "l": "Cajón", "p": ["IFAM-02"]}, {"k": "INST-027", "l": "Congas", "p": ["IFAM-02"]}, {"k": "INST-028", "l": "Bongos", "p": ["IFAM-02"]}, {"k": "INST-047", "l": "Sitar", "p": ["IFAM-03"]}, {"k": "INST-048", "l": "Sarod", "p": ["IFAM-03"]}, {"k": "INST-049", "l": "Sarangi", "p": ["IFAM-03"]}, {"k": "INST-050", "l": "Santoor", "p": ["IFAM-03"]}], "Equipment group": [{"k": "EQG-01", "l": "Camera bodies"}, {"k": "EQG-03", "l": "Lighting fixtures"}, {"k": "EQG-06", "l": "Live event systems"}], "Equipment category (depends on group)": [{"k": "EQC-001", "l": "Digital cinema - Super 35", "p": ["EQG-01"]}, {"k": "EQC-002", "l": "Digital cinema - Large Format / Full Frame", "p": ["EQG-01"]}, {"k": "EQC-020", "l": "LED soft / panel", "p": ["EQG-03"]}, {"k": "EQC-021", "l": "LED COB / point source", "p": ["EQG-03"]}, {"k": "EQC-045", "l": "Digital audio consoles", "p": ["EQG-06"]}, {"k": "EQC-046", "l": "PA / loudspeaker systems", "p": ["EQG-06"]}], "Equipment make / model (depends on category)": [{"k": "EQM-0001", "l": "ARRI ALEXA 35", "p": ["EQC-001"]}, {"k": "EQM-0002", "l": "ARRI ALEXA Mini", "p": ["EQC-001"]}, {"k": "EQM-0003", "l": "ARRI ALEXA SXT", "p": ["EQC-001"]}, {"k": "EQM-0009", "l": "ARRI ALEXA LF", "p": ["EQC-002"]}, {"k": "EQM-0010", "l": "ARRI ALEXA Mini LF", "p": ["EQC-002"]}, {"k": "EQM-0011", "l": "ARRI ALEXA 265", "p": ["EQC-002"]}, {"k": "EQM-0168", "l": "ARRI SkyPanel S30-C", "p": ["EQC-020"]}, {"k": "EQM-0169", "l": "ARRI SkyPanel S60-C", "p": ["EQC-020"]}, {"k": "EQM-0170", "l": "ARRI SkyPanel S120-C", "p": ["EQC-020"]}, {"k": "EQM-0176", "l": "Aputure STORM 80c", "p": ["EQC-021"]}, {"k": "EQM-0177", "l": "Aputure STORM 300x", "p": ["EQC-021"]}, {"k": "EQM-0178", "l": "Aputure STORM 400x", "p": ["EQC-021"]}, {"k": "EQM-0455", "l": "DiGiCo SD7", "p": ["EQC-045"]}, {"k": "EQM-0456", "l": "DiGiCo SD10", "p": ["EQC-045"]}, {"k": "EQM-0457", "l": "DiGiCo SD12", "p": ["EQC-045"]}, {"k": "EQM-0470", "l": "L-Acoustics K1", "p": ["EQC-046"]}, {"k": "EQM-0471", "l": "L-Acoustics K2", "p": ["EQC-046"]}, {"k": "EQM-0472", "l": "L-Acoustics K3", "p": ["EQC-046"]}]}, "profiles": [{"id": "CC-P-0001", "name": "Ananya Rao", "vert": ["VERT-001"], "dept": ["DEPT-0008"], "t1": "ROLE-00057", "t2": null, "sen": "SEN-10", "yrs": 14, "skills": ["SKL-0001", "SKL-0002", "SKL-0018"], "langs": ["LANG-13", "LANG-01", "LANG-05"], "city": "Mumbai", "state": "Maharashtra", "radius": 500, "avl": "AVL-01", "eng": ["ENG-03", "ENG-05"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0001"}, {"id": "CC-P-0002", "name": "Vikram Iyer", "vert": ["VERT-001"], "dept": ["DEPT-0008"], "t1": "ROLE-00063", "t2": "ROLE-00064", "sen": "SEN-07", "yrs": 8, "skills": ["SKL-0014", "SKL-0001"], "langs": ["LANG-02", "LANG-13"], "city": "Chennai", "state": "Tamil Nadu", "radius": 300, "avl": "AVL-02", "eng": ["ENG-03", "ENG-04"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0002"}, {"id": "CC-P-0003", "name": "Rahul Deshmukh", "vert": ["VERT-001"], "dept": ["DEPT-0008"], "t1": "ROLE-00062", "t2": "ROLE-00059", "sen": "SEN-07", "yrs": 10, "skills": ["SKL-0015", "SKL-0001"], "langs": ["LANG-07", "LANG-01"], "city": "Pune", "state": "Maharashtra", "radius": 800, "avl": "AVL-01", "eng": ["ENG-03", "ENG-13"], "ver": "VST-04", "reel": "https://example.com/reel/cc-p-0003"}, {"id": "CC-P-0004", "name": "Farhan Qureshi", "vert": ["VERT-001"], "dept": ["DEPT-0010"], "t1": "ROLE-00077", "t2": null, "sen": "SEN-10", "yrs": 18, "skills": ["SKL-0022", "SKL-0025", "SKL-0033"], "langs": ["LANG-01", "LANG-12"], "city": "Mumbai", "state": "Maharashtra", "radius": 1000, "avl": "AVL-01", "eng": ["ENG-05"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0004"}, {"id": "CC-P-0005", "name": "Suresh Kumar", "vert": ["VERT-001"], "dept": ["DEPT-0010"], "t1": "ROLE-00080", "t2": "ROLE-00083", "sen": "SEN-05", "yrs": 6, "skills": ["SKL-0025", "SKL-0033"], "langs": ["LANG-03", "LANG-01"], "city": "Hyderabad", "state": "Telangana", "radius": 200, "avl": "AVL-03", "eng": ["ENG-04"], "ver": "VST-01", "reel": "https://example.com/reel/cc-p-0005"}, {"id": "CC-P-0006", "name": "Meera Nair", "vert": ["VERT-001"], "dept": ["DEPT-0012"], "t1": "ROLE-00097", "t2": null, "sen": "SEN-08", "yrs": 12, "skills": ["SKL-0035", "SKL-0036", "SKL-0038"], "langs": ["LANG-04", "LANG-13", "LANG-02"], "city": "Kochi", "state": "Kerala", "radius": 600, "avl": "AVL-01", "eng": ["ENG-03", "ENG-05"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0006"}, {"id": "CC-P-0007", "name": "Arjun Mehta", "vert": ["VERT-001"], "dept": ["DEPT-0002"], "t1": "ROLE-00008", "t2": "ROLE-00012", "sen": "SEN-04", "yrs": 4, "skills": ["SKL-0099", "SKL-0104"], "langs": ["LANG-01", "LANG-08", "LANG-13"], "city": "Mumbai", "state": "Maharashtra", "radius": 250, "avl": "AVL-01", "eng": ["ENG-03", "ENG-05"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0007"}, {"id": "CC-P-0008", "name": "Priyanka Sen", "vert": ["VERT-001"], "dept": ["DEPT-0016"], "t1": "ROLE-00131", "t2": null, "sen": "SEN-07", "yrs": 9, "skills": ["SKL-0126"], "langs": ["LANG-06", "LANG-01", "LANG-13"], "city": "Kolkata", "state": "West Bengal", "radius": 400, "avl": "AVL-02", "eng": ["ENG-05", "ENG-07"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0008"}, {"id": "CC-P-0009", "name": "Kavya Reddy", "vert": ["VERT-022"], "dept": ["DEPT-0288"], "t1": "ROLE-01734", "t2": "ROLE-01735", "sen": "SEN-07", "yrs": 11, "skills": ["SKL-0039", "SKL-0058", "SKL-0059"], "langs": ["LANG-03", "LANG-13"], "city": "Hyderabad", "state": "Telangana", "radius": 0, "avl": "AVL-01", "eng": ["ENG-03", "ENG-07"], "ver": "VST-04", "reel": "https://example.com/reel/cc-p-0009"}, {"id": "CC-P-0010", "name": "Aditya Bose", "vert": ["VERT-014"], "dept": ["DEPT-0186"], "t1": "ROLE-01166", "t2": "ROLE-01167", "sen": "SEN-07", "yrs": 13, "skills": ["SKL-0039", "SKL-0058"], "langs": ["LANG-06", "LANG-01", "LANG-13"], "city": "Mumbai", "state": "Maharashtra", "radius": 0, "avl": "AVL-02", "eng": ["ENG-03", "ENG-07"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0010"}, {"id": "CC-P-0011", "name": "Shreya Pillai", "vert": ["VERT-014"], "dept": ["DEPT-0184"], "t1": "ROLE-01147", "t2": "ROLE-01151", "sen": "SEN-06", "yrs": 7, "skills": ["SKL-0135", "SKL-0139"], "langs": ["LANG-01", "LANG-04", "LANG-02", "LANG-03"], "city": "Chennai", "state": "Tamil Nadu", "radius": 2000, "avl": "AVL-01", "eng": ["ENG-13", "ENG-03"], "ver": "VST-03", "reel": "https://example.com/reel/cc-p-0011"}, {"id": "CC-P-0012", "name": "Nikhil Sharma", "vert": ["VERT-014"], "dept": ["DEPT-0177"], "t1": "ROLE-01108", "t2": "ROLE-01102", "sen": "SEN-06", "yrs": 6, "skills": ["SKL-0136", "SKL-0137", "SKL-0039"], "langs": ["LANG-01", "LANG-09", "LANG-13"], "city": "Delhi", "state": "Delhi", "radius": 500, "avl": "AVL-01", "eng": ["ENG-05", "ENG-03"], "ver": "VST-01", "reel": "https://example.com/reel/cc-p-0012"}, {"id": "CC-P-0013", "name": "Rohan Kapoor", "vert": ["VERT-024"], "dept": ["DEPT-0307"], "t1": "ROLE-01832", "t2": null, "sen": "SEN-06", "yrs": 5, "skills": ["SKL-0050", "SKL-0051"], "langs": ["LANG-13", "LANG-01"], "city": "Bengaluru", "state": "Karnataka", "radius": 0, "avl": "AVL-01", "eng": ["ENG-01", "ENG-05"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0013"}, {"id": "CC-P-0014", "name": "Divya Menon", "vert": ["VERT-024"], "dept": ["DEPT-0311"], "t1": "ROLE-01860", "t2": "ROLE-01858", "sen": "SEN-03", "yrs": 2, "skills": ["SKL-0049", "SKL-0050"], "langs": ["LANG-04", "LANG-13", "LANG-05"], "city": "Bengaluru", "state": "Karnataka", "radius": 0, "avl": "AVL-01", "eng": ["ENG-01", "ENG-03"], "ver": "VST-01", "reel": "https://example.com/reel/cc-p-0014"}, {"id": "CC-P-0015", "name": "Sameer Khan", "vert": ["VERT-001"], "dept": ["DEPT-0008"], "t1": "ROLE-00066", "t2": "ROLE-00063", "sen": "SEN-05", "yrs": 5, "skills": ["SKL-0018", "SKL-0042", "SKL-0002"], "langs": ["LANG-01", "LANG-12", "LANG-13"], "city": "Mumbai", "state": "Maharashtra", "radius": 300, "avl": "AVL-02", "eng": ["ENG-03", "ENG-04"], "ver": "VST-02", "reel": "https://example.com/reel/cc-p-0015"}], "scenarios": [{"scenario": "Department only", "filters": "Department = Camera (Film production)", "keys": "DEPT-0008", "count": 4, "matching": "CC-P-0001, CC-P-0002, CC-P-0003, CC-P-0015"}, {"scenario": "Work title", "filters": "Work title = 1st AC / Focus Puller (primary or secondary)", "keys": "ROLE-00063", "count": 2, "matching": "CC-P-0002, CC-P-0015"}, {"scenario": "One skill", "filters": "Skill = Pro Tools", "keys": "SKL-0039", "count": 3, "matching": "CC-P-0009, CC-P-0010, CC-P-0012"}, {"scenario": "Multiple skills — ANY", "filters": "Pro Tools OR Dolby Atmos workflows", "keys": "SKL-0039|SKL-0058", "count": 3, "matching": "CC-P-0009, CC-P-0010, CC-P-0012"}, {"scenario": "Multiple skills — ALL", "filters": "Pro Tools AND Dolby Atmos workflows", "keys": "SKL-0039&SKL-0058", "count": 2, "matching": "CC-P-0009, CC-P-0010"}, {"scenario": "Department + Title + Skill", "filters": "Camera + 1st AC / Focus Puller + ARRI camera systems", "keys": "DEPT-0008 + ROLE-00063 + SKL-0001", "count": 1, "matching": "CC-P-0002"}, {"scenario": "Vertical + availability", "filters": "Film production + Available now", "keys": "VERT-001 + AVL-01", "count": 5, "matching": "CC-P-0001, CC-P-0003, CC-P-0004, CC-P-0006, CC-P-0007"}, {"scenario": "Language + city", "filters": "Telugu speakers in Hyderabad", "keys": "LANG-03 + city", "count": 2, "matching": "CC-P-0005, CC-P-0009"}, {"scenario": "Seniority + years", "filters": "HOD seniority with 10+ years", "keys": "SEN-10 + years ≥ 10", "count": 2, "matching": "CC-P-0001, CC-P-0004"}, {"scenario": "Verified only", "filters": "Verification = Reference checked", "keys": "VST-04", "count": 2, "matching": "CC-P-0003, CC-P-0009"}, {"scenario": "No match", "filters": "Gaming + Costume tailoring", "keys": "VERT-024 + SKL-0126", "count": 0, "matching": "— none (show empty state)"}], "jobTags": {"_note": "Existing sample jobs tagged with workbook keys only where the job title names them. Jobs with no matching department/title in the sample set stay untagged (they show in unfiltered results and keyword search only).", "focus_puller": {"vert": ["VERT-001"], "dept": ["DEPT-0008"], "title": ["ROLE-00063"], "skills": []}, "second_unit": {"vert": ["VERT-001"], "dept": ["DEPT-0008"], "title": ["ROLE-00059"], "skills": []}, "assistant_editor": {"vert": [], "dept": [], "title": [], "skills": []}, "location_sound": {"vert": ["VERT-001"], "dept": ["DEPT-0012"], "title": ["ROLE-00098"], "skills": []}, "gaffer": {"vert": ["VERT-001"], "dept": ["DEPT-0010"], "title": ["ROLE-00077"], "skills": []}, "colourist": {"vert": [], "dept": [], "title": [], "skills": ["SKL-0042"]}, "actor": {"vert": [], "dept": [], "title": [], "skills": []}, "first_ad": {"vert": ["VERT-001"], "dept": ["DEPT-0002"], "title": ["ROLE-00008"], "skills": []}}, "vendorTags": {"_note": "Vendor discovery uses the Equipment group → category lists. Vendor House = Camera bodies; Kilowatt Lighting Co. = Lighting fixtures. Soundbox Audio Hire is mapped to Live event systems as the closest sound group in the sample set — confirm.", "Vendor House": {"group": ["EQG-01"], "cat": ["EQC-001", "EQC-002"]}, "Kilowatt Lighting Co.": {"group": ["EQG-03"], "cat": ["EQC-020", "EQC-021"]}, "Soundbox Audio Hire": {"group": ["EQG-06"], "cat": ["EQC-045", "EQC-046"]}}, "flags": ["F05 Alternate / Credit Title: the sample set has no suggestion list (28 in the full dataset) — shown as free text with the placeholder only.", "F06 Specialisation: design note says 'V4-only lists'; the vertical it refers to is unclear, so the specialisation list is shown to everyone.", "F07 Equipment / Software: 'when you last used it' has no list or format in the workbook — only proficiency is captured.", "F10 Location: no city master list yet — City is a free-text field; State is free text.", "F11 Languages: fluency levels are not yet defined — only the language is captured.", "F12 Availability: the date range is handled by the existing Calendar; only status and engagement are captured here.", "Departments in the sample are specific to a vertical (e.g. 'Art' exists only under Gaming). Existing sample jobs in Editing, Colour and Cast have no matching department in the sample set.", "Soundbox Audio Hire mapped to 'Live event systems' (closest group) — confirm."]};
+  var L = {}, lab = {};
+  function put(o) { lab[o.k] = o.l; }
+  m.verticals.forEach(put); m.departments.forEach(put); m.titles.forEach(put);
+  Object.keys(m.lists).forEach(function (n) { m.lists[n].forEach(put); });
+  var LN = { sen: 'Seniority', skills: 'Skills', langs: 'Languages', eng: 'Engagement preference', avl: 'Availability status', ver: 'Verification status', prof: 'Proficiency', credit: 'Credit type',
+    vfxs: 'VFX specialisation', vfxt: 'VFX software (depends on specialisation)', ifam: 'Instrument family', inst: 'Instrument (depends on family)', eqg: 'Equipment group', eqc: 'Equipment category (depends on group)', eqm: 'Equipment make / model (depends on category)' };
+  Object.keys(LN).forEach(function (k) { L[k] = m.lists[LN[k]] || []; });
+  var dept = {}; m.departments.forEach(function (d) { dept[d.k] = d; });
+  var title = {}; m.titles.forEach(function (t) { title[t.k] = t; });
+  var field = {}; m.fields.forEach(function (f) { field[f.id] = f; });
+  function label(k) { return lab[k] || k || ''; }
+  function any(a, b) { a = a || []; b = b || []; for (var i = 0; i < a.length; i++) if (b.indexOf(a[i]) >= 0) return true; return false; }
+  function all(need, have) { have = have || []; for (var i = 0; i < need.length; i++) if (have.indexOf(need[i]) < 0) return false; return true; }
+  // Options per field, with parent keys (p) so screens can cascade: Vertical → Department → Work title; VFX specialisation → software; family → instrument; group → category → model.
+  function opts(f) {
+    if (f === 'vert') return m.verticals.map(function (v) { return { v: v.k, l: v.l }; });
+    if (f === 'dept') return m.departments.map(function (d) { return { v: d.k, l: d.l, s: label(d.v), p: [d.v], g: label(d.v) }; });
+    if (f === 'title') return m.titles.map(function (t) { return { v: t.k, l: t.l, s: label(t.d), p: [t.d], g: label(t.d) }; });
+    if (f === 'spec') return L.vfxs.map(function (o) { return { v: o.k, l: o.l, g: 'VFX specialisation' }; }).concat(L.inst.map(function (o) { return { v: o.k, l: o.l, p: o.p, g: 'Instruments · ' + label(o.p[0]) }; }));
+    if (f === 'equip') return L.skills.map(function (o) { return { v: o.k, l: o.l, g: 'Skills' }; })
+      .concat(L.vfxt.map(function (o) { return { v: o.k, l: o.l, p: o.p, g: 'VFX software', s: o.p.map(label).join(' · ') }; }))
+      .concat(L.eqm.map(function (o) { var c = L.eqc.filter(function (x) { return x.k === o.p[0]; })[0] || { p: [] }; return { v: o.k, l: o.l, p: o.p, g: label(c.p[0]) + ' › ' + label(o.p[0]) }; }));
+    var k = { sen: 'sen', skills: 'skills', langs: 'langs', eng: 'eng', avl: 'avl', ver: 'ver', prof: 'prof', credit: 'credit', eqg: 'eqg', eqc: 'eqc' }[f];
+    return k ? L[k].map(function (o) { return { v: o.k, l: o.l, p: o.p, s: o.p ? o.p.map(label).join(' · ') : '' }; }) : [];
+  }
+  // Workbook sample profiles → result cards. Work title matches primary or secondary; skills match ANY (default) or ALL.
+  function profiles() { return m.profiles; }
+  function match(p, f) {
+    f = f || {};
+    var titles = [p.t1, p.t2].filter(Boolean);
+    return (!(f.vert || []).length || any(f.vert, p.vert)) && (!(f.dept || []).length || any(f.dept, p.dept)) && (!(f.title || []).length || any(f.title, titles)) &&
+      (!(f.skills || []).length || (f.skillMode === 'all' ? all(f.skills, p.skills) : any(f.skills, p.skills))) &&
+      (!(f.sen || []).length || f.sen.indexOf(p.sen) >= 0) && (!(+f.yrs) || p.yrs >= +f.yrs) && (!(f.avl || []).length || f.avl.indexOf(p.avl) >= 0) &&
+      (!(f.langs || []).length || any(f.langs, p.langs)) && (!(f.city || []).length || f.city.indexOf(p.city) >= 0) && (!(f.ver || []).length || f.ver.indexOf(p.ver) >= 0) &&
+      (!(f.eng || []).length || any(f.eng, p.eng));
+  }
+  return (w.__ccPM = { m: m, L: L, label: label, opts: opts, profiles: profiles, match: match, field: function (id) { return field[id] || {}; }, dept: function (k) { return dept[k]; }, title: function (k) { return title[k]; },
+    jobTag: function (id) { return (m.jobTags || {})[id] || null; }, vendorTag: function (n) { return (m.vendorTags || {})[n] || null; }, any: any }); })(window);
+
+
+/* R8: mapped profile fields (workbook › Field UI) — one form model + one selection panel, shared by profile creation, profile editing and job creation. */
+var PFX = (function () {
+  var NA = 'Not added yet';
+  function empty() { return { skills: [], vert: [], dept: [], titles: [], primary: '', alt: '', sen: '', yrs: '', spec: [], equip: [], prof: {}, langs: [], avl: 'AVL-01', eng: [], city: '', state: '', radius: 100, travel: true, reel: '', credits: [] }; }
+  var DEF = {
+    vert: { f: 'F02', title: 'Primary Vertical', multi: true, src: 'vert' },
+    dept: { f: 'F03', title: 'Department', multi: true, src: 'dept', parent: 'vert', grouped: true },
+    titles: { f: 'F04', title: 'Designation (Work title)', multi: true, src: 'title', parent: 'dept', grouped: true },
+    sen: { f: 'F08', title: 'Seniority', multi: false, src: 'sen', ph: 'Select seniority' },
+    spec: { f: 'F06', title: 'Specialisation', multi: true, src: 'spec', grouped: true },
+    equip: { f: 'F07', title: 'Equipment / Software', multi: true, src: 'equip', grouped: true },
+    langs: { f: 'F11', title: 'Languages', multi: true, src: 'langs' },
+    skills: { f: 'F07', title: 'Skills', multi: true, src: 'skills', ph: 'Add skill' },
+    ctype: { f: 'F09', title: 'Credit type', multi: false, src: 'credit', ph: 'Select credit type' },
+    crole: { f: 'F09', title: 'Role on this credit', multi: false, src: 'title', grouped: true, ph: 'Select work title' }
+  };
+  function vfxs(v) { return (v.spec || []).filter(function (k) { return /^VFXS/.test(k); }); }
+  function optsFor(key, v, cfg) {
+    var d = DEF[key], o = PM.opts(d.src);
+    if (key === 'dept') o = o.filter(function (x) { return PM.any(x.p, v.vert); });
+    if (key === 'titles') o = o.filter(function (x) { return PM.any(x.p, v.dept); });
+    if (key === 'crole' && v.dept.length) o = o.filter(function (x) { return PM.any(x.p, v.dept); });
+    if (key === 'equip') { var s = vfxs(v); o = o.filter(function (x) { return !/^VFXT/.test(x.v) || PM.any(x.p, s); }); }
+    return o;
+  }
+  // When a parent changes, child values that no longer belong are removed (Vertical → Department → Work title; VFX specialisation → software).
+  function cascade(v) {
+    v = JSON.parse(JSON.stringify(v));
+    v.dept = v.dept.filter(function (k) { var d = PM.dept(k); return d && v.vert.indexOf(d.v) >= 0; });
+    v.titles = v.titles.filter(function (k) { var t = PM.title(k); return t && v.dept.indexOf(t.d) >= 0; });
+    if (v.titles.indexOf(v.primary) < 0) v.primary = v.titles[0] || '';
+    var s = vfxs(v), eo = PM.opts('equip');
+    v.equip = v.equip.filter(function (k) { if (!/^VFXT/.test(k)) return true; var o = eo.filter(function (x) { return x.v === k; })[0]; return o && PM.any(o.p, s); });
+    var p = {}; v.equip.forEach(function (k) { p[k] = (v.prof || {})[k] || 'PRF-02'; }); v.prof = p;
+    return v;
+  }
+  function missing(v, cfg) {
+    cfg = cfg || {}; var m = [];
+    if (!v.vert.length) m.push('vert'); if (!v.dept.length) m.push('dept');
+    if (!cfg.job) { if (!v.titles.length) m.push('titles'); if (String(v.yrs) === '' ) m.push('yrs'); if (!v.sen) m.push('sen'); if (!String(v.city || '').trim()) m.push('city'); }
+    return m;
+  }
+  function vals(c, cfg) {
+    cfg = cfg || {};
+    var st = c.state, v = st.pf || empty(), pp = st.pp, tried = !!cfg.tried, miss = missing(v, cfg), L = PM.label;
+    var set = function (nv) { var x = cascade(nv); c.setState({ pf: x }); if (cfg.onChange) cfg.onChange(x); };
+    var single = cfg.single || {};
+    var isMulti = function (k) { return single[k] ? false : DEF[k].multi; };
+    var F = function (k) { return PM.field(DEF[k].f); };
+    function field(k, extra) {
+      var d = DEF[k], fi = F(k), val = v[k], multi = isMulti(k), sel = Array.isArray(val) ? val : (val ? [val] : []);
+      var parentEmpty = d.parent && !v[d.parent].length, err = tried && miss.indexOf(k) >= 0;
+      var ph = d.ph || fi.placeholder || ('Select ' + d.title.toLowerCase());
+      return Object.assign({
+        label: d.title, req: k !== 'skills' && (fi.required || '') === 'Required' && !(cfg.job && k === 'sen') && !(cfg.optional || {})[k], notReq: !(k !== 'skills' && (fi.required || '') === 'Required' && !(cfg.job && k === 'sen') && !(cfg.optional || {})[k]), help: parentEmpty ? (fi.note || ('Pick a ' + DEF[d.parent].title.toLowerCase() + ' first')) : (fi.helper || ''),
+        disabled: !!parentEmpty, btnCls: err ? 'inp bad pf-dd' : 'inp pf-dd',
+        btnText: sel.length ? (multi ? sel.length + ' selected' : L(sel[0])) : (parentEmpty ? 'Pick a ' + DEF[d.parent].title.toLowerCase() + ' first' : ph), btnTxtCls: sel.length ? 't-b' : 't-b mut',
+        open: function () { if (!parentEmpty) c.setState({ pp: { k: k, draft: JSON.parse(JSON.stringify(sel)), q: '' } }); },
+        chips: (multi ? sel : []).map(function (x) { return { l: L(x), remove: function () { var nv = Object.assign({}, v); nv[k] = v[k].filter(function (y) { return y !== x; }); set(nv); } }; }),
+        hasChips: multi && sel.length > 0, err: err, errText: 'Choose ' + d.title.toLowerCase(),
+        hasHelp: !!(parentEmpty ? (fi.note || d.parent) : fi.helper)
+      }, extra || {});
+    }
+    var PRF = PM.L.prof;
+    var out = {
+      vert: field('vert'), dept: field('dept'),
+      titles: field('titles', { chips: v.titles.map(function (x) { var p = x === v.primary; return { l: L(x), sub: L((PM.title(x) || {}).d), isP: p, notP: !p, cls: p ? 'chip on' : 'chip', makePrimary: function () { var nv = Object.assign({}, v, { primary: x }); set(nv); }, remove: function () { set(Object.assign({}, v, { titles: v.titles.filter(function (y) { return y !== x; }) })); } }; }),
+        hasPrimary: v.titles.length > 1, primaryHint: 'Tap a title to make it your primary' }),
+      sen: field('sen'), spec: field('spec'), langs: field('langs'), skills: field('skills'),
+      equip: field('equip', { chips: v.equip.map(function (x) { var pk = v.prof[x] || 'PRF-02', i = PRF.map(function (p) { return p.k; }).indexOf(pk);
+        return { l: L(x), prof: L(pk), cycle: function () { var np = Object.assign({}, v.prof); np[x] = PRF[(i + 1) % PRF.length].k; set(Object.assign({}, v, { prof: np })); }, remove: function () { set(Object.assign({}, v, { equip: v.equip.filter(function (y) { return y !== x; }) })); } }; }),
+        profHint: 'Tap an item to set proficiency: ' + PRF.map(function (p) { return p.l; }).join(' → ') }),
+      alt: v.alt, altPh: PM.field('F05').placeholder || 'e.g. DOP, First AC', altHelp: PM.field('F05').helper, onAlt: function (e) { set(Object.assign({}, v, { alt: e.target.value })); },
+      altPh2: PM.field('F05').placeholder,
+      yrs: v.yrs, yrsErr: tried && miss.indexOf('yrs') >= 0, yrsCls: tried && miss.indexOf('yrs') >= 0 ? 'inp bad' : 'inp',
+      onYrs: function (e) { var n = String(e.target.value).replace(/[^0-9]/g, '').slice(0, 2); set(Object.assign({}, v, { yrs: n })); },
+      yrsDec: function () { set(Object.assign({}, v, { yrs: String(Math.max(0, (+v.yrs || 0) - 1)) })); }, yrsInc: function () { set(Object.assign({}, v, { yrs: String(Math.min(60, (+v.yrs || 0) + 1)) })); },
+      yrsHelp: PM.field('F08').helper,
+      avl: PM.L.avl.map(function (a) { return { l: a.l, on: v.avl === a.k, cls: v.avl === a.k ? 'on' : '', pick: function () { set(Object.assign({}, v, { avl: a.k })); } }; }),
+      eng: PM.L.eng.map(function (a) { var on = v.eng.indexOf(a.k) >= 0; return { l: a.l, on: on, cls: on ? 'chip on' : 'chip', toggle: function () { set(Object.assign({}, v, { eng: on ? v.eng.filter(function (y) { return y !== a.k; }) : v.eng.concat([a.k]) })); } }; }),
+      avlHelp: PM.field('F12').helper,
+      city: v.city, cityCls: tried && miss.indexOf('city') >= 0 ? 'inp bad' : 'inp', cityErr: tried && miss.indexOf('city') >= 0, onCity: function (e) { set(Object.assign({}, v, { city: e.target.value })); },
+      state: v.state, onState: function (e) { set(Object.assign({}, v, { state: e.target.value })); }, locHelp: PM.field('F10').helper,
+      radius: v.radius, radiusLabel: +v.radius ? v.radius + ' km' : 'Local only', onRadius: function (e) { set(Object.assign({}, v, { radius: +e.target.value })); },
+      travel: !!v.travel, travelCls: v.travel ? 'switch on' : 'switch', toggleTravel: function () { set(Object.assign({}, v, { travel: !v.travel })); },
+      reel: v.reel, onReel: function (e) { set(Object.assign({}, v, { reel: e.target.value })); }, reelHelp: PM.field('F13').helper,
+      credits: v.credits.map(function (cr, i) { return { project: cr.project, type: L(cr.type), role: L(cr.role), sub: [L(cr.type), L(cr.role)].filter(Boolean).join(' · '), remove: function () { set(Object.assign({}, v, { credits: v.credits.filter(function (y, j) { return j !== i; }) })); } }; }),
+      hasCredits: v.credits.length > 0, creditHelp: PM.field('F09').helper,
+      cf: st.cf ? { project: st.cf.project, onProject: function (e) { c.setState({ cf: Object.assign({}, st.cf, { project: e.target.value }) }); },
+        typeText: st.cf.type ? L(st.cf.type) : 'Select credit type', typeCls: st.cf.type ? 't-b' : 't-b mut', roleText: st.cf.role ? L(st.cf.role) : 'Select work title', roleCls: st.cf.role ? 't-b' : 't-b mut',
+        pickType: function () { c.setState({ pp: { k: 'ctype', draft: st.cf.type ? [st.cf.type] : [], q: '' } }); }, pickRole: function () { c.setState({ pp: { k: 'crole', draft: st.cf.role ? [st.cf.role] : [], q: '' } }); },
+        err: !!st.cf.tried && !String(st.cf.project || '').trim(),
+        add: function () { if (!String(st.cf.project || '').trim()) return c.setState({ cf: Object.assign({}, st.cf, { tried: true }) }); set(Object.assign({}, v, { credits: v.credits.concat([{ project: st.cf.project.trim(), type: st.cf.type || '', role: st.cf.role || '' }]) })); c.setState({ cf: null }); },
+        cancel: function () { c.setState({ cf: null }); } } : {},
+      cfOpen: !!st.cf, cfClosed: !st.cf, openCf: function () { c.setState({ cf: { project: '', type: '', role: '' } }); },
+      errN: miss.length, hasErr: tried && miss.length > 0, errText: 'Complete the required fields: ' + miss.map(function (k) { return k === 'yrs' ? 'Experience (years)' : k === 'city' ? 'City' : DEF[k].title; }).join(', ')
+    };
+    // selection panel
+    var panel = { open: false };
+    if (pp) {
+      var d = DEF[pp.k], multi = pp.k === 'ctype' || pp.k === 'crole' ? false : isMulti(pp.k), q = (pp.q || '').trim().toLowerCase();
+      var all = optsFor(pp.k, v, cfg), shown = q ? all.filter(function (o) { return (o.l + ' ' + (o.s || '') + ' ' + (o.g || '')).toLowerCase().indexOf(q) >= 0; }) : all;
+      var groups = [];
+      shown.forEach(function (o) { var gl = d.grouped ? (o.g || '') : ''; var G = groups.filter(function (x) { return x.label === gl; })[0]; if (!G) { G = { label: gl, hasLabel: !!gl, opts: [] }; groups.push(G); } G.opts.push(o); });
+      var draft = pp.draft || [];
+      var setD = function (nd) { c.setState({ pp: Object.assign({}, pp, { draft: nd }) }); };
+      panel = {
+        open: true, title: d.title, multi: multi, ph: 'Search ' + d.title.toLowerCase(), q: pp.q || '', onQ: function (e) { c.setState({ pp: Object.assign({}, pp, { q: e.target.value }) }); },
+        sub: multi ? (draft.length ? draft.length + ' selected' : 'Select one or more') : 'Select one',
+        hasHint: (pp.k === 'equip' && !vfxs(v).length) || pp.k === 'titles',
+        hint: pp.k === 'equip' && !vfxs(v).length ? 'VFX software appears once you add a VFX specialisation.' : pp.k === 'titles' ? 'Department is shown next to each title.' : '',
+        groups: groups.map(function (G) { return { label: G.label, hasLabel: G.hasLabel, opts: G.opts.map(function (o) { var on = draft.indexOf(o.v) >= 0;
+          return { l: o.l, s: d.grouped && pp.k !== 'titles' && pp.k !== 'crole' ? '' : (o.s || ''), hasS: !!o.s && (pp.k === 'titles' || pp.k === 'crole' || pp.k === 'dept') , on: on, chk: multi ? (on ? 'chk on' : 'chk') : (on ? 'radio on' : 'radio'),
+            toggle: function () { setD(multi ? (on ? draft.filter(function (x) { return x !== o.v; }) : draft.concat([o.v])) : [o.v]); } }; }) }; }),
+        chips: multi ? draft.map(function (x) { return { l: L(x), remove: function () { setD(draft.filter(function (y) { return y !== x; })); } }; }) : [], hasChips: multi && draft.length > 0,
+        empty: shown.length === 0, emptyText: q ? 'No matches for “' + pp.q.trim() + '”' : 'No options yet',
+        clear: function () { setD([]); }, close: function () { c.setState({ pp: null }); },
+        doneLabel: multi ? 'Done' + (draft.length ? ' · ' + draft.length : '') : 'Done',
+        done: function () {
+          if (pp.k === 'ctype' || pp.k === 'crole') { var cf = Object.assign({}, st.cf); cf[pp.k === 'ctype' ? 'type' : 'role'] = draft[0] || ''; return c.setState({ pp: null, cf: cf }); }
+          var nv = Object.assign({}, v); nv[pp.k] = Array.isArray(v[pp.k]) ? (multi ? draft : draft.slice(0, 1)) : (draft[0] || ''); c.setState({ pp: null }); set(nv);
+        }
+      };
+    }
+    out.panel = panel;
+    return out;
+  }
+  function summary(v) {
+    var L = PM.label; v = v || empty();
+    return { has: v.titles.length > 0, titleTags: v.titles.map(function (t) { return { l: L(t) + (t === v.primary ? ' · primary' : ''), cls: t === v.primary ? 'badge b-p' : 'tag' }; }),
+      equipTags: v.equip.map(function (k) { return L(k) + ' · ' + L(v.prof[k] || 'PRF-02'); }), specTags: v.spec.map(L), langTags: v.langs.map(L),
+      kv: [['Primary Vertical', v.vert.map(L).join(', ')], ['Department', v.dept.map(L).join(', ')], ['Alternate / Credit title', v.alt], ['Seniority', L(v.sen)], ['Experience (years)', String(v.yrs)],
+        ['Availability', L(v.avl)], ['Engagement', v.eng.map(L).join(', ')], ['Location', [v.city, v.state].filter(Boolean).join(', ')], ['Travel radius', +v.radius ? v.radius + ' km' + (v.travel ? ' · willing to travel' : '') : 'Local only'], ['Portfolio / Showreel', v.reel]]
+        .filter(function (r) { return r[1]; }).map(function (r) { return { k: r[0], v: r[1] }; }),
+      credits: v.credits.map(function (c) { return { project: c.project, sub: [L(c.type), L(c.role)].filter(Boolean).join(' · ') }; }), hasCredits: v.credits.length > 0,
+      hasEquip: v.equip.length > 0, hasSpec: v.spec.length > 0, hasLangs: v.langs.length > 0 };
+  }
+  return { empty: empty, cascade: cascade, missing: missing, vals: vals, summary: summary, DEF: DEF };
+})();
+
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.T = {
+      depts: ['Camera', 'Direction', 'Editing & Post', 'Sound', 'Lighting & Grip', 'Art & Production Design', 'Production', 'Costume & Make-up', 'VFX', 'Stunts'],
+      titles: {
+        'Camera': ['Director of Photography', 'Camera Operator', 'Focus Puller', '1st Assistant Camera', '2nd Assistant Camera', 'DIT', 'Steadicam Operator'],
+        'Direction': [cc("common.director"), cc("common.associate_director"), cc("common.t_1st_assistant_director"), cc("common.t_2nd_assistant_director"), cc("common.script_supervisor")],
+        'Editing & Post': ['Editor', 'Assistant Editor', 'Colourist', cc("common.online_editor")],
+        'Sound': ['Sound Recordist', 'Boom Operator', cc("common.sound_designer"), cc("common.re_recording_mixer")],
+        'Lighting & Grip': ['Gaffer', cc("common.best_boy"), cc("common.lighting_technician"), cc("common.key_grip"), cc("common.grip")],
+        'Art & Production Design': ['Production Designer', cc("common.art_director"), cc("common.set_dresser"), cc("common.prop_master")],
+        'Production': [cc("common.producer"), cc("common.line_producer"), cc("common.production_manager"), cc("common.production_assistant"), cc("common.spot_boy_set_assistant")],
+        'Costume & Make-up': [cc("common.costume_designer"), cc("common.stylist"), cc("common.make_up_artist"), cc("common.hair_stylist")],
+        'VFX': [cc("common.vfx_supervisor"), cc("common.compositor"), cc("common.t_3d_artist")],
+        'Stunts': ['Stunt Coordinator', 'Stunt Performer']
+      },
+      skills: {
+        'Director of Photography': [cc("common.lighting_design"), cc("common.arri_alexa"), cc("common.anamorphic"), cc("common.colour_pipeline")],
+        'Camera Operator': [cc("common.arri_alexa"), 'RED', cc("common.gimbal_ops"), cc("common.handheld")],
+        'Focus Puller': [cc("common.focus_pulling"), cc("common.wireless_follow_focus"), cc("common.arri_alexa"), cc("common.sony_venice"), cc("common.lens_tech")],
+        '1st Assistant Camera': [cc("common.camera_prep"), cc("common.lens_tech"), cc("common.focus_pulling"), 'RED'],
+        '2nd Assistant Camera': [cc("common.slating"), cc("common.camera_reports"), cc("common.camera_prep")],
+        'DIT': [cc("common.data_wrangling"), cc("common.on_set_grading"), cc("common.davinci_resolve")],
+        'Steadicam Operator': [cc("common.steadicam"), cc("common.gimbal_ops")],
+        'Editor': [cc("common.premiere_pro"), cc("common.davinci_resolve"), cc("common.avid_media_composer"), cc("common.assembly_cuts")],
+        'Assistant Editor': [cc("common.assembly_cuts"), cc("common.syncing"), cc("common.premiere_pro")],
+        'Colourist': [cc("common.davinci_resolve"), cc("common.hdr_grading")],
+        'Sound Recordist': [cc("common.location_sound"), cc("common.sound_devices"), cc("common.wireless_mics"), cc("common.boom_ops")],
+        'Boom Operator': [cc("common.boom_ops"), cc("common.wireless_mics")],
+        'Gaffer': [cc("common.lighting_design"), 'HMI', cc("common.led_walls"), cc("common.power_distribution")],
+        'Production Designer': [cc("common.period_sets"), cc("common.set_dressing"), 'SketchUp'],
+        'Stunt Coordinator': [cc("common.fight_choreography"), cc("common.rigging"), cc("common.safety_planning")],
+        'Stunt Performer': [cc("common.falls"), cc("common.fight_choreography"), cc("common.wire_work")]
+      },
+      deptSkills: {
+        'Camera': [cc("common.camera_prep"), cc("common.arri_alexa"), 'RED', cc("common.sony_venice")], 'Direction': [cc("common.shot_breakdown"), cc("common.scheduling"), cc("common.continuity")], 'Editing & Post': [cc("common.premiere_pro"), cc("common.davinci_resolve")],
+        'Sound': [cc("common.location_sound"), cc("common.boom_ops")], 'Lighting & Grip': ['HMI', cc("common.led_walls"), cc("common.rigging")], 'Art & Production Design': [cc("common.set_dressing"), cc("common.props")], 'Production': [cc("common.budgeting"), cc("common.scheduling"), cc("common.location_permits")], 'Costume & Make-up': [cc("common.period_costume"), cc("common.prosthetics")], 'VFX': [cc("common.nuke"), cc("common.maya")], 'Stunts': [cc("common.safety_planning"), cc("common.rigging")]
+      }
+    };
+    const prof = (p.store && p.store.prof) || {};
+    const R0 = (p.store && p.store.roles) || { crew: true, vendor: true };
+    const first = R0.crew && !prof.pro ? 'pro' : R0.crew && !prof.refs ? 'refs' : R0.vendor && !prof.biz ? 'biz' : R0.vendor && !prof.contact ? 'contact' : '';
+    // R8: mapped profile fields start from the saved profile (store.pf) or empty.
+    this.pf0 = JSON.parse(JSON.stringify((p.store && p.store.pf) || PFX.empty()));
+    this.state = { pf: JSON.parse(JSON.stringify(this.pf0)), pp: null, cf: null,
+      open: first, done: { pro: !!prof.pro, refs: !!prof.refs, biz: !!prof.biz, contact: !!prof.contact }, tried: {}, toast: '',
+      dept: '', deptO: '', titles: {}, titleOtherOn: false, ddOpen: false, titleO: '', custom: [], band: cc("common.mid_level"), skills: {}, skillOtherOn: false, skillO: '',
+      imdb: '', cv: false, vimeo: '', sc: '',
+      xs: {}, xsCustom: [], xsIn: '', loc1: 'Mumbai', locN: '', cities: ACC.me(p.store || {}) ? [] : ['Pune', 'Goa'], cityIn: '', ow: true, offices: [{ city: 'Mumbai', state: 'Maharashtra', addr: 'Unit 4, Film City Road, Goregaon East, Mumbai 400065' }, { city: 'Hyderabad', state: 'Telangana', addr: 'Plot 12, Road No. 2, Banjara Hills, Hyderabad 500034' }], offIn: '', offEdit: null, ofCity: '', ofState: '', ofAddr: '', ofTried: false, clients: ['Lantern Pictures', 'Northlight Studios', 'Pinewood Ads'], clIn: '', cv: 'none', cvSel: { 'Kavya Menon': true },
+      bn: '', ct: '', mode: cc("common.rent_and_buy")
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state, t = s.tried, T = this.T, act = this.props.act || (() => {});
+    const isOther = s.dept === 'Other';
+    const deptOk = s.dept && (!isOther || s.deptO.trim());
+    const chosen = Object.keys(s.titles).filter((k) => s.titles[k]).concat(s.custom);
+    const titleList = isOther || !s.dept ? [] : T.titles[s.dept] || [];
+    let skillList = [];
+    const fromTitles = chosen.filter((c) => T.skills[c]);
+    if (fromTitles.length) fromTitles.forEach((c) => T.skills[c].forEach((k) => { if (skillList.indexOf(k) < 0) skillList.push(k); }));
+    else if (s.dept && !isOther) skillList = T.deptSkills[s.dept] || [];
+    const deptErr = t.pro && !deptOk, titleErr = t.pro && chosen.length === 0;
+    const bnErr = t.biz && !s.bn.trim(), ctErr = t.biz && !s.ct;
+    // Only the sections of the account's roles exist. Both: 20% each. One role: 34% basic + 33% per section [TBC].
+    const R = (this.props.store && this.props.store.roles) || { crew: true, vendor: true };
+    const order = [].concat(R.crew ? ['pro', 'refs'] : [], R.vendor ? ['biz', 'contact'] : []);
+    const doneN = order.filter((k) => s.done[k]).length;
+    const pctV = order.length === 4 ? 20 * (1 + doneN) : 34 + 33 * doneN;
+    const save = (k, ok, msg, extra) => {
+      if (!ok) return this.setState({ tried: { ...t, [k]: true } });
+      const done = { ...s.done, [k]: true };
+      const nxt = order.find((x) => !done[x]) || '';
+      this.setState({ done, open: nxt, toast: msg, warn: '' });
+      act('prof', k, k === 'biz' ? { bizName: s.bn.trim() } : (extra || null));
+      clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2200);
+    };
+    // Unsaved changes: a section with filled-in fields that hasn't been saved yet.
+    const dirty = {
+      pro: !s.done.pro && JSON.stringify(s.pf) !== JSON.stringify(this.pf0),
+      refs: !s.done.refs && !!(s.imdb.trim() || s.cv || s.vimeo.trim() || s.sc.trim()),
+      biz: !s.done.biz && !!(s.bn.trim() || s.ct),
+      contact: false
+    };
+    const NAMES = { pro: cc("common.professional_information"), refs: cc("common.external_references"), biz: cc("common.business_details"), contact: cc("common.business_contact_and_gst") };
+    const firstDirty = order.find((k) => dirty[k]) || '';
+    const warnNow = (k) => { this.setState({ warn: k, open: k, toast: cc("complete_profile.save") + NAMES[k] + cc("complete_profile.first") }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2400); };
+    const tog = (k) => () => (s.open && s.open !== k && dirty[s.open] ? warnNow(s.open) : this.setState({ open: s.open === k ? '' : k }));
+    const badge = (k) => (s.done[k] ? 'badge b-g' : dirty[k] ? 'badge b-w' : 'badge b-n');
+    const lab = (k) => (s.done[k] ? cc("common.complete_2") : dirty[k] ? cc("complete_profile.not_saved") : cc("complete_profile.to_do"));
+    const all = doneN === order.length;
+    return {
+      doneN, secN: order.length, pct: pctV,
+      hasCrew: !!R.crew, hasVendor: !!R.vendor,
+      // Availability is a Job Seeker feature; Crew modes never change completion %.
+      showAvailStep: !!R.crew && ((this.props.store && this.props.store.modes) || { seek: true }).seek !== false,
+      crewHead: R.vendor ? cc("common.crew_member") : cc("complete_profile.your_crew_profile"), vendorHead: R.crew ? cc("complete_profile.product_provider_business_and_listings") : cc("common.your_business"),
+      barStyle: 'height:100%;border-radius:4px;background:linear-gradient(90deg,#7C3AED,#367A22);width:' + pctV + '%',
+      oPro: s.open === 'pro', oRefs: s.open === 'refs', oBiz: s.open === 'biz', oCon: s.open === 'contact',
+      tPro: tog('pro'), tRefs: tog('refs'), tBiz: tog('biz'), tCon: tog('contact'),
+      bPro: badge('pro'), bRefs: badge('refs'), bBiz: badge('biz'), bCon: badge('contact'),
+      lPro: lab('pro'), lRefs: lab('refs'), lBiz: lab('biz'), lCon: lab('contact'),
+      // R8: the professional section saves the mapped profile fields; required = Primary Vertical, Department, Work title, Experience, Seniority, City.
+      savePro: () => { const ok = PFX.missing(s.pf).length === 0; save('pro', ok, cc("complete_profile.professional_information_saved"), { pf: s.pf }); },
+      pfv: PFX.vals(this, { tried: !!t.pro }),
+      saveRefs: () => save('refs', true, cc("complete_profile.external_references_saved")),
+      saveBiz: () => save('biz', !!s.bn.trim() && !!s.ct, cc("complete_profile.business_details_saved")),
+      saveCon: () => save('contact', true, cc("complete_profile.business_contact_saved")),
+      homeLabel: all ? cc("complete_profile.done_go_to_home") : cc("complete_profile.finish_later_go_to_home"), homeCls: all ? 'btn btn-g w100' : 'btn btn-s w100',
+      // Sign-up flow: Step 1 (Basic profile) → Step 2 (this screen) → Profile set up. Opened later from Profile, it returns to Home.
+      inSetup: this.props.setup === true || this.props.setup === 'yes', notSetup: !(this.props.setup === true || this.props.setup === 'yes'),
+      backHref: (this.props.setup === true || this.props.setup === 'yes') ? 'SetupBasic.dc.html' : 'SeekerProfile.dc.html',
+      finishLabel: all ? cc("complete_profile.finish_setup") : cc("complete_profile.finish_setup_complete_the_rest"),
+      anyDirty: !!firstDirty, setupGo: !firstDirty && (this.props.setup === true || this.props.setup === 'yes'), homeGo: !firstDirty && !(this.props.setup === true || this.props.setup === 'yes'),
+      leaveLabel: (this.props.setup === true || this.props.setup === 'yes') ? (all ? cc("complete_profile.finish_setup") : cc("complete_profile.finish_setup_complete_the_rest")) : (all ? cc("complete_profile.done_go_to_home") : cc("complete_profile.finish_later_go_to_home")),
+      leaveCls: 'btn btn-p w100', blockLeave: () => warnNow(firstDirty),
+      showWarn: !!s.warn && !!dirty[s.warn], warnName: NAMES[s.warn] || '', finishCls: doneN > 0 ? 'btn btn-p w100' : 'btn btn-s w100',
+      toast: !!s.toast, toastText: s.toast,
+
+      dept: s.dept, deptOpts: T.depts, deptOther: isOther, deptO: s.deptO, deptOCls: t.pro && isOther && !s.deptO.trim() ? 'inp bad' : 'inp',
+      onDeptO: (e) => this.setState({ deptO: e.target.value }), onDept: (e) => this.setState({ dept: e.target.value, titles: {}, skills: {} }),
+      deptErr, deptCls: deptErr ? 'inp bad' : 'inp', noDept: !s.dept,
+      titleOpts: titleList.map((l) => ({ label: l, on: !!s.titles[l], chk: s.titles[l] ? 'chk on' : 'chk', toggle: () => this.setState({ titles: { ...s.titles, [l]: !s.titles[l] } }) })),
+      ddOpen: s.ddOpen && !!s.dept && !isOther, toggleDD: () => this.setState({ ddOpen: !s.ddOpen }),
+      ddCls: titleErr ? 'inp bad' : 'inp', ddTxtCls: chosen.length ? 't-b' : 't-b mut',
+      ddLabel: !s.dept ? cc("complete_profile.choose_a_department_first") : chosen.length ? chosen.length + (chosen.length === 1 ? cc("complete_profile.work_title_selected") : cc("complete_profile.work_titles_selected")) : cc("complete_profile.select_work_titles"),
+      otherChk: s.titleOtherOn ? 'chk on' : 'chk', titleOtherOn: s.titleOtherOn, toggleTitleOther: () => this.setState({ titleOtherOn: !s.titleOtherOn }),
+      titleO: s.titleO, onTitleO: (e) => this.setState({ titleO: e.target.value }),
+      addTitleO: () => { const v = s.titleO.trim(); if (v && s.custom.indexOf(v) < 0) this.setState({ custom: s.custom.concat([v]), titleO: '' }); },
+      hasChosen: chosen.length > 0,
+      chosenTags: chosen.map((c) => ({ label: c, remove: () => (s.custom.indexOf(c) >= 0 ? this.setState({ custom: s.custom.filter((x) => x !== c) }) : this.setState({ titles: { ...s.titles, [c]: false } })) })),
+      titleErr, titleCount: chosen.length ? chosen.length + (chosen.length === 1 ? cc("complete_profile.title_selected") : cc("complete_profile.titles_selected")) : cc("complete_profile.none_selected"),
+      skillHint: fromTitles.length ? cc("complete_profile.showing_skills_for") + fromTitles.join(', ') : s.dept && !isOther ? cc("complete_profile.showing_skills_for") + s.dept + cc("complete_profile.pick_work_titles_to_refine") : cc("complete_profile.choose_a_department_and_work"),
+      skills: skillList.map((l) => ({ label: l, on: !!s.skills[l], cls: s.skills[l] ? 'chip on' : 'chip', toggle: () => this.setState({ skills: { ...s.skills, [l]: !s.skills[l] } }) })),
+      skillOtherOn: s.skillOtherOn, skillOtherCls: s.skillOtherOn ? 'chip on' : 'chip', toggleSkillOther: () => this.setState({ skillOtherOn: !s.skillOtherOn }),
+      skillO: s.skillO, onSkillO: (e) => this.setState({ skillO: e.target.value }),
+      // Revision 2: additional skills, locations, open to work, vendor offices — all searchable in Find talent.
+      xsList: ['Photoshop', 'CorelDRAW', 'Adobe Premiere editing', 'Movie Magic Budgeting', 'Movie Magic Scheduling'].concat(s.xsCustom).map((l) => ({ label: l, on: !!s.xs[l], cls: s.xs[l] ? 'chip on' : 'chip', toggle: () => this.setState({ xs: { ...s.xs, [l]: !s.xs[l] } }) })),
+      xsIn: s.xsIn, onXsIn: (e) => this.setState({ xsIn: e.target.value }),
+      addXs: () => { const v = s.xsIn.trim(); if (v) this.setState({ xsCustom: s.xsCustom.indexOf(v) < 0 ? s.xsCustom.concat(v) : s.xsCustom, xs: { ...s.xs, [v]: true }, xsIn: '' }); },
+      loc1: s.loc1, onLoc1: (e) => this.setState({ loc1: e.target.value }), locN: s.locN, onLocN: (e) => this.setState({ locN: e.target.value }),
+      hasCities: s.cities.length > 0, cityTags: s.cities.map((c) => ({ label: c, remove: () => this.setState({ cities: s.cities.filter((x) => x !== c) }) })),
+      cityIn: s.cityIn, onCityIn: (e) => this.setState({ cityIn: e.target.value }),
+      addCity: () => { const v = s.cityIn.trim(); if (v && s.cities.indexOf(v) < 0) this.setState({ cities: s.cities.concat(v), cityIn: '' }); },
+      ow: s.ow, owCls: s.ow ? 'switch on' : 'switch', toggleOw: () => this.setState({ ow: !s.ow }),
+      hasOffices: s.offices.length > 0,
+      officeTags: s.offices.map((o, k) => ({ ...o, edit: () => this.setState({ offEdit: k, ofCity: o.city, ofState: o.state, ofAddr: o.addr, ofTried: false }), remove: () => this.setState({ offices: s.offices.filter((x, n) => n !== k) }) })),
+      offFormOpen: s.offEdit !== null, offFormClosed: s.offEdit === null, offFormTitle: s.offEdit === 'new' ? cc("r2.new_office_location") : cc("r2.edit_office_location"),
+      ofCity: s.ofCity, ofState: s.ofState, ofAddr: s.ofAddr, onOfCity: (e) => this.setState({ ofCity: e.target.value }), onOfState: (e) => this.setState({ ofState: e.target.value }), onOfAddr: (e) => this.setState({ ofAddr: e.target.value }),
+      ofErr: s.ofTried && !(s.ofCity.trim() && s.ofState.trim() && s.ofAddr.trim()),
+      addOff: () => this.setState({ offEdit: 'new', ofCity: '', ofState: '', ofAddr: '', ofTried: false }), cancelOff: () => this.setState({ offEdit: null }),
+      saveOff: () => {
+        if (!(s.ofCity.trim() && s.ofState.trim() && s.ofAddr.trim())) return this.setState({ ofTried: true });
+        const o = { city: s.ofCity.trim(), state: s.ofState.trim(), addr: s.ofAddr.trim() };
+        this.setState({ offices: s.offEdit === 'new' ? s.offices.concat(o) : s.offices.map((x, n) => (n === s.offEdit ? o : x)), offEdit: null });
+      },
+      hasClients: s.clients.length > 0, clientTags: s.clients.map((c) => ({ label: c, remove: () => this.setState({ clients: s.clients.filter((x) => x !== c) }) })),
+      clIn: s.clIn, onClIn: (e) => this.setState({ clIn: e.target.value }), addCl: () => { const v = s.clIn.trim(); if (v && s.clients.indexOf(v) < 0) this.setState({ clients: s.clients.concat(v), clIn: '' }); },
+      // R3: crew contact visibility — hidden by default; all connections or selected connections.
+      cvOpts: [['none', cc("r2.only_me_hidden"), cc("r2.contact_details_stay_private")], ['conn', cc("r2.all_my_connections"), cc("r2.connections_can_see_your_phone_and_email")], ['pick', cc("r2.selected_connections"), cc("r2.choose_who_can_see_them")]].map(([k, t, d]) => ({ t, d, on: s.cv === k, cls: s.cv === k ? 'plan-opt on' : 'plan-opt', radio: s.cv === k ? 'radio on' : 'radio', pick: () => this.setState({ cv: k }) })),
+      cvPick: s.cv === 'pick', cvPeople: ['Kavya Menon', 'Farhan Siddiqui', 'Ananya Iyer', 'Arjun Kulkarni', 'Vendor House'].map((n) => ({ label: n, on: !!s.cvSel[n], cls: s.cvSel[n] ? 'chip on' : 'chip', toggle: () => this.setState({ cvSel: { ...s.cvSel, [n]: !s.cvSel[n] } }) })),
+      bands: [cc("common.junior"), cc("common.mid_level"), cc("common.senior")].map((b) => ({ label: b, on: s.band === b, cls: s.band === b ? 'on' : '', pick: () => this.setState({ band: b }) })),
+
+      imdb: s.imdb, vimeo: s.vimeo, sc: s.sc,
+      onImdb: (e) => this.setState({ imdb: e.target.value }), onVimeo: (e) => this.setState({ vimeo: e.target.value }), onSc: (e) => this.setState({ sc: e.target.value }),
+      // R7: names come from the logged-in account / its vendor profile.
+      cvName: (() => { const st = this.props.store || {}; return ACC.me(st) ? ACC.name(st).replace(/\s+/g, '-') + '-Resume.pdf' : cc("common.priya_nair_resume_2026_pdf"); })(),
+      cpName: (() => { const st = this.props.store || {}, V = ACC.vendorByName(st.bizName || '') || ACC.vendorOf(ACC.me(st)); return V ? V.contact.person : (ACC.me(st) ? ACC.name(st) : cc("common.rahul_mehta")); })(),
+      hasCv: s.cv, noCv: !s.cv, addCv: () => this.setState({ cv: true }), rmCv: () => this.setState({ cv: false }),
+
+      bn: s.bn, ct: s.ct, bnErr, ctErr, bnCls: bnErr ? 'inp bad' : 'inp', ctCls: ctErr ? 'inp bad' : 'inp',
+      onBn: (e) => this.setState({ bn: e.target.value }), onCt: (e) => this.setState({ ct: e.target.value }),
+      modes: ['Rent', 'Buy', cc("common.rent_and_buy")].map((m) => ({ label: m, on: s.mode === m, cls: s.mode === m ? 'on' : '', pick: () => this.setState({ mode: m }) }))
+    };
+  }
+}
+ccHook(Component, ["pfv","xsIn","loc1","locN","cityIn","offIn","ofCity","ofState","ofAddr","clIn","offices","clients","dept","deptO","titleO","skillO","imdb","vimeo","sc","bn","ct"]);
+</script>
+</body>
+</html>

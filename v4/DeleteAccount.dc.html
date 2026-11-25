@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Delete account</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <!-- STEP 1 · what happens -->
+  <sc-if value="{{onInfo}}" hint-placeholder-val="{{ true }}">
+    <div class="bar"><a class="iconbtn" href="SeekerProfile.dc.html" aria-label="{{cct.common.back_to_settings}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.delete_account}}</div></div>
+  </sc-if>
+  <sc-if value="{{onInfo}}" hint-placeholder-val="{{ true }}">
+    <div class="sc" style="gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start">
+        <span class="sq" style="width: 56px; height: 56px; border-radius: 16px; background: #FDECEA; color: #B42318; border-color: #F6C9C3"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"></path></svg></span>
+        <h1 class="t-d" style="margin: 0">{{cct.delete_account.delete_your_account}}</h1>
+        <p class="t-b mut" style="margin: 0">{{cct.delete_account.this_permanently_deletes_the_account}} <b style="color: #1A1820">{{email}}</b>{{cct.delete_account.it_can_t_be_undone}}</p>
+      </div>
+      <div class="card" style="gap: 10px">
+        <div class="t-over">{{cct.delete_account.what_will_be_deleted}}</div>
+        <sc-for list="{{losses}}" as="l" hint-placeholder-count="4">
+          <div class="row t-s" style="gap: 10px; align-items: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #B42318; flex: none; margin-top: 2px"><path d="M6 6l12 12M18 6 6 18"></path></svg><span>{{l}}</span></div>
+        </sc-for>
+      </div>
+      <sc-if value="{{hasPlan}}" hint-placeholder-val="{{ true }}">
+        <div class="alert a-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><div>{{cct.delete_account.your}} <b>{{cct.common.premium}}</b> {{cct.delete_account.plan}}{{planLine}}{{cct.delete_account.ends_when_the_account_is}} <span class="ph-tag">{{cct.delete_account.refund_policy_tbc}}</span></div></div>
+      </sc-if>
+      <div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.01"></path></svg><div>{{cct.delete_account.only_want_a_break}} <b>{{cct.common.log_out}}</b> {{cct.delete_account.instead_data_kept_after_deletion}} <span class="ph-tag">{{cct.delete_account.retention_policy_tbc}}</span></div></div>
+    </div>
+  </sc-if>
+  <sc-if value="{{onInfo}}" hint-placeholder-val="{{ true }}">
+    <div class="foot">
+      <a class="btn btn-s" href="SeekerProfile.dc.html" style="flex: 1">{{cct.delete_account.keep_account}}</a>
+      <button class="btn btn-danger" onClick="{{toConfirm}}" style="flex: 1">{{cct.common.continue}}</button>
+    </div>
+  </sc-if>
+
+  <!-- STEP 2 · confirm -->
+  <sc-if value="{{onConfirm}}" hint-placeholder-val="{{ false }}">
+    <div class="bar"><button class="iconbtn" onClick="{{toInfo}}" aria-label="{{cct.delete_account.back_to_what_will_be}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button><div class="ttl">{{cct.delete_account.confirm_deletion}}</div></div>
+  </sc-if>
+  <sc-if value="{{onConfirm}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="gap: 18px">
+      <div class="fld">
+        <label class="lbl" for="why">{{cct.delete_account.why_are_you_leaving}} <span class="opt">{{cct.common.optional}}</span></label>
+        <select id="why" class="inp" value="{{why}}" onChange="{{onWhy}}"><option value="">{{cct.delete_account.choose_a_reason}}</option><option>{{cct.delete_account.i_don_t_need_it}}</option><option>{{cct.delete_account.i_have_another_account}}</option><option>{{cct.delete_account.privacy_concerns}}</option><option>{{cct.delete_account.too_many_notifications}}</option><option value="Other">{{cct.common.other}}</option></select>
+        <span class="help">{{cct.delete_account.reason_list}} <span class="ph-tag">{{cct.common.placeholder_pending_client_input}}</span></span>
+      </div>
+      <label class="row t-s" style="gap: 10px; align-items: flex-start; cursor: pointer">
+        <input type="checkbox" checked="{{ack}}" onChange="{{onAck}}" style="width: 20px; height: 20px; margin: 0; flex: none; accent-color: #B42318">
+        <span>{{cct.delete_account.i_understand_my_profile_activity}}</span>
+      </label>
+      <div class="fld">
+        <label class="lbl" for="typed">{{cct.common.type}} <b>{{cct.delete_account.delete}}</b> {{cct.delete_account.to_confirm}} <span class="req">*</span></label>
+        <input id="typed" class="inp" value="{{typed}}" onChange="{{onTyped}}" autocomplete="off" autocapitalize="characters" aria-describedby="typed-help">
+        <span id="typed-help" class="help">{{cct.delete_account.this_stops_an_accidental_tap}}</span>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{onConfirm}}" hint-placeholder-val="{{ false }}">
+    <div class="foot">
+      <button class="btn btn-s" onClick="{{toInfo}}" style="flex: 1">{{cct.common.back}}</button>
+      <sc-if value="{{ready}}" hint-placeholder-val="{{ false }}"><button class="btn btn-danger" onClick="{{openSheet}}" style="flex: 2">{{cct.common.delete_account}}</button></sc-if>
+      <sc-if value="{{notReady}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" disabled style="flex: 2; background: #E8B4AE; border-color: #E8B4AE; cursor: not-allowed">{{cct.common.delete_account}}</button></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- STEP 3 · done -->
+  <sc-if value="{{onDone}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="justify-content: center; align-items: center; text-align: center; gap: 12px; padding: 32px 28px">
+      <span class="sq" style="width: 64px; height: 64px; border-radius: 32px"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg></span>
+      <h1 class="t-d" style="margin: 0">{{cct.delete_account.account_deleted}}</h1>
+      <p class="t-b mut" style="margin: 0">{{cct.delete_account.your_crewconnect_account_and_its}}{{email}} <span class="ph-tag">{{cct.delete_account.email_tbc}}</span>.</p>
+    </div>
+  </sc-if>
+  <sc-if value="{{onDone}}" hint-placeholder-val="{{ false }}">
+    <div class="foot"><a class="btn btn-p w100" href="Welcome.dc.html">{{cct.delete_account.back_to_welcome}}</a></div>
+  </sc-if>
+
+  <sc-if value="{{sheet}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim">
+      <div class="sheet" role="alertdialog" aria-label="{{cct.delete_account.delete_account_permanently}}">
+        <div class="grab"></div>
+        <div class="t-h2">{{cct.delete_account.delete_permanently}}</div>
+        <p class="t-s mut" style="margin: 0">{{cct.delete_account.you_ll_be_logged_out}}</p>
+        <sc-if value="{{busy}}" hint-placeholder-val="{{ false }}"><button class="btn btn-danger w100" aria-busy="true"><span class="spin"></span>{{cct.delete_account.deleting}}</button></sc-if>
+        <sc-if value="{{notBusy}}" hint-placeholder-val="{{ true }}"><button class="btn btn-danger w100" onClick="{{doDelete}}">{{cct.delete_account.yes_delete_my_account}}</button></sc-if>
+        <button class="btn btn-t w100" onClick="{{closeSheet}}">{{cct.common.cancel}}</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"step":{"editor":"enum","options":["info","confirm","done"],"default":"info"},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* R7: sample accounts (crewconnect_content.json › accounts) — the one place names, roles and the vendor profile are defined. */
+var ACC = (function (w) { if (w.__ccAcc) return w.__ccAcc;
+  var d = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.accounts) || {"about": "Sample accounts (Revision 7). Single source of truth for who can log in, their roles and their vendor profile. Every screen reads this block (via the ACC helper); no screen hardcodes these names or roles. Log in with the account ID (crew01 / crew02) or its demo email. Personal details follow sample_profiles: only name, city and public links are shown; designation, skills, bio, phone and bank details are left empty until verified.", "default": "crew01", "list": [{"id": "crew01", "name": "Varun Khandelwal", "email": "crew01@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": false}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster"], "vendor": null}, {"id": "crew02", "name": "Ria Bhavsar", "email": "crew02@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": true}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster", "Vendor"], "vendor": "vendor-house"}], "vendors": [{"id": "vendor-house", "name": "Vendor House", "type": "Vendor", "owner": "crew02", "city": "Mumbai", "initials": "VH", "contact": {"person": "Ria Bhavsar", "phone": "", "email": "", "website": "", "gstin": ""}, "note": "Business category, description, offices (city level), clientele and listings are sample demo content carried over from the previous sample vendor. Contact identifiers (phone, email, website, GSTIN, street address) are not set."}], "labels": {"notAdded": "Not added yet", "demoHint": "Demo accounts: crew01 · crew02", "crewMember": "Crew Member"}};
+  var by = {}, vb = {}, vn = {}; d.list.forEach(function (a) { by[a.id] = a; }); d.vendors.forEach(function (v) { vb[v.id] = v; vn[v.name] = v; });
+  function byLogin(s) { s = String(s || '').trim().toLowerCase(); for (var i = 0; i < d.list.length; i++) { var a = d.list[i]; if (a.id === s || a.email === s) return a; } return null; }
+  function def() { return by[d.default]; }
+  function byName(n) { for (var i = 0; i < d.list.length; i++) if (d.list[i].name === n) return d.list[i]; return null; }
+  function vendorOf(a) { return a && a.vendor ? vb[a.vendor] || null : null; }
+  function forStore(st) { return st && st.acct ? by[st.acct] || null : (st && st.name ? byName(st.name) : null); }
+  // Standalone artboards have no logged-in store: pick the sample account whose roles match the artboard's (default: all roles → crew02).
+  function byRoles(r) { r = r || { crew: true, vendor: true }; for (var i = 0; i < d.list.length; i++) { var x = d.list[i]; if (!!x.roles.crew === !!r.crew && !!x.roles.vendor === !!r.vendor) return x; } return def(); }
+  function me(st) { st = st || {}; return forStore(st) || (st.name ? null : byRoles(st.roles)); }
+  function name(st) { st = st || {}; var a = me(st); return st.name || (a ? a.name : def().name); }
+  function storeFor(a) { var v = vendorOf(a); return { acct: a.id, name: a.name, email: a.email, roles: { crew: !!a.roles.crew, vendor: !!a.roles.vendor }, modes: { seek: !!a.modes.seek, post: !!a.modes.post },
+    bizName: v ? v.name : '', phone: '', photo: false, prof: { pro: !!a.roles.crew, refs: !!a.roles.crew, biz: !!v, contact: false } }; }
+  return (w.__ccAcc = { d: d, list: d.list, labels: d.labels, byId: function (i) { return by[i] || null; }, byLogin: byLogin, byName: byName, def: def,
+    vendorOf: vendorOf, vendorByName: function (n) { return vn[n] || null; }, ownerOf: function (v) { return v ? by[v.owner] || null : null; }, forStore: forStore, me: me, name: name, storeFor: storeFor }); })(window);
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { step: p.step || 'info', why: '', ack: false, typed: '', sheet: false, busy: false }; }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state;
+    const st = this.props.store || {};
+    const R = st.roles || { crew: true, vendor: true };
+    const MD = st.modes || { seek: true, post: true };
+    const plan = (st.plans && st.plans.seeker) || 'expiring';
+    // What is lost follows the account's roles and Crew modes.
+    const losses = [cc("delete_account.your_profile_photo_and_contact"), cc("delete_account.followers_following_and_connections")]
+      .concat(R.crew && MD.seek ? [cc("delete_account.job_applications_and_saved_jobs")] : [])
+      .concat(R.crew && MD.post ? [cc("delete_account.job_posts_and_their_applicants")] : [])
+      .concat(R.crew ? [cc("delete_account.your_availability_calendar")] : [])
+      .concat(R.vendor ? [cc("delete_account.your_product_page_and_all"), cc("delete_account.invoices_you_created")] : []);
+    const ready = s.ack && s.typed.trim().toUpperCase() === 'DELETE';
+    return {
+      onInfo: s.step === 'info', onConfirm: s.step === 'confirm', onDone: s.step === 'done',
+      email: st.email || ACC.def().email, losses,
+      hasPlan: plan === 'active' || plan === 'expiring',
+      planLine: plan === 'active' ? cc("delete_account.expires_26_nov_2026") : cc("delete_account.expires_26_oct_2026"),
+      why: s.why, onWhy: (e) => this.setState({ why: e.target.value }),
+      ack: s.ack, onAck: (e) => this.setState({ ack: e.target.checked }),
+      typed: s.typed, onTyped: (e) => this.setState({ typed: e.target.value }),
+      ready, notReady: !ready,
+      toConfirm: () => this.setState({ step: 'confirm' }), toInfo: () => this.setState({ step: 'info', sheet: false }),
+      sheet: s.sheet, busy: s.busy, notBusy: !s.busy,
+      openSheet: () => this.setState({ sheet: true }), closeSheet: () => this.setState({ sheet: false }),
+      doDelete: () => {
+        this.setState({ busy: true });
+        this.t = setTimeout(() => this.setState({ busy: false, sheet: false, step: 'done' }), 1200);
+      }
+    };
+  }
+}
+ccHook(Component, ["why","typed"]);
+</script>
+</body>
+</html>

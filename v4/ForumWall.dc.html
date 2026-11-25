@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Association notices</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="{{backHref}}" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{barTitle}}</div></div>
+  <div style="flex: none; padding: 0 20px 12px; display: flex; flex-direction: column; gap: 10px">
+    <div><div class="t-h1">{{heading}}</div><p class="t-s mut" style="margin-top: 2px">{{subhead}}</p></div>
+    <div class="seg" role="tablist" aria-label="{{cct.r2.entity_type}}" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+      <sc-for list="{{typeTabs}}" as="t" hint-placeholder-count="3"><button role="tab" class="{{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+    </div>
+    <div class="row" style="gap: 10px"><button class="{{fBtnCls}}" onClick="{{openF}}" aria-label="{{cct.r2.open_filters}} {{fN}} {{cct.r2.selected}}" style="display: inline-flex; align-items: center; gap: 6px; flex: none"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>{{cct.common.filters}}<sc-if value="{{fHasN}}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #fff; color: #367A22; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">{{fN}}</span></sc-if></button><span class="t-c mut trunc sp">{{fSummary}}</span></div>
+  </div>
+  <sc-if value="{{fOpen}}" hint-placeholder-val="{{ false }}"><dc-import name="FiltersPage" title="{{fTitle}}" sections="{{fSecs}}" value="{{fVal}}" preview="{{fPrev}}" noun="{{fNoun}}" onApply="{{fApply}}" onClose="{{fClose}}" hint-size="390px,844px" style="position: absolute; inset: 0; z-index: 60"></dc-import></sc-if>
+  <div class="sc" style="padding-top: 0; gap: 12px">
+    <div class="row t-c mut"><span class="sp">{{count}}</span><span>{{cct.common.newest_first}}</span></div>
+    <sc-if value="{{showPinZone}}" hint-placeholder-val="{{ false }}">
+      <div class="pinned-zone" aria-label="{{cct.r2.pinned}}">
+        <div class="row" style="gap: 8px"><span class="pin-b"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6l-1 6 3 3H7l3-3z"></path><path d="M12 16v5"></path></svg>{{cct.r2.pinned}}</span><span class="t-c mut sp">{{cct.r2.pinned_associations_and_forums_stay_on_top}}</span><span class="badge b-y" style="height: 20px; font-size: 11px">{{cct.common.premium}}</span></div>
+        <sc-for list="{{pinned}}" as="n" hint-placeholder-count="1">
+          <a href="NoticeDetail.dc.html" data-notice="{{n.id}}" class="row" style="gap: 10px; text-decoration: none; color: #1A1820; padding: 6px 2px">
+            <dc-import name="AssocLogo" code="{{n.entity}}" size="36" hint-size="36px,36px"></dc-import>
+            <span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.title}}</span><span class="t-c mut trunc" style="display: block">{{n.ename}} · {{n.date}}</span></span>
+          </a>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-for list="{{list}}" as="n" hint-placeholder-count="4">
+      <article class="card" style="gap: 10px">
+        <a href="AssociationProfile.dc.html" data-assoc="{{n.entity}}" class="row" style="gap: 10px; text-decoration: none; color: #1A1820" aria-label="{{cct.r2.open_profile_of}} {{n.ename}}">
+          <dc-import name="AssocLogo" code="{{n.entity}}" size="44" hint-size="44px,44px"></dc-import>
+          <span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.ename}}</span><span class="row" style="gap: 6px; margin-top: 2px"><span class="{{n.typeCls}}" style="height: 20px; font-size: 11px">{{n.typeLabel}}</span><span class="t-c mut">{{n.date}}</span></span></span>
+        </a>
+        <a href="NoticeDetail.dc.html" data-notice="{{n.id}}" style="text-decoration: none; color: #1A1820; display: flex; flex-direction: column; gap: 6px">
+          <span class="t-h3">{{n.title}}</span>
+          <span class="t-s mut clamp2">{{n.preview}}</span>
+        </a>
+        <div class="chips" aria-label="{{cct.r2.departments}}"><sc-for list="{{n.depts}}" as="d" hint-placeholder-count="2"><span class="tag">{{d}}</span></sc-for></div>
+        <div class="row" style="gap: 8px; flex-wrap: wrap">
+          <sc-if value="{{n.isEdited}}" hint-placeholder-val="{{ false }}"><span class="badge b-n"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>{{n.editedLabel}}</span></sc-if>
+          <sc-if value="{{n.hasFile}}" hint-placeholder-val="{{ false }}"><span class="badge b-n"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"></path><path d="M14 3v5h5"></path></svg>{{cct.r2.attachment}}</span></sc-if>
+          <span class="sp"></span>
+          <button class="btn btn-t btn-sm" onClick="{{n.togglePin}}" aria-pressed="{{n.isPinned}}" aria-label="{{n.pinAria}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6l-1 6 3 3H7l3-3z"></path><path d="M12 16v5"></path></svg>{{n.pinLabel}}</button>
+          <a href="NoticeDetail.dc.html" data-notice="{{n.id}}" class="btn btn-s btn-sm">{{cct.r2.read_notice}}</a>
+        </div>
+      </article>
+    </sc-for>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty" style="padding-top: 32px"><div class="t-h2">{{cct.r2.no_notices_match_these_filters}}</div><div class="t-s mut" style="max-width: 260px">{{cct.r2.try_another_department_or_show_notices_from}}</div><button class="btn btn-s" onClick="{{clearAll}}">{{cct.r2.clear_filters}}</button></div>
+    </sc-if>
+    <sc-if value="{{showOlderBtn}}" hint-placeholder-val="{{ true }}"><a href="ForumOlder.dc.html" class="btn btn-s w100" style="margin-top: 4px">{{cct.r2.view_older_notices}} {{olderN}}</a></sc-if>
+    <p class="help" style="text-align: center">{{cct.r2.notices_are_official_updates_published_by_verified}}</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"archive":{"editor":"enum","options":["","yes"],"default":""},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* CrewConnect Association & Forum data (mock, from crewconnect_content.json › assoc_module). Shape is ready for a backend API. */
+var AF = (function (w) {
+  if (w.__ccAssoc) return w.__ccAssoc;
+  var m = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.assoc_module) || { entities: [], notices: [], departments: [], variants: {}, recentFrom: '2026-10-20' };
+  var byId = {};
+  m.entities.forEach(function (e) { byId[e.id] = e; });
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmt(iso, withTime) {
+    if (!iso) return '';
+    var d = new Date(iso); if (isNaN(d)) return iso;
+    var s = d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+    if (withTime === false) return s;
+    var h = d.getHours(), mi = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    return s + ', ' + h + ':' + (mi < 10 ? '0' : '') + mi + ' ' + ap;
+  }
+  function nowIso() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':00'; }
+  // Notices = seed data + this session's changes (store.notices: created[], edited{id: patch}, deleted{id: true}).
+  function notices(store) {
+    var n = (store && store.notices) || {}, cr = n.created || [], ed = n.edited || {}, del = n.deleted || {};
+    return cr.concat(m.notices).filter(function (x) { return !del[x.id] && byId[x.entity]; })
+      .map(function (x) { return ed[x.id] ? Object.assign({}, x, ed[x.id]) : x; })
+      .sort(function (a, b) { return a.postedAt < b.postedAt ? 1 : -1; });
+  }
+  function canPublish(e) { return !!e && e.status === 'active' && e.access === 'issued'; }
+  function entityByEmail(em) { em = (em || '').trim().toLowerCase(); for (var i = 0; i < m.entities.length; i++) if (m.entities[i].email === em) return m.entities[i]; return null; }
+  function preview(x) { var b = x.body || []; for (var i = 0; i < b.length; i++) if (typeof b[i] === 'string') return b[i]; return ''; }
+  return (w.__ccAssoc = { m: m, entities: m.entities, byId: byId, depts: m.departments, fmt: fmt, nowIso: nowIso, notices: notices, canPublish: canPublish, entityByEmail: entityByEmail, preview: preview, isOld: function (x) { return x.postedAt < m.recentFrom; } });
+})(window);
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { type: 'All', ent: 'All', dept: [], fOpen: false, pins: { CTG: true } }; }
+  renderVals() {
+    const s = this.state, st = this.props.store || {};
+    const arch = (this.props.archive || '') === 'yes';
+    const plans = st.plans || {};
+    const premium = plans.seeker !== 'free';
+    const pins = premium ? s.pins : {};
+    // Only notices from active entities appear on the wall (inactive entities keep their profile page).
+    const all = AF.notices(st).filter((x) => AF.byId[x.entity].status === 'active');
+    const scope = all.filter((x) => (arch ? AF.isOld(x) : !AF.isOld(x)));
+    const ok = (x, f) => (f.type === 'All' || AF.byId[x.entity].type === f.type) && (f.ent === 'All' || x.entity === f.ent) && (!f.dept.length || x.depts.some((d) => f.dept.indexOf(d) >= 0));
+    const list0 = scope.filter((x) => ok(x, s));
+    const pinnedL = arch ? [] : list0.filter((x) => pins[x.entity]);
+    const list = arch ? list0 : list0.filter((x) => !pins[x.entity]);
+    const ents = AF.entities.filter((e) => e.status === 'active' && (s.type === 'All' || e.type === s.type));
+    const fN = (s.ent !== 'All' ? 1 : 0) + s.dept.length;
+    const row = (x) => {
+      const E = AF.byId[x.entity];
+      return { ...x, ename: E.name, typeLabel: E.type === 'Forum' ? cc("r2.forum") : cc("r2.association"), typeCls: E.type === 'Forum' ? 'badge b-y' : 'badge b-p', date: AF.fmt(x.postedAt, false),
+        preview: AF.preview(x), isEdited: !!x.editedAt, editedLabel: cc("r2.edited") + ' ' + AF.fmt(x.editedAt, false), hasFile: !!x.attachment,
+        isPinned: !!pins[x.entity], pinLabel: premium ? (pins[x.entity] ? cc("r2.unpin") : cc("r2.pin")) : cc("r2.pin_premium"), pinAria: cc("r2.pin") + ' ' + E.name,
+        togglePin: () => (premium ? this.setState({ pins: { ...s.pins, [x.entity]: !s.pins[x.entity] } }) : null) };
+    };
+    return {
+      barTitle: arch ? cc("common.older_notices") : cc("r2.forum_wall"), backHref: arch ? 'ForumWall.dc.html' : 'SeekerHome.dc.html',
+      heading: arch ? cc("common.older_notices") : cc("r2.notices_from_associations_forums"),
+      subhead: arch ? cc("r2.earlier_official_notices_newest_first") : cc("r2.official_updates_for_the_film_media_and"),
+      typeTabs: [['All', cc("r2.all")], ['Association', cc("r2.associations")], ['Forum', cc("r2.forums")]].map(([k, l]) => ({ label: l, on: s.type === k, cls: s.type === k ? 'on' : '', pick: () => this.setState({ type: k, ent: 'All' }) })),
+      fOpen: s.fOpen, openF: () => this.setState({ fOpen: true }), fClose: () => this.setState({ fOpen: false }),
+      fTitle: cc("r2.filter_notices"), fNoun: cc("r2.notices"), fN, fHasN: fN > 0, fBtnCls: fN ? 'chip on' : 'chip',
+      fSummary: [s.ent !== 'All' ? AF.byId[s.ent].short : (s.type === 'All' ? cc("r2.all_associations_forums") : s.type === 'Forum' ? cc("r2.all_forums") : cc("r2.all_associations"))].concat(s.dept).join(' · '),
+      fSecs: [
+        { k: 'ent', title: s.type === 'Forum' ? cc("r2.forum") : s.type === 'Association' ? cc("r2.association") : cc("r2.association_forum"), def: 'All', opts: [{ v: 'All', l: cc("r2.all") }].concat(ents.map((e) => ({ v: e.id, l: e.name + ' · ' + (e.type === 'Forum' ? cc("r2.forum") : cc("r2.association")) }))) },
+        { k: 'dept', title: cc("common.department"), multi: true, def: [], hint: cc("r2.show_notices_relevant_to_any_of_the"), opts: AF.depts.map((d) => ({ v: d, l: d })) }
+      ],
+      fVal: { ent: s.ent, dept: s.dept },
+      fPrev: (d) => scope.filter((x) => ok(x, { type: s.type, ent: d.ent, dept: d.dept || [] })).length,
+      fApply: (d) => this.setState({ ent: d.ent || 'All', dept: d.dept || [], fOpen: false }),
+      clearAll: () => this.setState({ type: 'All', ent: 'All', dept: [] }),
+      showPinZone: pinnedL.length > 0, pinned: pinnedL.map((x) => ({ ...x, ename: AF.byId[x.entity].name, date: AF.fmt(x.postedAt, false) })),
+      list: list.map(row), empty: list0.length === 0,
+      count: list0.length + ' ' + (list0.length === 1 ? cc("r2.notice") : cc("r2.notices")),
+      showOlderBtn: !arch && all.filter(AF.isOld).length > 0, olderN: all.filter(AF.isOld).length
+    };
+  }
+}
+ccHook(Component, ["fSecs","fVal","fPrev","fApply","fClose","fTitle","fNoun","list","pinned"]);
+</script>
+</body>
+</html>

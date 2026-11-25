@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Splash</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<a class="ph" href="Onboarding.dc.html" aria-label="{{cct.splash.crewconnect_continue}}" style="text-decoration: none; align-items: center; justify-content: center; gap: 20px; background: radial-gradient(circle at 50% 42%, rgba(255,255,255,.85) 0, rgba(255,255,255,0) 240px), var(--cc-bg)">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center">
+    <span class="cc-logo-mark" aria-hidden="true" style="width: 170px; height: 202px; filter: drop-shadow(0 18px 28px rgba(199,122,18,.28))"></span>
+    <div style="font-size: 34px; line-height: 38px; font-weight: 800; letter-spacing: -0.03em; margin-top: -6px" aria-label="{{cct.splash.crewconnect}}"><span style="color: #5B2A8C">{{cct.common.crew}}</span><span style="color: #367A22">{{cct.common.connect}}</span></div>
+    <div style="font-size: 14px; line-height: 20px; font-weight: 600; color: #7A5530; padding: 8px 16px; border-radius: 14px; background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.8); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px)">{{cct.splash.film_media_and_entertainment}}<br>{{cct.splash.industry_platform}}</div>
+  </div>
+
+  <div style="position: absolute; bottom: 64px; display: flex; flex-direction: column; align-items: center; gap: 10px">
+    <span class="spin d"></span>
+  </div>
+</a>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

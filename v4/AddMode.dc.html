@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Turn on a Crew mode</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.am-scrim{animation:amfade .2s ease both}
+@keyframes amfade{from{opacity:0}to{opacity:1}}
+.am-sheet{animation:amup .5s cubic-bezier(.34,1.3,.64,1) both}
+@keyframes amup{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.am-st{opacity:0;transform:translateY(10px);animation:amin .45s cubic-bezier(.22,.8,.2,1) forwards}
+@keyframes amin{to{opacity:1;transform:none}}
+.am-pop{animation:ampop .55s cubic-bezier(.34,1.45,.64,1) both}
+@keyframes ampop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.am-sheet,.am-st,.am-pop{animation:amfade .15s ease both;opacity:1;transform:none}}
+</style>
+</helmet>
+<div class="ph bg-alt">
+
+    <!-- 1 · SUBSCRIPTION & ROLE OFFERING (replaces the old features sheet): shown before the role / mode is switched on -->
+  <sc-if value="{{stIntro}}" hint-placeholder-val="{{ true }}">
+    <dc-import name="RoleSubscribe" to="{{subTo}}" from="{{subFrom}}" back="{{backHref}}" act="{{subAct}}" onDone="{{introGo}}" hint-size="390px,844px" style="position: absolute; inset: 0; z-index: 5"></dc-import>
+  </sc-if>
+
+  <!-- STEP HEADER -->
+  <sc-if value="{{inSteps}}" hint-placeholder-val="{{ false }}">
+    <div class="bar">
+      <a class="iconbtn" href="{{backHref}}" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a>
+      <div class="ttl">{{barTitle}}</div>
+    </div>
+  </sc-if>
+
+  <!-- 2 · RECRUITER: quick hiring setup (required to unlock) -->
+  <sc-if value="{{stHire}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 14px; gap: 18px">
+      <div class="am-st"><span class="badge b-p">{{cct.add_mode.job_poster_quick_hiring_setup}}</span><div class="t-h1" style="margin-top: 8px">{{cct.add_mode.who_are_you_hiring_as}}</div><p class="t-s mut" style="margin-top: 4px">{{cct.add_mode.shown_on_your_job_posts}}</p></div>
+      <sc-if value="{{hasDraft}}" hint-placeholder-val="{{ false }}"><div class="alert a-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg><div>{{cct.add_mode.we_kept_what_you_entered}}</div></div></sc-if>
+      <div class="fld"><label class="lbl" for="dg">{{cct.common.your_designation}} <span class="req">*</span></label><input id="dg" class="{{dgCls}}" placeholder="{{cct.add_mode.e_g_line_producer_dop}}" value="{{desig}}" onChange="{{onDesig}}" aria-invalid="{{dgErr}}">
+        <div class="chips"><sc-for list="{{desigSugg}}" as="d" hint-placeholder-count="4"><button class="chip" onClick="{{d.pick}}">{{d.label}}</button></sc-for></div>
+        <sc-if value="{{dgErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.add_mode.enter_the_designation_you_hire}}</span></sc-if>
+      </div>
+      <div class="fld"><label class="lbl" for="co">{{cct.common.company_production_house}} <span class="req">*</span></label><input id="co" class="{{coCls}}" placeholder="{{cct.common.e_g_lantern_pictures}}" value="{{comp}}" onChange="{{onComp}}" aria-invalid="{{coErr}}">
+        <sc-if value="{{coErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.add_mode.enter_the_company_or_production}}</span></sc-if>
+      </div>
+      <div class="fld"><label class="lbl" for="ot">{{cct.common.other_companies_you_post_for}} <span class="opt">{{cct.common.optional}}</span></label>
+        <div class="row" style="gap: 8px"><input id="ot" class="inp sp" placeholder="{{cct.add_mode.add_a_company}}" value="{{other}}" onChange="{{onOther}}"><button class="btn btn-s" onClick="{{addOther}}">{{cct.common.add}}</button></div>
+        <sc-if value="{{hasOthers}}" hint-placeholder-val="{{ false }}"><div class="chips"><sc-for list="{{others}}" as="o" hint-placeholder-count="2"><span class="chip on">{{o.label}}<button onClick="{{o.remove}}" aria-label="{{cct.add_mode.remove}}{{o.label}}" style="border: 0; background: none; color: inherit; padding: 0; display: inline-flex; cursor: pointer"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+        <span class="help">{{cct.add_mode.you_pick_which_company_each}}</span>
+      </div>
+      <div class="alert a-w" role="note" style="align-items: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><div><b>{{cct.r2.categorising_applications_is_mandatory}}</b> {{cct.r2.review_and_categorise_every_application_within_48}}</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 2 · JOB SEEKER: optional availability -->
+  <sc-if value="{{stAvail}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 14px; gap: 18px">
+      <div class="am-st"><span class="badge b-n">{{cct.common.optional_2}}</span><div class="t-h1" style="margin-top: 8px">{{cct.common.set_your_availability}}</div><p class="t-s mut" style="margin-top: 4px">{{cct.add_mode.shown_on_your_profile_and}}</p></div>
+      <div class="list" role="radiogroup" aria-label="{{cct.common.availability}}"><sc-for list="{{avail}}" as="a" hint-placeholder-count="3"><button class="li" onClick="{{a.pick}}" role="radio" aria-checked="{{a.on}}" style="min-height: 56px"><span class="{{a.dot}}">{{a.label}}</span><span class="sp"></span><span class="{{a.radio}}"></span></button></sc-for></div>
+      <a class="row t-s b" href="Calendar.dc.html" style="gap: 6px; text-decoration: none"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg>{{cct.add_mode.mark_specific_dates_in_calendar}}</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{inSteps}}" hint-placeholder-val="{{ false }}">
+    <div class="foot" style="flex-direction: column; gap: 8px">
+      <sc-if value="{{saving}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>{{cct.common.saving}}</button></sc-if>
+      <sc-if value="{{notSaving}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{save}}">{{saveLabel}}</button></sc-if>
+      <sc-if value="{{canSkip}}" hint-placeholder-val="{{ false }}"><button class="btn btn-t w100" onClick="{{skip}}" style="min-height: 40px">{{cct.common.skip_for_now}}</button></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- 3 · SUCCESS -->
+  <sc-if value="{{stDone}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="justify-content: center; align-items: center; text-align: center; gap: 20px; padding: 40px 28px">
+      <div class="am-pop" style="{{doneRing}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 40px; height: 40px; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg></div>
+      <div class="am-st" style="display: flex; flex-direction: column; gap: 8px; animation-delay: .15s" role="status"><h1 class="t-d">{{doneTitle}}</h1><p class="t-b mut">{{doneSub}}</p></div>
+      <div class="card am-st" style="width: 100%; gap: 6px; text-align: left; animation-delay: .3s">
+        <div class="t-over">{{cct.add_mode.now_in_your_app}}</div>
+        <sc-for list="{{gains}}" as="g" hint-placeholder-count="4"><div class="row t-s" style="gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #367A22; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg><span>{{g.t}}</span></div></sc-for>
+      </div>
+    </div>
+    <div style="flex: none; padding: 12px 24px 36px; display: flex; flex-direction: column; gap: 10px">
+      <a class="btn btn-p w100" href="{{primaryHref}}" data-tab="{{primaryTab}}">{{primaryLabel}}</a>
+      <a class="btn btn-s w100" href="Jobs.dc.html" data-tab="{{backTab}}">{{cct.add_mode.back_to_jobs}}</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status" style="bottom: 140px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"act":{"editor":null},"store":{"editor":null},"mode":{"editor":"enum","options":["post","seek"],"default":"post"},"gate":{"editor":"enum","options":["","apply","post","talent"],"default":""},"demo":{"editor":"enum","options":["","form","error","saving","draft","avail","done"],"default":""},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    const d = p.demo || '', mode = p.mode || 'post';
+    const st = p.store || {};
+    const dr = st.hireDraft || (d === 'draft' ? { desig: cc("common.line_producer"), comp: '', others: [] } : null);
+    const at = mode === 'post' ? ({ form: 'hire', error: 'hire', saving: 'hire', draft: 'hire', done: 'done' }[d] || 'intro') : ({ avail: 'avail', done: 'done' }[d] || 'intro');
+    this.state = { at, tried: d === 'error', saving: d === 'saving', toast: '', av: cc("common.available"), touched: false,
+      desig: dr ? dr.desig || '' : '', comp: dr ? dr.comp || '' : '', others: dr ? dr.others || [] : [], other: '', draft: !!dr };
+  }
+  componentWillUnmount() { clearTimeout(this.t); clearTimeout(this.t2); }
+  flash(m) { this.setState({ toast: m }); clearTimeout(this.t2); this.t2 = setTimeout(() => this.setState({ toast: '' }), 2200); }
+  renderVals() {
+    const s = this.state, act = this.props.act || (() => {});
+    const st = this.props.store || {};
+    const mode = this.props.mode || 'post', post = mode === 'post';
+    const gate = this.props.gate || '';
+    const prof = st.prof || { pro: true };
+    // Keep what was typed as a draft in the shared store, so leaving the setup keeps Job Poster locked but nothing is lost.
+    const keep = (patch) => { const v = { desig: s.desig, comp: s.comp, others: s.others, ...patch }; this.setState({ ...patch, touched: true }); act('hireDraft', v); };
+    const okHire = !!s.desig.trim() && !!s.comp.trim();
+    const gateT = { apply: cc("add_mode.turn_on_job_seeker_to"), post: cc("add_mode.turn_on_job_poster_to"), talent: cc("add_mode.turn_on_job_poster_to_2") }[gate];
+    const gains = (post
+      ? [[cc("common.post_jobs"), cc("add_mode.create_review_and_publish_job")], [cc("common.review_applicants"), cc("add_mode.statuses_shortlists_and_applicant_profiles")], [cc("common.find_talent"), cc("add_mode.search_the_crew_directory_and")], [cc("common.currently_hiring_badge"), cc("add_mode.on_your_profile_while_posts")]]
+      : [[cc("common.find_jobs_2"), cc("common.recommended_and_saved_jobs_search")], [cc("common.applications"), cc("add_mode.track_applied_under_review_shortlisted")], [cc("add_mode.jobs_for_you_on_home"), cc("add_mode.matched_to_your_work_titles")], [cc("add_mode.your_applications_on_home"), cc("add_mode.status_updates_at_a_glance")]]).map((g) => ({ t: g[0], d: g[1], sq: post ? 'sq g' : 'sq' }));
+    const finish = () => this.setState({ at: 'done', saving: false });
+    const primary = post
+      ? (gate === 'talent' ? [cc("common.open_find_talent"), 'Talent.dc.html', ''] : [cc("add_mode.post_your_first_job"), 'CreateJob.dc.html', ''])
+      : (gate === 'apply' ? [cc("add_mode.back_to_the_job"), 'JobDetail.dc.html', ''] : [cc("common.find_jobs"), 'Jobs.dc.html', 'find']);
+    return {
+      subTo: post ? 'post' : 'seek', subFrom: post ? cc("add_mode.crew_member_job_seeker") : cc("add_mode.crew_member_job_poster"), subAct: act,
+      isSeek: !post, isPost: post, modeName: post ? 'Job Poster' : 'Job Seeker', introSq: post ? 'sq g' : 'sq',
+      stIntro: s.at === 'intro', inSteps: s.at === 'hire' || s.at === 'avail', stHire: s.at === 'hire', stAvail: s.at === 'avail', stDone: s.at === 'done',
+      introTitle: gateT || (post ? cc("common.hiring_for_a_production") : cc("common.looking_for_work_too")),
+      introSub: post ? cc("add_mode.turn_on_job_poster_to_3") : (gate === 'apply' ? cc("add_mode.your_professional_information_is_already") : cc("add_mode.turn_on_job_seeker_to_2")),
+      introCta: post ? cc("common.continue") : cc("add_mode.turn_on_job_seeker"),
+      needPro: !post && !prof.pro,
+      gains, backHref: gate === 'apply' ? 'JobDetail.dc.html' : 'Jobs.dc.html',
+      introGo: () => {
+        if (post) return this.setState({ at: 'hire' });
+        // Job Seeker needs no form: confirming turns it on, then availability is offered.
+        act('addMode', 'seek');
+        this.setState({ at: 'avail' });
+        this.flash(cc("add_mode.job_seeker_is_on"));
+      },
+      barTitle: post ? cc("add_mode.quick_hiring_setup") : cc("common.availability"),
+      hasDraft: s.draft && !s.touched,
+      desig: s.desig, comp: s.comp, other: s.other,
+      onDesig: (e) => keep({ desig: e.target.value }), onComp: (e) => keep({ comp: e.target.value }), onOther: (e) => this.setState({ other: e.target.value }),
+      desigSugg: [cc("common.producer"), cc("common.line_producer"), cc("common.director"), 'DOP'].map((l) => ({ label: l, pick: () => keep({ desig: l }) })),
+      addOther: () => { const v = s.other.trim(); if (v && s.others.indexOf(v) < 0) { keep({ others: s.others.concat([v]) }); this.setState({ other: '' }); } },
+      hasOthers: s.others.length > 0, others: s.others.map((o) => ({ label: o, remove: () => keep({ others: s.others.filter((x) => x !== o) }) })),
+      dgErr: s.tried && !s.desig.trim(), coErr: s.tried && !s.comp.trim(),
+      dgCls: s.tried && !s.desig.trim() ? 'inp bad' : 'inp', coCls: s.tried && !s.comp.trim() ? 'inp bad' : 'inp',
+      avail: [[cc("common.available"), 'avail a-av'], ['Tentatively booked', 'avail a-tb'], ['Unavailable', 'avail a-un']].map((a) => ({ label: a[0], dot: a[1], on: s.av === a[0], radio: s.av === a[0] ? 'radio on' : 'radio', pick: () => this.setState({ av: a[0] }) })),
+      saving: s.saving, notSaving: !s.saving,
+      saveLabel: post ? cc("add_mode.save_and_turn_on_job") : cc("add_mode.save_availability"),
+      canSkip: s.at === 'avail' && !s.saving,
+      save: () => {
+        if (s.at === 'hire') {
+          if (!okHire) return this.setState({ tried: true });
+          this.setState({ saving: true });
+          clearTimeout(this.t);
+          this.t = setTimeout(() => { act('addMode', 'post', { desig: s.desig.trim(), companies: [s.comp.trim()].concat(s.others) }); finish(); this.flash(cc("add_mode.job_poster_is_on")); }, 700);
+          return;
+        }
+        act('profile', { availability: s.av });
+        finish();
+      },
+      skip: () => finish(),
+      doneRing: 'width:88px;height:88px;border-radius:44px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 0 0 6px rgba(255,255,255,.8),0 18px 36px -14px rgba(24,44,30,.45);background:' + (post ? 'linear-gradient(180deg,#3F8A28,#367A22)' : 'linear-gradient(180deg,#8A4DF2,#7C3AED)'),
+      doneTitle: post ? cc("add_mode.job_poster_is_on_2") : cc("add_mode.job_seeker_is_on_2"),
+      doneSub: post ? (gate === 'talent' ? cc("add_mode.find_talent_is_ready_jobs") : cc("add_mode.jobs_now_shows_my_posts")) : (gate === 'apply' ? cc("add_mode.your_application_has_been_sent") : cc("add_mode.jobs_now_shows_find_jobs")),
+      primaryLabel: primary[0], primaryHref: primary[1], primaryTab: primary[2], backTab: post ? 'posts' : 'find',
+      toast: !!s.toast, toastText: s.toast
+    };
+  }
+}
+ccHook(Component, ["subTo","subFrom","backHref","subAct","introGo","desig","comp","other"]);
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Payment history</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="SeekerProfile.dc.html" aria-label="{{cct.common.back_to_settings}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.payment_history}}</div></div>
+  <div class="sc" style="gap: 16px">
+    <div class="card" style="gap: 8px">
+      <div class="row" style="gap: 8px"><span class="badge b-y">{{cct.common.premium}}</span><span class="t-h3 sp">{{cct.r2.how_billing_works}}</span></div>
+      <div class="t-s">{{cct.r2.premium_is_billed_monthly_at_299_each}}</div>
+      <div class="t-s mut">{{cct.r2.save_with_discounted_6_month_and_1}}</div>
+      <a class="btn btn-s btn-sm" href="Subscription.dc.html" style="align-self: flex-start">{{cct.r2.see_plans_discounts}}</a>
+      <div class="t-c mut">{{cct.r2.payment_gateway_dedicated_payment_screen_or_in}} <span class="ph-tag">{{cct.r2.pending_client_decision}}</span></div>
+    </div>
+    <sc-if value="{{hasRows}}" hint-placeholder-val="{{ true }}">
+      <div class="card" style="gap: 10px; border-color: #EFEAFE">
+        <div class="t-over">{{cct.payment_history.payments_to_crewconnect}}</div>
+        <div class="row" style="gap: 12px; align-items: flex-end">
+          <div class="sp"><div class="t-c mut">{{cct.payment_history.total_paid}}</div><div class="t-h1">{{total}}</div></div>
+          <div style="text-align: right"><div class="t-c mut">{{cct.common.payments}}</div><div class="t-h2">{{count}}</div></div>
+        </div>
+        <div class="t-c mut">{{cct.payment_history.subscription_payments_only_invoices_you}}</div>
+      </div>
+      <div class="t-over">{{cct.payment_history.transactions}}</div>
+      <div class="list">
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="2">
+          <button class="li" onClick="{{r.open}}" style="width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid #F0EDF4; font: inherit; color: inherit" aria-label="{{r.aria}}">
+            <span class="sq" style="width: 40px; height: 40px; border-radius: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 8 4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg></span>
+            <span class="sp" style="min-width: 0">
+              <span class="t-s b" style="display: block">{{r.title}}</span>
+              <span class="t-c mut" style="display: block">{{r.dateShow}}</span>
+            </span>
+            <span style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
+              <span class="t-s b">{{r.amt}}</span>
+              <span class="{{r.stCls}}">{{r.st}}</span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+      <p class="help">{{cct.payment_history.transaction_dates_reference_ids_and}} <span class="ph-tag">{{cct.common.payment_flow_tbc}}</span>{{cct.payment_history.values_marked}} <span class="ph-tag">{{cct.common.tbc}}</span> {{cct.payment_history.are_placeholders_until_billing_data}}</p>
+    </sc-if>
+    <sc-if value="{{noRows}}" hint-placeholder-val="{{ false }}">
+      <div class="card" style="align-items: center; text-align: center; gap: 10px; padding: 28px 20px">
+        <span class="sq" style="width: 56px; height: 56px; border-radius: 16px"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>
+        <div class="t-h2">{{cct.common.no_payments_yet}}</div>
+        <div class="t-s mut">{{cct.payment_history.when_you_subscribe_to_or}}</div>
+        <a class="btn btn-s" href="Subscription.dc.html">{{cct.common.view_plans}}</a>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{dlg}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim">
+      <div class="sheet" role="dialog" aria-label="{{cct.payment_history.payment_details}}">
+        <div class="grab"></div>
+        <div class="row"><div class="t-h2 sp">{{cct.payment_history.payment_details}}</div><span class="{{sel.stCls}}">{{sel.st}}</span></div>
+        <div class="card" style="gap: 2px; background: rgba(255,255,255,.5)">
+          <div class="kv"><span>{{cct.common.plan}}</span><span>{{sel.plan}}</span></div>
+          <div class="kv"><span>{{cct.common.type}}</span><span>{{sel.kind}}</span></div>
+          <div class="kv"><span>{{cct.common.amount}}</span><span>{{sel.amt}}</span></div>
+          <div class="kv"><span>{{cct.payment_history.date}}</span><span>{{sel.dateShow}}</span></div>
+          <div class="kv"><span>{{cct.payment_history.reference_id}}</span><span><span class="ph-tag">{{sel.refShow}}</span></span></div>
+          <div class="kv"><span>{{cct.payment_history.payment_method}}</span><span><span class="ph-tag">{{cct.common.payment_flow_tbc}}</span></span></div>
+        </div>
+        <button class="btn btn-t w100" onClick="{{close}}">{{cct.common.close}}</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"payments":{"editor":null},"plan":{"editor":"enum","options":["free","active","expiring","expired"],"default":"expiring"},"empty":{"editor":"enum","options":["","yes"],"default":""},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { sel: null }; }
+  renderVals() {
+    const s = this.state;
+    // Records come from the prototype store: the Premium payment behind the current plan (₹299, as on Subscription) plus any renewal made this session.
+    const base = [{ id: 'pay-1', plan: cc("common.premium"), kind: 'Subscription', amt: cc("common.inr_100"), st: 'Paid', date: '', ref: '' }];
+    const list = (this.props.empty || '') === 'yes' ? [] : (this.props.payments || base);
+    const ST = { Paid: 'badge b-g', Pending: 'badge b-w', Failed: 'badge b-e', Refunded: 'badge b-n' };
+    const rows = list.map((r) => {
+      const dateShow = r.date || cc("common.date_tbc");
+      const x = { ...r, title: ccv(r.plan) + ' · ' + ccv(r.kind), dateShow, refShow: r.ref || cc("payment_history.ref_tbc"), stCls: ST[r.st] || 'badge b-n', aria: r.plan + ' ' + r.kind + ', ' + r.amt + ', ' + r.st + ', ' + dateShow };
+      x.open = () => this.setState({ sel: x });
+      return x;
+    });
+    const paid = list.filter((r) => r.st === 'Paid').reduce((n, r) => n + (parseInt(String(r.amt).replace(/[^0-9]/g, ''), 10) || 0), 0);
+    return {
+      rows, hasRows: rows.length > 0, noRows: rows.length === 0,
+      total: cc("common.inr") + paid.toLocaleString('en-IN'), count: String(rows.length),
+      dlg: !!s.sel, sel: s.sel || {}, close: () => this.setState({ sel: null })
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bottom bar — by role</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<!-- One bottom bar, shaped by the account's roles and Crew modes. Job Seeker only: Listings is labelled Rent/Buy. Crew or Both: Home · Jobs · More (Calendar, Invoices) · Listings · Profile.
+     Vendor only: Home · Listings · Invoices · Network · Profile (no Jobs, no Calendar, so no More dock). -->
+<!-- Shared bottom bar: every tab screen imports this component (fit="yes" sizes it to the bar so it sits in the screen's column). -->
+<div style="{{rootStyle}}">
+  <sc-if value="{{isCrew}}" hint-placeholder-val="{{ true }}">
+  <nav class="nav" aria-label="{{cct.common.main}}" style="{{crewNavStyle}}">
+    <a class="{{c_home}}" href="SeekerHome.dc.html" aria-current="{{a_home}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>{{cct.common.home}}</a>
+    <a class="{{c_jobs}}" href="Jobs.dc.html" aria-current="{{a_jobs}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>{{cct.common.jobs}}</a>
+    <a class="{{c_calendar}}" href="Calendar.dc.html" aria-current="{{a_calendar}}" aria-label="{{cct.r2.calendar_check_your_availability}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>{{cct.common.calendar}}</a>
+    <sc-if value="{{hasDock}}" hint-placeholder-val="{{ true }}"><div class="{{nmCls}}"><label class="nm-btn"><input type="checkbox" class="nm-t" aria-label="{{cct.role_nav.more_calendar_and_invoices}}"><span class="nm-scrim" aria-hidden="true"></span><span class="nm-core"><svg class="i nm-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"></rect></svg></span><span class="nm-lbl">{{cct.role_nav.more}}</span></label><div class="nm-menu"><span class="nm-arc" aria-hidden="true"></span><a class="{{calCls}}" href="Calendar.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="nm-tag">{{cct.common.calendar}}</span></a><a class="{{invCls}}" href="Invoices.dc.html"><span class="nm-orb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span><span class="nm-tag">{{cct.common.invoices}}</span></a></div></div></sc-if><sc-if value="{{noDock}}" hint-placeholder-val="{{ false }}"><a class="{{c_invoices}}" href="Invoices.dc.html" aria-current="{{a_invoices}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>{{cct.common.invoices}}</a></sc-if>
+    <sc-if value="{{rentBuy}}" hint-placeholder-val="{{ false }}"><a class="{{c_listings}}" href="MyListings.dc.html" aria-current="{{a_listings}}" aria-label="{{cct.role_nav.buy_sell_or_rent_equipment}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg></span><span style="white-space: nowrap; letter-spacing: -0.02em">{{cct.common.buy_sell_rent}}</span></a></sc-if><sc-if value="{{notRentBuy}}" hint-placeholder-val="{{ true }}"><a class="{{c_listings}}" href="MyListings.dc.html" aria-current="{{a_listings}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><span style="white-space: nowrap; letter-spacing: -0.02em">{{cct.common.buy_sell_rent}}</span></a></sc-if>
+    <a class="{{c_profile}}" href="SeekerProfile.dc.html" aria-current="{{a_profile}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>{{cct.common.profile}}</a>
+  </nav>
+  </sc-if>
+  <sc-if value="{{isVendor}}" hint-placeholder-val="{{ false }}">
+  <nav class="nav" aria-label="{{cct.common.main}}" style="{{navStyle}}">
+    <a class="{{c_home}}" href="SeekerHome.dc.html" aria-current="{{a_home}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>{{cct.common.home}}</a>
+    <a class="{{c_listings}}" href="MyListings.dc.html" aria-current="{{a_listings}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><span style="white-space: nowrap; letter-spacing: -0.02em">{{cct.common.buy_sell_rent}}</span></a>
+    <a class="{{c_invoices}}" href="Invoices.dc.html" aria-current="{{a_invoices}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>{{cct.common.invoices}}</a>
+    <a class="{{c_network}}" href="DiscoverFeed.dc.html" aria-current="{{a_network}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>{{cct.common.network}}</a>
+    <a class="{{c_profile}}" href="SeekerProfile.dc.html" aria-current="{{a_profile}}"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>{{cct.common.profile}}</a>
+  </nav>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"roles":{"editor":null},"modes":{"editor":null},"active":{"editor":"enum","options":["home","jobs","listings","calendar","invoices","network","profile",""],"default":"home"},"tall":{"editor":"boolean","default":false},"fit":{"editor":"enum","options":["","yes"],"default":""},"$preview":{"width":390,"height":96}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  renderVals() {
+    const R = this.props.roles || { crew: true, vendor: true };
+    const a = this.props.active ?? 'home';
+    const md = this.props.modes || { seek: true, post: true };
+    const vendorOnly = !!R.vendor && !R.crew;
+    const c = (k) => (a === k ? 'on' : '');
+    const more = a === 'calendar' || a === 'invoices';
+    return {
+      // Calendar belongs to Job Seeker. Without it only Invoices is left, so the dock becomes a direct tab.
+      // Availability calendar is for all Crew Members (client decision), so every Crew bar keeps the More dock.
+      // R2 (client feedback): Calendar sits next to Jobs as its own tab; Invoices becomes a direct tab (no More dock). Placement pending final sign-off.
+      hasDock: false, noDock: !vendorOnly,
+      crewNavStyle: 'grid-template-columns:repeat(6,minmax(0,1fr));' + (this.props.tall ? 'height:96px;padding-bottom:34px' : ''),
+      c_calendar: c('calendar'), a_calendar: a === 'calendar' ? 'page' : 'false',
+      // Job Seeker only (no Job Poster, no Vendor role): the Listings tab is called Rent/Buy.
+      rentBuy: !!R.crew && !R.vendor && md.seek !== false && md.post === false, notRentBuy: !(!!R.crew && !R.vendor && md.seek !== false && md.post === false),
+      isCrew: !vendorOnly, isVendor: vendorOnly,
+      navStyle: this.props.tall ? 'height:96px;padding-bottom:34px' : '',
+      rootStyle: (this.props.fit === 'yes' || this.props.fit === true)
+        ? 'width: 100%; flex: none; position: relative; display: flex; flex-direction: column; font-family: Inter, system-ui, sans-serif'
+        : 'width: 390px; height: 96px; position: relative; display: flex; flex-direction: column; justify-content: flex-end; font-family: Inter, system-ui, sans-serif',
+      c_home: c('home'), c_jobs: c('jobs'), c_listings: c('listings'), c_profile: c('profile'), c_invoices: c('invoices'), c_network: c('network'),
+      a_home: a === 'home' ? 'page' : 'false', a_jobs: a === 'jobs' ? 'page' : 'false', a_listings: a === 'listings' ? 'page' : 'false', a_profile: a === 'profile' ? 'page' : 'false', a_invoices: a === 'invoices' ? 'page' : 'false', a_network: a === 'network' ? 'page' : 'false',
+      nmCls: more ? 'nm on' : 'nm',
+      calCls: 'nm-opt nm-o1' + (a === 'calendar' ? ' on' : ''),
+      invCls: 'nm-opt nm-o2' + (a === 'invoices' ? ' on' : '')
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

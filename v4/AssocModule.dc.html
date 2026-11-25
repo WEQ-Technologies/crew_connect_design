@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Association & Forum module</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div style="padding: 40px; display: flex; flex-direction: column; gap: 28px; background: #EEF5EC; min-height: 100%; font-family: Inter, system-ui, sans-serif; color: #1A1820">
+  <div style="max-width: 1500px"><div class="t-over">Revision 4 · Association &amp; Forum module</div><div class="t-d" style="margin-top: 4px">Official notices from Associations and Forums</div><p class="t-b mut" style="margin-top: 6px">Two entity types — Association and Forum — publish official notices; everyone else reads them on a read-only Forum Wall. No likes, reactions, comments, user posts, follow/connect, sharing, engagement metrics or withdrawal. All screens below are the live prototype screens, running on the mock data in <b>crewconnect_content.json › assoc_module</b> (10 entities, 16 notices).</p></div>
+  <div class="t-h2">For CrewConnect users</div>
+  <div style="display: flex; gap: 32px; align-items: flex-start">
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Users · 1</div><div class="t-h3">Forum Wall</div><div class="t-c mut">Combined feed of Associations and Forums, newest first. Filter by type, entity and departments.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="ForumWall" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Users · 2</div><div class="t-h3">Notice detail</div><div class="t-c mut">Entity, type, departments, published and last-edited dates, PDF preview/download. Read-only.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="NoticeDetail" notice="n01" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Users · 3</div><div class="t-h3">Forum profile</div><div class="t-c mut">Logo, type, region, description and all its notices. No follow or connect.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="AssociationProfile" assoc="SSP" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Users · 4</div><div class="t-h3">Associations & Forums directory</div><div class="t-c mut">All / Associations / Forums tabs and department filter.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="Associations" hint-size="390px,844px"></dc-import></div>
+    </div>
+  </div>
+  <div class="t-h2">For Associations and Forums</div>
+  <div style="display: flex; gap: 32px; align-items: flex-start">
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Entity · 1</div><div class="t-h3">One CrewConnect login</div><div class="t-c mut">The registered email of an onboarded entity opens its dashboard after the usual OTP.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="LogIn" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Entity · 2</div><div class="t-h3">Dashboard — access issued</div><div class="t-c mut">Association: name, logo, type, totals, departments, My notices with Preview / Edit / Delete.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="AssocNotices" entity="CTG" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Entity · 3</div><div class="t-h3">Create notice</div><div class="t-c mut">Title, body, departments (mandatory, multi-select), optional PDF, then Preview → Publish.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="NoticeForm" entity="SSP" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Entity · 4</div><div class="t-h3">Edit notice</div><div class="t-c mut">Original publication date kept; edited date updates on save.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="NoticeForm" entity="CTG" mode="edit" notice="n01" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Entity · 5</div><div class="t-h3">Posting access revoked</div><div class="t-c mut">Forum with revoked access: create and edit disabled, with the reason.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="AssocNotices" entity="EPF" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Entity · 6</div><div class="t-h3">Inactive entity</div><div class="t-c mut">Inactive Association: cannot publish; earlier notices stay visible.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="AssocNotices" entity="DCI" hint-size="390px,844px"></dc-import></div>
+    </div>
+  </div>
+  <div class="card" style="gap: 12px; max-width: 2600px; background: rgba(255,255,255,.88)">
+    <div class="t-h2">Data model and backend hand-off</div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+      <div style="display: flex; flex-direction: column; gap: 6px"><div class="t-h3">Entity</div><div class="t-s">id · name · type (Association | Forum) · logo · short description · region (optional) · status (active | inactive) · posting access (issued | revoked) · departments · login email</div></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><div class="t-h3">Notice</div><div class="t-s">id · entity (posted by) · title · body · departments[] (mandatory, from the existing department master list) · attachment (optional PDF) · postedAt · editedAt (nullable). No withdrawn status.</div></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><div class="t-h3">Not yet available — needs backend</div><div class="t-s">Entity accounts on the existing auth service (role = association | forum, entityId) · notices API (list with type / entity / department filters, create, update, delete scoped to the signed-in entity) · PDF upload and file URLs · admin controls for status and posting access. The prototype simulates these with mock data and session-only changes.</div></div>
+    </div>
+    <div class="t-c mut">Demo logins (prototype only): notices@ctgm.org (Association, issued) · hello@screensoundforum.in (Forum, issued) · desk@epforum.in (Forum, revoked) · admin@directorscircle.in (Association, inactive).</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":3500,"height":2280}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

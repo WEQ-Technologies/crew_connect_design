@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Connections</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="SeekerProfile.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.connections}}</div></div>
+  <div style="flex: none; padding: 0 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div class="tabs" role="tablist">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button role="tab" class="{{t.cls}}" onClick="{{t.pick}}" aria-selected="{{t.on}}" style="flex: 1">{{t.label}}</button></sc-for>
+    </div>
+    <div class="alert a-i" style="padding: 8px 12px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg><div class="t-c">{{cct.r2.messaging_is_not_part_of_this_phase}} <span class="ph-tag">{{cct.r2.pending_client_discussion}}</span></div></div>
+    <sc-if value="{{onMine}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{cct.connections.search_connections}}" value="{{q}}" onChange="{{onQ}}" aria-label="{{cct.connections.search_connections}}"></div>
+        <div class="chips x"><sc-for list="{{roles}}" as="r" hint-placeholder-count="4"><button class="{{r.cls}}" onClick="{{r.pick}}" aria-pressed="{{r.on}}">{{r.label}}</button></sc-for></div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div class="sc" style="padding-top: 0; gap: 12px">
+    <!-- MY CONNECTIONS -->
+    <sc-if value="{{showMine}}" hint-placeholder-val="{{ true }}">
+      <div class="list">
+        <sc-for list="{{mine}}" as="u" hint-placeholder-count="5">
+          <div class="li" style="cursor: default">
+            <a href="UserProfile.dc.html" class="{{u.av}}" style="text-decoration: none" aria-label="{{cct.connections.open}}{{u.name}}" data-ini="{{u.ini}}">{{u.ini}}</a>
+            <a href="UserProfile.dc.html" class="sp" style="color: #1A1820; text-decoration: none; min-width: 0"><div class="t-h3 trunc">{{u.name}}</div><div class="t-c mut trunc">{{u.sub}}</div><div style="margin-top: 4px"><sc-if value="{{u.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{u.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{u.mutText}}</span></span></sc-if></div></a>
+            <button class="btn btn-t btn-sm" onClick="{{u.ask}}" aria-label="{{cct.connections.remove}}{{u.name}}" style="color: #545060">{{cct.common.remove}}</button>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{mineNoMatch}}" hint-placeholder-val="{{ false }}">
+      <div class="empty"><div class="t-h3">{{cct.connections.no_connections_match}}</div><button class="btn btn-s btn-sm" onClick="{{clear}}">{{cct.common.clear_search}}</button></div>
+    </sc-if>
+    <sc-if value="{{mineEmpty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty" style="padding-top: 48px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><path d="M9 12h6"></path></svg></div><div class="t-h2">{{cct.connections.no_connections_yet}}</div><div class="t-s mut" style="max-width: 270px">{{cct.connections.send_a_connection_request_from}}</div><a class="btn btn-p" href="Talent.dc.html">{{cct.connections.find_people}}</a></div>
+    </sc-if>
+
+    <!-- RECEIVED -->
+    <sc-for list="{{received}}" as="r" hint-placeholder-count="0">
+      <div class="card" style="gap: 10px">
+        <div class="row" style="gap: 12px"><a href="UserProfile.dc.html" class="{{r.av}}" style="text-decoration: none" data-ini="{{r.ini}}">{{r.ini}}</a><a href="UserProfile.dc.html" class="sp" style="color: #1A1820; text-decoration: none"><div class="t-h3">{{r.name}}</div><div class="t-c mut">{{r.sub}} · {{r.when}}</div><div style="margin-top: 4px"><sc-if value="{{r.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{r.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{r.mutText}}</span></span></sc-if></div></a></div>
+        <sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}"><div class="t-s mut" style="background: rgba(255,255,255,.5); border-radius: 10px; padding: 10px 12px; font-style: italic">“{{r.note}}”</div></sc-if>
+        <div class="row" style="gap: 10px"><button class="btn btn-s btn-sm" onClick="{{r.decline}}" style="flex: 1">{{cct.common.decline}}</button><button class="btn btn-p btn-sm" onClick="{{r.accept}}" style="flex: 1.4">{{cct.common.accept}}</button></div>
+      </div>
+    </sc-for>
+    <sc-if value="{{recEmpty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty" style="padding-top: 48px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg></div><div class="t-h2">{{cct.connections.no_pending_requests}}</div><div class="t-s mut">{{cct.connections.new_connection_requests_will_appear}}</div></div>
+    </sc-if>
+
+    <!-- SENT -->
+    <sc-if value="{{showSent}}" hint-placeholder-val="{{ false }}">
+      <div class="list">
+        <sc-for list="{{sent}}" as="u" hint-placeholder-count="2">
+          <div class="li" style="cursor: default; align-items: flex-start">
+            <a href="UserProfile.dc.html" class="{{u.av}}" style="text-decoration: none" data-ini="{{u.ini}}">{{u.ini}}</a>
+            <a href="UserProfile.dc.html" class="sp" style="color: #1A1820; text-decoration: none; min-width: 0"><div class="t-h3 trunc">{{u.name}}</div><div class="t-c mut trunc">{{u.sub}}</div><div class="row" style="gap: 6px; margin-top: 6px"><span class="badge b-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{cct.connections.pending}}</span><span class="t-c mut">{{cct.connections.sent}}{{u.when}}</span></div></a>
+            <button class="btn btn-s btn-sm" onClick="{{u.ask}}">{{cct.common.cancel}}</button>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{sentEmpty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty" style="padding-top: 48px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div><div class="t-h2">{{cct.connections.no_requests_waiting}}</div><div class="t-s mut">{{cct.connections.requests_you_send_stay_here}}</div></div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status" style="bottom: 24px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div>
+  </sc-if>
+
+  <sc-if value="{{confirm}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c"><div class="dlg" role="alertdialog" aria-label="{{cct.common.confirm}}">
+      <div class="t-h2">{{cTitle}}</div>
+      <div class="t-s mut">{{cBody}}</div>
+      <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{cancel}}" style="flex: 1">{{cct.common.keep}}</button><button class="btn btn-p" onClick="{{doIt}}" style="flex: 1; background: #B42318">{{cAction}}</button></div>
+    </div></div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"startTab":{"editor":"enum","options":["mine","received","sent"],"default":"received"},"emptyConnections":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  net(n) {
+    const N = { 'Meera Joshi': [12, 'av'], 'Arjun Kulkarni': [4, 'tb'], 'Sana Mirza': [7, 'av'], 'Farhan Siddiqui': [9, 'un'], 'Ananya Iyer': [3, 'av'], 'Vikram Bhosle': [15, 'tb'], 'Kavya Menon': [18, ''], 'Northlight Studios': [6, ''], 'Vendor House': [11, ''], 'Kilowatt Lighting Co.': [2, ''], 'Nisha Verma': [5, 'av'], 'Aditya Rao': [8, 'av'], 'Priya Nair': [10, 'av'], 'Rohan D’Souza': [1, 'un'], 'Karthik Subramanian': [0, 'av'], 'Imran Shaikh': [2, 'av'] };
+    const pool = ['FS', 'AI', 'MJ', 'VB', 'AK', 'SM', 'KM', 'NV'];
+    const e = N[n] || [0, ''];
+    const me = n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const m = e[0];
+    const AV = { av: [cc("common.available"), 'avail a-av'], un: ['Unavailable', 'avail a-un'], tb: ['Tentatively booked', 'avail a-tb'] };
+    return {
+      isHiring: ['Kavya Menon', 'Vikram Bhosle', 'Nisha Verma'].indexOf(n) >= 0,
+      mutN: m, hasMut: m > 0, noMut: m === 0,
+      mutText: m === 0 ? cc("common.no_mutual_connections") : m + (m === 1 ? cc("connections.mutual_connection") : cc("connections.mutual_connections")),
+      mutAv: pool.filter((x) => x !== me).slice(0, Math.min(3, m)),
+      hasAvail: !!e[1], availText: e[1] ? AV[e[1]][0] : '', availCls: e[1] ? AV[e[1]][1] : ''
+    };
+  }
+  constructor(p) {
+    super(p);
+    const E = p.emptyConnections ?? false;
+    this.state = {
+      tab: null, q: '', role: 'All', confirm: null, toast: '',
+      mine: E ? [] : [
+        { id: 'c1', name: 'Meera Joshi', sub: cc("common.focus_puller_camera"), role: 'Job Seeker' },
+        { id: 'c2', name: 'Kavya Menon', sub: cc("common.producer_lantern_pictures"), role: 'Job Poster' },
+        { id: 'c3', name: 'Farhan Siddiqui', sub: cc("common.t_1st_assistant_camera_camera"), role: 'Job Seeker' },
+        { id: 'c4', name: 'Vendor House', sub: cc("common.camera_and_lenses_mumbai"), role: 'Product Provider' },
+        { id: 'c5', name: 'Arjun Kulkarni', sub: cc("common.sound_recordist_sound"), role: 'Job Seeker' }
+      ],
+      received: [
+        { id: 'r1', name: 'Vikram Bhosle', sub: cc("common.gaffer_lighting"), role: 'Job Seeker', when: cc("common.t_2h_ago"), note: cc("connections.we_were_both_on_the") },
+        { id: 'r2', name: 'Northlight Studios', sub: cc("common.production_house_mumbai"), role: 'Job Poster', when: cc("common.yesterday"), note: '' }
+      ],
+      sent: [
+        { id: 's1', name: 'Sana Mirza', sub: cc("common.production_designer_art"), role: 'Job Seeker', when: cc("common.t_3_days_ago") },
+        { id: 's2', name: 'Kilowatt Lighting Co.', sub: cc("common.lighting_and_grip_mumbai"), role: 'Product Provider', when: cc("common.t_1_week_ago") }
+      ]
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  flash(m) { this.setState({ toast: m }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    const s = this.state;
+    const st = this.props.store, act = this.props.act;
+    // Unified prototype: lists are derived from the shared connection store.
+    const fromStore = (status) => Object.keys(st.meta).filter((n) => st.conn[n] === status).map((n) => ({ id: n, name: n, sub: st.meta[n].sub, role: st.meta[n].role, when: st.meta[n].when || cc("connections.recently"), note: (st.notes && st.notes[n]) || '' }));
+    const L = st ? { mine: fromStore('connected'), received: fromStore('received'), sent: fromStore('pending') } : { mine: s.mine, received: s.received, sent: s.sent };
+    const tab = s.tab ?? (this.props.startTab ?? 'received');
+    const ini = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const av = (r) => (r === 'Product Provider' || r === 'Vendor' ? 'av g' : 'av');
+    const q = s.q.trim().toLowerCase();
+    const mineF = L.mine.filter((u) => (s.role === 'All' || u.role === s.role) && (!q || (u.name + u.sub).toLowerCase().includes(q)));
+    const c = s.confirm;
+    return {
+      tabs: [['mine', cc("connections.connections") + L.mine.length], ['received', cc("connections.received") + L.received.length], ['sent', cc("connections.sent_2") + L.sent.length]].map(([k, l]) => ({ label: l, on: tab === k, cls: tab === k ? 'on' : '', pick: () => this.setState({ tab: k }) })),
+      onMine: tab === 'mine',
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      roles: ['All', 'Job Seeker', 'Job Poster', 'Product Provider'].map((r) => ({ label: r === 'All' ? 'All' : ccv(r) + cc("common.s"), on: s.role === r, cls: s.role === r ? 'chip on' : 'chip', pick: () => this.setState({ role: r }) })),
+      mine: mineF.map((u) => ({ ...u, ...this.net(u.name), ini: ini(u.name), av: av(u.role), ask: () => this.setState({ confirm: { kind: 'remove', u } }) })),
+      showMine: tab === 'mine' && mineF.length > 0,
+      mineNoMatch: tab === 'mine' && L.mine.length > 0 && mineF.length === 0,
+      mineEmpty: tab === 'mine' && L.mine.length === 0,
+      clear: () => this.setState({ q: '', role: 'All' }),
+      received: tab !== 'received' ? [] : L.received.map((r) => ({
+        ...r, ...this.net(r.name), ini: ini(r.name), av: av(r.role), hasNote: !!r.note,
+        accept: () => { if (st && act) act('conn', r.name, 'connected'); else this.setState({ received: s.received.filter((x) => x.id !== r.id), mine: [{ ...r }, ...s.mine] }); this.flash(cc("connections.you_and") + r.name + cc("connections.are_now_connected")); },
+        decline: () => { if (st && act) act('conn', r.name, 'none'); else this.setState({ received: s.received.filter((x) => x.id !== r.id) }); this.flash(cc("common.request_declined")); }
+      })),
+      recEmpty: tab === 'received' && L.received.length === 0,
+      sent: L.sent.map((u) => ({ ...u, ini: ini(u.name), av: av(u.role), ask: () => this.setState({ confirm: { kind: 'cancel', u } }) })),
+      showSent: tab === 'sent' && L.sent.length > 0,
+      sentEmpty: tab === 'sent' && L.sent.length === 0,
+      confirm: !!c,
+      cTitle: c ? (c.kind === 'remove' ? cc("connections.remove") + ccv(c.u.name) + '?' : cc("connections.cancel_request_to") + ccv(c.u.name) + '?') : '',
+      cBody: c ? (c.kind === 'remove' ? cc("connections.you_ll_need_a_new") : cc("connections.they_won_t_see_your")) : '',
+      cAction: c && c.kind === 'remove' ? cc("common.remove") : cc("common.cancel_request"),
+      cancel: () => this.setState({ confirm: null }),
+      doIt: () => {
+        if (!c) return;
+        if (st && act) { act('conn', c.u.name, 'none'); this.setState({ confirm: null }); this.flash(c.kind === 'remove' ? cc("common.connection_removed") : cc("common.request_cancelled")); return; }
+        if (c.kind === 'remove') { this.setState({ mine: s.mine.filter((x) => x.id !== c.u.id), confirm: null }); this.flash(cc("common.connection_removed")); }
+        else { this.setState({ sent: s.sent.filter((x) => x.id !== c.u.id), confirm: null }); this.flash(cc("common.request_cancelled")); }
+      },
+      toast: !!s.toast, toastText: s.toast
+    };
+  }
+}
+ccHook(Component, ["q"]);
+</script>
+</body>
+</html>

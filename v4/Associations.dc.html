@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Associations</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div style="flex: none; padding: 20px 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div class="row" style="gap: 12px"><div class="sp"><div class="t-h1">{{cct.r2.forum_association_notice_wall}}</div><div class="t-s mut" style="margin-top: 2px">{{cct.associations.registered_industry_associations_on_crewconnect}}</div></div></div>
+    <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{cct.associations.search_associations}}" value="{{q}}" onChange="{{onQ}}" aria-label="{{cct.associations.search_associations}}"></div>
+    <div class="seg" role="tablist" aria-label="{{cct.r2.associations_and_forums}}" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+      <sc-for list="{{kindTabs}}" as="t" hint-placeholder-count="2"><button role="tab" class="{{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+    </div>
+    <div class="chips x" role="group" aria-label="{{cct.r2.filter_by_department}}"><sc-for list="{{deptChips}}" as="d" hint-placeholder-count="5"><button class="{{d.cls}}" aria-pressed="{{d.on}}" onClick="{{d.pick}}">{{d.label}}</button></sc-for></div>
+  </div>
+  <div class="sc" style="padding-top: 0; gap: 12px">
+    <div class="t-c mut">{{count}}</div>
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+      <a href="AssociationProfile.dc.html" data-assoc="{{r.key}}" class="card" style="flex-direction: row; align-items: center; gap: 14px; text-decoration: none">
+        <dc-import name="AssocLogo" code="{{r.key}}" size="52" hint-size="52px,52px"></dc-import>
+        <span class="sp" style="display: flex; flex-direction: column; gap: 3px">
+          <span class="t-h3">{{r.name}}</span><span class="row" style="gap: 6px"><span class="{{r.kindCls}}" style="height: 20px; font-size: 11px">{{r.kind}}</span><sc-if value="{{r.inactive}}" hint-placeholder-val="{{ false }}"><span class="badge b-n" style="height: 20px; font-size: 11px">{{cct.r2.inactive}}</span></sc-if><span class="t-c mut">{{r.region}}</span></span>
+          <span class="t-c mut">{{r.meta}}</span>
+          <span class="t-c" style="color: #2C6619">{{r.depts}}</span>
+        </span>
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg>
+      </a>
+    </sc-for>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty"><div class="t-h2">{{cct.associations.no_associations_found}}</div><div class="t-s mut">{{cct.associations.try_a_different_name}}</div><button class="btn btn-s" onClick="{{clear}}">{{cct.common.clear_search}}</button></div>
+    </sc-if>
+    <a href="ForumWall.dc.html" class="alert a-i" style="text-decoration: none; align-items: center"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a3 3 0 0 1 0 6"></path></svg><div class="sp">{{cct.associations.read_the_latest_notices_from}} <b>{{cct.common.forum_wall}}</b>.</div><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
+  </div>
+  <dc-import name="RoleNav" fit="yes" active="home" hint-size="390px,80px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"role":{"editor":"enum","options":["seeker","poster","vendor"],"default":"seeker"},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* CrewConnect Association & Forum data (mock, from crewconnect_content.json › assoc_module). Shape is ready for a backend API. */
+var AF = (function (w) {
+  if (w.__ccAssoc) return w.__ccAssoc;
+  var m = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.assoc_module) || { entities: [], notices: [], departments: [], variants: {}, recentFrom: '2026-10-20' };
+  var byId = {};
+  m.entities.forEach(function (e) { byId[e.id] = e; });
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmt(iso, withTime) {
+    if (!iso) return '';
+    var d = new Date(iso); if (isNaN(d)) return iso;
+    var s = d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+    if (withTime === false) return s;
+    var h = d.getHours(), mi = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    return s + ', ' + h + ':' + (mi < 10 ? '0' : '') + mi + ' ' + ap;
+  }
+  function nowIso() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':00'; }
+  // Notices = seed data + this session's changes (store.notices: created[], edited{id: patch}, deleted{id: true}).
+  function notices(store) {
+    var n = (store && store.notices) || {}, cr = n.created || [], ed = n.edited || {}, del = n.deleted || {};
+    return cr.concat(m.notices).filter(function (x) { return !del[x.id] && byId[x.entity]; })
+      .map(function (x) { return ed[x.id] ? Object.assign({}, x, ed[x.id]) : x; })
+      .sort(function (a, b) { return a.postedAt < b.postedAt ? 1 : -1; });
+  }
+  function canPublish(e) { return !!e && e.status === 'active' && e.access === 'issued'; }
+  function entityByEmail(em) { em = (em || '').trim().toLowerCase(); for (var i = 0; i < m.entities.length; i++) if (m.entities[i].email === em) return m.entities[i]; return null; }
+  function preview(x) { var b = x.body || []; for (var i = 0; i < b.length; i++) if (typeof b[i] === 'string') return b[i]; return ''; }
+  return (w.__ccAssoc = { m: m, entities: m.entities, byId: byId, depts: m.departments, fmt: fmt, nowIso: nowIso, notices: notices, canPublish: canPublish, entityByEmail: entityByEmail, preview: preview, isOld: function (x) { return x.postedAt < m.recentFrom; } });
+})(window);
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { q: '', kind: 'All', dept: [] }; }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const all = AF.notices(this.props.store);
+    // All / Associations / Forums tabs and a multi-select department filter, from the entity records.
+    const okDep = (e) => !s.dept.length || e.depts.some((d) => s.dept.indexOf(d) >= 0);
+    const ents = AF.entities.filter((e) => (s.kind === 'All' || e.type === s.kind) && okDep(e) && (!q || (e.name + ' ' + e.short + ' ' + e.id).toLowerCase().includes(q)));
+    return {
+      kindTabs: [['All', cc("r2.all")], ['Association', cc("r2.associations")], ['Forum', cc("r2.forums")]].map(([k, l]) => ({ label: l, on: s.kind === k, cls: s.kind === k ? 'on' : '', pick: () => this.setState({ kind: k }) })),
+      deptChips: [{ label: cc("r2.all_departments"), on: !s.dept.length, cls: !s.dept.length ? 'chip on' : 'chip', pick: () => this.setState({ dept: [] }) }].concat(AF.depts.map((d) => ({ label: d, on: s.dept.indexOf(d) >= 0, cls: s.dept.indexOf(d) >= 0 ? 'chip on' : 'chip', pick: () => this.setState({ dept: s.dept.indexOf(d) >= 0 ? s.dept.filter((x) => x !== d) : s.dept.concat(d) }) }))),
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }), clear: () => this.setState({ q: '', dept: [], kind: 'All' }),
+      rows: ents.map((e) => { const mine = all.filter((x) => x.entity === e.id); return { key: e.id, name: e.name, kind: e.type === 'Forum' ? cc("r2.forum") : cc("r2.association"), kindCls: e.type === 'Forum' ? 'badge b-y' : 'badge b-p', inactive: e.status !== 'active', region: e.region || '', depts: e.depts.join(' · '),
+        meta: mine.length ? mine.length + ' ' + (mine.length === 1 ? cc("r2.notice") : cc("r2.notices")) + ' · ' + cc("r2.latest") + ' ' + AF.fmt(mine[0].postedAt, false) : cc("common.no_notices_yet") }; }),
+      count: ents.length + ' ' + (ents.length === 1 ? cc("r2.association_or_forum") : cc("r2.associations_and_forums_2")), empty: ents.length === 0
+    };
+  }
+}
+ccHook(Component, ["q","rows"]);
+</script>
+</body>
+</html>

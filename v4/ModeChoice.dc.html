@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>As Crew, what will you do?</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.rc-card{display:flex;align-items:center;gap:14px;padding:16px;width:100%;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:18px;
+  background:linear-gradient(160deg,rgba(255,255,255,.82),rgba(255,255,255,.5));border:2px solid rgba(255,255,255,.9);
+  box-shadow:0 12px 28px -14px rgba(24,44,30,.22),inset 0 1px 0 #fff;-webkit-backdrop-filter:blur(18px) saturate(165%);backdrop-filter:blur(18px) saturate(165%);
+  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease,background-color .18s ease}
+@media (hover:hover){.rc-card:hover{border-color:rgba(183,154,214,.75);transform:translateY(-1px);box-shadow:0 0 0 3px rgba(183,154,214,.18),0 14px 30px -14px rgba(101,39,200,.35),inset 0 1px 0 #fff}}
+.rc-card:active{transform:scale(.99)}
+.rc-card:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(183,154,214,.7)}
+.rc-card.on{border-color:#7C3AED;background-color:rgba(246,243,255,.9)}
+.rc-st{opacity:0;transform:translateY(12px);animation:rcin .5s cubic-bezier(.22,.8,.2,1) forwards}
+@keyframes rcin{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.rc-st{animation:none;opacity:1;transform:none}.rc-card{transition:none}}
+</style>
+</helmet>
+<div class="ph bg-alt">
+  <div class="bar"><a class="iconbtn" href="RoleChoice.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl"></div><span class="t-s mut b" style="padding-right: 12px">{{cct.mode_choice.crew_1_more_question}}</span></div>
+  <div class="sc" style="padding-top: 8px; gap: 22px">
+    <div class="rc-st" style="display: flex; flex-direction: column; gap: 10px">
+      <div class="badge b-p" style="align-self: flex-start">{{cct.common.crew}}</div>
+      <h1 class="t-d">{{cct.common.as_crew_what_will_you}}</h1>
+      <p class="t-b mut">{{cct.mode_choice.jobs_shows_only_what_you}}</p>
+    </div>
+
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 12px" aria-busy="true" aria-label="{{cct.common.loading_options}}">
+        <div class="card" style="flex-direction: row; gap: 14px; align-items: center"><div class="skel" style="width: 48px; height: 48px; border-radius: 14px"></div><div class="sp" style="display: flex; flex-direction: column; gap: 8px"><div class="skel" style="height: 14px; width: 50%"></div><div class="skel" style="height: 12px; width: 80%"></div></div></div>
+        <div class="card" style="flex-direction: row; gap: 14px; align-items: center"><div class="skel" style="width: 48px; height: 48px; border-radius: 14px"></div><div class="sp" style="display: flex; flex-direction: column; gap: 8px"><div class="skel" style="height: 14px; width: 45%"></div><div class="skel" style="height: 12px; width: 75%"></div></div></div>
+        <div class="card" style="flex-direction: row; gap: 14px; align-items: center"><div class="skel" style="width: 48px; height: 48px; border-radius: 14px"></div><div class="sp" style="display: flex; flex-direction: column; gap: 8px"><div class="skel" style="height: 14px; width: 30%"></div><div class="skel" style="height: 12px; width: 70%"></div></div></div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+      <div role="radiogroup" aria-label="{{cct.mode_choice.what_you_will_do_as}}" style="display: flex; flex-direction: column; gap: 12px">
+        <sc-for list="{{opts}}" as="o" hint-placeholder-count="3">
+          <button class="{{o.cls}}" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="{{o.anim}}">
+            <span class="{{o.sq}}" style="width: 48px; height: 48px; border-radius: 14px">
+              <sc-if value="{{o.isCrew}}" hint-placeholder-val="{{ true }}"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></sc-if>
+              <sc-if value="{{o.isVen}}" hint-placeholder-val="{{ false }}"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M19 8v6M16 11h6"></path></svg></sc-if>
+              <sc-if value="{{o.isBoth}}" hint-placeholder-val="{{ false }}"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="9" width="11" height="10" rx="2"></rect><path d="M10 9V7.5a2 2 0 0 1 2-2h1"></path><path d="M14 6.5 18.5 4.5 23 6.5v6L18.5 15"></path></svg></sc-if>
+            </span>
+            <span class="sp" style="display: flex; flex-direction: column; gap: 3px">
+              <span class="t-h3" style="font-size: 16px">{{o.title}}</span>
+              <span class="t-s mut">{{o.desc}}</span>
+            </span>
+            <span class="{{o.radio}}"></span>
+          </button>
+        </sc-for>
+        <sc-if value="{{err}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.mode_choice.pick_one_to_continue}}</span></sc-if>
+      </div>
+    </sc-if>
+  </div>
+  <div class="foot">
+    <sc-if value="{{valid}}" hint-placeholder-val="{{ false }}"><a class="btn btn-p w100" href="SetupBasic.dc.html">{{cct.common.continue}}</a></sc-if>
+    <sc-if value="{{invalid}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" disabled="" aria-disabled="true">{{cct.common.continue}}</button></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"act":{"editor":null},"demo":{"editor":"enum","options":["","loading","error","seek","post","both"],"default":""},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    const d = p.demo || '';
+    this.state = { sel: ['seek', 'post', 'both'].indexOf(d) >= 0 ? d : null, tried: d === 'error' };
+  }
+  renderVals() {
+    const s = this.state, act = this.props.act || (() => {});
+    const loading = (this.props.demo || '') === 'loading';
+    const O = [
+      { id: 'seek', title: cc("common.find_work"), desc: cc("mode_choice.job_seeker_find_jobs_apply"), sq: 'sq' },
+      { id: 'post', title: cc("mode_choice.hire_crew"), desc: cc("mode_choice.job_poster_post_jobs_review"), sq: 'sq g' },
+      { id: 'both', title: cc("common.both"), desc: cc("mode_choice.find_work_and_hire_crew"), sq: 'sq' }
+    ];
+    return {
+      loading, ready: !loading,
+      opts: O.map((o, i) => ({
+        ...o, on: s.sel === o.id, cls: 'rc-card rc-st' + (s.sel === o.id ? ' on' : ''), radio: s.sel === o.id ? 'radio on' : 'radio',
+        isCrew: o.id === 'seek', isVen: o.id === 'post', isBoth: o.id === 'both', anim: 'animation-delay:' + (0.08 + i * 0.07).toFixed(2) + 's',
+        pick: () => { this.setState({ sel: o.id, tried: false }); act('modes', { seek: o.id !== 'post', post: o.id !== 'seek' }); }
+      })),
+      err: !!s.tried && !s.sel,
+      valid: !!s.sel && !loading, invalid: !s.sel || loading,
+      tryNext: () => this.setState({ tried: true })
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

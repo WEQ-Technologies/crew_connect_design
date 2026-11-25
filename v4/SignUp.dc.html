@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sign up with email</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph bg-alt">
+  <div class="bar"><a class="iconbtn" href="Welcome.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl"></div></div>
+  <div class="sc" style="padding: 16px 24px 24px; gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div class="t-over" style="color: #7C3AED">{{cct.common.sign_up}}</div>
+      <h1 class="t-d">{{cct.sign_up.create_your_account}}</h1>
+      <p class="t-b mut">{{cct.sign_up.for_crew_members_job_posters}}</p>
+    </div>
+    <div class="fld">
+      <label class="lbl" for="em">{{cct.common.email_address}} <span class="req">*</span></label>
+      <input id="em" type="email" inputmode="email" autocomplete="email" class="{{inpCls}}" placeholder="{{cct.common.name_studio_com}}" value="{{email}}" onChange="{{onEmail}}" aria-invalid="{{errOn}}" aria-describedby="em-msg">
+      <sc-if value="{{errOn}}" hint-placeholder-val="{{ false }}">
+        <span id="em-msg" class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{err}}</span>
+      </sc-if>
+      <sc-if value="{{noErr}}" hint-placeholder-val="{{ true }}">
+        <span id="em-msg" class="help">{{cct.sign_up.use_an_email_you_can}}</span>
+      </sc-if>
+    </div>
+  </div>
+  <div style="flex: none; padding: 12px 24px 36px; display: flex; flex-direction: column; gap: 14px">
+    <sc-if value="{{valid}}" hint-placeholder-val="{{ false }}">
+      <a class="btn btn-p w100" href="Otp.dc.html">{{cct.common.continue}}</a>
+    </sc-if>
+    <sc-if value="{{invalid}}" hint-placeholder-val="{{ true }}">
+      <button class="btn btn-p w100" onClick="{{submit}}">{{cct.common.continue}}</button>
+    </sc-if>
+    <p class="t-s mut" style="text-align: center">{{cct.sign_up.already_have_an_account}} <a href="LogIn.dc.html" style="font-weight: 700">{{cct.common.log_in}}</a></p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"act":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { email: '', touched: false }; }
+  renderVals() {
+    const e = this.state.email.trim();
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+    let err = '';
+    if (this.state.touched && !e) err = cc("common.enter_your_email_address_to");
+    else if (this.state.touched && !valid) err = cc("common.enter_a_valid_email_address");
+    return {
+      email: this.state.email,
+      valid, invalid: !valid,
+      err, errOn: !!err, noErr: !err,
+      inpCls: err ? 'inp bad' : 'inp',
+      onEmail: (ev) => { this.setState({ email: ev.target.value }); if (this.props.act) this.props.act('email', ev.target.value.trim()); },
+      submit: () => this.setState({ touched: true })
+    };
+  }
+}
+ccHook(Component, ["email"]);
+</script>
+</body>
+</html>

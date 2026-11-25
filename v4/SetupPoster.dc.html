@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create your company page</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph bg-alt">
+  <div class="bar">
+    <sc-if value="{{isFirst}}" hint-placeholder-val="{{ true }}"><a class="iconbtn" href="RoleSelect.dc.html" aria-label="{{cct.setup_poster.back_to_role_selection}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a></sc-if>
+    <sc-if value="{{notFirst}}" hint-placeholder-val="{{ false }}"><button class="iconbtn" onClick="{{back}}" aria-label="{{cct.setup_poster.previous_step}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button></sc-if>
+    <div class="ttl">{{cct.common.company_page}}</div>
+    <span class="t-s mut b" style="padding-right: 12px">{{cct.setup_poster.step}}{{stepNo}}{{cct.setup_poster.of_2}}</span>
+  </div>
+  <div style="padding: 0 20px 4px"><div class="stepper"><div class="{{s1}}"></div><div class="{{s2}}"></div></div></div>
+
+  <div class="sc" style="padding-top: 20px; gap: 18px">
+    <sc-if value="{{st1}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <div><div class="t-h1">{{cct.setup_poster.about_your_company}}</div><p class="t-s mut" style="margin-top: 4px">{{cct.setup_poster.job_seekers_see_this_on}}</p></div>
+        <div class="fld"><label class="lbl" for="cn">{{cct.setup_poster.company_or_professional_name}} <span class="req">*</span></label><input id="cn" class="{{cnCls}}" placeholder="{{cct.common.e_g_lantern_pictures}}" value="{{cn}}" onChange="{{onCn}}">
+          <sc-if value="{{cnErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.setup_poster.enter_a_company_or_professional}}</span></sc-if>
+        </div>
+        <div class="fld"><label class="lbl" for="lc">{{cct.common.location}} <span class="req">*</span></label><input id="lc" class="{{lcCls}}" placeholder="{{cct.setup_poster.city_state}}" value="{{lc}}" onChange="{{onLc}}">
+          <sc-if value="{{lcErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.setup_poster.enter_your_city}}</span></sc-if>
+        </div>
+        <div class="fld"><label class="lbl" for="ce">{{cct.common.contact_email}} <span class="req">*</span></label><input id="ce" class="inp" type="email" value="{{cct.common.hiring_lanternpictures_in}}"><span class="help">{{cct.setup_poster.defaults_to_your_login_email}}</span></div>
+        <div class="fld"><label class="lbl" for="ws">{{cct.common.website}} <span class="opt">{{cct.common.optional}}</span></label><input id="ws" class="inp" type="url" placeholder="{{cct.common.https}}"></div>
+        <div class="fld"><label class="lbl" for="dc">{{cct.common.description}}</label><textarea id="dc" class="inp" placeholder="{{cct.setup_poster.what_you_make_the_kind}}"></textarea></div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{st2}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <div><div class="t-h1">{{cct.setup_poster.gst_details}}</div><p class="t-s mut" style="margin-top: 4px">{{cct.setup_poster.used_on_invoices_you_can}}</p></div>
+        <div class="fld"><label class="lbl" for="gst">{{cct.common.gstin}} <span class="opt">{{cct.common.optional}}</span></label><input id="gst" class="{{gstCls}}" placeholder="{{cct.common.t_15_character_gstin}}" value="{{gst}}" onChange="{{onGst}}" style="text-transform: uppercase; letter-spacing: 0.06em" maxlength="15">
+          <sc-if value="{{gstErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.setup_poster.a_gstin_has_15_characters}}</span></sc-if>
+          <sc-if value="{{gstHelp}}" hint-placeholder-val="{{ true }}"><span class="help">{{gstCount}}{{cct.setup_poster.t_15_characters}}</span></sc-if>
+        </div>
+        <div class="fld"><label class="lbl" for="ln">{{cct.setup_poster.registered_business_name}} <span class="opt">{{cct.common.optional}}</span></label><input id="ln" class="inp" placeholder="{{cct.setup_poster.as_on_gst_certificate}}"></div>
+        <div class="fld"><label class="lbl" for="ba">{{cct.setup_poster.billing_address}} <span class="opt">{{cct.common.optional}}</span></label><textarea id="ba" class="inp" style="min-height: 80px" placeholder="{{cct.setup_poster.street_city_pin}}"></textarea></div>
+        <div class="card" style="gap: 8px">
+          <div class="t-over">{{cct.setup_poster.preview_how_job_seekers_see}}</div>
+          <div class="row"><div class="sq"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M10 21v-3h4v3"></path></svg></div><div class="sp"><div class="t-h3">{{cnShow}}</div><div class="t-s mut">{{lcShow}}</div></div></div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div class="foot">
+    <sc-if value="{{st1}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{next}}">{{cct.common.continue}}</button></sc-if>
+    <sc-if value="{{lastBad}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" onClick="{{next}}">{{cct.setup_poster.create_company_page}}</button></sc-if>
+    <sc-if value="{{lastOk}}" hint-placeholder-val="{{ false }}"><a class="btn btn-g w100" href="PosterHome.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>{{cct.setup_poster.create_company_page}}</a></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { step: 1, tried: {}, cn: '', lc: '', gst: '' }; }
+  renderVals() {
+    const s = this.state, t = s.tried;
+    const cnErr = t[1] && !s.cn.trim();
+    const lcErr = t[1] && !s.lc.trim();
+    const g = s.gst.trim();
+    const gstBad = g.length > 0 && !/^[0-9]{2}[A-Za-z0-9]{13}$/.test(g);
+    const gstErr = t[2] && gstBad;
+    const valid = { 1: !!s.cn.trim() && !!s.lc.trim(), 2: !gstBad };
+    const cls = (st, i) => (st > i ? 'done' : st === i ? 'on' : '');
+    return {
+      stepNo: s.step, isFirst: s.step === 1, notFirst: s.step > 1,
+      s1: cls(s.step, 1), s2: cls(s.step, 2), st1: s.step === 1, st2: s.step === 2,
+      cn: s.cn, lc: s.lc, gst: s.gst,
+      cnErr, lcErr, gstErr, gstHelp: !gstErr, gstCount: g.length,
+      cnCls: cnErr ? 'inp bad' : 'inp', lcCls: lcErr ? 'inp bad' : 'inp', gstCls: gstErr ? 'inp bad' : 'inp',
+      cnShow: s.cn.trim() || cc("common.lantern_pictures"), lcShow: s.lc.trim() || cc("setup_poster.mumbai_maharashtra"),
+      onCn: (e) => this.setState({ cn: e.target.value }),
+      onLc: (e) => this.setState({ lc: e.target.value }),
+      onGst: (e) => this.setState({ gst: e.target.value.toUpperCase() }),
+      lastOk: s.step === 2 && valid[2], lastBad: s.step === 2 && !valid[2],
+      next: () => {
+        if (!valid[s.step]) return this.setState({ tried: { ...t, [s.step]: true } });
+        if (s.step < 2) this.setState({ step: 2 });
+      },
+      back: () => this.setState({ step: 1 })
+    };
+  }
+}
+ccHook(Component, ["cn","lc","gst"]);
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Following feed</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="SeekerProfile.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.following}}</div><a class="btn btn-t btn-sm" href="FollowList.dc.html" style="margin-right: 8px">{{cct.common.manage}}</a></div>
+  <div style="flex: none; padding: 0 20px 12px; display: flex; flex-direction: column; gap: 10px">
+    <p class="t-s mut">{{cct.following_feed.updates_from_people_and_businesses}}</p>
+    <div class="chips x"><sc-for list="{{types}}" as="t" hint-placeholder-count="3"><button class="{{t.cls}}" onClick="{{t.pick}}" aria-pressed="{{t.on}}">{{t.label}}</button></sc-for></div>
+  </div>
+  <div class="sc" style="padding-top: 0; gap: 12px">
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+      <div class="card" aria-busy="true"><div class="row" style="gap: 10px"><div class="skel" style="width: 40px; height: 40px; border-radius: 20px"></div><div class="sp" style="display: flex; flex-direction: column; gap: 6px"><div class="skel" style="height: 12px; width: 60%"></div><div class="skel" style="height: 10px; width: 30%"></div></div></div><div class="skel" style="height: 72px"></div></div>
+    </sc-if>
+    <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <sc-for list="{{items}}" as="it" hint-placeholder-count="4">
+          <div class="card" style="gap: 12px">
+            <div class="row" style="gap: 10px">
+              <a href="UserProfile.dc.html" class="{{it.av}}" style="width: 40px; height: 40px; font-size: 14px; text-decoration: none" aria-label="{{cct.following_feed.open}}{{it.who}}" data-ini="{{it.ini}}">{{it.ini}}</a>
+              <div class="sp"><div class="t-s"><a href="UserProfile.dc.html" style="color: #1A1820; font-weight: 700; text-decoration: none">{{it.who}}</a> {{it.verb}}</div><div class="t-c mut">{{it.when}}</div></div>
+            </div>
+            <a href="{{it.href}}" class="card" style="text-decoration: none; background: rgba(255,255,255,.5); padding: 12px; gap: 6px">
+              <div class="row" style="gap: 8px"><span class="tag">{{it.kind}}</span><span class="sp"></span><span class="t-c mut">{{it.meta}}</span></div>
+              <div class="t-h3 clamp2">{{it.title}}</div>
+              <div class="t-s b">{{it.price}}</div>
+            </a>
+          </div>
+        </sc-for>
+        <div class="t-c mut" style="text-align: center; padding: 8px 0">{{cct.common.you_re_all_caught_up}}</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty" style="padding-top: 56px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"></circle><path d="M2 21a7 7 0 0 1 14 0"></path><path d="M19 8v6M16 11h6"></path></svg></div><div class="t-h2">{{cct.following_feed.your_feed_is_empty}}</div><div class="t-s mut" style="max-width: 270px">{{cct.following_feed.you_re_not_following_anyone}}</div><a class="btn btn-p" href="Talent.dc.html">{{cct.common.find_people_to_follow}}</a><a class="btn btn-t" href="Discover.dc.html">{{cct.following_feed.browse_product_providers}}</a></div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"empty":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.data = [
+      { who: 'Kavya Menon', ini: 'KM', v: false, verb: cc("following_feed.posted_a_job"), when: cc("common.t_2h_ago"), kind: cc("common.job"), type: 'Jobs', title: cc("common.focus_puller_feature_film_hindi"), meta: cc("common.film_city_mumbai"), price: cc("common.inr_8_000_inr_12"), href: 'JobDetail.dc.html' },
+      { who: 'Vendor House', ini: 'RC', v: true, verb: cc("following_feed.added_a_listing"), when: cc("common.t_5h_ago"), kind: cc("common.listing"), type: cc("common.listings"), title: cc("common.sony_fx3_cinema_camera_kit"), meta: cc("following_feed.rent_mumbai"), price: cc("common.inr_4_500_day"), href: 'VendorPublic.dc.html' },
+      { who: 'Northlight Studios', ini: 'NS', v: false, verb: cc("following_feed.posted_a_job"), when: cc("common.yesterday"), kind: cc("common.job"), type: 'Jobs', title: cc("common.assistant_editor_web_series_8"), meta: cc("common.andheri_west_mumbai"), price: cc("common.inr_55_000_inr_70"), href: 'JobDetail.dc.html' },
+      { who: 'Kilowatt Lighting Co.', ini: 'KL', v: true, verb: cc("following_feed.added_a_listing"), when: cc("common.t_2_days_ago"), kind: cc("common.listing"), type: cc("common.listings"), title: cc("following_feed.arri_skypanel_s60_c_set"), meta: cc("following_feed.rent_mumbai"), price: cc("common.inr_9_000_day"), href: 'VendorPublic.dc.html' }
+    ];
+    this.state = { type: 'All', loading: false };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state;
+    const empty = this.props.empty ?? false;
+    const list = empty ? [] : this.data.filter((d) => s.type === 'All' || d.type === s.type);
+    return {
+      types: ['All', 'Jobs', cc("common.listings")].map((t) => ({ label: t, on: s.type === t, cls: s.type === t ? 'chip on' : 'chip', pick: () => { this.setState({ type: t, loading: true }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ loading: false }), 500); } })),
+      items: list.map((d) => ({ ...d, av: d.v ? 'av g' : 'av' })),
+      loading: s.loading && !empty, ready: !s.loading && list.length > 0, empty
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

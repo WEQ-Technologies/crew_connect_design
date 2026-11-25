@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add a role</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.ar-sheet{animation:arup .45s cubic-bezier(.22,.8,.2,1) both}
+@keyframes arup{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.ar-st{opacity:0;transform:translateY(10px);animation:arin .45s cubic-bezier(.22,.8,.2,1) forwards}
+@keyframes arin{to{opacity:1;transform:none}}
+.ar-pop{animation:arpop .55s cubic-bezier(.34,1.45,.64,1) both}
+@keyframes arpop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.ar-sheet,.ar-st,.ar-pop{animation:none;opacity:1;transform:none}}
+</style>
+</helmet>
+<div class="ph bg-alt">
+
+    <!-- 1 · SUBSCRIPTION & ROLE OFFERING (replaces the old features sheet): shown before the role / mode is switched on -->
+  <sc-if value="{{stIntro}}" hint-placeholder-val="{{ true }}">
+    <dc-import name="RoleSubscribe" to="{{subTo}}" from="{{subFrom}}" back="{{backHref}}" act="{{subAct}}" onDone="{{toForm}}" hint-size="390px,844px" style="position: absolute; inset: 0; z-index: 5"></dc-import>
+  </sc-if>
+
+  <!-- FORM STEPS -->
+  <sc-if value="{{inSteps}}" hint-placeholder-val="{{ false }}">
+    <div class="bar">
+      <sc-if value="{{stReq}}" hint-placeholder-val="{{ true }}"><a class="iconbtn" href="{{backHref}}" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a></sc-if>
+      <div class="ttl">{{barTitle}}</div>
+      <span class="t-s mut b" style="padding-right: 12px">{{cct.add_role.step}}{{stepNo}}{{cct.add_role.of}}{{stepTotal}}</span>
+    </div>
+    <div style="padding: 0 20px 4px"><div class="stepper"><sc-for list="{{segs}}" as="g" hint-placeholder-count="3"><div class="{{g.cls}}"></div></sc-for></div></div>
+  </sc-if>
+
+  <!-- 2 · REQUIRED: Business details (vendor) -->
+  <sc-if value="{{stReqV}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 18px; gap: 18px">
+      <div class="ar-st"><span class="badge b-g">{{cct.add_role.product_provider_profile_required}}</span><div class="t-h1" style="margin-top: 8px">{{cct.common.business_details}}</div><p class="t-s mut" style="margin-top: 4px">{{cct.add_role.saving_this_unlocks_my_listings}}</p></div>
+      <div class="alert a-i" style="align-items: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 8 4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg><div>{{cct.r2.vendor_accounts_need}} <b>{{cct.r2.premium_299_month}}</b> {{cct.r2.because_they_include_invoice_management_you_ll}}</div></div>
+      <sc-if value="{{hasDraft}}" hint-placeholder-val="{{ false }}"><div class="alert a-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg><div>{{cct.add_role.we_kept_what_you_entered}}</div></div></sc-if>
+      <div class="fld"><label class="lbl" for="bn">{{cct.common.business_name}} <span class="req">*</span></label><input id="bn" class="{{bnCls}}" placeholder="{{cct.common.e_g_reelhouse_camera_rentals}}" value="{{bn}}" onChange="{{onBn}}">
+        <sc-if value="{{bnErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.common.enter_your_business_name}}</span></sc-if>
+      </div>
+      <div class="fld"><label class="lbl" for="ct">{{cct.common.primary_category}} <span class="req">*</span></label>
+        <select id="ct" class="{{ctCls}}" value="{{ct}}" onChange="{{onCt}}"><option value="">{{cct.common.select_category}}</option><option>{{cct.common.camera_and_lenses}}</option><option>{{cct.common.lighting_and_grip}}</option><option>{{cct.common.sound_equipment}}</option><option>{{cct.common.drones_and_aerial}}</option><option>{{cct.common.costume_and_props}}</option><option>{{cct.common.post_production_gear}}</option><option>{{cct.common.production_vehicles}}</option></select>
+        <sc-if value="{{ctErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.common.choose_the_category_you_mainly}}</span></sc-if>
+      </div>
+      <div class="fld"><span class="lbl">{{cct.common.you_offer_equipment_for}}</span><div class="seg" style="grid-template-columns: repeat(3, minmax(0, 1fr))"><sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button class="{{m.cls}}" onClick="{{m.pick}}" aria-pressed="{{m.on}}">{{m.label}}</button></sc-for></div></div>
+      <div class="fld"><label class="lbl" for="cy">{{cct.r2.main_office}}</label><input id="cy" class="inp" placeholder="{{cct.add_role.e_g_goregaon_east_mumbai}}"></div>
+      <div class="fld"><label class="lbl" for="cy2">{{cct.r2.other_office_locations}} <span class="opt">{{cct.r2.optional_2}}</span></label><input id="cy2" class="inp" placeholder="{{cct.r2.e_g_banjara_hills_hyderabad_koregaon_park}}"><span class="help">{{cct.r2.vendors_in_more_than_one_city_can}}</span></div>
+      <div class="fld"><label class="lbl" for="clt">{{cct.r2.clientele}} <span class="opt">{{cct.r2.optional_2}}</span></label><textarea id="clt" class="inp" placeholder="{{cct.r2.production_houses_and_brands_you_have_supplied_2}}"></textarea><span class="help">{{cct.r2.shown_as_clients_on_your_public_product}}</span></div>
+      <div class="fld"><label class="lbl" for="ab">{{cct.common.about_your_business}} <span class="opt">{{cct.common.optional}}</span></label><textarea id="ab" class="inp" placeholder="{{cct.add_role.what_you_stock_delivery_and}}"></textarea></div>
+    </div>
+  </sc-if>
+
+  <!-- 2 · REQUIRED: Professional information (crew) -->
+  <sc-if value="{{stReqC}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 18px; gap: 18px">
+      <div class="ar-st"><span class="badge b-p">{{cct.add_role.crew_profile_required}}</span><div class="t-h1" style="margin-top: 8px">{{cct.common.professional_information}}</div><p class="t-s mut" style="margin-top: 4px">{{cct.add_role.saving_this_unlocks_jobs_applying}}</p></div>
+      <sc-if value="{{hasDraft}}" hint-placeholder-val="{{ false }}"><div class="alert a-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg><div>{{cct.add_role.we_kept_what_you_entered_2}}</div></div></sc-if>
+      <div class="fld"><label class="lbl" for="dp">{{cct.common.department}} <span class="req">*</span></label>
+        <select id="dp" class="{{dpCls}}" value="{{dept}}" onChange="{{onDept}}"><option value="">{{cct.common.select_department}}</option><sc-for list="{{deptOpts}}" as="d" hint-placeholder-count="6"><option value="{{d}}">{{d}}</option></sc-for></select>
+        <sc-if value="{{dpErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.common.choose_your_department}}</span></sc-if>
+      </div>
+      <div class="fld"><span class="lbl">{{cct.add_role.work_title}} <span class="req">*</span> <span class="opt">{{cct.common.select_one_or_more}}</span></span>
+        <sc-if value="{{noDept}}" hint-placeholder-val="{{ true }}"><span class="help">{{cct.add_role.choose_a_department_first}}</span></sc-if>
+        <div class="chips"><sc-for list="{{titleOpts}}" as="t" hint-placeholder-count="5"><button class="{{t.cls}}" onClick="{{t.toggle}}" aria-pressed="{{t.on}}">{{t.label}}</button></sc-for></div>
+        <sc-if value="{{tiErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.common.select_at_least_one_work}}</span></sc-if>
+      </div>
+      <sc-if value="{{hasSkills}}" hint-placeholder-val="{{ false }}"><div class="fld"><span class="lbl">{{cct.common.skills}} <span class="opt">{{cct.add_role.filtered_by_your_titles}}</span></span><div class="chips"><sc-for list="{{skills}}" as="k" hint-placeholder-count="5"><button class="{{k.cls}}" onClick="{{k.toggle}}" aria-pressed="{{k.on}}">{{k.label}}</button></sc-for></div></div></sc-if>
+      <div class="row" style="gap: 12px; align-items: flex-start">
+        <div class="fld" style="width: 110px"><label class="lbl" for="yr">{{cct.common.years}}</label><input id="yr" class="inp" type="number" inputmode="numeric" placeholder="0"></div>
+        <div class="fld sp"><span class="lbl">{{cct.common.experience_band}}</span><div class="seg" style="grid-template-columns: repeat(3, minmax(0, 1fr))"><sc-for list="{{bands}}" as="b" hint-placeholder-count="3"><button class="{{b.cls}}" onClick="{{b.pick}}" aria-pressed="{{b.on}}">{{b.label}}</button></sc-for></div></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 3 · OPTIONAL: Business contact & GST (vendor) -->
+  <sc-if value="{{stOptV}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 18px; gap: 18px">
+      <div class="ar-st"><span class="badge b-n">{{cct.common.optional_2}}</span><div class="t-h1" style="margin-top: 8px">{{cct.common.business_contact_and_gst}}</div><p class="t-s mut" style="margin-top: 4px">{{cct.add_role.prefilled_from_your_basic_profile}}</p></div>
+      <div class="fld"><label class="lbl" for="cp">{{cct.common.contact_person}}</label><input id="cp" class="inp" value="{{meName}}"></div>
+      <div class="fld"><label class="lbl" for="ph">{{cct.common.business_phone}}</label><div class="pre"><span>{{cct.common.t_91}}</span><input id="ph" type="tel" value="{{mePhone}}" placeholder="98765 43210"></div></div>
+      <div class="fld"><label class="lbl" for="be">{{cct.common.business_email}}</label><input id="be" class="inp" type="email" value="{{meEmail}}"></div>
+      <div class="fld"><label class="lbl" for="bw">{{cct.common.website}} <span class="opt">{{cct.common.optional}}</span></label><input id="bw" class="inp" type="url" placeholder="{{cct.common.https}}"></div>
+      <div class="fld"><label class="lbl" for="bg">{{cct.common.gstin}} <span class="opt">{{cct.common.optional}}</span></label><input id="bg" class="inp" placeholder="{{cct.common.t_15_character_gstin}}" maxlength="15" style="text-transform: uppercase"></div>
+    </div>
+  </sc-if>
+
+  <!-- 3 · OPTIONAL: External references (crew) -->
+  <sc-if value="{{stOptC}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 18px; gap: 18px">
+      <div class="ar-st"><span class="badge b-n">{{cct.common.optional_2}}</span><div class="t-h1" style="margin-top: 8px">{{cct.common.external_references}}</div><p class="t-s mut" style="margin-top: 4px">{{cct.add_role.shown_on_your_profile_links}}</p></div>
+      <div class="fld"><label class="lbl" for="im">{{cct.common.imdb_link}}</label><input id="im" class="inp" type="url" placeholder="{{cct.common.https_www_imdb_com_name}}"></div>
+      <div class="fld"><span class="lbl">{{cct.common.resume}} <span class="opt">{{cct.common.pdf_2}}</span></span><button class="file" style="border-style: dashed; cursor: pointer; width: 100%; font: inherit; color: inherit"><span class="sq" style="width: 40px; height: 40px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span><span class="sp" style="text-align: left"><span class="t-s b" style="display: block; color: #7C3AED">{{cct.common.upload_resume}}</span><span class="t-c mut">{{cct.common.pdf_only_max_size_tbc}}</span></span></button></div>
+      <div class="fld"><label class="lbl" for="vm">{{cct.common.vimeo_link}}</label><input id="vm" class="inp" type="url" placeholder="{{cct.common.https_vimeo_com}}"></div>
+      <div class="fld"><label class="lbl" for="sc">{{cct.common.soundcloud_link}}</label><input id="sc" class="inp" type="url" placeholder="{{cct.common.https_soundcloud_com}}"></div>
+    </div>
+  </sc-if>
+
+  <!-- 4 · OPTIONAL: Availability (crew) -->
+  <sc-if value="{{stAvail}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 18px; gap: 18px">
+      <div class="ar-st"><span class="badge b-n">{{cct.common.optional_2}}</span><div class="t-h1" style="margin-top: 8px">{{cct.common.set_your_availability}}</div><p class="t-s mut" style="margin-top: 4px">{{cct.add_role.shown_on_your_profile_and}}</p></div>
+      <div class="list"><sc-for list="{{avail}}" as="a" hint-placeholder-count="3"><button class="li" onClick="{{a.pick}}" role="radio" aria-checked="{{a.on}}" style="min-height: 56px"><span class="{{a.dot}}">{{a.label}}</span><span class="sp"></span><span class="{{a.radio}}"></span></button></sc-for></div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{inSteps}}" hint-placeholder-val="{{ false }}">
+    <div class="foot" style="flex-direction: column; gap: 8px">
+      <sc-if value="{{saving}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>{{cct.common.saving}}</button></sc-if>
+      <sc-if value="{{notSaving}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{save}}">{{saveLabel}}</button></sc-if>
+      <sc-if value="{{canSkip}}" hint-placeholder-val="{{ false }}"><button class="btn btn-t w100" onClick="{{skip}}" style="min-height: 40px">{{cct.common.skip_for_now}}</button></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- 5 · SUCCESS -->
+  <sc-if value="{{stDone}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="justify-content: center; align-items: center; text-align: center; gap: 20px; padding: 40px 28px">
+      <div class="ar-pop" style="{{doneRing}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 40px; height: 40px; stroke-width: 2.4"><path d="m5 12 5 5 9-10"></path></svg></div>
+      <div class="ar-st" style="display: flex; flex-direction: column; gap: 8px; animation-delay: .15s" role="status"><h1 class="t-d">{{doneTitle}}</h1><p class="t-b mut">{{doneSub}}</p></div>
+      <div class="card ar-st" style="width: 100%; gap: 10px; text-align: left; animation-delay: .3s">
+        <div class="row"><div class="sp"><div class="t-h3">{{gainTitle}}</div><div class="t-c mut">{{gainSub}}</div></div><span class="t-h2" style="color: #7C3AED">{{pct}}%</span></div>
+        <div style="height: 8px; border-radius: 4px; background: #EFEAFE; overflow: hidden"><div style="{{barStyle}}"></div></div>
+      </div>
+    </div>
+    <div style="flex: none; padding: 12px 24px 36px; display: flex; flex-direction: column; gap: 10px">
+      <a class="btn btn-p w100" href="{{primaryHref}}" data-app="{{primaryApp}}">{{primaryLabel}}</a>
+      <a class="btn btn-s w100" href="SeekerHome.dc.html">{{cct.common.go_to_home}}</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status" style="bottom: 140px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"act":{"editor":null},"store":{"editor":null},"role":{"editor":"enum","options":["vendor","crew"],"default":"vendor"},"gate":{"editor":"enum","options":["","apply","post","talent","listing"],"default":""},"demo":{"editor":"enum","options":["","form","error","saving","optional","avail","done","draft"],"default":""},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.T = {
+      depts: ['Camera', 'Direction', 'Editing & Post', 'Sound', 'Lighting & Grip', 'Art & Production Design', 'Production', 'Costume & Make-up', 'VFX', 'Stunts'],
+      titles: {
+        'Camera': ['Director of Photography', 'Camera Operator', 'Focus Puller', '1st Assistant Camera', '2nd Assistant Camera', 'DIT', 'Steadicam Operator'],
+        'Direction': [cc("common.director"), cc("common.associate_director"), cc("common.t_1st_assistant_director"), cc("common.t_2nd_assistant_director"), cc("common.script_supervisor")],
+        'Editing & Post': ['Editor', 'Assistant Editor', 'Colourist', cc("common.online_editor")],
+        'Sound': ['Sound Recordist', 'Boom Operator', cc("common.sound_designer"), cc("common.re_recording_mixer")],
+        'Lighting & Grip': ['Gaffer', cc("common.best_boy"), cc("common.lighting_technician"), cc("common.key_grip"), cc("common.grip")],
+        'Art & Production Design': ['Production Designer', cc("common.art_director"), cc("common.set_dresser"), cc("common.prop_master")],
+        'Production': [cc("common.producer"), cc("common.line_producer"), cc("common.production_manager"), cc("common.production_assistant"), cc("common.spot_boy_set_assistant")],
+        'Costume & Make-up': [cc("common.costume_designer"), cc("common.stylist"), cc("common.make_up_artist"), cc("common.hair_stylist")],
+        'VFX': [cc("common.vfx_supervisor"), cc("common.compositor"), cc("common.t_3d_artist")],
+        'Stunts': ['Stunt Coordinator', 'Stunt Performer']
+      },
+      skills: {
+        'Director of Photography': [cc("common.lighting_design"), cc("common.arri_alexa"), cc("common.anamorphic"), cc("common.colour_pipeline")],
+        'Camera Operator': [cc("common.arri_alexa"), 'RED', cc("common.gimbal_ops"), cc("common.handheld")],
+        'Focus Puller': [cc("common.focus_pulling"), cc("common.wireless_follow_focus"), cc("common.arri_alexa"), cc("common.sony_venice"), cc("common.lens_tech")],
+        '1st Assistant Camera': [cc("common.camera_prep"), cc("common.lens_tech"), cc("common.focus_pulling"), 'RED'],
+        '2nd Assistant Camera': [cc("common.slating"), cc("common.camera_reports"), cc("common.camera_prep")],
+        'DIT': [cc("common.data_wrangling"), cc("common.on_set_grading"), cc("common.davinci_resolve")],
+        'Steadicam Operator': [cc("common.steadicam"), cc("common.gimbal_ops")],
+        'Editor': [cc("common.premiere_pro"), cc("common.davinci_resolve"), cc("common.avid_media_composer"), cc("common.assembly_cuts")],
+        'Assistant Editor': [cc("common.assembly_cuts"), cc("common.syncing"), cc("common.premiere_pro")],
+        'Colourist': [cc("common.davinci_resolve"), cc("common.hdr_grading")],
+        'Sound Recordist': [cc("common.location_sound"), cc("common.sound_devices"), cc("common.wireless_mics"), cc("common.boom_ops")],
+        'Boom Operator': [cc("common.boom_ops"), cc("common.wireless_mics")],
+        'Gaffer': [cc("common.lighting_design"), 'HMI', cc("common.led_walls"), cc("common.power_distribution")],
+        'Production Designer': [cc("common.period_sets"), cc("common.set_dressing"), 'SketchUp'],
+        'Stunt Coordinator': [cc("common.fight_choreography"), cc("common.rigging"), cc("common.safety_planning")],
+        'Stunt Performer': [cc("common.falls"), cc("common.fight_choreography"), cc("common.wire_work")]
+      },
+      deptSkills: {
+        'Camera': [cc("common.camera_prep"), cc("common.arri_alexa"), 'RED', cc("common.sony_venice")], 'Direction': [cc("common.shot_breakdown"), cc("common.scheduling"), cc("common.continuity")], 'Editing & Post': [cc("common.premiere_pro"), cc("common.davinci_resolve")],
+        'Sound': [cc("common.location_sound"), cc("common.boom_ops")], 'Lighting & Grip': ['HMI', cc("common.led_walls"), cc("common.rigging")], 'Art & Production Design': [cc("common.set_dressing"), cc("common.props")], 'Production': [cc("common.budgeting"), cc("common.scheduling"), cc("common.location_permits")], 'Costume & Make-up': [cc("common.period_costume"), cc("common.prosthetics")], 'VFX': [cc("common.nuke"), cc("common.maya")], 'Stunts': [cc("common.safety_planning"), cc("common.rigging")]
+      }
+    };
+    const d = p.demo || '';
+    const role = p.role || 'vendor';
+    const at = { form: 'req', error: 'req', saving: 'req', draft: 'req', optional: 'opt', avail: 'avail', done: 'done' }[d] || 'intro';
+    this.state = { at, tried: d === 'error', saving: d === 'saving', bn: d === 'draft' && role === 'vendor' ? cc("common.frame_and_focus_rentals") : '', ct: '', mode: cc("common.rent_and_buy"),
+      dept: d === 'draft' && role === 'crew' ? 'Camera' : '', titles: {}, skills: {}, band: cc("common.mid_level"), av: cc("common.available"), toast: '', touched: false };
+    // A role picked at sign-up but not yet unlocked (required section not saved) finishes here too.
+    this.had = !!(((p.store || {}).roles || {})[p.role || 'vendor']);
+  }
+  componentWillUnmount() { clearTimeout(this.t); clearTimeout(this.t2); }
+  renderVals() {
+    const s = this.state, T = this.T, act = this.props.act || (() => {});
+    const st = this.props.store || {};
+    const role = this.props.role || 'vendor', vendor = role === 'vendor';
+    const gate = this.props.gate || '';
+    const R = st.roles || { crew: !vendor, vendor: vendor };
+    const draft = !!(st.drafts && st.drafts[role]) || (this.props.demo || '') === 'draft';
+    const steps = vendor ? ['req', 'opt'] : ['req', 'opt', 'avail'];
+    const idx = steps.indexOf(s.at);
+    const chosen = Object.keys(s.titles).filter((k) => s.titles[k]);
+    const okReq = vendor ? !!s.bn.trim() && !!s.ct : !!s.dept && chosen.length > 0;
+    const touch = () => { if (!s.touched) { this.setState({ touched: true }); act('draft', role); } };
+    // completion after this role is added (both roles = 20% blocks; single role = 34/33/33 [TBC])
+    const pf = { ...(st.prof || {}) };
+    if (s.at === 'done') { if (vendor) pf.biz = true; else pf.pro = true; }
+    const roles2 = { ...R, [role]: true };
+    const L = [].concat(roles2.crew ? ['pro', 'refs'] : [], roles2.vendor ? ['biz', 'contact'] : []);
+    const n = L.filter((k) => pf[k]).length;
+    const pct = L.length === 4 ? 20 * (1 + n) : 34 + 33 * n;
+    const left = L.length - n;
+    const goNext = () => { const nx = steps[idx + 1]; this.setState({ at: nx || 'done', saving: false }); };
+    const had = this.had;
+    const T1 = had ? (vendor ? cc("add_role.finish_your_business_details") : cc("add_role.finish_your_professional_information")) : vendor ? cc("common.add_a_product_provider_profile") : cc("common.add_a_crew_profile");
+    const gateT = had ? { apply: cc("add_role.finish_your_crew_profile_to"), post: cc("add_role.finish_your_crew_profile_to_2"), talent: cc("add_role.finish_your_crew_profile_to_3"), listing: cc("add_role.add_business_details_to_list") }[gate] : { apply: cc("add_role.add_a_crew_profile_to"), post: cc("add_role.posting_jobs_needs_a_crew"), talent: cc("add_role.find_talent_needs_a_crew"), listing: cc("add_role.listing_equipment_needs_a_product") }[gate];
+    const titleList = s.dept ? (T.titles[s.dept] || []) : [];
+    let skillList = [];
+    chosen.forEach((c) => (T.skills[c] || []).forEach((k) => { if (skillList.indexOf(k) < 0) skillList.push(k); }));
+    if (!skillList.length && s.dept) skillList = T.deptSkills[s.dept] || [];
+    const primary = vendor ? [cc("add_role.create_your_first_listing"), 'ListingForm.dc.html', '']
+      : gate === 'apply' ? [cc("add_role.finish_applying"), 'JobDetail.dc.html', '']
+      : gate === 'post' ? [cc("add_role.continue_to_post_a_job"), 'CreateJob.dc.html', '']
+      : gate === 'talent' ? [cc("common.open_find_talent"), 'Talent.dc.html', ''] : [cc("common.find_jobs"), 'Jobs.dc.html', ''];
+    return {
+      subTo: vendor ? 'vendor' : 'crew', subFrom: vendor ? cc("common.crew_member") : 'Product Provider', subAct: this.props.act,
+      isVendor: vendor, isCrew: !vendor,
+      stIntro: s.at === 'intro', inSteps: idx >= 0, stDone: s.at === 'done',
+      stReq: s.at === 'req', stReqV: s.at === 'req' && vendor, stReqC: s.at === 'req' && !vendor,
+      stOptV: s.at === 'opt' && vendor, stOptC: s.at === 'opt' && !vendor, stAvail: s.at === 'avail',
+      introSq: vendor ? 'sq g' : 'sq',
+      introTitle: gateT || T1,
+      introSub: gate === 'apply' ? cc("add_role.it_takes_a_minute_you") : vendor ? cc("add_role.rent_or_sell_equipment_from") : cc("add_role.find_work_apply_and_hire"),
+      gains: (vendor
+        ? [[cc("common.my_listings"), cc("add_role.publish_equipment_to_rent_or")], [cc("common.public_product_page"), cc("add_role.your_business_listings_and_contact")], [cc("common.contact_reveals"), cc("add_role.see_who_tapped_show_contact")]]
+        : [['Jobs', cc("add_role.find_work_apply_and_track")], [cc("add_role.post_jobs_and_find_talent"), cc("add_role.hire_crew_for_your_projects")], [cc("common.availability_calendar"), cc("add_role.show_when_you_are_free")]]).map((g) => ({ t: g[0], d: g[1], sq: vendor ? 'sq g' : 'sq' })),
+      reassure: had ? cc("add_role.only_the_required_fields_are") : vendor ? cc("add_role.your_crew_profile_stays_exactly") : cc("add_role.your_product_provider_profile_and"),
+      backHref: gate === 'apply' ? 'JobDetail.dc.html' : 'SeekerProfile.dc.html',
+      toForm: () => this.setState({ at: 'req' }),
+      hasDraft: draft,
+      barTitle: T1, stepNo: idx + 1, stepTotal: steps.length,
+      segs: steps.map((k, i) => ({ cls: i < idx ? 'done' : i === idx ? 'on' : '' })),
+      bn: s.bn, ct: s.ct, onBn: (e) => { touch(); this.setState({ bn: e.target.value }); }, onCt: (e) => { touch(); this.setState({ ct: e.target.value }); },
+      bnErr: s.tried && !s.bn.trim(), ctErr: s.tried && !s.ct, bnCls: s.tried && !s.bn.trim() ? 'inp bad' : 'inp', ctCls: s.tried && !s.ct ? 'inp bad' : 'inp',
+      modes: ['Rent', 'Buy', cc("common.rent_and_buy")].map((m) => ({ label: m, on: s.mode === m, cls: s.mode === m ? 'on' : '', pick: () => this.setState({ mode: m }) })),
+      dept: s.dept, deptOpts: T.depts, onDept: (e) => { touch(); this.setState({ dept: e.target.value, titles: {}, skills: {} }); },
+      dpErr: s.tried && !s.dept, dpCls: s.tried && !s.dept ? 'inp bad' : 'inp', noDept: !s.dept,
+      titleOpts: titleList.map((l) => ({ label: l, on: !!s.titles[l], cls: s.titles[l] ? 'chip on' : 'chip', toggle: () => { touch(); this.setState({ titles: { ...s.titles, [l]: !s.titles[l] } }); } })),
+      tiErr: s.tried && !!s.dept && chosen.length === 0,
+      hasSkills: skillList.length > 0, skills: skillList.map((l) => ({ label: l, on: !!s.skills[l], cls: s.skills[l] ? 'chip on' : 'chip', toggle: () => this.setState({ skills: { ...s.skills, [l]: !s.skills[l] } }) })),
+      bands: [cc("common.junior"), cc("common.mid_level"), cc("common.senior")].map((b) => ({ label: b, on: s.band === b, cls: s.band === b ? 'on' : '', pick: () => this.setState({ band: b }) })),
+      meName: st.name || '', mePhone: st.phone || '', meEmail: st.email || '',
+      avail: [[cc("common.available"), 'avail a-av'], ['Tentatively booked', 'avail a-tb'], ['Unavailable', 'avail a-un']].map((a) => ({ label: a[0], dot: a[1], on: s.av === a[0], radio: s.av === a[0] ? 'radio on' : 'radio', pick: () => this.setState({ av: a[0] }) })),
+      saving: s.saving, notSaving: !s.saving,
+      saveLabel: s.at === 'req' ? cc("add_role.save_and_unlock") : cc("common.save_and_continue"),
+      canSkip: s.at !== 'req' && !s.saving,
+      save: () => {
+        if (s.at === 'req') {
+          if (!okReq) return this.setState({ tried: true });
+          this.setState({ saving: true });
+          clearTimeout(this.t);
+          this.t = setTimeout(() => {
+            act('addRole', role, vendor ? { bizName: s.bn.trim() } : {});
+            this.setState({ toast: vendor ? cc("add_role.product_provider_profile_unlocked") : cc("add_role.crew_profile_unlocked") });
+            clearTimeout(this.t2); this.t2 = setTimeout(() => this.setState({ toast: '' }), 2000);
+            goNext();
+          }, 700);
+          return;
+        }
+        if (s.at === 'opt') act('prof', vendor ? 'contact' : 'refs');
+        goNext();
+      },
+      skip: () => goNext(),
+      doneRing: 'width:88px;height:88px;border-radius:44px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 0 0 6px rgba(255,255,255,.8),0 18px 36px -14px rgba(24,44,30,.45);background:' + (vendor ? 'linear-gradient(180deg,#3F8A28,#367A22)' : 'linear-gradient(180deg,#8A4DF2,#7C3AED)'),
+      doneTitle: had ? (vendor ? cc("add_role.your_product_provider_profile_is") : cc("add_role.your_crew_profile_is_ready")) : vendor ? cc("add_role.you_re_now_a_product") : cc("add_role.you_re_now_crew_too"),
+      doneSub: vendor ? cc("add_role.my_listings_your_public_product") : cc("add_role.jobs_posting_and_find_talent"),
+      gainTitle: had ? cc("add_role.your_profile_is") + ccv(pct) + cc("common.complete") : (vendor ? cc("add_role.new_product_provider_profile_added") : cc("add_role.new_crew_profile_added")) + (left ? ': ' + ccv(left) + (left === 1 ? cc("add_role.section_to_go") : cc("add_role.sections_to_go")) : cc("add_role.all_done")),
+      gainSub: left ? cc("add_role.finish_them_any_time_from") : cc("add_role.your_profile_is_complete"),
+      pct, barStyle: 'height:100%;border-radius:4px;background:linear-gradient(90deg,#7C3AED,#367A22);width:' + pct + '%',
+      primaryLabel: primary[0], primaryHref: primary[1], primaryApp: primary[2],
+      toast: !!s.toast, toastText: s.toast
+    };
+  }
+}
+ccHook(Component, ["subTo","subFrom","backHref","subAct","toForm","bn","ct","dept","meName","mePhone","meEmail"]);
+</script>
+</body>
+</html>

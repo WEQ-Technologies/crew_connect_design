@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create or edit notice</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <sc-if value="{{isBlocked}}" hint-placeholder-val="{{ false }}">
+    <div class="bar"><a class="iconbtn" href="AssocNotices.dc.html" aria-label="{{cct.common.close}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a><div class="ttl">{{heading}}</div></div>
+    <div class="sc"><div class="empty" style="padding-top: 60px"><div class="t-h2">{{cct.r2.publishing_is_unavailable}}</div><div class="t-s mut" style="max-width: 280px">{{blockedMsg}}</div><a class="btn btn-s" href="AssocNotices.dc.html">{{cct.r2.back_to_dashboard}}</a></div></div>
+  </sc-if>
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="bar"><a class="iconbtn" href="AssocNotices.dc.html" aria-label="{{cct.common.close}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a><div class="ttl">{{heading}}</div><span class="t-s mut b" style="padding-right: 14px">{{cct.r2.step_1_of_2}}</span></div>
+    <div class="sc" style="gap: 18px">
+      <div class="row" style="gap: 12px"><dc-import name="AssocLogo" code="{{key}}" size="44" hint-size="44px,44px"></dc-import><span class="t-s mut sp">{{cct.r2.posting_as}} <b style="color: #1A1820">{{ename}}</b> · {{typeLabel}}</span></div>
+      <sc-if value="{{isEdit}}" hint-placeholder-val="{{ false }}"><div class="alert a-i" style="align-items: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg><div>{{cct.r2.published}} {{posted}}<sc-if value="{{wasEdited}}" hint-placeholder-val="{{ false }}"> · {{cct.r2.last_edited}} {{edited}}</sc-if>. {{cct.r2.saving_keeps_the_original_publication_date_and}}</div></div></sc-if>
+      <div class="fld"><label class="lbl" for="t">{{cct.r2.notice_title}} <span class="req">*</span></label><input id="t" class="{{tCls}}" maxlength="120" value="{{title}}" onChange="{{onTitle}}" placeholder="{{cct.r2.e_g_revised_minimum_day_rates_from}}">
+        <sc-if value="{{tErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.r2.add_a_title_for_the_notice}}</span></sc-if><span class="help" style="text-align: right">{{tLen}} / 120</span></div>
+      <div class="fld"><label class="lbl" for="b">{{cct.r2.notice_body}} <span class="req">*</span></label><textarea id="b" class="{{bCls}}" style="min-height: 180px" onChange="{{onBody}}" placeholder="{{cct.r2.write_the_full_notice_leave_a_blank}}" value="{{body}}"></textarea>
+        <sc-if value="{{bErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.r2.write_at_least_40_characters}}</span></sc-if>
+        <sc-if value="{{keepsTable}}" hint-placeholder-val="{{ false }}"><span class="help">{{cct.r2.the_rate_table_in_this_notice_is}}</span></sc-if></div>
+      <div class="fld"><span class="lbl" id="dl">{{cct.r2.departments}} <span class="req">*</span> <span class="opt">{{cct.r2.select_one_or_more}}</span></span>
+        <div class="chips" role="group" aria-labelledby="dl"><sc-for list="{{depts}}" as="d" hint-placeholder-count="6"><button class="{{d.cls}}" aria-pressed="{{d.on}}" onClick="{{d.toggle}}">{{d.label}}</button></sc-for></div>
+        <sc-if value="{{dErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.r2.select_at_least_one_department}}</span></sc-if>
+        <span class="help">{{deptHelp}}</span></div>
+      <div class="fld"><span class="lbl">{{cct.r2.attachment}} <span class="opt">{{cct.r2.optional_pdf}}</span></span>
+        <sc-if value="{{noFile}}" hint-placeholder-val="{{ true }}"><button class="file" onClick="{{addFile}}" style="border-style: dashed; cursor: pointer; width: 100%; font: inherit; color: inherit"><span class="sq" style="width: 40px; height: 40px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span><span class="sp" style="text-align: left"><span class="t-s b" style="display: block">{{cct.r2.add_a_pdf}}</span><span class="t-c mut">{{cct.r2.max_10_mb}}</span></span></button></sc-if>
+        <sc-if value="{{hasFile}}" hint-placeholder-val="{{ false }}"><div class="file"><div class="fico">PDF</div><div class="sp" style="min-width: 0"><div class="t-h3 trunc">{{fileName}}</div><div class="t-c mut">{{fileSize}}</div></div><button class="iconbtn" onClick="{{removeFile}}" aria-label="{{cct.r2.remove_attachment}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div></sc-if>
+      </div>
+    </div>
+    <div class="foot" style="flex-direction: column; gap: 8px"><button class="btn btn-p w100" onClick="{{toPreview}}">{{cct.r2.preview_notice}}</button><a class="btn btn-t w100" href="AssocNotices.dc.html">{{cct.common.cancel}}</a></div>
+  </sc-if>
+  <sc-if value="{{isPreview}}" hint-placeholder-val="{{ false }}">
+    <div class="bar"><button class="iconbtn" onClick="{{toForm}}" aria-label="{{cct.r2.back_to_edit}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button><div class="ttl">{{cct.r2.preview}}</div><span class="t-s mut b" style="padding-right: 14px">{{cct.r2.step_2_of_2}}</span></div>
+    <div class="sc" style="gap: 14px">
+      <p class="t-s mut">{{cct.r2.this_is_how_the_notice_will_appear}}</p>
+      <div class="card" style="gap: 10px">
+        <div class="row" style="gap: 10px"><dc-import name="AssocLogo" code="{{key}}" size="40" hint-size="40px,40px"></dc-import><span class="sp"><span class="t-s b" style="display: block">{{ename}}</span><span class="row" style="gap: 6px"><span class="{{typeCls}}" style="height: 20px; font-size: 11px">{{typeLabel}}</span><span class="t-c mut">{{previewDate}}</span></span></span></div>
+        <div class="t-h2">{{title}}</div>
+        <sc-for list="{{paras}}" as="p" hint-placeholder-count="2"><p class="t-s">{{p}}</p></sc-for>
+        <div class="t-over">{{cct.r2.departments}}</div>
+        <div class="chips"><sc-for list="{{chosen}}" as="d" hint-placeholder-count="2"><span class="tag" style="background: #E6F2DC; color: #2C6619">{{d}}</span></sc-for></div>
+        <sc-if value="{{hasFile}}" hint-placeholder-val="{{ false }}"><div class="file"><div class="fico">PDF</div><div class="sp"><div class="t-s b trunc">{{fileName}}</div><div class="t-c mut">{{fileSize}}</div></div></div></sc-if>
+      </div>
+      <button class="btn btn-s w100" onClick="{{toForm}}">{{cct.r2.edit_details}}</button>
+    </div>
+    <div class="foot" style="flex-direction: column; gap: 8px">
+      <sc-if value="{{saving}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>{{savingLabel}}</button></sc-if>
+      <sc-if value="{{notSaving}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{publish}}">{{submitLabel}}</button></sc-if>
+      <a class="btn btn-t w100" href="AssocNotices.dc.html">{{cct.common.cancel}}</a>
+    </div>
+  </sc-if>
+  <sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="justify-content: center; align-items: center; text-align: center; gap: 14px">
+      <div style="width: 64px; height: 64px; border-radius: 32px; background: #E6F2DC; color: #2C6619; display: flex; align-items: center; justify-content: center"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></div>
+      <div class="t-h1">{{doneTitle}}</div>
+      <div class="t-b mut">“{{title}}” {{cct.r2.is_on_the_forum_wall_for_all}}</div>
+      <div class="edit-h" style="justify-content: center">{{stampLine}}</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; width: 100%">
+        <a class="btn btn-p w100" href="NoticeDetail.dc.html" data-notice="{{savedId}}">{{cct.r2.view_notice}}</a>
+        <a class="btn btn-s w100" href="ForumWall.dc.html">{{cct.r2.see_on_the_forum_wall}}</a>
+        <a class="btn btn-t w100" href="AssocNotices.dc.html">{{cct.r2.back_to_dashboard}}</a>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"entity":{"editor":"text","default":""},"notice":{"editor":"text","default":""},"mode":{"editor":"enum","options":["create","edit"],"default":"create"},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* CrewConnect Association & Forum data (mock, from crewconnect_content.json › assoc_module). Shape is ready for a backend API. */
+var AF = (function (w) {
+  if (w.__ccAssoc) return w.__ccAssoc;
+  var m = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.assoc_module) || { entities: [], notices: [], departments: [], variants: {}, recentFrom: '2026-10-20' };
+  var byId = {};
+  m.entities.forEach(function (e) { byId[e.id] = e; });
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmt(iso, withTime) {
+    if (!iso) return '';
+    var d = new Date(iso); if (isNaN(d)) return iso;
+    var s = d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+    if (withTime === false) return s;
+    var h = d.getHours(), mi = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    return s + ', ' + h + ':' + (mi < 10 ? '0' : '') + mi + ' ' + ap;
+  }
+  function nowIso() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':00'; }
+  // Notices = seed data + this session's changes (store.notices: created[], edited{id: patch}, deleted{id: true}).
+  function notices(store) {
+    var n = (store && store.notices) || {}, cr = n.created || [], ed = n.edited || {}, del = n.deleted || {};
+    return cr.concat(m.notices).filter(function (x) { return !del[x.id] && byId[x.entity]; })
+      .map(function (x) { return ed[x.id] ? Object.assign({}, x, ed[x.id]) : x; })
+      .sort(function (a, b) { return a.postedAt < b.postedAt ? 1 : -1; });
+  }
+  function canPublish(e) { return !!e && e.status === 'active' && e.access === 'issued'; }
+  function entityByEmail(em) { em = (em || '').trim().toLowerCase(); for (var i = 0; i < m.entities.length; i++) if (m.entities[i].email === em) return m.entities[i]; return null; }
+  function preview(x) { var b = x.body || []; for (var i = 0; i < b.length; i++) if (typeof b[i] === 'string') return b[i]; return ''; }
+  return (w.__ccAssoc = { m: m, entities: m.entities, byId: byId, depts: m.departments, fmt: fmt, nowIso: nowIso, notices: notices, canPublish: canPublish, entityByEmail: entityByEmail, preview: preview, isOld: function (x) { return x.postedAt < m.recentFrom; } });
+})(window);
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    const edit = (p.mode ?? 'create') === 'edit';
+    const src = edit ? AF.notices(p.store).find((x) => x.id === (p.notice || 'n01')) : null;
+    const paras = src ? src.body.filter((b) => typeof b === 'string') : [];
+    this.state = { phase: 'form', tried: false, saving: false, title: src ? src.title : '', body: paras.join('\n\n'),
+      dp: src ? src.depts.reduce((o, d) => ({ ...o, [d]: true }), {}) : {}, file: src ? src.attachment : null, src };
+  }
+  componentWillUnmount() { clearTimeout(this.a); }
+  renderVals() {
+    const s = this.state, st = this.props.store || {}, act = this.props.act;
+    const edit = (this.props.mode ?? 'create') === 'edit' && !!s.src;
+    const E = AF.byId[this.props.entity || st.entity || (s.src && s.src.entity)] || AF.byId.CTG;
+    const ok = AF.canPublish(E);
+    const chosen = AF.depts.filter((d) => s.dp[d]);
+    const tE = !s.title.trim(), bE = s.body.trim().length < 40, dE = chosen.length === 0;
+    const paras = s.body.split(/\n\s*\n/).map((x) => x.trim()).filter(Boolean);
+    return {
+      key: E.id, ename: E.name, typeLabel: E.type === 'Forum' ? cc("r2.forum") : cc("r2.association"), typeCls: E.type === 'Forum' ? 'badge b-y' : 'badge b-p',
+      isBlocked: !ok, blockedMsg: E.status !== 'active' ? cc("r2.your_account_is_inactive_so_you_can_2") : cc("r2.posting_access_has_been_revoked_by_the"),
+      isForm: ok && s.phase === 'form', isPreview: ok && s.phase === 'preview', isDone: ok && s.phase === 'done',
+      isEdit: edit, heading: edit ? cc("r2.edit_notice") : cc("r2.create_notice"),
+      posted: s.src ? AF.fmt(s.src.postedAt) : '', wasEdited: !!(s.src && s.src.editedAt), edited: s.src ? AF.fmt(s.src.editedAt) : '',
+      keepsTable: !!(s.src && s.src.body.some((b) => typeof b !== 'string')),
+      title: s.title, body: s.body, tLen: s.title.length, onTitle: (e) => this.setState({ title: e.target.value }), onBody: (e) => this.setState({ body: e.target.value }),
+      tErr: s.tried && tE, bErr: s.tried && bE, dErr: s.tried && dE, tCls: s.tried && tE ? 'inp bad' : 'inp', bCls: s.tried && bE ? 'inp bad' : 'inp',
+      depts: AF.depts.map((d) => ({ label: d, on: !!s.dp[d], cls: s.dp[d] ? 'chip on' : 'chip', toggle: () => this.setState({ dp: { ...s.dp, [d]: !s.dp[d] } }) })),
+      deptHelp: chosen.length ? chosen.length + ' ' + cc("r2.selected_members_filtering_by_these_departments_will") : cc("r2.choose_every_department_this_notice_is_relevant"),
+      hasFile: !!s.file, noFile: !s.file, fileName: s.file ? s.file.name : '', fileSize: s.file ? s.file.size : '',
+      addFile: () => this.setState({ file: { name: cc("r2.notice_attachment_pdf"), size: '240 KB' } }), removeFile: () => this.setState({ file: null }),
+      toPreview: () => (tE || bE || dE ? this.setState({ tried: true }) : this.setState({ phase: 'preview' })), toForm: () => this.setState({ phase: 'form' }),
+      paras, chosen, previewDate: edit ? AF.fmt(s.src.postedAt, false) : cc("r2.today"),
+      saving: s.saving, notSaving: !s.saving, savingLabel: edit ? cc("common.saving") : cc("common.publishing"), submitLabel: edit ? cc("common.save_changes") : cc("r2.publish_notice"),
+      doneTitle: edit ? cc("r2.notice_updated") : cc("r2.notice_published"), savedId: s.savedId || '',
+      stampLine: s.stamp || '',
+      publish: () => {
+        this.setState({ saving: true });
+        this.a = setTimeout(() => {
+          const now = AF.nowIso();
+          const body = paras.concat(s.src ? s.src.body.filter((b) => typeof b !== 'string') : []);
+          if (edit) {
+            // Editing keeps postedAt and sets editedAt to now.
+            if (act) act('noticeEdit', s.src.id, { title: s.title.trim(), body, depts: chosen, attachment: s.file, editedAt: now });
+            this.setState({ saving: false, phase: 'done', savedId: s.src.id, stamp: cc("r2.published") + ' ' + AF.fmt(s.src.postedAt) + ' · ' + cc("r2.last_edited") + ' ' + AF.fmt(now) });
+          } else {
+            const id = 'u' + Date.now();
+            if (act) act('noticeCreate', { id, entity: E.id, title: s.title.trim(), body, depts: chosen, attachment: s.file, postedAt: now, editedAt: null });
+            this.setState({ saving: false, phase: 'done', savedId: id, stamp: cc("r2.published") + ' ' + AF.fmt(now) });
+          }
+        }, 900);
+      }
+    };
+  }
+}
+ccHook(Component, ["title","body","depts","paras","chosen"]);
+</script>
+</body>
+</html>

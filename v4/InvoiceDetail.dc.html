@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invoice INV-2026-014</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="./fonts/fonts.css" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="Invoices.dc.html" aria-label="{{cct.invoice_detail.back_to_invoices}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.inv_2026_014}}</div>
+    <sc-if value="{{paid}}" hint-placeholder-val="{{ false }}"><span class="badge b-g" style="margin-right: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>{{cct.common.paid}}</span></sc-if>
+    <sc-if value="{{sent}}" hint-placeholder-val="{{ true }}"><span class="badge b-p" style="margin-right: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>{{cct.common.sent}}</span></sc-if>
+  </div>
+  <div class="sc" style="gap: 14px; padding-top: 12px">
+    <!-- R2 · invoice options: print-friendly mode, currency, GST % -->
+    <div class="card" style="gap: 12px; padding: 14px">
+      <div class="row" style="gap: 12px">
+        <div class="sp"><div class="t-s b">{{cct.r2.print_friendly_black_white}}</div><div class="t-c mut">{{cct.r2.turns_violet_areas_white_so_text_stays}}</div></div>
+        <button class="{{printCls}}" role="switch" aria-checked="{{printOn}}" aria-label="{{cct.r2.print_friendly_black_white}}" onClick="{{togglePrint}}"><span></span></button>
+      </div>
+      <div class="row" style="gap: 10px">
+        <div class="fld sp"><label class="lbl" for="cur">{{cct.r2.currency}}</label><select id="cur" class="inp" value="{{cur}}" onChange="{{onCur}}"><option value="INR">{{cct.r2.inr_default}}</option><option value="USD">{{cct.r2.usd}}</option><option value="EUR">{{cct.r2.eur}}</option><option value="NONE">{{cct.r2.no_currency_symbol}}</option></select></div>
+        <div class="fld" style="width: 112px"><label class="lbl" for="gst">{{cct.r2.gst}}</label><div class="pre"><input id="gst" inputmode="decimal" value="{{gst}}" onChange="{{onGst}}" aria-label="{{cct.r2.gst_percentage}}"><span>%</span></div></div>
+      </div>
+    </div>
+    <div class="{{docCls}}" style="background: #fff; border-radius: 12px; border: 1px solid #E1EADF; padding: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 1px 2px rgba(29,27,34,.06)">
+      <div class="row" style="align-items: flex-start">
+        <div class="sp"><div class="t-over" style="color: #7C3AED">{{cct.invoice_detail.tax_invoice}}</div><div class="t-h2" style="margin-top: 4px">{{me.name}}</div><div class="t-c mut">{{me.sub}}</div><div class="t-c mut">{{me.email}}</div></div>
+        <div style="text-align: right"><div class="t-c mut">{{cct.invoice_detail.invoice_no}}</div><div class="t-s b">{{cct.common.inv_2026_014}}</div></div>
+      </div>
+      <div style="border: 1px solid #E1EADF; border-left: 3px solid #7C3AED; background: {{projBg}}; border-radius: 0 10px 10px 0; padding: 10px 14px">
+        <div class="t-over" style="color: #7C3AED">{{cct.common.project}}</div>
+        <div class="t-h2" style="margin-top: 2px">{{cct.common.untitled_hindi_feature}}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+        <div><div class="t-c mut">{{cct.common.bill_to}}</div><div class="t-s b">{{cct.common.lantern_pictures}}</div><div class="t-c mut">{{cct.invoice_detail.gstin_27aabcl4821f1z6}}</div></div>
+        <div style="text-align: right; display: flex; flex-direction: column; gap: 6px">
+          <div><div class="t-c mut">{{cct.r2.date_of_issue}}</div><div class="t-s b">{{cct.r2.t_18_oct_2026}}</div></div>
+          <div><div class="t-c mut">{{cct.r2.due_date}}</div><div class="t-s b">{{cct.r2.t_2_nov_2026}}</div></div>
+        </div>
+      </div>
+      <div><div class="t-c mut">{{cct.r2.description}}</div><div class="t-s">{{cct.r2.focus_pulling_services_for_untitled_hindi_feature}}</div></div>
+      <div style="border: 1px solid #E1EADF; border-radius: 10px; overflow: hidden">
+        <div class="row t-c" style="background: {{headBg}}; padding: 8px 10px; font-weight: 700; color: #545060; gap: 6px"><span style="width: 26px; text-align: left">{{cct.r2.s_no}}</span><span class="sp">{{cct.r2.item}}</span><span style="width: 58px; text-align: right">{{cct.r2.rate}}</span><span style="width: 52px; text-align: right">{{cct.r2.qty}}</span><span style="width: 64px; text-align: right">{{cct.r2.amount}}</span></div>
+        <sc-for list="{{lines}}" as="l" hint-placeholder-count="2"><div class="row t-c" style="padding: 10px; border-top: 1px solid #E1EADF; align-items: flex-start; gap: 6px"><span style="width: 26px; text-align: left">{{l.n}}</span><span class="sp" style="font-size: 12px; line-height: 16px">{{l.item}}</span><span style="width: 58px; text-align: right">{{l.rate}}</span><span style="width: 52px; text-align: right">{{l.qty}}</span><span style="width: 64px; text-align: right; font-weight: 700">{{l.amt}}</span></div></sc-for>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <div class="kv" style="font-size: 13px"><span>{{cct.common.subtotal}}</span><span>{{subT}}</span></div>
+        <div class="kv" style="font-size: 13px"><span>{{cct.r2.gst_2}} {{gst}}%</span><span>{{gstT}}</span></div>
+        <div class="hr" style="margin: 6px 0"></div>
+        <div class="kv"><span style="color: #1A1820; font-weight: 800">{{cct.common.total}}</span><span style="font-weight: 800; font-size: 18px">{{totT}}</span></div>
+        <sc-if value="{{hasWords}}" hint-placeholder-val="{{ true }}"><div class="t-c mut" style="text-align: right">{{words}}</div></sc-if>
+      </div>
+      <div style="border-top: 1px dashed #CFDACB; padding-top: 10px; display: flex; flex-direction: column; gap: 2px">
+        <div class="t-over">{{cct.r2.account_details}}</div>
+        <div class="kv" style="font-size: 12px; padding: 2px 0"><span>{{cct.r2.account_name}}</span><span>{{me.name}}</span></div>
+        <div class="kv" style="font-size: 12px; padding: 2px 0"><span>{{cct.r2.bank_branch}}</span><span>{{me.bank}}</span></div>
+        <div class="kv" style="font-size: 12px; padding: 2px 0"><span>{{cct.r2.account_no}}</span><span>{{me.acno}}</span></div>
+        <div class="kv" style="font-size: 12px; padding: 2px 0"><span>{{cct.r2.ifsc}}</span><span>{{me.ifsc}}</span></div>
+        <div class="kv" style="font-size: 12px; padding: 2px 0"><span>{{cct.r2.upi}}</span><span>{{me.upi}}</span></div>
+      </div>
+      <div class="row" style="align-items: flex-end; gap: 12px">
+        <div class="sp t-c mut">{{cct.r2.payment_terms_within_15_days_of_the}}</div>
+        <div style="text-align: center; min-width: 130px"><div style="font: italic 600 20px/26px Georgia, 'Times New Roman', serif; color: #1A1820; padding: 0 6px">{{me.name}}</div><div style="border-top: 1px solid #545060; margin-top: 2px; padding-top: 4px" class="t-c mut">{{cct.r2.authorised_signature}}</div></div>
+      </div>
+    </div>
+    <div class="file" style="background: rgba(255,255,255,.72)"><div class="fico">{{cct.common.pdf}}</div><div class="sp"><div class="t-h3 trunc">{{cct.invoice_detail.inv_2026_014_pdf}}</div><div class="t-c mut">{{cct.invoice_detail.generated_from_this_invoice}}</div></div></div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status" style="bottom: 150px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div>
+  </sc-if>
+
+  <div class="foot" style="flex-direction: column; gap: 10px">
+    <div class="row" style="gap: 10px">
+      <button class="btn btn-s" onClick="{{openShare}}" style="flex: 1"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><circle cx="18" cy="19" r="2.5"></circle><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"></path></svg>{{cct.invoice_detail.share}}</button>
+      <sc-if value="{{downloading}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s" style="flex: 1" aria-busy="true"><span class="spin d"></span>{{cct.invoice_detail.preparing}}</button></sc-if>
+      <sc-if value="{{notDownloading}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s" onClick="{{download}}" style="flex: 1"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"></path></svg>{{cct.common.download_pdf}}</button></sc-if>
+    </div>
+    <sc-if value="{{sent}}" hint-placeholder-val="{{ true }}"><button class="btn btn-g w100" onClick="{{askPaid}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>{{cct.invoice_detail.mark_as_paid}}</button></sc-if>
+  </div>
+
+  <sc-if value="{{share}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim">
+      <div class="sheet" role="dialog" aria-label="{{cct.invoice_detail.share_invoice}}">
+        <div class="grab"></div>
+        <div class="t-h2">{{cct.invoice_detail.share_invoice}}</div>
+        <div class="t-s mut">{{cct.invoice_detail.send_inv_2026_014_pdf}}</div>
+        <div class="list">
+          <button class="li" onClick="{{shareEmail}}"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></span><span class="sp" style="text-align: left"><span class="t-s b" style="display: block">{{cct.invoice_detail.email_to_client}}</span><span class="t-c mut">{{cct.common.accounts_lanternpictures_in}}</span></span></button>
+          <button class="li" onClick="{{shareOther}}"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><circle cx="18" cy="19" r="2.5"></circle><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"></path></svg></span><span class="sp" style="text-align: left"><span class="t-s b" style="display: block">{{cct.invoice_detail.share_pdf_via_other_apps}}</span><span class="t-c mut">{{cct.invoice_detail.opens_your_phone_s_share}}</span></span></button>
+        </div>
+        <button class="btn btn-t w100" onClick="{{closeShare}}">{{cct.common.cancel}}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{confirmPaid}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c">
+      <div class="dlg" role="alertdialog" aria-label="{{cct.invoice_detail.mark_as_paid}}">
+        <div class="sq g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></div>
+        <div class="t-h2">{{cct.r2.mark}} {{totT}} {{cct.r2.as_paid}}</div>
+        <div class="t-s mut">{{cct.invoice_detail.record_that_lantern_pictures_has}}</div>
+        <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{cancelPaid}}" style="flex: 1">{{cct.common.cancel}}</button><button class="btn btn-g" onClick="{{markPaid}}" style="flex: 1">{{cct.invoice_detail.mark_paid}}</button></div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* R7: sample accounts (crewconnect_content.json › accounts) — the one place names, roles and the vendor profile are defined. */
+var ACC = (function (w) { if (w.__ccAcc) return w.__ccAcc;
+  var d = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.accounts) || {"about": "Sample accounts (Revision 7). Single source of truth for who can log in, their roles and their vendor profile. Every screen reads this block (via the ACC helper); no screen hardcodes these names or roles. Log in with the account ID (crew01 / crew02) or its demo email. Personal details follow sample_profiles: only name, city and public links are shown; designation, skills, bio, phone and bank details are left empty until verified.", "default": "crew01", "list": [{"id": "crew01", "name": "Varun Khandelwal", "email": "crew01@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": false}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster"], "vendor": null}, {"id": "crew02", "name": "Ria Bhavsar", "email": "crew02@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": true}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster", "Vendor"], "vendor": "vendor-house"}], "vendors": [{"id": "vendor-house", "name": "Vendor House", "type": "Vendor", "owner": "crew02", "city": "Mumbai", "initials": "VH", "contact": {"person": "Ria Bhavsar", "phone": "", "email": "", "website": "", "gstin": ""}, "note": "Business category, description, offices (city level), clientele and listings are sample demo content carried over from the previous sample vendor. Contact identifiers (phone, email, website, GSTIN, street address) are not set."}], "labels": {"notAdded": "Not added yet", "demoHint": "Demo accounts: crew01 · crew02", "crewMember": "Crew Member"}};
+  var by = {}, vb = {}, vn = {}; d.list.forEach(function (a) { by[a.id] = a; }); d.vendors.forEach(function (v) { vb[v.id] = v; vn[v.name] = v; });
+  function byLogin(s) { s = String(s || '').trim().toLowerCase(); for (var i = 0; i < d.list.length; i++) { var a = d.list[i]; if (a.id === s || a.email === s) return a; } return null; }
+  function def() { return by[d.default]; }
+  function byName(n) { for (var i = 0; i < d.list.length; i++) if (d.list[i].name === n) return d.list[i]; return null; }
+  function vendorOf(a) { return a && a.vendor ? vb[a.vendor] || null : null; }
+  function forStore(st) { return st && st.acct ? by[st.acct] || null : (st && st.name ? byName(st.name) : null); }
+  // Standalone artboards have no logged-in store: pick the sample account whose roles match the artboard's (default: all roles → crew02).
+  function byRoles(r) { r = r || { crew: true, vendor: true }; for (var i = 0; i < d.list.length; i++) { var x = d.list[i]; if (!!x.roles.crew === !!r.crew && !!x.roles.vendor === !!r.vendor) return x; } return def(); }
+  function me(st) { st = st || {}; return forStore(st) || (st.name ? null : byRoles(st.roles)); }
+  function name(st) { st = st || {}; var a = me(st); return st.name || (a ? a.name : def().name); }
+  function storeFor(a) { var v = vendorOf(a); return { acct: a.id, name: a.name, email: a.email, roles: { crew: !!a.roles.crew, vendor: !!a.roles.vendor }, modes: { seek: !!a.modes.seek, post: !!a.modes.post },
+    bizName: v ? v.name : '', phone: '', photo: false, prof: { pro: !!a.roles.crew, refs: !!a.roles.crew, biz: !!v, contact: false } }; }
+  return (w.__ccAcc = { d: d, list: d.list, labels: d.labels, byId: function (i) { return by[i] || null; }, byLogin: byLogin, byName: byName, def: def,
+    vendorOf: vendorOf, vendorByName: function (n) { return vn[n] || null; }, ownerOf: function (v) { return v ? by[v.owner] || null : null; }, forStore: forStore, me: me, name: name, storeFor: storeFor }); })(window);
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { status: 'Sent', share: false, confirmPaid: false, downloading: false, toast: '', print: false, cur: 'INR', gst: '18' }; }
+  componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.t); }
+  flash(m) { this.setState({ toast: m }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    const s = this.state;
+    // R2: currency (INR default, changeable or removable), editable GST %, units in Days/Months, serial numbers.
+    const SYM = { INR: '₹', USD: '$', EUR: '€', NONE: '' };
+    const sym = SYM[s.cur] === undefined ? '₹' : SYM[s.cur];
+    const fmt = (n) => sym + Math.round(n).toLocaleString(s.cur === 'INR' || s.cur === 'NONE' ? 'en-IN' : 'en-US');
+    const L = [
+      { item: cc("r2.focus_pulling_principal_photography"), rate: 10000, q: 6, u: 'Days' },
+      { item: cc("r2.camera_prep_day"), rate: 5000, q: 1, u: 'Day' },
+      { item: cc("r2.wireless_follow_focus_kit_own_equipment"), rate: 8000, q: 1, u: 'Month' }
+    ];
+    const UNIT = { Days: cc("r2.days"), Day: cc("r2.day"), Months: cc("r2.months"), Month: cc("r2.month") };
+    const sub = L.reduce((t, l) => t + l.rate * l.q, 0);
+    const g = Math.max(0, Number(String(s.gst).replace(/[^0-9.]/g, '')) || 0);
+    const gv = sub * g / 100, tot = sub + gv;
+    const W1 = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+    const W10 = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    const two = (n) => (n < 20 ? W1[n] : W10[Math.floor(n / 10)] + (n % 10 ? '-' + W1[n % 10] : ''));
+    const three = (n) => (n >= 100 ? W1[Math.floor(n / 100)] + ' hundred' + (n % 100 ? ' ' + two(n % 100) : '') : two(n));
+    const words = (n) => { n = Math.round(n); const cr = Math.floor(n / 1e7), lk = Math.floor(n / 1e5) % 100, th = Math.floor(n / 1000) % 100, rest = n % 1000; return [cr ? two(cr) + ' crore' : '', lk ? two(lk) + ' lakh' : '', th ? two(th) + ' thousand' : '', rest ? three(rest) : ''].filter(Boolean).join(' '); };
+    return {
+      // R7: issuer = the logged-in account. Bank details are not stored for sample accounts.
+      me: (() => { const m = (() => { const st = this.props.store || {}, A = ACC.me(st), n = ACC.name(st); return { name: n, ini: n.split(/\s+/).map((x) => x[0]).join('').slice(0, 2).toUpperCase(), real: !!A, email: st.email || (A ? A.email : cc("common.priya_nair_gmail_com")), city: A ? A.city : '' }; })(), NA = ACC.labels.notAdded; return { ...m, sub: m.real ? m.city : cc("invoice_detail.focus_puller_mumbai"), bank: m.real ? NA : cc("r2.hdfc_bank_goregaon_east"), acno: m.real ? NA : cc("r2.xxxx_xxxx_4821"), ifsc: m.real ? NA : cc("r2.hdfc0000123"), upi: m.real ? NA : cc("r2.priyanair_hdfcbank") }; })(),
+      printOn: !!s.print, printCls: s.print ? 'switch on' : 'switch', togglePrint: () => this.setState({ print: !s.print }),
+      docCls: s.print ? 'inv-doc inv-print' : 'inv-doc', projBg: s.print ? '#fff' : '#F6F3FF', headBg: s.print ? '#fff' : '#EEF4EC',
+      cur: s.cur, onCur: (e) => this.setState({ cur: e.target.value }), gst: s.gst, onGst: (e) => this.setState({ gst: e.target.value }),
+      lines: L.map((l, i) => ({ n: i + 1, item: l.item, rate: fmt(l.rate), qty: l.q + ' ' + UNIT[l.u], amt: fmt(l.rate * l.q) })),
+      subT: fmt(sub), gstT: fmt(gv), totT: fmt(tot),
+      hasWords: s.cur === 'INR', words: s.cur === 'INR' ? cc("r2.rupees") + ' ' + words(tot) + ' ' + cc("r2.only") : '',
+      paid: s.status === 'Paid', sent: s.status === 'Sent',
+      share: s.share, confirmPaid: s.confirmPaid,
+      downloading: s.downloading, notDownloading: !s.downloading,
+      toast: !!s.toast, toastText: s.toast,
+      openShare: () => this.setState({ share: true }),
+      closeShare: () => this.setState({ share: false }),
+      shareEmail: () => { this.setState({ share: false }); this.flash(cc("invoice_detail.invoice_emailed_to_lantern_pictures")); },
+      shareOther: () => { this.setState({ share: false }); this.flash(cc("invoice_detail.share_options_opened")); },
+      download: () => { this.setState({ downloading: true }); this.a = setTimeout(() => { this.setState({ downloading: false }); this.flash(cc("invoice_detail.saved_inv_2026_014_pdf")); }, 1000); },
+      askPaid: () => this.setState({ confirmPaid: true }),
+      cancelPaid: () => this.setState({ confirmPaid: false }),
+      markPaid: () => { this.setState({ confirmPaid: false, status: 'Paid' }); this.flash(cc("invoice_detail.invoice_marked_as_paid")); }
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>
