@@ -4,7 +4,17 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "/v3",
+      "destination": "/v4/",
+      "permanent": false
+    },
+    {
+      "source": "/v4",
+      "destination": "/v4/",
+      "permanent": false
+    },
+    {
+      "source": "/v4/glass",
+      "destination": "/v4/",
       "permanent": false
     },
     {
@@ -14,42 +24,52 @@
     },
     {
       "source": "/v2",
-      "destination": "/v2/",
+      "destination": "/v2/glass/",
+      "permanent": false
+    },
+    {
+      "source": "/v2/glass",
+      "destination": "/v2/glass/",
       "permanent": false
     },
     {
       "source": "/v3",
-      "destination": "/v3/",
+      "destination": "/v3/bento/",
+      "permanent": false
+    },
+    {
+      "source": "/v3/bento",
+      "destination": "/v3/bento/",
       "permanent": false
     },
     {
       "source": "/Prototype.dc.html",
-      "destination": "/v3",
+      "destination": "/v4/",
       "permanent": false
     },
     {
       "source": "/prototype.dc.html",
-      "destination": "/v3",
+      "destination": "/v4/",
       "permanent": false
     },
     {
       "source": "/prototype",
-      "destination": "/v3",
+      "destination": "/v4/",
       "permanent": false
     },
     {
       "source": "/Prototype",
-      "destination": "/v3",
+      "destination": "/v4/",
       "permanent": false
     },
     {
       "source": "/Journeys.dc.html",
-      "destination": "/v3",
+      "destination": "/v4/",
       "permanent": false
     },
     {
       "source": "/journeys.dc.html",
-      "destination": "/v3",
+      "destination": "/v4/",
       "permanent": false
     },
     {
@@ -73,12 +93,24 @@
       "destination": "/assets/:id.png"
     },
     {
+      "source": "/v4/_blob/:id",
+      "destination": "/v4/assets/:id.png"
+    },
+    {
+      "source": "/v3/bento/_blob/:id",
+      "destination": "/v3/bento/assets/:id.png"
+    },
+    {
+      "source": "/v2/glass/_blob/:id",
+      "destination": "/v2/glass/assets/:id.png"
+    },
+    {
       "source": "/v3/_blob/:id",
-      "destination": "/v3/assets/:id.png"
+      "destination": "/v3/bento/assets/:id.png"
     },
     {
       "source": "/v2/_blob/:id",
-      "destination": "/v2/assets/:id.png"
+      "destination": "/v2/glass/assets/:id.png"
     },
     {
       "source": "/v1/_blob/:id",
@@ -105,19 +137,6 @@
       ]
     },
     {
-      "source": "/v2",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "text/html; charset=utf-8"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    },
-    {
       "source": "/v2/(.*)",
       "headers": [
         {
@@ -127,7 +146,16 @@
       ]
     },
     {
-      "source": "/v3",
+      "source": "/v3/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/v4",
       "headers": [
         {
           "key": "Content-Type",
@@ -140,7 +168,7 @@
       ]
     },
     {
-      "source": "/v3/(.*)",
+      "source": "/v4/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -167,7 +195,7 @@
       ]
     },
     {
-      "source": "/v2/assets/(.*)",
+      "source": "/v2/glass/assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -176,7 +204,16 @@
       ]
     },
     {
-      "source": "/v3/assets/(.*)",
+      "source": "/v3/bento/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/v4/assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
