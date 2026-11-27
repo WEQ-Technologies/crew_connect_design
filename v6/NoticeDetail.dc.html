@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notice</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+/* Notice body: user-written content, so every element is styled defensively (long words, long links, empty lines). */
+.nd-body{display:flex;flex-direction:column;gap:14px;font-size:15.5px;line-height:1.62;color:#24212B;overflow-wrap:anywhere;word-break:normal}
+.nd-body p{margin:0}
+.nd-body h2{margin:6px 0 -4px;font-size:17px;line-height:1.35;font-weight:800;color:#1A1820}
+.nd-body ul,.nd-body ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+.nd-body li::marker{color:#7C3AED;font-weight:700}
+.nd-plain{white-space:pre-line}
+.nd-quote{display:flex;gap:10px;padding:12px 14px;border-radius:14px;background:var(--tint-p);border:1px solid rgba(240,235,254,.95);color:#3A2A4E;font-size:15px;line-height:1.55}
+.nd-quote svg{flex:none;color:#C4B1FA;margin-top:2px}
+.nd-tag{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border-radius:13px;font:700 12px/1 Inter,system-ui,sans-serif;white-space:nowrap}
+.nd-tag.c-event{background:#EFEAFE;color:#6527C8}
+.nd-tag.c-payment{background:#FFF2DB;color:#8A5300}
+.nd-tag.c-general{background:#EEF4EC;color:#3D3A45}
+.nd-tag.c-maintenance{background:#E3F0F6;color:#1D5A73}
+.nd-tag.c-urgent{background:#B42318;color:#fff}
+.nd-upd{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;background:#E6F2DC;color:#2C6619;font:700 11.5px/1 Inter,system-ui,sans-serif}
+.nd-tw{position:relative;border:1px solid #E1EADF;border-radius:14px;background:rgba(255,255,255,.75);overflow:hidden}
+.nd-ts{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nd-tw table{border-collapse:separate;border-spacing:0;min-width:100%;font-size:13.5px;line-height:1.4}
+.nd-tw th,.nd-tw td{padding:10px 12px;text-align:left;border-bottom:1px solid #F0EDF4;white-space:nowrap;vertical-align:top}
+.nd-tw th{background:#F4EFF9;color:#6527C8;font-weight:700;font-size:12.5px}
+.nd-tw th:first-child,.nd-tw td:first-child{position:sticky;left:0;z-index:1;background:rgba(255,255,255,.9);-webkit-backdrop-filter:var(--blur-md);backdrop-filter:var(--blur-md);font-weight:700;color:#1A1820;white-space:normal;min-width:120px;max-width:150px;box-shadow:1px 0 0 #E1EADF}
+.nd-tw th:first-child{background:#F4EFF9;color:#6527C8}
+.nd-tw tr:last-child td{border-bottom:0}
+.nd-tc{display:flex;flex-direction:column;gap:8px}
+.nd-tc .card{gap:4px;padding:12px 14px}
+.nd-img{display:flex;flex-direction:column;gap:6px;border:0;padding:0;background:none;text-align:left;cursor:zoom-in;font:inherit;color:inherit}
+.nd-ph{width:100%;aspect-ratio:16/9;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,#EFEAFE 0%,#DCEBE9 100%);border:1px solid #E1EADF;color:#7C3AED}
+.nd-file{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #E1EADF;border-radius:14px;background:rgba(255,255,255,.8)}
+.nd-ft{width:44px;height:48px;border-radius:10px;flex:none;display:flex;align-items:flex-end;justify-content:center;padding-bottom:7px;box-sizing:border-box;font:800 10.5px/1 Inter,system-ui,sans-serif;letter-spacing:.03em;color:#fff}
+.nd-ft.t-pdf{background:#C8382B}.nd-ft.t-docx{background:#2B5CC8}.nd-ft.t-xlsx{background:#2C7A3F}.nd-ft.t-jpg{background:#8A5300}
+.nd-key{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.92),rgba(246,243,255,.85));border:1px solid #EFEAFE}
+.nd-kv{display:flex;gap:10px;align-items:flex-start}
+.nd-kv .sq{width:34px;height:34px;border-radius:10px;flex:none}
+.nd-lb{position:absolute;inset:0;z-index:40;background:rgba(18,12,26,.92);display:flex;flex-direction:column;padding:16px;gap:12px;color:#fff}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="ForumWall.dc.html" aria-label="{{cct.r2.back_to_the_forum_wall}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.r2.notice_2}}</div></div>
+  <div class="sc" style="gap: 18px">
+    <sc-if value="{{found}}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 18px">
+    <a href="AssociationProfile.dc.html" data-assoc="{{entity}}" class="card" style="text-decoration: none; flex-direction: row; align-items: center; gap: 12px; padding: 12px 14px; color: #1A1820">
+      <dc-import name="AssocLogo" code="{{entity}}" size="52" hint-size="52px,52px"></dc-import>
+      <span class="sp" style="min-width: 0"><span class="t-h3 clamp2" style="display: block">{{ename}}</span><span class="row" style="gap: 6px; margin-top: 4px"><span class="{{typeCls}}" style="height: 20px; font-size: 11px">{{typeLabel}}</span><span class="t-c mut">{{cct.r2.official_notice}}</span></span></span>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg>
+    </a>
+    <header style="display: flex; flex-direction: column; gap: 10px">
+      <h1 class="t-h1" style="margin: 0; overflow-wrap: anywhere">{{title}}</h1>
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <span class="row t-c mut" style="gap: 6px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{cct.r2.published}} {{posted}}</span>
+        <sc-if value="{{isEdited}}" hint-placeholder-val="{{ true }}"><span class="row t-c" style="gap: 6px; color: #2C6619; font-weight: 600"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>{{cct.r2.last_edited}} {{edited}}</span></sc-if>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><span class="t-over">{{cct.r2.relevant_departments}}</span><div class="chips"><sc-for list="{{depts}}" as="d" hint-placeholder-count="2"><span class="tag" style="background: #E6F2DC; color: #2C6619">{{d}}</span></sc-for></div></div>
+    </header>
+    <div class="nd-body">
+      <sc-for list="{{blocks}}" as="b" hint-placeholder-count="3">
+        <sc-if value="{{b.isP}}" hint-placeholder-val="{{ true }}"><p>{{b.text}}</p></sc-if>
+        <sc-if value="{{b.isT}}" hint-placeholder-val="{{ false }}"><div class="nd-tw"><div class="nd-ts"><table><thead><tr><sc-for list="{{b.head}}" as="h" hint-placeholder-count="3"><th>{{h}}</th></sc-for></tr></thead><tbody><sc-for list="{{b.rows}}" as="r" hint-placeholder-count="3"><tr><sc-for list="{{r}}" as="c" hint-placeholder-count="3"><td>{{c}}</td></sc-for></tr></sc-for></tbody></table></div></div></sc-if>
+      </sc-for>
+    </div>
+    <sc-if value="{{hasFile}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 8px"><span class="t-over">{{cct.r2.attachment}}</span>
+        <div class="nd-file"><span class="nd-ft t-pdf">PDF</span><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{fileName}}</span><span class="t-c mut">{{fileSize}}</span></span>
+          <button class="iconbtn" onClick="{{openFile}}" aria-label="{{cct.r2.preview_attachment}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+          <button class="iconbtn" onClick="{{download}}" aria-label="{{cct.r2.download_attachment}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"></path></svg></button>
+        </div>
+      </div>
+    </sc-if>
+    <a href="ForumWall.dc.html" class="btn btn-s w100">{{cct.r2.back_to_the_forum_wall}}</a>
+    </div>
+    </sc-if>
+    <sc-if value="{{missing}}" hint-placeholder-val="{{ false }}">
+      <div class="empty" style="padding-top: 48px"><div class="t-h2">{{cct.r2.this_notice_is_no_longer_available}}</div><div class="t-s mut" style="max-width: 260px">{{cct.r2.it_may_have_been_deleted_by_the}}</div><a href="ForumWall.dc.html" class="btn btn-s">{{cct.r2.back_to_the_forum_wall}}</a></div>
+    </sc-if>
+  </div>
+  <sc-if value="{{fileOpen}}" hint-placeholder-val="{{ false }}">
+    <div class="nd-lb" role="dialog" aria-modal="true" aria-label="{{cct.r2.attachment_preview}}">
+      <div class="row" style="gap: 10px"><span class="sp t-s b trunc">{{fileName}}</span><button class="iconbtn" onClick="{{closeFile}}" aria-label="{{cct.common.close}}" style="color: #fff"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+      <div style="flex: 1; border-radius: 12px; background: #fff; color: #1A1820; padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; overflow: auto">
+        <div class="t-over">{{ename}}</div><div class="t-h2">{{title}}</div>
+        <div class="skel" style="height: 10px; width: 92%"></div><div class="skel" style="height: 10px; width: 86%"></div><div class="skel" style="height: 10px; width: 90%"></div><div class="skel" style="height: 10px; width: 60%"></div>
+        <div class="t-c mut" style="margin-top: auto">{{cct.r2.pdf_preview_page_1}} <span class="ph-tag">{{cct.r2.viewer_backend_file_url_required}}</span></div>
+      </div>
+      <button class="btn btn-s w100" onClick="{{download}}">{{cct.r2.download_pdf}}</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status" style="bottom: 24px">{{toastText}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"notice":{"editor":"text","default":""},"variant":{"editor":"enum","options":["standard","table","attachments","plain"],"default":"standard"},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* CrewConnect Association & Forum data (mock, from crewconnect_content.json › assoc_module). Shape is ready for a backend API. */
+var AF = (function (w) {
+  if (w.__ccAssoc) return w.__ccAssoc;
+  var m = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.assoc_module) || { entities: [], notices: [], departments: [], variants: {}, recentFrom: '2026-10-20' };
+  var byId = {};
+  m.entities.forEach(function (e) { byId[e.id] = e; });
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmt(iso, withTime) {
+    if (!iso) return '';
+    var d = new Date(iso); if (isNaN(d)) return iso;
+    var s = d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+    if (withTime === false) return s;
+    var h = d.getHours(), mi = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    return s + ', ' + h + ':' + (mi < 10 ? '0' : '') + mi + ' ' + ap;
+  }
+  function nowIso() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':00'; }
+  // Notices = seed data + this session's changes (store.notices: created[], edited{id: patch}, deleted{id: true}).
+  function notices(store) {
+    var n = (store && store.notices) || {}, cr = n.created || [], ed = n.edited || {}, del = n.deleted || {};
+    return cr.concat(m.notices).filter(function (x) { return !del[x.id] && byId[x.entity]; })
+      .map(function (x) { return ed[x.id] ? Object.assign({}, x, ed[x.id]) : x; })
+      .sort(function (a, b) { return a.postedAt < b.postedAt ? 1 : -1; });
+  }
+  function canPublish(e) { return !!e && e.status === 'active' && e.access === 'issued'; }
+  function entityByEmail(em) { em = (em || '').trim().toLowerCase(); for (var i = 0; i < m.entities.length; i++) if (m.entities[i].email === em) return m.entities[i]; return null; }
+  function preview(x) { var b = x.body || []; for (var i = 0; i < b.length; i++) if (typeof b[i] === 'string') return b[i]; return ''; }
+  return (w.__ccAssoc = { m: m, entities: m.entities, byId: byId, depts: m.departments, fmt: fmt, nowIso: nowIso, notices: notices, canPublish: canPublish, entityByEmail: entityByEmail, preview: preview, isOld: function (x) { return x.postedAt < m.recentFrom; } });
+})(window);
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { fileOpen: false, toast: '' }; }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state, st = this.props.store || {};
+    // The notice comes from the id the Forum Wall, profile or dashboard passed; board variants map to sample notices.
+    const id = this.props.notice || AF.m.variants[this.props.variant || 'standard'] || 'n01';
+    const x = AF.notices(st).find((n) => n.id === id);
+    if (!x) return { found: false, missing: true, fileOpen: false, toast: false };
+    const E = AF.byId[x.entity];
+    const blocks = (x.body || []).map((b) => (typeof b === 'string' ? { isP: true, isT: false, text: b } : { isP: false, isT: true, head: b.table[0], rows: b.table.slice(1) }));
+    const flash = (m) => { this.setState({ toast: m, fileOpen: false }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2200); };
+    return {
+      found: true, missing: false, entity: x.entity, ename: E.name, typeLabel: E.type === 'Forum' ? cc("r2.forum") : cc("r2.association"), typeCls: E.type === 'Forum' ? 'badge b-y' : 'badge b-p',
+      title: x.title, posted: AF.fmt(x.postedAt), isEdited: !!x.editedAt, edited: AF.fmt(x.editedAt), depts: x.depts, blocks,
+      hasFile: !!x.attachment, fileName: x.attachment ? x.attachment.name : '', fileSize: x.attachment ? x.attachment.size : '',
+      fileOpen: s.fileOpen, openFile: () => this.setState({ fileOpen: true }), closeFile: () => this.setState({ fileOpen: false }),
+      download: () => flash(cc("r2.downloaded") + ' ' + (x.attachment ? x.attachment.name : '')), toast: !!s.toast, toastText: s.toast
+    };
+  }
+}
+ccHook(Component, ["blocks","depts"]);
+</script>
+</body>
+</html>

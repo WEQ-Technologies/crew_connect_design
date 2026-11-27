@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create invoice</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="Invoices.dc.html" aria-label="{{cct.common.close}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a><div class="ttl">{{cct.common.new_invoice}}</div><span class="t-s mut b" style="padding-right: 14px">{{cct.invoice_create.inv_2026_015}}</span></div>
+  <div class="sc" style="gap: 18px">
+    <sc-if value="{{showErr}}" hint-placeholder-val="{{ false }}">
+      <div class="alert a-e" role="alert"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg><div>{{cct.invoice_create.add_a_project_name_a}}</div></div>
+    </sc-if>
+    <div class="t-over">{{cct.common.project}}</div>
+    <div class="fld"><label class="lbl" for="pj">{{cct.invoice_create.project_name}} <span class="req">*</span></label><input id="pj" class="{{pjCls}}" placeholder="{{cct.invoice_create.e_g_the_film_or}}" value="{{project}}" onChange="{{onProject}}"><span class="help">{{cct.invoice_create.shown_as_its_own_header}}</span></div>
+    <div class="hr"></div>
+    <div class="t-over">{{cct.common.bill_to}}</div>
+    <div class="fld"><label class="lbl" for="cl">{{cct.invoice_create.client_name}} <span class="req">*</span></label><input id="cl" class="{{clCls}}" placeholder="{{cct.invoice_create.company_or_person}}" value="{{client}}" onChange="{{onClient}}"></div>
+    <!-- R3 · more than one client email: chips + add field; the invoice is shared with every address -->
+    <div class="fld"><label class="lbl" for="ce">{{cct.r3.inv_client_emails}} <span class="opt">{{cct.common.optional}}</span></label>
+      <sc-if value="{{hasEmails}}" hint-placeholder-val="{{ true }}"><div class="chips" role="list" aria-label="{{cct.r3.inv_client_emails}}"><sc-for list="{{emails}}" as="m" hint-placeholder-count="2"><span class="chip on" role="listitem" style="cursor: default; padding-right: 6px">{{m.v}}<button type="button" onClick="{{m.remove}}" aria-label="{{m.aria}}" style="border: 0; background: rgba(255,255,255,.25); color: #fff; width: 22px; height: 22px; border-radius: 11px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0"><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span></sc-for></div></sc-if>
+      <div class="row" style="gap: 8px"><input id="ce" class="{{emCls}}" type="email" placeholder="{{cct.r3.inv_add_email_placeholder}}" value="{{emailDraft}}" onChange="{{onEmail}}" onKeyDown="{{emailKey}}" style="flex: 1"><button type="button" class="btn btn-s" onClick="{{addEmail}}" style="min-height: 48px; padding: 0 14px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{cct.r3.inv_add}}</button></div>
+      <sc-if value="{{emErr}}" hint-placeholder-val="{{ false }}"><span class="errt">{{cct.r3.inv_email_invalid}}</span></sc-if>
+      <span class="help">{{cct.r3.inv_emails_help}}</span>
+    </div>
+    <div class="fld"><label class="lbl" for="cg">{{cct.invoice_create.client_gstin}} <span class="opt">{{cct.common.optional}}</span></label><input id="cg" class="inp" value="{{cct.common.t_27aabcl4821f1z6}}" style="letter-spacing: 0.04em"></div>
+    <!-- R3 · Date of issue and Due date sit one below the other -->
+    <div class="fld"><label class="lbl" for="id">{{cct.r2.date_of_issue}}</label><input id="id" class="inp" type="date" value="2026-10-20"></div>
+    <div class="fld"><label class="lbl" for="dd">{{cct.invoice_create.due_date}}</label><input id="dd" class="inp" type="date" value="2026-11-04"></div>
+
+    <div class="fld"><label class="lbl" for="ivd">{{cct.r2.description}}</label><textarea id="ivd" class="inp" placeholder="{{cct.r2.what_this_invoice_covers_schedule_location_dates}}">{{cct.r2.focus_pulling_services_for_untitled_hindi_feature}}</textarea></div>
+    <div class="hr"></div>
+    <div class="sec"><div class="t-over">{{cct.invoice_create.line_items}}</div><span class="t-c mut">{{itemCount}}</span></div>
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="2">
+      <div class="card" style="gap: 12px">
+        <div class="row"><span class="t-c mut b sp">{{cct.r3.inv_s_no}} {{it.n}}</span><sc-if value="{{it.canRemove}}" hint-placeholder-val="{{ true }}"><button class="iconbtn" onClick="{{it.remove}}" aria-label="{{cct.invoice_create.remove_item}}{{it.n}}" style="width: 36px; height: 36px; color: #B42318"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if></div>
+        <input class="inp" value="{{it.desc}}" onChange="{{it.onDesc}}" placeholder="{{cct.invoice_create.description_e_g_focus_pulling}}" aria-label="{{cct.invoice_create.item}}{{it.n}}{{cct.invoice_create.description}}">
+        <div class="row" style="gap: 10px">
+          <div class="fld sp"><span class="lbl" style="font-size: 12px">{{cct.r2.rate_per_unit}} <span class="req">*</span></span><div class="pre" style="{{it.rateStyle}}"><span>{{sym}}</span><input inputmode="numeric" value="{{it.rate}}" onChange="{{it.onRate}}" aria-label="{{cct.invoice_create.item}}{{it.n}}{{cct.invoice_create.day_rate_2}}"></div></div>
+          <div class="fld" style="width: 64px"><span class="lbl" style="font-size: 12px">{{cct.r2.qty}} <span class="req">*</span></span><input class="{{it.daysCls}}" inputmode="numeric" value="{{it.days}}" onChange="{{it.onDays}}" aria-label="{{cct.invoice_create.item}}{{it.n}} {{cct.r2.quantity}}"></div>
+          <div class="fld" style="width: 96px"><span class="lbl" style="font-size: 12px">{{cct.r2.unit}}</span><select class="inp" value="{{it.unit}}" onChange="{{it.onUnit}}" aria-label="{{cct.invoice_create.item}}{{it.n}} {{cct.r2.unit_2}}"><option value="Days">{{cct.r2.days}}</option><option value="Months">{{cct.r2.months}}</option></select></div>
+        </div>
+        <div class="row t-s"><span class="mut sp">{{cct.common.amount}}</span><b>{{it.amt}}</b></div>
+      </div>
+    </sc-for>
+    <button class="btn btn-s w100" onClick="{{addItem}}" style="border-style: dashed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{cct.invoice_create.add_line_item}}</button>
+
+    <div class="row" style="gap: 10px; align-items: flex-start">
+      <div class="fld sp"><label class="lbl" for="cur">{{cct.r2.currency}}</label><select id="cur" class="inp" value="{{cur}}" onChange="{{onCur}}"><option value="INR">{{cct.r2.inr_default}}</option><option value="USD">{{cct.r2.usd}}</option><option value="EUR">{{cct.r2.eur}}</option><option value="NONE">{{cct.r2.no_currency_symbol}}</option></select><span class="help">{{cct.r2.inr_is_the_default_change_it_or}}</span></div>
+      <div class="fld" style="width: 120px"><label class="lbl" for="gst">{{cct.r2.gst_2}}</label><div class="pre"><input id="gst" inputmode="decimal" value="{{gst}}" onChange="{{onGst}}" aria-label="{{cct.r2.gst_percentage}}"><span>%</span></div></div>
+    </div>
+    <span class="help" style="margin-top: -8px">{{cct.invoice_create.cgst_sgst_vs_igst_split}} <span class="ph-tag">{{cct.invoice_create.gst_logic_tbc}}</span></span>
+    <div class="hr"></div>
+    <div class="t-over">{{cct.r2.account_details}}</div>
+    <div class="fld"><label class="lbl" for="an">{{cct.r2.account_name}}</label><input id="an" class="inp" value="{{me.name}}"></div>
+    <div class="row" style="gap: 10px"><div class="fld sp"><label class="lbl" for="bk">{{cct.r2.bank_branch}}</label><input id="bk" class="inp" value="{{me.bank}}"></div></div>
+    <div class="row" style="gap: 10px"><div class="fld sp"><label class="lbl" for="ac">{{cct.r2.account_no}}</label><input id="ac" class="inp" inputmode="numeric" value="{{me.acno}}"></div><div class="fld sp"><label class="lbl" for="ifsc">{{cct.r2.ifsc}}</label><input id="ifsc" class="inp" value="{{me.ifsc}}" style="text-transform: uppercase"></div></div>
+    <div class="fld"><label class="lbl" for="upi">{{cct.r2.upi_id}} <span class="opt">{{cct.common.optional}}</span></label><input id="upi" class="inp" value="{{me.upi}}"><span class="help">{{cct.r2.saved_for_your_next_invoices_only_the}}</span></div>
+    <div class="fld"><span class="lbl">{{cct.r2.signature}}</span>
+      <div class="file" style="align-items: center"><div style="font: italic 600 20px/26px Georgia, 'Times New Roman', serif; color: #1A1820; flex: 1; padding-left: 6px">{{me.name}}</div><button class="btn btn-s btn-sm">{{cct.r2.change}}</button></div>
+      <span class="help">{{cct.r2.draw_upload_an_image_or_use_your}}</span>
+    </div>
+
+    <div class="card" style="gap: 2px; background: #F6F3FF; border-color: #EFEAFE">
+      <div class="kv"><span>{{cct.common.subtotal}}</span><span>{{sub}}</span></div>
+      <div class="kv"><span>{{cct.invoice_create.gst}}{{gst}}%)</span><span>{{tax}}</span></div>
+      <div class="hr" style="margin: 6px 0"></div>
+      <div class="kv" style="font-size: 17px"><span style="color: #1A1820; font-weight: 700">{{cct.common.total}}</span><span style="font-weight: 800">{{total}}</span></div>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{cct.common.saved}}</div>
+  </sc-if>
+
+  <div class="foot">
+    <sc-if value="{{valid}}" hint-placeholder-val="{{ true }}"><a class="btn btn-p" href="InvoiceDetail.dc.html" style="flex: 1.5">{{cct.invoice_create.preview_invoice}}</a></sc-if>
+    <sc-if value="{{invalid}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" onClick="{{tryPreview}}" style="flex: 1.5">{{cct.invoice_create.preview_invoice}}</button></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* R7: sample accounts (crewconnect_content.json › accounts) — the one place names, roles and the vendor profile are defined. */
+var ACC = (function (w) { if (w.__ccAcc) return w.__ccAcc;
+  var d = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.accounts) || {"about": "Sample accounts (Revision 7). Single source of truth for who can log in, their roles and their vendor profile. Every screen reads this block (via the ACC helper); no screen hardcodes these names or roles. Log in with the account ID (crew01 / crew02) or its demo email. Personal details follow sample_profiles: only name, city and public links are shown; designation, skills, bio, phone and bank details are left empty until verified.", "default": "crew01", "list": [{"id": "crew01", "name": "Varun Khandelwal", "email": "crew01@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": false}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster"], "vendor": null}, {"id": "crew02", "name": "Ria Bhavsar", "email": "crew02@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": true}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster", "Vendor"], "vendor": "vendor-house"}], "vendors": [{"id": "vendor-house", "name": "Vendor House", "type": "Vendor", "owner": "crew02", "city": "Mumbai", "initials": "VH", "contact": {"person": "Ria Bhavsar", "phone": "", "email": "", "website": "", "gstin": ""}, "note": "Business category, description, offices (city level), clientele and listings are sample demo content carried over from the previous sample vendor. Contact identifiers (phone, email, website, GSTIN, street address) are not set."}], "labels": {"notAdded": "Not added yet", "demoHint": "Demo accounts: crew01 · crew02", "crewMember": "Crew Member"}};
+  var by = {}, vb = {}, vn = {}; d.list.forEach(function (a) { by[a.id] = a; }); d.vendors.forEach(function (v) { vb[v.id] = v; vn[v.name] = v; });
+  function byLogin(s) { s = String(s || '').trim().toLowerCase(); for (var i = 0; i < d.list.length; i++) { var a = d.list[i]; if (a.id === s || a.email === s) return a; } return null; }
+  function def() { return by[d.default]; }
+  function byName(n) { for (var i = 0; i < d.list.length; i++) if (d.list[i].name === n) return d.list[i]; return null; }
+  function vendorOf(a) { return a && a.vendor ? vb[a.vendor] || null : null; }
+  function forStore(st) { return st && st.acct ? by[st.acct] || null : (st && st.name ? byName(st.name) : null); }
+  // Standalone artboards have no logged-in store: pick the sample account whose roles match the artboard's (default: all roles → crew02).
+  function byRoles(r) { r = r || { crew: true, vendor: true }; for (var i = 0; i < d.list.length; i++) { var x = d.list[i]; if (!!x.roles.crew === !!r.crew && !!x.roles.vendor === !!r.vendor) return x; } return def(); }
+  function me(st) { st = st || {}; return forStore(st) || (st.name ? null : byRoles(st.roles)); }
+  function name(st) { st = st || {}; var a = me(st); return st.name || (a ? a.name : def().name); }
+  function storeFor(a) { var v = vendorOf(a); return { acct: a.id, name: a.name, email: a.email, roles: { crew: !!a.roles.crew, vendor: !!a.roles.vendor }, modes: { seek: !!a.modes.seek, post: !!a.modes.post },
+    bizName: v ? v.name : '', phone: '', photo: false, prof: { pro: !!a.roles.crew, refs: !!a.roles.crew, biz: !!v, contact: false } }; }
+  return (w.__ccAcc = { d: d, list: d.list, labels: d.labels, byId: function (i) { return by[i] || null; }, byLogin: byLogin, byName: byName, def: def,
+    vendorOf: vendorOf, vendorByName: function (n) { return vn[n] || null; }, ownerOf: function (v) { return v ? by[v.owner] || null : null; }, forStore: forStore, me: me, name: name, storeFor: storeFor }); })(window);
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.nextId = 3;
+    this.state = {
+      client: cc("common.lantern_pictures"), project: cc("common.untitled_hindi_feature"), gst: '18', cur: 'INR', tried: false, toast: false,
+      emails: [cc("common.accounts_lanternpictures_in"), 'production@lanternpictures.in'], emailDraft: '', emErr: false,
+      items: [
+        { id: 1, desc: cc("common.focus_pulling_principal_photography"), rate: '10000', days: '6', unit: 'Days' },
+        { id: 2, desc: cc("common.camera_prep_day"), rate: '5000', days: '1', unit: 'Days' }
+      ]
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  addEmail() {
+    const v = (this.state.emailDraft || '').trim().replace(/,$/, '');
+    if (!v) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return this.setState({ emErr: true });
+    if (!this.state.emails.includes(v)) this.setState({ emails: [...this.state.emails, v] });
+    this.setState({ emailDraft: '', emErr: false });
+  }
+  renderVals() {
+    const s = this.state;
+    const num = (v) => Number(String(v).replace(/[^0-9.]/g, '')) || 0;
+    const SYM = { INR: '₹', USD: '$', EUR: '€', NONE: '' };
+    const sym = SYM[s.cur] === undefined ? '₹' : SYM[s.cur];
+    const inr = (v) => sym + Math.round(v).toLocaleString(s.cur === 'USD' || s.cur === 'EUR' ? 'en-US' : 'en-IN');
+    const upd = (id, k, v) => this.setState({ items: s.items.map((x) => (x.id === id ? { ...x, [k]: v } : x)) });
+    const sub = s.items.reduce((a, x) => a + num(x.rate) * num(x.days), 0);
+    const tax = sub * num(s.gst) / 100;
+    const valid = !!s.project.trim() && (!!s.client.trim() && s.items.length > 0 && s.items.every((x) => num(x.rate) > 0 && num(x.days) > 0));
+    return {
+      // R7: account name = the logged-in account; bank fields start empty for sample accounts.
+      me: (() => { const m = (() => { const st = this.props.store || {}, A = ACC.me(st), n = ACC.name(st); return { name: n, ini: n.split(/\s+/).map((x) => x[0]).join('').slice(0, 2).toUpperCase(), real: !!A, email: st.email || (A ? A.email : cc("common.priya_nair_gmail_com")), city: A ? A.city : '' }; })(); return { ...m, bank: m.real ? '' : cc("r2.hdfc_bank_goregaon_east"), acno: m.real ? '' : '50100234814821', ifsc: m.real ? '' : 'HDFC0000123', upi: m.real ? '' : 'priyanair@hdfcbank' }; })(),
+      client: s.client, gst: s.gst,
+      emails: s.emails.map((v) => ({ v, aria: cc("r3.inv_remove_email", { e: v }), remove: () => this.setState({ emails: s.emails.filter((x) => x !== v) }) })),
+      hasEmails: s.emails.length > 0, emailDraft: s.emailDraft, emErr: s.emErr, emCls: s.emErr ? 'inp bad' : 'inp',
+      onEmail: (e) => this.setState({ emailDraft: e.target.value, emErr: false }),
+      emailKey: (e) => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); this.addEmail(); } },
+      addEmail: () => this.addEmail(),
+      clCls: s.tried && !s.client.trim() ? 'inp bad' : 'inp',
+      pjCls: s.tried && !s.project.trim() ? 'inp bad' : 'inp', project: s.project, onProject: (e) => this.setState({ project: e.target.value }),
+      onClient: (e) => this.setState({ client: e.target.value }),
+      onGst: (e) => this.setState({ gst: e.target.value }),
+      cur: s.cur, sym, onCur: (e) => this.setState({ cur: e.target.value }),
+      itemCount: s.items.length + (s.items.length === 1 ? cc("invoice_create.item_2") : cc("invoice_create.items")),
+      items: s.items.map((x, i) => {
+        const badR = s.tried && !(num(x.rate) > 0), badD = s.tried && !(num(x.days) > 0);
+        return {
+          ...x, n: i + 1, canRemove: s.items.length > 1,
+          amt: inr(num(x.rate) * num(x.days)),
+          rateStyle: badR ? 'border-color:#B42318;box-shadow:0 0 0 3px #FDECEA' : '',
+          daysCls: badD ? 'inp bad' : 'inp',
+          onDesc: (e) => upd(x.id, 'desc', e.target.value),
+          onRate: (e) => upd(x.id, 'rate', e.target.value),
+          onDays: (e) => upd(x.id, 'days', e.target.value), unit: x.unit || 'Days', onUnit: (e) => upd(x.id, 'unit', e.target.value),
+          remove: () => this.setState({ items: s.items.filter((y) => y.id !== x.id) })
+        };
+      }),
+      addItem: () => this.setState({ items: [...s.items, { id: this.nextId++, desc: '', rate: '', days: '', unit: 'Days' }] }),
+      sub: inr(sub), tax: inr(tax), total: inr(sub + tax),
+      valid, invalid: !valid, showErr: s.tried && !valid,
+      tryPreview: () => this.setState({ tried: true }),
+      toast: s.toast
+    };
+  }
+}
+ccHook(Component, ["project","client","it","gst","cur","sym","emails","emailDraft"]);
+</script>
+</body>
+</html>

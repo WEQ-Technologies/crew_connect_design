@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Discover</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <sc-if value="{{isAssoc}}" hint-placeholder-val="{{ false }}">
+    <div class="bar"><a class="iconbtn" href="AssocNotices.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.discover}}</div></div>
+  </sc-if>
+  <div style="flex: none; padding: 0 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <sc-if value="{{notAssoc}}" hint-placeholder-val="{{ true }}"><div style="padding-top: 20px"><div class="t-h1">{{cct.common.discover}}</div></div></sc-if>
+    <div class="seg" role="tablist" style="grid-template-columns: 1fr 1fr">
+      <button role="tab" class="{{feedTabCls}}" aria-selected="{{onFeed}}" onClick="{{toFeed}}">{{cct.common.feed}}</button>
+      <button role="tab" class="{{custTabCls}}" aria-selected="{{onCust}}" onClick="{{toCust}}">{{cct.discover_feed.customise_feed}}</button>
+    </div>
+    <sc-if value="{{onFeed}}" hint-placeholder-val="{{ true }}">
+      <div class="row" style="gap: 10px"><button class="{{fBtnCls}}" onClick="{{openF}}" aria-label="{{cct.discover_feed.open_filters}}{{fN}}{{cct.discover_feed.selected}}" style="display: inline-flex; align-items: center; gap: 6px; flex: none"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>{{cct.common.filters}}<sc-if value="{{fHasN}}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #fff; color: #7C3AED; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">{{fN}}</span></sc-if></button><span class="t-c mut trunc sp">{{fSummary}}</span></div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{fOpen}}" hint-placeholder-val="{{ false }}"><dc-import name="FiltersPage" title="{{fTitle}}" sections="{{fSecs}}" value="{{fVal}}" preview="{{fPrev}}" noun="{{fNoun}}" onApply="{{fApply}}" onClose="{{fClose}}" hint-size="390px,844px" style="position: absolute; inset: 0; z-index: 60"></dc-import></sc-if>
+  <!-- FEED -->
+  <sc-if value="{{onFeed}}" hint-placeholder-val="{{ true }}">
+    <div class="sc" style="padding-top: 0; gap: 12px">
+      <div class="row t-c mut"><span class="sp">{{feedCount}}</span><span>{{cct.common.newest_first}}</span></div>
+      <sc-for list="{{feed}}" as="f" hint-placeholder-count="4">
+        <div>
+          <sc-if value="{{f.isJob}}" hint-placeholder-val="{{ true }}">
+            <a href="JobDetail.dc.html" data-job="{{f.variant}}" class="card" style="text-decoration: none; gap: 8px">
+              <div class="row"><span class="badge b-p"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg>{{cct.discover_feed.job_post}}</span><span class="sp"></span><span class="t-c mut">{{f.when}}</span></div>
+              <div class="t-h3">{{f.title}}</div>
+              <div class="t-s mut">{{f.org}}</div>
+              <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"></path><circle cx="7.5" cy="8" r="1.5"></circle></svg>{{f.cat}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{f.loc}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{f.dur}}</span></div>
+              <div class="pay">{{f.pay}}</div><sc-if value="{{f.disc}}" hint-placeholder-val="{{ false }}"><div class="alert a-w" style="padding: 8px 10px; font-size: 12px; line-height: 16px; align-self: stretch"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"></path><path d="M12 10v4M12 17v.01"></path></svg><span>{{cct.r2.job_posters_may_be_employees}}</span></div></sc-if>
+            </a>
+          </sc-if>
+          <sc-if value="{{f.isNotice}}" hint-placeholder-val="{{ false }}">
+            <a href="NoticeDetail.dc.html" class="card" style="text-decoration: none; gap: 8px">
+              <div class="row"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a3 3 0 0 1 0 6"></path></svg>{{cct.discover_feed.association_notice}}</span><sc-if value="{{f.isNew}}" hint-placeholder-val="{{ false }}"><span class="badge b-w">{{cct.common.new}}</span></sc-if><span class="sp"></span><span class="t-c mut">{{f.when}}</span></div>
+              <div class="row" style="gap: 10px"><dc-import name="AssocLogo" code="{{f.a}}" size="36" hint-size="36px,36px"></dc-import><span class="t-s b sp trunc">{{f.assoc}}</span></div>
+              <div class="t-h3">{{f.title}}</div>
+              <div class="t-s mut clamp2">{{f.preview}}</div>
+              
+            </a>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- CUSTOMISE: filters -->
+  <sc-if value="{{showPanel}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 0; gap: 16px">
+      <div class="t-s mut">{{cct.discover_feed.filter_by_skill_role_location}} <b style="color: #1A1820">{{connCount}}{{cct.discover_feed.connections}}</b> {{cct.discover_feed.are_shown}}</div>
+      <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{cct.discover_feed.search_by_name_skill_or}}" value="{{dq}}" onChange="{{onQ}}" aria-label="{{cct.discover_feed.search_connection_updates}}"></div>
+      <div class="fld"><span class="lbl">{{cct.common.skill}}</span>
+        <div class="chips"><sc-for list="{{skillF}}" as="t" hint-placeholder-count="4"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+      </div>
+      <div class="fld"><span class="lbl">{{cct.common.role}}</span>
+        <div class="chips"><sc-for list="{{roleF}}" as="t" hint-placeholder-count="4"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+        <span class="help">{{cct.discover_feed.skill_and_role_lists}} <span class="ph-tag">{{cct.common.placeholder_pending_client_input}}</span></span>
+      </div>
+      <div class="fld"><span class="lbl">{{cct.discover_feed.update_type}}</span>
+        <div class="chips"><sc-for list="{{types}}" as="t" hint-placeholder-count="3"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+        <span class="help">{{cct.discover_feed.select_none_to_include_every}}</span>
+      </div>
+      <div class="fld"><span class="lbl">{{cct.common.location}}</span>
+        <div class="chips"><sc-for list="{{locs}}" as="l" hint-placeholder-count="3"><button class="{{l.cls}}" aria-pressed="{{l.on}}" onClick="{{l.pick}}">{{l.label}}</button></sc-for></div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{showPanel}}" hint-placeholder-val="{{ false }}">
+    <div class="foot">
+      <button class="btn btn-s" style="flex: 1" onClick="{{clearAll}}">{{cct.common.clear}}</button>
+      <button class="btn btn-p" style="flex: 2" onClick="{{apply}}">{{applyLabel}}</button>
+    </div>
+  </sc-if>
+
+  <!-- CUSTOMISE: results -->
+  <sc-if value="{{showResults}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="padding-top: 0; gap: 12px">
+      <div class="card tint-p" style="padding: 12px 14px; gap: 10px">
+        <div class="row"><span class="t-s b sp">{{resCount}}</span><button class="btn btn-t btn-sm" onClick="{{edit}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>{{cct.discover_feed.edit_filters}}</button></div>
+        <div class="chips"><sc-for list="{{activeTags}}" as="a" hint-placeholder-count="2"><span class="tag" style="background: rgba(255,255,255,.8)">{{a}}</span></sc-for></div>
+        <button class="btn btn-t btn-sm" style="align-self: flex-start; padding: 0" onClick="{{clearAll}}">{{cct.common.clear_filters}}</button>
+      </div>
+      <sc-for list="{{results}}" as="u" hint-placeholder-count="4">
+        <a href="UserProfile.dc.html" aria-label="{{cct.discover_feed.open}}{{u.who}}" class="card" style="text-decoration: none; gap: 10px">
+          <div class="row" style="gap: 12px; align-items: flex-start"><span class="{{u.avCls}}" data-ini="{{u.ini}}" style="width: 48px; height: 48px; border-radius: 24px">{{u.ini}}</span><span class="sp" style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span class="row" style="gap: 6px"><span class="t-h3 trunc">{{u.who}}</span><span class="t-c mut" style="margin-left: auto; white-space: nowrap">{{u.when}}</span></span><span class="t-s b" style="color: #7C3AED">{{u.titles}}</span><span class="t-c mut">{{u.dept}} · {{u.city}}</span></span></div>
+          <div class="row" style="gap: 10px; flex-wrap: wrap"><sc-if value="{{u.hasAvail}}" hint-placeholder-val="{{ true }}"><span class="{{u.availCls}}">{{u.availText}}</span></sc-if><sc-if value="{{u.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{u.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{u.mutText}}</span></span></sc-if></div>
+          <div class="row" style="gap: 8px"><span class="{{u.badge}}">{{u.typeLabel}}</span><span class="t-s b">{{u.text}}</span></div>
+          <div class="t-s" style="padding: 10px 12px; background: rgba(255,255,255,.5); border-radius: 10px; display: flex; gap: 8px; align-items: center"><sc-if value="{{u.isLink}}" hint-placeholder-val="{{ true }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></sc-if><sc-if value="{{u.isSkill}}" hint-placeholder-val="{{ false }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"></path></svg></sc-if><sc-if value="{{u.isLoc}}" hint-placeholder-val="{{ false }}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></sc-if><span class="sp">{{u.detail}}</span></div>
+
+        </a>
+      </sc-for>
+      <sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}">
+        <div class="empty"><div class="t-h2">{{cct.discover_feed.no_matching_updates}}</div><div class="t-s mut" style="max-width: 260px">{{cct.discover_feed.none_of_your_connections_have}}</div><button class="btn btn-s" onClick="{{edit}}">{{cct.discover_feed.change_filters}}</button></div>
+      </sc-if>
+    </div>
+  </sc-if>
+  <sc-if value="{{notAssoc}}" hint-placeholder-val="{{ true }}"><dc-import name="RoleNav" fit="yes" active="home" hint-size="390px,80px"></dc-import></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"role":{"editor":"enum","options":["seeker","poster","vendor","association"],"default":"seeker"},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  net(n) {
+    const N = { 'Meera Joshi': [12, 'av'], 'Arjun Kulkarni': [4, 'tb'], 'Sana Mirza': [7, 'av'], 'Farhan Siddiqui': [9, 'un'], 'Ananya Iyer': [3, 'av'], 'Vikram Bhosle': [15, 'tb'], 'Kavya Menon': [18, ''], 'Northlight Studios': [6, ''], 'Vendor House': [11, ''], 'Kilowatt Lighting Co.': [2, ''], 'Nisha Verma': [5, 'av'], 'Aditya Rao': [8, 'av'], 'Priya Nair': [10, 'av'], 'Rohan D’Souza': [1, 'un'], 'Karthik Subramanian': [0, 'av'], 'Imran Shaikh': [2, 'av'] };
+    const pool = ['FS', 'AI', 'MJ', 'VB', 'AK', 'SM', 'KM', 'NV'];
+    const e = N[n] || [0, ''];
+    const me = n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const m = e[0];
+    const AV = { av: [cc("common.available"), 'avail a-av'], un: ['Unavailable', 'avail a-un'], tb: ['Tentatively booked', 'avail a-tb'] };
+    return {
+      isHiring: ['Kavya Menon', 'Vikram Bhosle', 'Nisha Verma'].indexOf(n) >= 0,
+      mutN: m, hasMut: m > 0, noMut: m === 0,
+      mutText: m === 0 ? cc("common.no_mutual_connections") : m + (m === 1 ? cc("discover_feed.mutual_connection") : cc("discover_feed.mutual_connections")),
+      mutAv: pool.filter((x) => x !== me).slice(0, Math.min(3, m)),
+      hasAvail: !!e[1], availText: e[1] ? AV[e[1]][0] : '', availCls: e[1] ? AV[e[1]][1] : ''
+    };
+  }
+  constructor(p) {
+    super(p);
+    this.A = {
+      CTG: { name: cc("common.cine_technicians_guild_of_maharashtra"), short: cc("common.cine_technicians_guild"), bg: '#EFEAFE', fg: '#6527C8' },
+      WLA: { name: cc("common.western_india_film_lighting_association"), short: cc("common.film_lighting_assn"), bg: '#E6F2DC', fg: '#2C6619' },
+      SSP: { name: cc("common.screen_sound_professionals_forum"), short: cc("common.screen_sound_forum"), bg: '#FFF2DB', fg: '#8A5300' },
+      IPC: { name: cc("common.independent_producers_council"), short: cc("common.producers_council"), bg: '#EEF4EC', fg: '#1A1820' }
+    };
+    this.notices = [
+      { a: 'CTG', date: '27 Oct 2026', title: cc("discover_feed.revised_minimum_day_rates_for"), preview: cc("discover_feed.following_the_general_body_meeting"), pdf: true },
+      { a: 'WLA', date: '25 Oct 2026', title: cc("discover_feed.mandatory_electrical_safety_refresher_november"), preview: cc("discover_feed.all_member_gaffers_and_best"), pdf: true },
+      { a: 'SSP', date: '22 Oct 2026', title: cc("common.wireless_frequency_guidance_for_outdoor"), preview: cc("discover_feed.members_have_reported_interference_near"), pdf: false },
+      { a: 'CTG', date: '18 Oct 2026', title: cc("common.office_closed_for_diwali_7"), preview: cc("discover_feed.the_guild_office_and_helpline"), pdf: false },
+      { a: 'WLA', date: '12 Oct 2026', title: cc("common.new_member_registration_window_1"), preview: cc("discover_feed.applications_for_new_members_open"), pdf: true }
+    ];
+    this.jobs = [
+      { title: cc("common.focus_puller_feature_film_hindi"), dur: cc("common.t_32_days"), org: cc("common.lantern_pictures"), cat: 'Camera', loc: cc("common.film_city_mumbai"), pay: cc("common.inr_8_000_inr_12"), ago: cc("common.t_2d_ago"), d: 2 },
+      { title: cc("common.second_unit_camera_operator_action"), dur: cc("common.t_18_days"), variant: 'disc', disc: true, org: cc("common.redline_motion_pictures"), cat: 'Camera', loc: cc("common.ramoji_film_city_hyderabad"), pay: cc("common.inr_10_000_inr_14"), ago: cc("common.t_2d_ago"), d: 2 },
+      { title: cc("common.assistant_editor_web_series_8"), dur: cc("common.t_3_months"), org: 'Northlight Studios', cat: 'Editing & Post', loc: cc("common.andheri_west_mumbai"), pay: cc("common.inr_55_000_inr_70"), ago: cc("common.t_3d_ago"), d: 3 },
+      { title: cc("common.location_sound_recordist_wildlife_documentary"), dur: cc("common.t_21_days"), org: cc("common.kite_and_kettle_films"), cat: 'Sound', loc: cc("common.leh_ladakh_travel"), pay: cc("common.inr_6_000_inr_9"), ago: cc("common.t_4d_ago"), d: 4 },
+      { title: 'Gaffer — TVC, 2-day shoot', dur: cc("common.t_2_days"), org: cc("common.pinewood_ads"), cat: 'Lighting & Grip', loc: cc("common.bandra_mumbai"), pay: cc("common.payment_not_specified"), ago: cc("common.t_5d_ago"), d: 5 },
+      { title: cc("common.colourist_independent_feature_davinci_resolve"), dur: cc("common.t_4_weeks"), org: cc("common.saffron_frame"), cat: 'Editing & Post', loc: cc("common.indiranagar_bengaluru"), pay: cc("common.inr_2_50_000_project"), ago: cc("common.t_6d_ago"), d: 6 }
+    ];
+    this.nd = { '27 Oct 2026': 3, '25 Oct 2026': 5, '22 Oct 2026': 8, '18 Oct 2026': 12, '12 Oct 2026': 18 };
+    this.updates = [
+      { who: 'Farhan Siddiqui', type: 'link', text: cc("discover_feed.added_a_new_work_link"), detail: cc("common.vimeo_vimeo_com_farhansiddiqui"), city: cc("common.hyderabad"), when: cc("common.t_3h_ago") },
+      { who: 'Ananya Iyer', type: 'skill', text: cc("discover_feed.updated_their_skill_board"), detail: cc("common.added_davinci_resolve_and_assembly"), city: cc("common.bengaluru"), when: cc("common.t_5h_ago") },
+      { who: 'Arjun Kulkarni', type: 'location', text: cc("discover_feed.changed_their_location"), detail: cc("common.now_based_in_pune"), city: cc("common.pune"), when: cc("common.yesterday") },
+      { who: 'Kavya Menon', type: 'link', text: cc("discover_feed.added_a_new_work_link"), detail: cc("discover_feed.website_lanternpictures_in_showreel"), city: cc("common.mumbai"), when: cc("common.yesterday") },
+      { who: 'Farhan Siddiqui', type: 'skill', text: cc("discover_feed.updated_their_skill_board"), detail: cc("discover_feed.added_red_and_data_wrangling"), city: cc("common.hyderabad"), when: cc("common.t_2_days_ago") },
+      { who: 'Vendor House', type: 'location', text: cc("discover_feed.updated_their_business_location"), detail: cc("common.goregaon_east_mumbai"), city: cc("common.mumbai"), when: cc("common.t_3_days_ago") },
+      { who: 'Ananya Iyer', type: 'link', text: cc("discover_feed.added_a_new_work_link"), detail: cc("discover_feed.imdb_imdb_com_name_ananya"), city: cc("common.bengaluru"), when: cc("discover_feed.t_4_days_ago") },
+      { who: 'Arjun Kulkarni', type: 'skill', text: cc("discover_feed.updated_their_skill_board"), detail: cc("discover_feed.added_sound_devices_and_boom"), city: cc("common.pune"), when: cc("common.t_1_week_ago") }
+    ];
+    this.subs = { 'Farhan Siddiqui': '1st Assistant Camera', 'Ananya Iyer': 'Editor', 'Arjun Kulkarni': 'Sound Recordist', 'Kavya Menon': cc("common.producer_lantern_pictures"), 'Vendor House': cc("discover_feed.product_provider_camera_and_lenses") };
+    this.P = {
+      'Farhan Siddiqui': { titles: ['1st Assistant Camera', 'Focus Puller'], dept: 'Camera', skills: [cc("common.camera_prep"), 'RED', cc("common.data_wrangling")] },
+      'Ananya Iyer': { titles: ['Editor', 'Assistant Editor'], dept: 'Editing & Post', skills: [cc("common.premiere_pro"), cc("common.davinci_resolve"), cc("common.assembly_cuts")] },
+      'Arjun Kulkarni': { titles: ['Sound Recordist', 'Boom Operator'], dept: 'Sound', skills: [cc("common.location_sound"), cc("common.boom_ops"), cc("common.sound_devices")] },
+      'Kavya Menon': { titles: [cc("common.line_producer")], dept: 'Production', skills: [cc("common.budgeting"), cc("common.scheduling")] },
+      'Vendor House': { titles: [cc("discover_feed.product_provider_camera_and_lenses")], dept: cc("discover_feed.equipment"), skills: [] }
+    };
+    this.T = { link: cc("discover_feed.new_work_links"), skill: cc("discover_feed.skill_board_updates"), location: cc("discover_feed.location_updates") };
+    this.state = { tab: 'feed', kind: 'all', dTypes: [], dLoc: 'Any', dSkill: 'Any', dRole: 'Any', dq: '', applied: null, editing: false };
+  }
+  renderVals() {
+    const s = this.state, role = this.props.role ?? 'seeker';
+    const store = this.props.store || {};
+    const conn = store.conn || null;
+    const isConn = (n) => !conn || conn[n] === 'connected';
+    // FEED
+    const posts = (store.posts || []).map((n) => ({ ...n, isNew: true, d: 0, when: cc("common.just_now") }));
+    const notices = posts.concat(this.notices.map((n) => ({ ...n, d: this.nd[n.date] || 9, when: n.date.replace(' 2026', '') })));
+    const items = [];
+    if (s.kind !== 'notices') this.jobs.forEach((j) => items.push({ ...j, isJob: true, isNotice: false, when: j.ago }));
+    if (s.kind !== 'jobs') notices.forEach((n) => { const A = this.A[n.a]; items.push({ ...n, isJob: false, isNotice: true, isNew: !!n.isNew, pdf: !!n.pdf, assoc: A.name,
+      logo: 'width:32px;height:32px;border-radius:9px;flex:none;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:1px solid #E1EADF;background:' + A.bg + cc("common.color") + A.fg }); });
+    items.sort((a, b) => a.d - b.d);
+    // CUSTOMISE
+    const match = (f) => this.updates.filter((u) => isConn(u.who)
+      && (!f.types.length || f.types.indexOf(u.type) >= 0)
+      && (f.loc === 'Any' || u.city === f.loc)
+      && (f.skill === 'Any' || (this.P[u.who] || { skills: [] }).skills.indexOf(f.skill) >= 0)
+      && (f.role === 'Any' || (this.P[u.who] || { titles: [] }).titles.indexOf(f.role) >= 0)
+      && (!f.q.trim() || (u.who + ' ' + u.text + ' ' + u.detail).toLowerCase().includes(f.q.trim().toLowerCase())));
+    const draft = { types: s.dTypes, loc: s.dLoc, q: s.dq, skill: s.dSkill, role: s.dRole };
+    const draftN = match(draft).length;
+    const res = s.applied ? match(s.applied) : [];
+    const conns = Object.keys(this.subs).filter(isConn).length;
+    const chip = (on) => (on ? 'chip on' : 'chip');
+    const onCust = s.tab === 'cust';
+    const tags = s.applied ? (s.applied.types.length ? s.applied.types.map((t) => this.T[t]) : [cc("discover_feed.all_update_types")]).concat(s.applied.skill === 'Any' ? [] : [s.applied.skill], s.applied.role === 'Any' ? [] : [s.applied.role], s.applied.loc === 'Any' ? [] : [s.applied.loc], s.applied.q.trim() ? ['“' + s.applied.q.trim() + '”'] : []) : [];
+    const BADGE = { link: 'badge b-p', skill: 'badge b-g', location: 'badge b-w' };
+    const SHORT = { link: cc("discover_feed.work_link"), skill: cc("discover_feed.skill_board"), location: cc("common.location") };
+    // Filters page for the Feed: the same three post types, same filtering.
+    const KL = { all: 'All', jobs: cc("common.job_posts"), notices: cc("discover_feed.association_and_forum_updates") };
+    const fN = s.kind !== 'all' ? 1 : 0;
+    const fRet = { fOpen: !!s.fOpen, openF: () => this.setState({ fOpen: true }), fClose: () => this.setState({ fOpen: false }),
+      fSecs: [{ k: 'kind', title: cc("discover_feed.post_type"), def: 'all', opts: ['all', 'jobs', 'notices'].map((k) => ({ v: k, l: KL[k] })) }],
+      fVal: { kind: s.kind }, fN, fHasN: fN > 0, fBtnCls: fN ? 'chip on' : 'chip', fSummary: fN ? KL[s.kind] : cc("discover_feed.all_posts"), fTitle: cc("common.discover_feed"), fNoun: 'posts',
+      fPrev: (d) => (d.kind !== 'notices' ? this.jobs.length : 0) + (d.kind !== 'jobs' ? notices.length : 0),
+      fApply: (d) => this.setState({ kind: d.kind, fOpen: false }) };
+    return {
+      ...fRet,
+      isAssoc: role === 'association', notAssoc: role !== 'association',
+      is_seeker: role === 'seeker', is_poster: role === 'poster', is_vendor: role === 'vendor',
+      onFeed: !onCust, onCust,
+      feedTabCls: !onCust ? 'on' : '', custTabCls: onCust ? 'on' : '',
+      toFeed: () => this.setState({ tab: 'feed' }), toCust: () => this.setState({ tab: 'cust' }),
+      kinds: [['all', 'All'], ['jobs', cc("common.job_posts")], ['notices', cc("discover_feed.association_and_forum_updates")]].map(([k, l]) => ({ label: l, on: s.kind === k, cls: chip(s.kind === k), pick: () => this.setState({ kind: k }) })),
+      feed: items, feedCount: items.length + (items.length === 1 ? cc("discover_feed.post") : cc("discover_feed.posts_2")),
+      showPanel: onCust && (!s.applied || s.editing), showResults: onCust && !!s.applied && !s.editing,
+      connCount: conns,
+      dq: s.dq, onQ: (e) => this.setState({ dq: e.target.value }),
+      types: ['link', 'skill', 'location'].map((t) => { const on = s.dTypes.indexOf(t) >= 0; return { label: this.T[t], on, cls: chip(on), pick: () => this.setState({ dTypes: on ? s.dTypes.filter((x) => x !== t) : s.dTypes.concat([t]) }) }; }),
+      skillF: ['Any', cc("common.camera_prep"), 'RED', cc("common.premiere_pro"), cc("common.davinci_resolve"), cc("common.location_sound"), cc("common.boom_ops"), cc("common.budgeting")].map((l) => ({ label: l === 'Any' ? cc("discover_feed.any_skill") : l, on: s.dSkill === l, cls: chip(s.dSkill === l), pick: () => this.setState({ dSkill: l }) })),
+      roleF: ['Any', 'Focus Puller', '1st Assistant Camera', 'Editor', 'Sound Recordist', cc("common.line_producer")].map((l) => ({ label: l === 'Any' ? cc("discover_feed.any_role") : l, on: s.dRole === l, cls: chip(s.dRole === l), pick: () => this.setState({ dRole: l }) })),
+      locs: ['Any', cc("common.mumbai"), cc("common.pune"), cc("common.hyderabad"), cc("common.bengaluru")].map((l) => ({ label: l === 'Any' ? cc("discover_feed.any_location") : l, on: s.dLoc === l, cls: chip(s.dLoc === l), pick: () => this.setState({ dLoc: l }) })),
+      applyLabel: draftN ? cc("discover_feed.apply") + ccv(draftN) + (draftN === 1 ? cc("discover_feed.update") : cc("discover_feed.updates")) : cc("common.apply_filters"),
+      apply: () => this.setState({ applied: { types: s.dTypes.slice(), loc: s.dLoc, q: s.dq, skill: s.dSkill, role: s.dRole }, editing: false }),
+      edit: () => this.setState({ editing: true }),
+      clearAll: () => this.setState({ dTypes: [], dLoc: 'Any', dSkill: 'Any', dRole: 'Any', dq: '', applied: null, editing: false }),
+      activeTags: tags,
+      resCount: res.length + (res.length === 1 ? cc("discover_feed.update_from_your_connections") : cc("discover_feed.updates_from_your_connections")),
+      results: res.map((u) => ({ ...u, ...this.net(u.who), titles: ((this.P[u.who] || {}).titles || []).join(' · '), dept: (this.P[u.who] || {}).dept || '', sub: this.subs[u.who] || '', ini: u.who.split(' ').map((w) => w[0]).slice(0, 2).join(''), avCls: u.who === 'Vendor House' ? 'av g' : 'av', badge: BADGE[u.type], typeLabel: SHORT[u.type], isLink: u.type === 'link', isSkill: u.type === 'skill', isLoc: u.type === 'location' })),
+      noResults: !!s.applied && res.length === 0
+    };
+  }
+}
+ccHook(Component, ["fTitle","fSecs","fVal","fPrev","fNoun","fApply","fClose","f","dq"]);
+</script>
+</body>
+</html>

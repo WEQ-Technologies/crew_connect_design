@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My jobs</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><div class="ttl" style="padding-left: 12px; font-size: 20px">{{cct.common.my_jobs}}</div></div>
+  <div style="flex: none; padding: 4px 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{cct.my_jobs.search_your_jobs}}" value="{{q}}" onChange="{{onQ}}" aria-label="{{cct.my_jobs.search_your_jobs}}"></div>
+    <div class="chips x">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button class="{{t.cls}}" onClick="{{t.pick}}" aria-pressed="{{t.on}}">{{t.label}}</button></sc-for>
+    </div>
+  </div>
+  <div class="sc" style="padding-top: 0; gap: 12px; padding-bottom: 96px">
+    <div class="t-s mut" role="status"><b style="color: #1A1820">{{count}}</b> {{countWord}}</div>
+    <sc-for list="{{jobs}}" as="j" hint-placeholder-count="4">
+      <div class="card">
+        <div class="row" style="align-items: flex-start; gap: 10px">
+          <a href="PosterJobDetail.dc.html" class="sp" style="color: #1A1820; text-decoration: none"><div class="t-h3 clamp2">{{j.title}}</div><div class="t-c mut" style="margin-top: 4px">{{j.cat}} · {{j.loc}} · {{j.dur}}</div></a>
+          <sc-if value="{{j.pub}}" hint-placeholder-val="{{ true }}"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle></svg>{{cct.common.published}}</span></sc-if>
+        </div>
+        <div class="row t-c mut" style="gap: 14px"><span class="row" style="gap: 5px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{j.when}}</span><span class="row" style="gap: 5px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path></svg>{{j.apps}}</span></div>
+        <div class="hr"></div>
+        <div class="row" style="gap: 8px">
+          <a class="btn btn-s btn-sm" href="CreateJob.dc.html" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>{{cct.common.edit}}</a>
+          <sc-if value="{{j.pub}}" hint-placeholder-val="{{ true }}"><a class="btn btn-p btn-sm" href="Applicants.dc.html" style="flex: 1.4">{{cct.common.view_applicants}}</a></sc-if>
+        </div>
+      </div>
+    </sc-for>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></div><div class="t-h2">{{cct.my_jobs.no_jobs_found}}</div><div class="t-s mut">{{cct.my_jobs.try_another_search_or_post}}</div><a class="btn btn-p" href="CreateJob.dc.html">{{cct.common.post_a_job_2}}</a></div>
+    </sc-if>
+  </div>
+
+  <a class="fab" href="CreateJob.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{cct.my_jobs.add_job}}</a>
+
+  <nav class="nav" aria-label="{{cct.common.main}}"><span class="nav-cap" aria-hidden="true"></span>
+    <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>{{cct.common.home}}</a>
+    <a class="on" href="Jobs.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>{{cct.common.jobs}}</a>
+    <a class="post" href="CreateJob.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.4"><path d="M12 5v14M5 12h14"></path></svg></span>{{cct.common.post_a_job}}</a>
+    <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>{{cct.common.calendar}}</a>
+    <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>{{cct.common.profile}}</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.data = [
+      { title: cc("common.focus_puller_feature_film_hindi"), dur: cc("common.t_32_days"), cat: 'Camera', loc: cc("common.film_city_mumbai"), st: 'Published', when: cc("my_jobs.posted_2d_ago"), apps: cc("my_jobs.t_18_applicants") },
+      { title: cc("common.production_designer_period_drama_pilot"), dur: cc("my_jobs.t_6_weeks"), cat: 'Art & Production Design', loc: cc("common.mumbai"), st: 'Published', when: cc("my_jobs.posted_6d_ago"), apps: cc("my_jobs.t_9_applicants") },
+      { title: cc("common.spot_boy_set_assistant_4"), dur: cc("my_jobs.t_10_days"), cat: 'Production', loc: cc("my_jobs.panaji_goa"), st: 'Published', when: cc("my_jobs.posted_today"), apps: cc("common.no_applicants_yet") }
+    ];
+    this.state = { q: '', tab: 'All' };
+  }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const list = this.data.filter((j) => (s.tab === 'All' || j.st === s.tab) && (!q || (j.title + j.cat + j.loc).toLowerCase().includes(q)));
+    const cnt = (t) => (t === 'All' ? this.data.length : this.data.filter((j) => j.st === t).length);
+    return {
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      tabs: ['All', 'Published'].map((t) => ({ label: ccv(t) + ' (' + cnt(t) + ')', on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) })),
+      jobs: list.map((j) => ({ ...j, pub: j.st === 'Published' })),
+      count: list.length, countWord: list.length === 1 ? 'job' : 'jobs', empty: list.length === 0
+    };
+  }
+}
+ccHook(Component, ["q"]);
+</script>
+</body>
+</html>

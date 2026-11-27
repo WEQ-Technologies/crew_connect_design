@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notice details variants and Available to Buy or Rent</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.nb-ph{width:390px;height:844px;border-radius:44px;overflow:hidden;position:relative;flex:none;box-shadow:0 30px 60px -30px rgba(24,44,30,.45),0 0 0 10px #1A1820}
+.nb-lab{width:390px;display:flex;flex-direction:column;gap:4px;min-height:84px}
+.nb-card{width:390px;box-sizing:border-box;padding:20px;border-radius:28px;background:linear-gradient(160deg,#F6F3FF,#EEF5F2);border:1px solid #E1EADF;flex:none}
+</style>
+</helmet>
+<div style="width: 2350px; height: 2080px; box-sizing: border-box; padding: 60px; display: flex; flex-direction: column; gap: 48px; background: #FBFAFD; font-family: Inter, system-ui, sans-serif; color: #1A1820">
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <div class="t-over" style="color: #7C3AED">Association forum wall</div>
+    <div style="font-size: 34px; font-weight: 800; line-height: 1.15">Notice details — four content variants, one read-only screen</div>
+    <div class="t-b mut" style="max-width: 1100px">The same screen renders whatever an association admin posts: formatted text, wide tables, payment details or plain unformatted text. Forums are read-only: no likes, dislikes, shares, comments or attachments; the association logo leads every notice. Key details and the Add to calendar / Pay action appear only when the notice carries a date or an amount.</div>
+  </div>
+  <div style="display: flex; gap: 40px; align-items: flex-start">
+    <div style="display: flex; flex-direction: column; gap: 16px"><div class="nb-lab"><div class="t-h3">1 · Standard</div><div class="t-c mut">Event · headings, lists, bold / italic, link, quote, key details with Add to calendar</div></div><div class="nb-ph"><dc-import name="NoticeDetail" variant="standard" hint-size="390px,844px"></dc-import></div></div>
+    <div style="display: flex; flex-direction: column; gap: 16px"><div class="nb-lab"><div class="t-h3">2 · Table-heavy</div><div class="t-c mut">5-column rate table scrolls sideways with a sticky first column; “View as cards” stacks rows on narrow screens</div></div><div class="nb-ph"><dc-import name="NoticeDetail" variant="table" hint-size="390px,844px"></dc-import></div></div>
+    <div style="display: flex; flex-direction: column; gap: 16px"><div class="nb-lab"><div class="t-h3">3 · Payment notice</div><div class="t-c mut">Payment · due date, amount and late fee with Pay now. Attachments removed: Forums are read-only</div></div><div class="nb-ph"><dc-import name="NoticeDetail" variant="attachments" hint-size="390px,844px"></dc-import></div></div>
+    <div style="display: flex; flex-direction: column; gap: 16px"><div class="nb-lab"><div class="t-h3">4a · Plain text, very short</div><div class="t-c mut">One unformatted sentence: no key details, no attachments; the layout stays balanced</div></div><div class="nb-ph"><dc-import name="NoticeDetail" variant="plain" length="short" hint-size="390px,844px"></dc-import></div></div>
+    <div style="display: flex; flex-direction: column; gap: 16px"><div class="nb-lab"><div class="t-h3">4b · Plain text, long</div><div class="t-c mut">All-caps title, pasted text with line breaks and a 120-character URL that wraps instead of overflowing</div></div><div class="nb-ph"><dc-import name="NoticeDetail" variant="plain" length="long" hint-size="390px,844px"></dc-import></div></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px">
+    <div class="t-over" style="color: #367A22">Home</div>
+    <div style="font-size: 34px; font-weight: 800; line-height: 1.15">“Listings for you” → “Available to Buy or Rent”</div>
+    <div class="t-b mut" style="max-width: 1100px">Section header with View all and a Buy / Rent toggle; every card carries a For Sale or For Rent badge; the empty state matches the toggle. Listings in CrewConnect are equipment, so the empty copy says equipment rather than properties.</div>
+  </div>
+  <div style="display: flex; gap: 40px; align-items: flex-start">
+    <div style="display: flex; flex-direction: column; gap: 16px"><div class="nb-lab" style="min-height: 0"><div class="t-h3">All</div><div class="t-c mut">Mixed sale and rent, newest first</div></div><div class="nb-card"><dc-import name="AvailableListings" mode="all" hint-size="350px,560px"></dc-import></div></div>
+    <div style="display: flex; flex-direction: column; gap: 16px"><div class="nb-lab" style="min-height: 0"><div class="t-h3">Buy</div><div class="t-c mut">For Sale badge, one-time price</div></div><div class="nb-card"><dc-import name="AvailableListings" mode="buy" hint-size="350px,560px"></dc-import></div></div>
+    <div style="display: flex; flex-direction: column; gap: 16px"><div class="nb-lab" style="min-height: 0"><div class="t-h3">Rent</div><div class="t-c mut">For Rent badge, price per day</div></div><div class="nb-card"><dc-import name="AvailableListings" mode="rent" hint-size="350px,560px"></dc-import></div></div>
+    <div style="display: flex; flex-direction: column; gap: 16px"><div class="nb-lab" style="min-height: 0"><div class="t-h3">Empty</div><div class="t-c mut">“No equipment available to buy or rent right now. Check back soon.”</div></div><div class="nb-card"><dc-import name="AvailableListings" demo="empty" hint-size="350px,300px"></dc-import></div></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":2350,"height":2080}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

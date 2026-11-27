@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Shop</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.no-sbar .sc,.no-sbar .chips.x{scrollbar-width:none;-ms-overflow-style:none}
+.no-sbar .sc::-webkit-scrollbar,.no-sbar .chips.x::-webkit-scrollbar{display:none;width:0;height:0}
+.ls-seg{display:flex;gap:4px;padding:4px;border-radius:14px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.ls-seg a{flex:1;text-align:center;padding:8px 10px;border-radius:10px;font-size:14px;font-weight:600;color:#5E5A66;text-decoration:none}
+.ls-seg a.on{background:#fff;color:#6527C8;box-shadow:0 6px 14px -8px rgba(24,44,30,.35)}
+</style>
+</helmet>
+<div class="ph no-sbar">
+  <!-- VENDOR ROLE (Vendor only, or Both): My listings is the default view; Discover is the second segment -->
+  <sc-if value="{{isVendor}}" hint-placeholder-val="{{ true }}">
+    <div class="bar"><div class="ttl" style="padding-left: 12px; font-size: 20px">{{cct.common.buy_sell_rent}}</div></div>
+    <div style="flex: none; padding: 4px 20px 12px; display: flex; flex-direction: column; gap: 12px">
+      <div class="ls-seg" role="tablist" aria-label="{{cct.my_listings.listings_views}}"><a class="on" role="tab" aria-selected="true" href="MyListings.dc.html">{{cct.common.my_listings}}</a><a role="tab" aria-selected="false" href="Discover.dc.html">{{cct.common.discover_products}}</a></div>
+      <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{cct.my_listings.search_your_listings}}" value="{{q}}" onChange="{{onQ}}" aria-label="{{cct.my_listings.search_your_listings}}"></div>
+      <div class="row" style="gap: 10px"><button class="{{fBtnCls}}" onClick="{{openF}}" aria-label="{{cct.my_listings.open_filters}}{{fN}}{{cct.my_listings.selected}}" style="display: inline-flex; align-items: center; gap: 6px; flex: none"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>{{cct.common.filters}}<sc-if value="{{fHasN}}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #fff; color: #7C3AED; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">{{fN}}</span></sc-if></button><span class="t-c mut trunc sp">{{fSummary}}</span></div>
+    </div>
+    <div class="sc" style="padding-top: 0; gap: 12px; padding-bottom: 96px">
+      <div class="t-s mut" role="status"><b style="color: #1A1820">{{count}}</b> {{countWord}}</div>
+      <sc-for list="{{items}}" as="l" hint-placeholder-count="4">
+        <div class="card">
+          <div class="row" style="align-items: flex-start; gap: 10px">
+            <div class="sp"><div class="t-h3 clamp2">{{l.name}}</div><div class="t-c mut" style="margin-top: 4px">{{l.cat}}</div></div>
+            <span class="{{l.badge}}">{{l.st}}</span>
+          </div>
+          <div class="row"><span class="tag">{{l.mode}}</span><span class="pay">{{l.price}}</span></div>
+          <div class="hr"></div>
+          <div class="row" style="gap: 8px">
+            <a class="btn btn-s btn-sm" href="ListingForm.dc.html" style="flex: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>{{cct.common.edit}}</a>
+            <button class="btn btn-d btn-sm" onClick="{{l.ask}}" aria-label="{{cct.my_listings.delete}}{{l.name}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg>{{cct.common.delete}}</button>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+        <div class="empty"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></div><div class="t-h2">{{emptyTitle}}</div><div class="t-s mut">{{cct.my_listings.add_equipment_or_products_so}}</div><a class="btn btn-p" href="ListingForm.dc.html">{{cct.common.add_your_first_listing}}</a></div>
+      </sc-if>
+    </div>
+    <a class="fab" href="ListingForm.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{cct.common.add_listing}}</a>
+  </sc-if>
+
+  <!-- CREW ONLY: a feed of gear to rent or buy (Job Seeker only: the tab is called Rent/Buy). Discover vendors is secondary. -->
+  <sc-if value="{{isBrowse}}" hint-placeholder-val="{{ false }}">
+    <div class="bar"><div class="ttl" style="padding-left: 12px; font-size: 20px">{{browseTitle}}</div><a class="btn btn-s btn-sm" href="Discover.dc.html" style="margin-right: 12px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg>{{cct.common.discover_products}}</a></div>
+    <div style="flex: none; padding: 4px 20px 10px; display: flex; flex-direction: column; gap: 10px">
+      <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{cct.my_listings.search_equipment_vendor_or_city}}" value="{{q}}" onChange="{{onQ}}" aria-label="{{cct.my_listings.search_equipment_vendor_or_city}}"><sc-if value="{{hasQ}}" hint-placeholder-val="{{ false }}"><button class="iconbtn" onClick="{{clearQ}}" aria-label="{{cct.common.clear_search}}" style="width: 28px; height: 28px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></sc-if></div>
+      <div class="row" style="gap: 10px"><button class="{{fBtnCls}}" onClick="{{openF}}" aria-label="{{cct.my_listings.open_filters}}{{fN}}{{cct.my_listings.selected}}" style="display: inline-flex; align-items: center; gap: 6px; flex: none"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>{{cct.common.filters}}<sc-if value="{{fHasN}}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #fff; color: #7C3AED; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">{{fN}}</span></sc-if></button><span class="t-c mut trunc sp">{{fSummary}}</span></div>
+    </div>
+    <div class="sc" style="padding-top: 0; gap: 12px; padding-bottom: 96px">
+      <div class="t-s mut" role="status"><b style="color: #1A1820">{{bcount}}</b> {{bWord}}</div>
+      <sc-for list="{{bitems}}" as="l" hint-placeholder-count="4">
+        <a class="card" href="VendorPublic.dc.html" aria-label="{{cct.my_listings.open}}{{l.name}}{{cct.my_listings.from}}{{l.vendor}}" style="text-decoration: none; color: inherit; flex-direction: row; gap: 12px; align-items: flex-start">
+          <span style="{{l.img}}" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" style="width: 28px; height: 28px; color: rgba(255,255,255,.95)"><path d="{{l.icon}}"></path></svg></span>
+          <span class="sp" style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+            <span class="t-h3 clamp2">{{l.name}}</span>
+            <span class="t-c mut trunc">{{l.cat}} · {{l.vendor}}</span>
+            <span class="t-c mut trunc"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align: -3px"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg> {{l.city}}</span>
+            <span class="row" style="gap: 8px; flex-wrap: wrap; margin-top: 2px"><span class="{{l.tagCls}}">{{l.mode}}</span><sc-if value="{{l.hasRate}}" hint-placeholder-val="{{ true }}"><span class="pay">{{l.rate}}</span></sc-if><sc-if value="{{l.hasPrice}}" hint-placeholder-val="{{ false }}"><span class="pay">{{l.price}}</span></sc-if></span>
+          </span>
+        </a>
+      </sc-for>
+      <sc-if value="{{bempty}}" hint-placeholder-val="{{ false }}">
+        <div class="empty" style="padding-top: 32px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></div><div class="t-h2">{{cct.my_listings.no_listings_match_your_filters}}</div><div class="t-s mut">{{cct.my_listings.try_another_search_category_or}}</div><button class="btn btn-s" onClick="{{clearAll}}">{{cct.common.clear_filters}}</button></div>
+      </sc-if>
+      <a href="AddRole.dc.html" data-role="vendor" class="row ghost-glass" style="gap: 10px; padding: 12px 14px; text-decoration: none; color: #1A1820; margin-top: 4px"><span class="sq" style="width: 32px; height: 32px; border-radius: 9px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span><span class="sp t-s"><b>{{cct.my_listings.rent_out_your_own_gear}}</b> <span class="mut">{{cct.my_listings.add_a_product_provider_profile}}</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{fOpen}}" hint-placeholder-val="{{ false }}"><dc-import name="FiltersPage" title="{{fTitle}}" sections="{{fSecs}}" value="{{fVal}}" preview="{{fPrev}}" noun="{{fNoun}}" onApply="{{fApply}}" onClose="{{fClose}}" hint-size="390px,844px" style="position: absolute; inset: 0; z-index: 60"></dc-import></sc-if>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status" style="bottom: 160px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{cct.my_listings.listing_deleted}}</div>
+  </sc-if>
+
+  <dc-import name="RoleNav" fit="yes" active="listings" hint-size="390px,80px"></dc-import>
+
+  <sc-if value="{{confirm}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c">
+      <div class="dlg" role="alertdialog" aria-label="{{cct.my_listings.delete_listing}}">
+        <div class="sq" style="background: #FDECEA; color: #B42318; border-color: #F6C9C3"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></div>
+        <div class="t-h2">{{cct.my_listings.delete_this_listing}}</div>
+        <div class="t-s mut">“{{confirmName}}{{cct.my_listings.will_be_removed_from_your}}</div>
+        <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{cancel}}" style="flex: 1">{{cct.common.cancel}}</button><button class="btn btn-danger" onClick="{{doDelete}}" style="flex: 1">{{cct.common.delete}}</button></div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"demo":{"editor":"enum","options":["","rent","search","empty"],"default":""},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = {
+      q: '', tab: 'All', cat: 'All', confirm: null, toast: false,
+      data: [
+        { id: 1, name: cc("my_listings.arri_alexa_mini_lf_full"), cat: cc("common.camera_bodies"), mode: 'Rent', price: cc("my_listings.inr_28_000_day"), st: 'Published' },
+        { id: 2, name: cc("common.cooke_s4_i_prime_set"), cat: cc("common.lenses"), mode: 'Rent', price: cc("my_listings.inr_12_500_day"), st: 'Published' },
+        { id: 3, name: cc("common.sony_fx6_body"), cat: cc("common.camera_bodies"), mode: 'Rent', price: cc("my_listings.inr_6_500_day"), st: 'Published' },
+        { id: 4, name: cc("my_listings.tilta_nucleus_m_follow_focus"), cat: cc("common.accessories"), mode: 'Buy', price: cc("my_listings.inr_38_000"), st: 'Published' },
+        { id: 5, name: cc("common.smallhd_cine_7_monitor"), cat: cc("common.monitoring"), mode: 'Rent', price: cc("my_listings.inr_3_000_day"), st: 'Published' }
+      ]
+    };
+    const IC = { cam: 'M4 8h3l2-3h6l2 3h3v11H4zM12 16.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z', light: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z', sound: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3', drone: 'M5 5h4M15 5h4M7 5v4h10V5M9 12h6l-1 4h-4zM4 19h16', post: 'M3 5h18v11H3zM8 20h8M12 16v4' };
+    this.browse = [
+      { name: cc("my_listings.arri_alexa_mini_lf_full"), cat: cc("common.camera_and_lenses"), ic: 'cam', vendor: 'Vendor House', city: cc("common.goregaon_east_mumbai"), mode: 'Rent', rate: cc("my_listings.inr_28_000_day") },
+      { name: cc("common.cooke_s4_i_prime_set"), cat: cc("common.camera_and_lenses"), ic: 'cam', vendor: 'Vendor House', city: cc("common.goregaon_east_mumbai"), mode: 'Rent', rate: cc("my_listings.inr_12_500_day") },
+      { name: cc("common.sony_fx3_cinema_camera_kit"), cat: cc("common.camera_and_lenses"), ic: 'cam', vendor: cc("common.frame_and_focus_rentals"), city: cc("common.pune"), mode: 'Rent & Buy', rate: cc("common.inr_4_500_day"), price: cc("my_listings.inr_3_20_000_to") },
+      { name: cc("my_listings.aputure_600d_pro_pair_with"), cat: cc("common.lighting_and_grip"), ic: 'light', vendor: 'Kilowatt Lighting Co.', city: cc("my_listings.goregaon_mumbai"), mode: 'Rent', rate: cc("common.inr_4_500_day") },
+      { name: cc("my_listings.matthews_c_stand_set_10"), cat: cc("common.lighting_and_grip"), ic: 'light', vendor: 'Kilowatt Lighting Co.', city: cc("my_listings.goregaon_mumbai"), mode: 'Buy', price: cc("common.inr_62_000") },
+      { name: cc("my_listings.sennheiser_mkh_416_boom_kit"), cat: 'Sound', ic: 'sound', vendor: cc("my_listings.soundstage_hire"), city: cc("common.bandra_mumbai"), mode: 'Rent & Buy', rate: cc("my_listings.inr_1_800_day"), price: cc("my_listings.inr_78_000_to_buy") },
+      { name: cc("my_listings.tilta_nucleus_m_follow_focus"), cat: cc("common.camera_and_lenses"), ic: 'cam', vendor: 'Vendor House', city: cc("common.goregaon_east_mumbai"), mode: 'Buy', price: cc("my_listings.inr_38_000") },
+      { name: cc("my_listings.dji_inspire_3_with_licensed"), cat: cc("common.drones_and_aerial"), ic: 'drone', vendor: cc("common.skyframe_aerials"), city: cc("common.hyderabad"), mode: 'Rent', rate: cc("my_listings.inr_35_000_day") },
+      { name: cc("my_listings.davinci_resolve_mini_panel"), cat: cc("my_listings.post_production"), ic: 'post', vendor: cc("my_listings.cutroom_supply"), city: cc("common.andheri_west_mumbai"), mode: 'Buy', price: cc("my_listings.inr_2_10_000") }
+    ].map((x) => ({ ...x, icon: IC[x.ic] }));
+    const d = p.demo || '';
+    if (d === 'rent') { this.state.tab = 'Rent'; this.state.cat = cc("common.camera_and_lenses"); }
+    if (d === 'search') this.state.q = 'kilowatt';
+    if (d === 'empty') { this.state.tab = 'Buy'; this.state.cat = cc("common.drones_and_aerial"); }
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const R = (this.props.store && this.props.store.roles) || { crew: true, vendor: true };
+    const match = (l, t) => t === 'All' || l.mode === t;
+    const list = s.data.filter((l) => match(l, s.tab) && (!q || (l.name + l.cat).toLowerCase().includes(q)));
+    // Rent includes Rent & Buy; Buy includes Rent & Buy. Search covers equipment, vendor and city.
+    const bm = (l, t) => t === 'All' || l.mode === t || l.mode === 'Rent & Buy';
+    const bq = (l) => !q || (l.name + ' ' + l.vendor + ' ' + l.city + ' ' + l.cat).toLowerCase().includes(q);
+    // Category is multi-select (an array; empty = all). A single value from older state or demos still works.
+    const bc = (l) => (Array.isArray(s.cat) ? (!s.cat.length || s.cat.indexOf(l.cat) >= 0) : (s.cat === 'All' || l.cat === s.cat));
+    const blist = this.browse.filter((l) => bm(l, s.tab) && bc(l) && bq(l));
+    const MD = (this.props.store && this.props.store.modes) || { seek: true, post: true };
+    const rentBuy = !R.vendor && MD.seek !== false && MD.post === false;
+    const TG = { Rent: 'badge b-p', Buy: 'badge b-g', 'Rent & Buy': 'badge b-y' };
+    const GR = { cam: '#9B7BF7,#7C3AED', light: '#E8B92E,#C77A12', sound: '#5CC8AC,#367A22', drone: '#7FB2E5,#3D6FB5', post: '#C4B1FA,#8A4DF2' };
+    const c = s.data.find((l) => l.id === s.confirm);
+    const chip = (src) => ['All', 'Rent', 'Buy'].map((t) => ({ label: ccv(t) + ' (' + ccv(src.filter((l) => match(l, t)).length) + ')', on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) }));
+    // Filters page: same options and filtering logic as before, edited on a dedicated page and applied back here.
+    const fSecs = R.vendor ? [{ k: 'tab', title: cc("my_listings.listing_type"), def: 'All', opts: [{ v: 'All', l: 'All' }, { v: 'Rent', l: 'Rent' }, { v: 'Buy', l: 'Buy' }] }] : [{ k: 'tab', title: cc("my_listings.buy_or_rent"), hint: cc("my_listings.rent_includes_items_offered_for"), def: 'All', opts: [{ v: 'All', l: 'All' }, { v: 'Rent', l: 'Rent' }, { v: 'Buy', l: 'Buy' }] }, { k: 'cat', title: cc("common.category"), multi: true, def: [], hint: cc("common.pick_one_or_more"), opts: [cc("common.camera_and_lenses"), cc("common.lighting_and_grip"), 'Sound', cc("common.drones_and_aerial"), cc("my_listings.post_production")].map((c) => ({ v: c, l: c })) }];
+    const fVal = R.vendor ? { tab: s.tab } : { tab: s.tab, cat: Array.isArray(s.cat) ? s.cat : s.cat === 'All' ? [] : [s.cat] };
+    const fN = fSecs.reduce((t, g) => t + (g.multi ? (fVal[g.k] || []).length : (fVal[g.k] !== g.def ? 1 : 0)), 0);
+    const fSum = [].concat(...fSecs.map((g) => (g.multi ? fVal[g.k] : (fVal[g.k] !== g.def ? [fVal[g.k]] : [])))).join(' · ');
+    const fRet = { fOpen: !!this.state.fOpen, openF: () => this.setState({ fOpen: true }), fClose: () => this.setState({ fOpen: false }),
+      fSecs, fVal, fN, fHasN: fN > 0, fBtnCls: fN ? 'chip on' : 'chip', fSummary: fSum || cc("common.no_filters_applied"), fTitle: 'Shop', fNoun: 'listings',
+      fPrev: (d) => (R.vendor ? s.data.filter((l) => match(l, d.tab) && (!q || (l.name + l.cat).toLowerCase().includes(q))).length : this.browse.filter((l) => bm(l, d.tab) && (!d.cat.length || d.cat.indexOf(l.cat) >= 0) && bq(l)).length), fApply: (d) => this.setState({ ...(R.vendor ? { tab: d.tab } : { tab: d.tab, cat: d.cat }), fOpen: false }) };
+    return {
+      ...fRet,
+      isVendor: !!R.vendor, isBrowse: !R.vendor,
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      tabs: chip(s.data),
+      btabs: ['All', 'Rent', 'Buy'].map((t) => ({ label: ccv(t) + ' · ' + ccv(this.browse.filter((l) => bm(l, t) && bc(l) && bq(l)).length), on: s.tab === t, cls2: s.tab === t ? 'on' : '', pick: () => this.setState({ tab: t }) })),
+      cats: ['All', cc("common.camera_and_lenses"), cc("common.lighting_and_grip"), 'Sound', cc("common.drones_and_aerial"), cc("my_listings.post_production")].map((c) => ({ label: c === 'All' ? cc("my_listings.all_categories") : c, on: s.cat === c, cls: s.cat === c ? 'chip on' : 'chip', pick: () => this.setState({ cat: c }) })),
+      browseTitle: 'Shop',
+      bWord: blist.length === 1 ? cc("my_listings.listing_to_rent_or_buy") : cc("my_listings.listings_to_rent_or_buy"),
+      hasQ: !!s.q, clearQ: () => this.setState({ q: '' }), clearAll: () => this.setState({ q: '', tab: 'All', cat: 'All' }),
+      items: list.map((l) => ({ ...l, badge: 'badge b-g', ask: () => this.setState({ confirm: l.id }) })),
+      count: list.length, countWord: list.length === 1 ? 'listing' : 'listings', empty: list.length === 0,
+      emptyTitle: s.data.length ? cc("my_listings.no_listings_here") : cc("my_listings.no_listings_yet"),
+      bitems: blist.map((l) => ({ ...l, tagCls: TG[l.mode], hasRate: !!l.rate, hasPrice: !!l.price, img: 'width:72px;height:72px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,' + GR[l.ic] + ');box-shadow:inset 0 1px 0 rgba(255,255,255,.35)' })),
+      bcount: blist.length, bempty: blist.length === 0,
+      confirm: !!c, confirmName: c ? c.name : '',
+      cancel: () => this.setState({ confirm: null }),
+      doDelete: () => {
+        this.setState({ data: s.data.filter((l) => l.id !== s.confirm), confirm: null, toast: true });
+        clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: false }), 2400);
+      },
+      toast: s.toast
+    };
+  }
+}
+ccHook(Component, ["q","fTitle","fSecs","fVal","fPrev","fNoun","fApply","fClose"]);
+</script>
+</body>
+</html>

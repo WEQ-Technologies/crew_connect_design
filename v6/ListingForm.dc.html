@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add or edit listing</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <!-- FORM -->
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="bar"><a class="iconbtn" href="MyListings.dc.html" aria-label="{{cct.common.close}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a><div class="ttl">{{heading}}</div></div>
+  </sc-if>
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="sc" style="gap: 18px">
+      <sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg><div>{{cct.listing_form.you_re_editing_a_published}}</div></div></sc-if>
+      <div class="fld"><label class="lbl" for="n">{{cct.listing_form.product_name}} <span class="req">*</span></label><input id="n" class="{{nCls}}" placeholder="{{cct.listing_form.e_g_arri_alexa_mini}}" value="{{name}}" onChange="{{onName}}">
+        <sc-if value="{{nErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.listing_form.add_a_product_name}}</span></sc-if>
+      </div>
+      <div class="fld"><label class="lbl" for="c">{{cct.common.category}} <span class="req">*</span></label><select id="c" class="inp"><option>{{cct.common.camera_bodies}}</option><option>{{cct.common.lenses}}</option><option>{{cct.common.monitoring}}</option><option>{{cct.common.lighting}}</option><option>{{cct.common.grip}}</option><option>{{cct.common.sound}}</option><option>{{cct.common.accessories}}</option></select></div>
+      <div class="fld"><span class="lbl">{{cct.listing_form.available_to}} <span class="req">*</span></span>
+        <div class="seg" style="grid-template-columns: repeat(3, minmax(0, 1fr))"><sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button class="{{m.cls}}" onClick="{{m.pick}}" aria-pressed="{{m.on}}">{{m.label}}</button></sc-for></div>
+      </div>
+      <div class="fld"><label class="lbl" for="p">{{priceLabel}} <span class="req">*</span></label>
+        <div class="row" style="gap: 8px"><div class="pre sp"><span>₹</span><input id="p" inputmode="numeric" value="{{price}}" onChange="{{onPrice}}" placeholder="0"></div><span class="t-s mut" style="width: 92px">{{priceUnit}}</span></div>
+        <sc-if value="{{pErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.r2.enter_a_rate_or_keep_the_rate}}</span></sc-if>
+        <div class="row" style="gap: 12px; margin-top: 4px">
+          <div class="sp"><div class="t-s b">{{cct.r2.keep_the_rate_private}}</div><div class="t-c mut">{{cct.r2.your_listing_shows_rate_on_request_interested}}</div></div>
+          <button class="{{privCls}}" role="switch" aria-checked="{{priv}}" aria-label="{{cct.r2.keep_the_rate_private}}" onClick="{{togglePriv}}"><span></span></button>
+        </div>
+      </div>
+      <div class="fld"><span class="lbl">{{cct.listing_form.condition}} <span class="opt">{{cct.common.optional}}</span></span><div class="chips"><button class="chip on">{{cct.common.new}}</button><button class="chip">{{cct.listing_form.used_like_new}}</button><button class="chip">{{cct.listing_form.used_good}}</button></div></div>
+      <div class="fld"><label class="lbl" for="d">{{cct.common.description}} <span class="req">*</span></label><textarea id="d" class="{{dCls}}" style="min-height: 120px" placeholder="{{cct.listing_form.what_s_included_accessories_deposit}}" onChange="{{onDesc}}" value="{{desc}}"></textarea>
+        <sc-if value="{{dErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.listing_form.describe_what_s_included_at}}</span></sc-if>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+    <div class="foot"><button class="btn btn-p w100" onClick="{{review}}">{{cct.listing_form.review_listing}}</button></div>
+  </sc-if>
+
+  <!-- REVIEW -->
+  <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+    <div class="bar"><button class="iconbtn" onClick="{{toForm}}" aria-label="{{cct.common.back_to_edit}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button><div class="ttl">{{cct.listing_form.review_listing}}</div></div>
+  </sc-if>
+  <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="gap: 16px">
+      <p class="t-s mut">{{cct.listing_form.this_is_how_the_listing}}</p>
+      <div class="card" style="gap: 10px">
+        <div class="row" style="align-items: flex-start"><div class="sp t-h2">{{name}}</div><span class="tag">{{mode}}</span></div>
+        <div class="t-c mut">{{cct.listing_form.camera_bodies_new}}</div>
+        <sc-if value="{{pubPrice}}" hint-placeholder-val="{{ true }}"><div class="pay" style="font-size: 18px">₹{{priceFmt}} <span class="t-s mut" style="font-weight: 500">{{priceUnit}}</span></div></sc-if>
+        <sc-if value="{{priv}}" hint-placeholder-val="{{ false }}"><div class="fee-hid"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>{{cct.r2.rate_on_request}}</div></sc-if>
+        <div class="hr"></div>
+        <p class="t-s" style="white-space: pre-line">{{desc}}</p>
+        <div class="hr"></div>
+        <div class="row t-c mut" style="gap: 6px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg>{{bizName}}{{cct.listing_form.goregaon_east_mumbai}}</div>
+      </div>
+      <button class="btn btn-s w100" onClick="{{toForm}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>{{cct.common.edit_details}}</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+    <div class="foot">
+      <sc-if value="{{saving}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p" style="flex: 1.6" aria-busy="true"><span class="spin"></span>{{cct.common.publishing}}</button></sc-if>
+      <sc-if value="{{notSaving}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" style="flex: 1.6" onClick="{{publish}}">{{publishLabel}}</button></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- DONE -->
+  <sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}">
+    <div class="sc" style="justify-content: center; align-items: center; text-align: center; gap: 14px; padding: 32px">
+      <div style="width: 80px; height: 80px; border-radius: 40px; background: #E6F2DC; color: #367A22; display: flex; align-items: center; justify-content: center"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 40px; height: 40px; stroke-width: 2.2"><path d="m5 12 5 5 9-10"></path></svg></div>
+      <div class="t-h1">{{doneTitle}}</div>
+      <div class="t-b mut">“{{name}}{{cct.listing_form.is_visible_on_your_public}}</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 10px">
+        <a class="btn btn-p w100" href="VendorPublic.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>{{cct.common.preview_public_page}}</a>
+        <button class="btn btn-s w100" onClick="{{editAgain}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>{{cct.listing_form.edit_this_listing}}</button>
+        <a class="btn btn-t w100" href="MyListings.dc.html">{{cct.listing_form.back_to_my_listings}}</a>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{cct.common.saved}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = {
+      phase: 'form', editing: false, tried: false, saving: false, toast: false, mode: 'Rent',
+      name: cc("common.sony_fx3_cinema_camera_kit"), price: '4500',
+      desc: cc("listing_form.body_3_batteries_charger_2")
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.b); }
+  renderVals() {
+    const s = this.state, tr = s.tried;
+    const nE = !s.name.trim(), pE = !s.priv && !(Number(String(s.price).replace(/[^0-9]/g, '')) > 0), dE = s.desc.trim().length < 30;
+    const unit = s.mode === 'Buy' ? cc("common.one_time") : cc("common.per_day");
+    return {
+      bizName: (this.props.store && this.props.store.bizName) || 'Vendor House',
+      isForm: s.phase === 'form', isReview: s.phase === 'review', isDone: s.phase === 'done',
+      editing: s.editing, heading: s.editing ? cc("listing_form.edit_listing") : cc("common.add_listing"),
+      name: s.name, price: s.price, desc: s.desc, mode: s.mode,
+      priceLabel: s.mode === 'Buy' ? cc("listing_form.sale_price") : s.mode === 'Rent' ? cc("listing_form.rental_rate") : cc("listing_form.rental_rate_sale_price_on"),
+      priceUnit: unit, priceFmt: (Number(String(s.price).replace(/[^0-9]/g, '')) || 0).toLocaleString('en-IN'),
+      nErr: tr && nE, pErr: tr && pE, dErr: tr && dE,
+      priv: !!s.priv, pubPrice: !s.priv, privCls: s.priv ? 'switch on' : 'switch', togglePriv: () => this.setState({ priv: !s.priv }),
+      nCls: tr && nE ? 'inp bad' : 'inp', dCls: tr && dE ? 'inp bad' : 'inp',
+      modes: ['Rent', 'Buy', cc("common.both")].map((m) => ({ label: m, on: s.mode === m, cls: s.mode === m ? 'on' : '', pick: () => this.setState({ mode: m }) })),
+      onName: (e) => this.setState({ name: e.target.value }),
+      onPrice: (e) => this.setState({ price: e.target.value }),
+      onDesc: (e) => this.setState({ desc: e.target.value }),
+      review: () => (nE || pE || dE ? this.setState({ tried: true }) : this.setState({ phase: 'review' })),
+      toForm: () => this.setState({ phase: 'form' }),
+      saving: s.saving, notSaving: !s.saving,
+      publishLabel: s.editing ? cc("common.save_changes") : cc("listing_form.publish_listing"),
+      doneTitle: s.editing ? cc("listing_form.listing_updated") : cc("listing_form.listing_published"),
+      publish: () => { this.setState({ saving: true }); this.a = setTimeout(() => this.setState({ saving: false, phase: 'done' }), 1000); },
+      editAgain: () => this.setState({ phase: 'form', editing: true, tried: false }),
+      toast: s.toast
+    };
+  }
+}
+ccHook(Component, ["name","price","desc"]);
+</script>
+</body>
+</html>

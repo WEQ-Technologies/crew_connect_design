@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Testimonials</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.tm-q{position:relative;padding:14px 14px 12px 40px}
+.tm-q:before{content:'\201C';position:absolute;left:12px;top:2px;font-size:44px;line-height:1;font-weight:800;color:#C9B8FB}
+.tm-pick{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:0;cursor:pointer;padding:10px 4px;min-height:56px;border-radius:12px}
+.tm-pick:focus-visible{outline:3px solid #7C3AED;outline-offset:2px}
+.tm-box{width:24px;height:24px;border-radius:7px;border:2px solid #CFC8DC;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;transition:background .2s,border-color .2s}
+.tm-box.on{background:#7C3AED;border-color:#7C3AED}
+.tm-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tm-steps span{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;color:var(--ink2);line-height:1.25}
+.tm-steps b{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:11px;background:#EFEAFE;color:#7C3AED;font-size:11px}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="{{backHref}}" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{title}}</div></div>
+  <sc-if value="{{showTabs}}" hint-placeholder-val="{{ true }}">
+  <div style="flex: none; padding: 0 20px 10px"><div class="seg" role="tablist" aria-label="{{cct.r3.tm_title}}" style="grid-template-columns: repeat(3, minmax(0, 1fr))"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button role="tab" class="{{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div></div>
+  </sc-if>
+  <div class="sc" style="gap: 14px; padding-top: 0">
+
+    <!-- 1 · ASK: request testimonials from your connections (crew ↔ crew, crew ↔ vendor, vendor ↔ crew, vendor ↔ vendor) -->
+    <sc-if value="{{vRequest}}" hint-placeholder-val="{{ true }}">
+      <div class="card" style="gap: 10px">
+        <div class="t-h3">{{cct.r3.tm_how_title}}</div>
+        <div class="tm-steps"><span><b>1</b>{{cct.r3.tm_step1}}</span><span><b>2</b>{{cct.r3.tm_step2}}</span><span><b>3</b>{{cct.r3.tm_step3}}</span><span><b>4</b>{{cct.r3.tm_step4}}</span></div>
+      </div>
+      <sc-if value="{{notSent}}" hint-placeholder-val="{{ true }}">
+        <div class="t-over">{{cct.r3.tm_pick_connections}}</div>
+        <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{cct.r3.tm_search_connections}}" value="{{q}}" onInput="{{onQ}}" aria-label="{{cct.r3.tm_search_connections}}"></div>
+        <div class="list" role="group" aria-label="{{cct.r3.tm_pick_connections}}">
+          <sc-for list="{{conns}}" as="c" hint-placeholder-count="5">
+            <div class="li" style="padding: 0 12px"><button class="tm-pick" role="checkbox" aria-checked="{{c.on}}" onClick="{{c.toggle}}">
+              <span class="{{c.avCls}}" data-ini="{{c.ini}}" aria-hidden="true">{{c.ini}}</span>
+              <span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{c.name}}</span><span class="t-c mut trunc" style="display: block">{{c.sub}}</span></span>
+              <span class="{{c.kindCls}}" style="height: 22px">{{c.kind}}</span>
+              <span class="{{c.boxCls}}" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" style="width: 14px; height: 14px; stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>
+            </button></div>
+          </sc-for>
+        </div>
+        <div class="fld"><label class="lbl" for="tm-msg">{{cct.r3.tm_note_label}} <span class="opt">{{cct.common.optional}}</span></label><textarea id="tm-msg" class="inp" rows="3" maxlength="200" placeholder="{{cct.r3.tm_note_ph}}" value="{{msg}}" onInput="{{onMsg}}"></textarea><span class="help">{{msgCount}}</span></div>
+      </sc-if>
+      <sc-if value="{{sent}}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="gap: 10px; align-items: center; text-align: center; padding: 24px 16px">
+          <span class="sq g" style="width: 52px; height: 52px; border-radius: 26px" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.6"><path d="m5 12 5 5 9-10"></path></svg></span>
+          <div class="t-h2">{{sentTitle}}</div>
+          <div class="t-s mut">{{cct.r3.tm_sent_sub}}</div>
+          <div class="chips" style="justify-content: center"><sc-for list="{{sentNames}}" as="n" hint-placeholder-count="2"><span class="chip on">{{n}}</span></sc-for></div>
+          <button class="btn btn-s btn-sm" onClick="{{askMore}}">{{cct.r3.tm_ask_more}}</button>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <!-- 2 · TO WRITE: requests you received — Write and Submit / Ignore -->
+    <sc-if value="{{vInbox}}" hint-placeholder-val="{{ false }}">
+      <div class="t-s mut">{{cct.r3.tm_inbox_sub}}</div>
+      <sc-for list="{{reqs}}" as="r" hint-placeholder-count="2">
+        <div class="card" style="gap: 10px">
+          <div class="row" style="gap: 12px"><span class="{{r.avCls}}" data-ini="{{r.ini}}" aria-hidden="true">{{r.ini}}</span><div class="sp" style="min-width: 0"><div class="t-s"><b>{{r.name}}</b> {{cct.r3.tm_n_asked}}</div><div class="t-c mut">{{r.sub}} · {{r.when}}</div></div></div>
+          <sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ true }}"><div class="glass-inset t-s" style="padding: 10px 12px; border-radius: 12px">{{r.note}}</div></sc-if>
+          <sc-if value="{{r.open}}" hint-placeholder-val="{{ true }}"><div class="row" style="gap: 8px"><button class="btn btn-s btn-sm" onClick="{{r.ignore}}" style="flex: 1">{{cct.r3.tm_ignore}}</button><button class="btn btn-p btn-sm" onClick="{{r.write}}" style="flex: 1.4">{{cct.r3.tm_write_submit}}</button></div></sc-if>
+          <sc-if value="{{r.closed}}" hint-placeholder-val="{{ false }}"><span class="{{r.stCls}}" style="align-self: flex-start">{{r.stText}}</span></sc-if>
+        </div>
+      </sc-for>
+    </sc-if>
+
+    <!-- 2b · WRITE a testimonial -->
+    <sc-if value="{{vWrite}}" hint-placeholder-val="{{ false }}">
+      <div class="row" style="gap: 12px"><span class="{{w.avCls}}" data-ini="{{w.ini}}" aria-hidden="true">{{w.ini}}</span><div class="sp"><div class="t-h3">{{w.name}}</div><div class="t-c mut">{{w.sub}}</div></div></div>
+      <div class="fld"><span class="lbl">{{cct.r3.tm_rel_label}} <span class="req">*</span></span><div class="chips" role="radiogroup" aria-label="{{cct.r3.tm_rel_label}}"><sc-for list="{{rels}}" as="x" hint-placeholder-count="5"><button class="{{x.cls}}" role="radio" aria-checked="{{x.on}}" onClick="{{x.pick}}">{{x.label}}</button></sc-for></div><sc-if value="{{relErr}}" hint-placeholder-val="{{ false }}"><span class="errt">{{cct.r3.tm_rel_err}}</span></sc-if></div>
+      <div class="fld"><label class="lbl" for="tm-proj">{{cct.r3.tm_proj_label}} <span class="opt">{{cct.common.optional}}</span></label><input id="tm-proj" class="inp" value="{{proj}}" onInput="{{onProj}}" placeholder="{{cct.r3.tm_proj_ph}}"></div>
+      <div class="fld"><label class="lbl" for="tm-text">{{cct.r3.tm_text_label}} <span class="req">*</span></label><textarea id="tm-text" class="{{textCls}}" rows="6" maxlength="500" placeholder="{{cct.r3.tm_text_ph}}" value="{{text}}" onInput="{{onText}}"></textarea><span class="row" style="gap: 8px"><sc-if value="{{textErr}}" hint-placeholder-val="{{ false }}"><span class="errt sp">{{cct.r3.tm_text_err}}</span></sc-if><sc-if value="{{textOk}}" hint-placeholder-val="{{ true }}"><span class="help sp">{{cct.r3.tm_text_help}}</span></sc-if><span class="t-c mut">{{textCount}}</span></span></div>
+      <div class="glass-inset row" style="gap: 8px; padding: 10px 12px; border-radius: 12px; align-items: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #7C3AED; flex: none; margin-top: 2px"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg><span class="t-c">{{w.decides}}</span></div>
+    </sc-if>
+
+    <!-- 3 · ABOUT YOU: testimonials you received — Publish or Keep Private -->
+    <sc-if value="{{vReview}}" hint-placeholder-val="{{ false }}">
+      <div class="t-s mut">{{cct.r3.tm_review_sub}}</div>
+      <sc-for list="{{recv}}" as="t" hint-placeholder-count="3">
+        <div class="card" style="gap: 10px; padding: 0; overflow: hidden">
+          <div class="tm-q"><div class="t-s">{{t.text}}</div></div>
+          <div class="row" style="gap: 10px; padding: 0 14px"><span class="{{t.avCls}}" data-ini="{{t.ini}}" aria-hidden="true" style="width: 32px; height: 32px; font-size: 12px">{{t.ini}}</span><div class="sp" style="min-width: 0"><div class="t-s b trunc">{{t.name}}</div><div class="t-c mut trunc">{{t.meta}}</div></div><span class="{{t.stCls}}">{{t.stText}}</span></div>
+          <div class="row" style="gap: 8px; padding: 0 14px 14px">
+            <sc-if value="{{t.pending}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s btn-sm" onClick="{{t.keep}}" style="flex: 1">{{cct.r3.tm_keep_private}}</button><button class="btn btn-p btn-sm" onClick="{{t.publish}}" style="flex: 1.3">{{cct.r3.tm_publish}}</button></sc-if>
+            <sc-if value="{{t.isPub}}" hint-placeholder-val="{{ false }}"><button class="btn btn-t btn-sm" onClick="{{t.keep}}" style="padding-left: 0">{{cct.r3.tm_make_private}}</button></sc-if>
+            <sc-if value="{{t.isPriv}}" hint-placeholder-val="{{ false }}"><button class="btn btn-t btn-sm" onClick="{{t.publish}}" style="padding-left: 0">{{cct.r3.tm_publish_instead}}</button></sc-if>
+          </div>
+        </div>
+      </sc-for>
+      <div class="t-over" style="margin-top: 4px">{{cct.r3.tm_on_profile}} · {{pubN}}</div>
+      <div class="card" style="gap: 12px">
+        <div class="row" style="gap: 8px"><span class="t-h3 sp">{{cct.r3.tm_title}}</span><span class="badge b-g">{{pubN}}</span></div>
+        <sc-if value="{{hasPub}}" hint-placeholder-val="{{ true }}"><sc-for list="{{pub}}" as="p" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; gap: 6px; padding-bottom: 10px; border-bottom: 1px solid var(--line)"><div class="t-s">“{{p.text}}”</div><div class="t-c mut">— {{p.name}} · {{p.meta}}</div></div></sc-for></sc-if>
+        <sc-if value="{{noPub}}" hint-placeholder-val="{{ false }}"><div class="t-s mut">{{cct.r3.tm_none_published}}</div></sc-if>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{vRequest}}" hint-placeholder-val="{{ true }}"><sc-if value="{{notSent}}" hint-placeholder-val="{{ true }}">
+    <div class="foot"><button class="{{sendCls}}" onClick="{{send}}" aria-disabled="{{sendOff}}" style="flex: 1">{{sendLabel}}</button></div>
+  </sc-if></sc-if>
+  <sc-if value="{{vWrite}}" hint-placeholder-val="{{ false }}">
+    <div class="foot" style="gap: 10px"><button class="btn btn-s" onClick="{{cancelWrite}}" style="flex: 1">{{cct.common.cancel}}</button><button class="btn btn-p" onClick="{{submit}}" style="flex: 1.6">{{cct.r3.tm_submit}}</button></div>
+  </sc-if>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status" style="bottom: 96px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"view":{"editor":"enum","options":["request","write","inbox","review"],"default":"request"},"tabKey":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    // Sample data. In production: connections from the Connections list; requests and testimonials from the backend.
+    this.conns = [
+      { name: 'Meera Joshi', sub: cc("r3.tm_s_meera"), v: false },
+      { name: 'Rohan D’Souza', sub: '2nd Assistant Camera · Camera', v: false },
+      { name: 'Farhan Siddiqui', sub: '1st Assistant Camera · Camera', v: false },
+      { name: 'Kilowatt Lighting Co.', sub: cc("r3.sugg_v1"), v: true },
+      { name: 'Vendor House', sub: cc("r3.tm_s_vh"), v: true },
+      { name: 'Northlight Studios', sub: cc("r3.sugg_v2"), v: true }
+    ];
+    const v = p.view || 'request';
+    this.state = {
+      view: v === 'write' ? 'inbox' : v, writing: v === 'write' ? 'Rohan D’Souza' : '', sel: {}, sent: [], q: '', msg: '',
+      rel: '', proj: '', text: '', tried: false, toast: '',
+      reqs: [
+        { name: 'Rohan D’Souza', sub: '2nd Assistant Camera · Camera', v: false, when: cc("r3.tm_when_1"), note: cc("r3.tm_req_note_1"), st: null },
+        { name: 'Kilowatt Lighting Co.', sub: cc("r3.sugg_v1"), v: true, when: cc("r3.tm_when_3"), note: '', st: null }
+      ],
+      recv: [
+        { name: 'Meera Joshi', v: false, rel: cc("r3.tm_rel_worked"), proj: 'Lantern Pictures · Feature film', when: cc("r3.tm_when_2"), text: cc("r3.tm_sample_1"), st: 'pending' },
+        { name: 'Vendor House', v: true, rel: cc("r3.tm_rel_rented"), proj: '', when: 'Oct 2026', text: cc("r3.tm_sample_2"), st: 'published' },
+        { name: 'Kavya Menon', v: false, rel: cc("r3.tm_rel_hired_by"), proj: 'Pinewood Ads · TVC', when: 'Sep 2026', text: cc("r3.tm_sample_3"), st: 'published' }
+      ]
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  flash(m) { this.setState({ toast: m }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    // Opened again from a link (notification, profile, connections): start on the view that link asks for.
+    if (this.k !== this.props.tabKey) { this.k = this.props.tabKey; const v = this.props.view || 'request'; Object.assign(this.state, { view: v === 'write' ? 'inbox' : v, writing: v === 'write' ? 'Rohan D’Souza' : '', tried: false }); }
+    const s = this.state;
+    const ini = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const av = (x) => (x.v ? 'av av-biz' : 'av');
+    const kind = (x) => (x.v ? cc("r2.vendor") : cc("r3.home_crew_member_profile"));
+    const writing = s.view === 'inbox' && !!s.writing;
+    const W = writing ? (s.reqs.find((r) => r.name === s.writing) || s.reqs[0]) : null;
+    const nSel = Object.keys(s.sel).filter((k) => s.sel[k]).length;
+    const q = s.q.trim().toLowerCase();
+    const RELS = [['worked', cc("r3.tm_rel_worked")], ['hired', cc("r3.tm_rel_hired")], ['hired_by', cc("r3.tm_rel_hired_by")], ['rented', cc("r3.tm_rel_rented")], ['collab', cc("r3.tm_rel_collab")]];
+    const tLen = s.text.trim().length, relErr = s.tried && !s.rel, textErr = s.tried && tLen < 20;
+    const setRecv = (i, st, msg) => { const r = s.recv.slice(); r[i] = { ...r[i], st }; this.setState({ recv: r }); this.flash(msg); };
+    const pub = s.recv.filter((t) => t.st === 'published');
+    const meta = (t) => [t.rel, t.proj].filter(Boolean).join(' · ');
+    const pendIn = s.reqs.filter((r) => !r.st).length, pendRev = s.recv.filter((t) => t.st === 'pending').length;
+    const TABS = [['request', cc("r3.tm_tab_ask")], ['inbox', cc("r3.tm_tab_write") + (pendIn ? ' · ' + pendIn : '')], ['review', cc("r3.tm_tab_about") + (pendRev ? ' · ' + pendRev : '')]];
+    return {
+      title: writing ? cc("r3.tm_write_title") : cc("r3.tm_title"),
+      backHref: writing ? 'Testimonials.dc.html' : 'SeekerProfile.dc.html',
+      showTabs: !writing,
+      tabs: TABS.map((t) => ({ label: t[1], on: String(s.view === t[0]), cls: s.view === t[0] ? 'on' : '', pick: () => this.setState({ view: t[0], writing: '', tried: false }) })),
+      vRequest: s.view === 'request', vInbox: s.view === 'inbox' && !writing, vWrite: writing, vReview: s.view === 'review',
+      // Ask
+      notSent: !s.sent.length, sent: s.sent.length > 0, sentNames: s.sent,
+      sentTitle: cc("r3.tm_sent_title", { n: s.sent.length }),
+      askMore: () => this.setState({ sent: [], sel: {}, msg: '' }),
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      conns: this.conns.filter((c) => !q || (c.name + ' ' + c.sub).toLowerCase().includes(q)).map((c) => { const on = !!s.sel[c.name]; return { ...c, ini: ini(c.name), avCls: av(c), kind: kind(c), kindCls: c.v ? 'badge b-g' : 'badge b-p', on: String(on), boxCls: on ? 'tm-box on' : 'tm-box', toggle: () => this.setState({ sel: { ...s.sel, [c.name]: !on } }) }; }),
+      msg: s.msg, onMsg: (e) => this.setState({ msg: e.target.value }), msgCount: s.msg.length + ' / 200',
+      sendOff: String(!nSel), sendCls: nSel ? 'btn btn-p' : 'btn btn-p is-off',
+      sendLabel: nSel ? cc("r3.tm_send_n", { n: nSel }) : cc("r3.tm_send_pick"),
+      send: () => { if (!nSel) { this.flash(cc("r3.tm_send_pick")); return; } this.setState({ sent: Object.keys(s.sel).filter((k) => s.sel[k]) }); },
+      // To write
+      reqs: s.reqs.map((r, i) => ({ ...r, ini: ini(r.name), avCls: av(r), hasNote: !!r.note, open: !r.st, closed: !!r.st,
+        stText: r.st === 'submitted' ? cc("r3.tm_submitted_badge") : cc("r3.tm_ignored_badge"), stCls: r.st === 'submitted' ? 'badge b-g' : 'badge b-n',
+        ignore: () => { const x = s.reqs.slice(); x[i] = { ...r, st: 'ignored' }; this.setState({ reqs: x }); this.flash(cc("r3.tm_ignored")); },
+        write: () => this.setState({ writing: r.name, rel: '', proj: '', text: '', tried: false }) })),
+      // Write
+      w: W ? { name: W.name, sub: W.sub, ini: ini(W.name), avCls: av(W), decides: cc("r3.tm_decides", { name: W.name.split(' ')[0] }) } : { name: '', sub: '', ini: '', avCls: 'av', decides: '' },
+      rels: RELS.map((r) => ({ label: r[1], on: String(s.rel === r[0]), cls: s.rel === r[0] ? 'chip on' : 'chip', pick: () => this.setState({ rel: r[0] }) })),
+      relErr, proj: s.proj, onProj: (e) => this.setState({ proj: e.target.value }),
+      text: s.text, onText: (e) => this.setState({ text: e.target.value }), textCount: s.text.length + ' / 500',
+      textErr, textOk: !textErr, textCls: textErr ? 'inp bad' : 'inp',
+      cancelWrite: () => this.setState({ writing: '', tried: false }),
+      submit: () => {
+        if (!s.rel || tLen < 20) { this.setState({ tried: true }); return; }
+        const x = s.reqs.map((r) => (r.name === W.name ? { ...r, st: 'submitted' } : r));
+        this.setState({ reqs: x, writing: '', tried: false, text: '', proj: '', rel: '' });
+        this.flash(cc("r3.tm_submitted", { name: W.name.split(' ')[0] }));
+      },
+      // About you
+      recv: s.recv.map((t, i) => ({ ...t, ini: ini(t.name), avCls: av(t), meta: [meta(t), t.when].filter(Boolean).join(' · '),
+        pending: t.st === 'pending', isPub: t.st === 'published', isPriv: t.st === 'private',
+        stText: t.st === 'published' ? cc("r3.tm_published_badge") : t.st === 'private' ? cc("r3.tm_private_badge") : cc("r3.tm_new_badge"),
+        stCls: t.st === 'published' ? 'badge b-g' : t.st === 'private' ? 'badge b-n' : 'badge b-p',
+        publish: () => setRecv(i, 'published', cc("r3.tm_published_toast")),
+        keep: () => setRecv(i, 'private', cc("r3.tm_private_toast")) })),
+      pub: pub.map((t) => ({ ...t, meta: meta(t) || t.when })), pubN: pub.length, hasPub: pub.length > 0, noPub: !pub.length,
+      toast: !!s.toast, toastText: s.toast
+    };
+  }
+}
+ccHook(Component, ["q","msg","proj","text"]);
+</script>
+</body>
+</html>

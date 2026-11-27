@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Job Poster home</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div style="flex: none; padding: 20px 20px 8px; display: flex; align-items: center; gap: 12px">
+    <div class="sp"><div class="t-s mut">{{cct.poster_home.hello}}</div><div class="t-h1">{{cct.common.kavya}}</div></div>
+    <a href="ForumWall.dc.html" class="iconbtn" aria-label="{{cct.common.association_notices}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></a>
+    <a href="Notifications.dc.html" class="iconbtn" aria-label="{{cct.poster_home.notifications_3_unread}}" style="position: relative"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span style="position: absolute; top: 6px; right: 6px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: #B42318; color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center" aria-hidden="true">{{cct.poster_home.t_3}}</span></a>
+    <a href="PosterProfile.dc.html" class="sq" aria-label="{{cct.poster_home.open_company_page}}" style="text-decoration: none"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M10 21v-3h4v3"></path></svg></a>
+  </div>
+
+  <sc-if value="{{banner}}" hint-placeholder-val="{{ true }}">
+    <div style="position: absolute; left: 12px; right: 12px; top: 76px; z-index: 7">
+      <div class="card glass-dark cc-reveal" role="status" style="flex-direction: row; align-items: center; gap: 12px; padding: 12px 12px 12px 14px">
+        <span class="sq" style="width: 40px; height: 40px; background: rgba(255,255,255,.12); color: #fff; border-color: transparent"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg></span>
+        <a href="Applicants.dc.html" class="sp" style="color: #fff; text-decoration: none; min-width: 0"><div class="t-s b">{{cct.poster_home.focus_puller_feature_film_passed}}</div><div class="t-c" style="color: #DCD0FE">{{cct.poster_home.new_applicants_are_waiting_view}}</div></a>
+        <button class="iconbtn" onClick="{{dismiss}}" aria-label="{{cct.common.dismiss}}" style="color: #fff; width: 32px; height: 32px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+      </div>
+    </div>
+  </sc-if>
+  <div class="sc" style="gap: 20px; padding-top: 8px">
+    <div class="card" style="gap: 14px">
+      <div class="row"><div class="sp"><div class="t-h3">{{cct.common.lantern_pictures}}</div><div class="t-s mut">{{cct.common.production_house_mumbai}}</div></div><span class="badge b-n">{{cct.common.free_plan}}</span></div>
+      <a class="btn btn-p w100" href="CreateJob.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{cct.common.post_a_job_2}}</a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+      <a href="MyJobs.dc.html" class="card" style="padding: 12px; gap: 2px; text-decoration: none"><div class="t-h1">{{cct.poster_home.t_3}}</div><div class="t-c mut">{{cct.poster_home.active_jobs}}</div></a>
+      <a href="Applicants.dc.html" class="card" style="padding: 12px; gap: 2px; text-decoration: none"><div class="t-h1" style="color: #7C3AED">{{cct.poster_home.t_12}}</div><div class="t-c mut">{{cct.poster_home.new_applicants}}</div></a>
+      <a href="Applicants.dc.html" class="card" style="padding: 12px; gap: 2px; text-decoration: none"><div class="t-h1">{{cct.common.t_5}}</div><div class="t-c mut">{{cct.common.under_review_2}}</div></a>
+    </div>
+
+    <div class="sec"><h2>{{cct.poster_home.active_jobs}}</h2><a href="MyJobs.dc.html" class="btn btn-t btn-sm">{{cct.common.manage}}</a></div>
+    <div class="list">
+      <a class="li" href="PosterJobDetail.dc.html"><div class="sp"><div class="t-h3 trunc">{{cct.common.focus_puller_feature_film_hindi_2}}</div><div class="t-c mut" style="margin-top: 2px">{{cct.poster_home.camera_film_city_32_days}}</div></div><span class="badge b-p">{{cct.poster_home.t_18}}</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
+      <a class="li" href="Applicants.dc.html"><div class="sp"><div class="t-h3 trunc">{{cct.common.production_designer_period_drama_pilot}}</div><div class="t-c mut" style="margin-top: 2px">{{cct.poster_home.art_mumbai_6_weeks_posted}}</div></div><span class="badge b-p">{{cct.common.t_9}}</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
+      <a class="li" href="Applicants.dc.html"><div class="sp"><div class="t-h3 trunc">{{cct.common.spot_boy_set_assistant_4}}</div><div class="t-c mut" style="margin-top: 2px">{{cct.poster_home.production_goa_10_days_posted}}</div></div><span class="badge b-n">{{cct.poster_home.t_0}}</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></a>
+    </div>
+
+    <div class="sec"><h2>{{cct.poster_home.recent_applicant_activity}}</h2></div>
+    <div class="list">
+      <a class="li" href="ApplicantDetail.dc.html"><div class="av" data-ini="AR">{{cct.common.ar}}</div><div class="sp"><div class="t-s b">{{cct.poster_home.aditya_rao_applied}}</div><div class="t-c mut">{{cct.poster_home.focus_puller_2h_ago}}</div></div><span class="badge b-n"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>{{cct.common.applied}}</span></a>
+      <a class="li" href="ApplicantDetail.dc.html"><div class="av g" data-ini="SM">{{cct.poster_home.sm}}</div><div class="sp"><div class="t-s b">{{cct.poster_home.sana_mirza_applied}}</div><div class="t-c mut">{{cct.poster_home.production_designer_5h_ago}}</div></div><span class="badge b-n"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>{{cct.common.applied}}</span></a>
+      <a class="li" href="ApplicantDetail.dc.html"><div class="av" data-ini="PN">{{cct.common.pn}}</div><div class="sp"><div class="t-s b">{{cct.common.priya_nair}}</div><div class="t-c mut">{{cct.poster_home.focus_puller_yesterday}}</div></div><span class="badge b-p"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>{{cct.common.under_review}}</span></a>
+    </div>
+
+    <a href="Talent.dc.html" class="card" style="text-decoration: none; flex-direction: row; align-items: center; gap: 12px">
+      <div class="sq g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></div>
+      <div class="sp"><div class="t-h3">{{cct.common.find_talent}}</div><div class="t-s mut">{{cct.poster_home.browse_the_job_seeker_directory}}</div></div>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg>
+    </a>
+    <a href="Discover.dc.html" class="card" style="text-decoration: none; flex-direction: row; align-items: center; gap: 12px">
+      <div class="sq"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></div>
+      <div class="sp"><div class="t-h3">{{cct.poster_home.find_equipment_vendors}}</div><div class="t-s mut">{{cct.poster_home.cameras_lighting_sound_and_more}}</div></div>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg>
+    </a>
+    <a href="Subscription.dc.html" class="alert a-i" style="text-decoration: none"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 8 4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg><div class="sp">{{cct.poster_home.free_plan_3_of}} <span class="ph-tag">{{cct.common.limit_tbc}}</span> {{cct.poster_home.active_jobs_used}} <b>{{cct.common.view_plans}}</b></div></a>
+  </div>
+
+  <nav class="nav" aria-label="{{cct.common.main}}"><span class="nav-cap" aria-hidden="true"></span>
+    <a class="on" href="PosterHome.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>{{cct.common.home}}</a>
+    <a href="DiscoverFeed.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg></span>{{cct.common.discover}}</a>
+    <a href="Associations.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6"></path><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"></path></svg></span>{{cct.common.associations}}</a>
+    <a href="MyJobs.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>{{cct.common.my_jobs_2}}</a>
+    <a href="PosterProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-3h4v3"></path></svg></span>{{cct.common.profile}}</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { banner: true }; }
+  componentDidMount() { this.t = setTimeout(() => this.setState({ banner: false }), 6000); }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() { return { banner: this.state.banner, dismiss: () => this.setState({ banner: false }) }; }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

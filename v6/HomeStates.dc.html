@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home feed — states</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div style="padding: 40px; display: flex; flex-direction: column; gap: 28px; background: #EEF4EC; min-height: 100%">
+  <div style="max-width: 1100px"><div class="t-over">Home feed · Crew Member</div><div class="t-d" style="margin-top: 4px">Home feed across states</div><p class="t-b mut" style="margin-top: 6px">Same sections in the same order for everyone: Jobs for you → Crew → From your network. Pending items (new applicants, &gt;5 applications, application status) live under the notification bell only. Each section shows up to 3 items and a “See all” link.</p></div>
+  <div style="display: flex; gap: 32px; align-items: flex-start">
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #7C3AED">State 1</div><div class="t-h3">New user</div><div class="t-c mut">No posts, no applications · “Hiring?” prompt in Crew</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #E1EADF; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative; background: #F3F8F1">
+        <dc-import name="SeekerHome" store="{{sNew}}" act="{{act}}" hint-size="390px,844px"></dc-import>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #7C3AED">State 2</div><div class="t-h3">Pending applications only</div><div class="t-c mut">Bell shows the application change · general crew</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #E1EADF; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative; background: #F3F8F1">
+        <dc-import name="SeekerHome" store="{{sApps}}" act="{{act}}" hint-size="390px,844px"></dc-import>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #7C3AED">State 3</div><div class="t-h3">Active posts + new applicants</div><div class="t-c mut">Bell shows applicants · “Crew for your open roles”</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #E1EADF; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative; background: #F3F8F1">
+        <dc-import name="SeekerHome" store="{{sPosts}}" act="{{act}}" hint-size="390px,844px"></dc-import>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #7C3AED">State 4</div><div class="t-h3">Posts + applications (busiest)</div><div class="t-c mut">Same order · 3 items per section</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #E1EADF; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative; background: #F3F8F1">
+        <dc-import name="SeekerHome" store="{{sBoth}}" act="{{act}}" hint-size="390px,844px"></dc-import>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #7C3AED">Empty state</div><div class="t-h3">No job recommendations yet</div><div class="t-c mut">Jobs section prompts to complete the profile</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #E1EADF; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative; background: #F3F8F1">
+        <dc-import name="SeekerHome" store="{{sNew}}" act="{{act}}" noRecs="{{yes}}" hint-size="390px,844px"></dc-import>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 2240, "height": 1040}}'>
+class Component extends DCLogic {
+  crewData(kind) {
+    if (kind === 'new') return { hiring: { setup: false, desig: '', companies: [] }, posts: [], apps: [], saved: {}, flash: null, avail: {} };
+    return {
+      hiring: { setup: true, desig: 'Focus Puller', companies: ['Lantern Pictures', 'Third Bell Collective'] },
+      posts: [
+        { id: 'p1', title: '2nd Assistant Camera — Feature Film', house: 'Lantern Pictures', ptype: 'Feature Film', cat: 'Camera', loc: 'Film City, Mumbai', dur: '32 days', dates: '4 Nov 2026 – 12 Dec 2026', start: '2026-11-04', end: '2026-12-12', pay: '₹4,000 – ₹6,000 per day', st: 'Active', apps: 7, newA: 3, posted: '2d ago' },
+        { id: 'p2', title: '1st Assistant Camera — Short Film', house: 'Third Bell Collective', ptype: 'Short Film', cat: 'Camera', loc: 'Pune', dur: '4 days', dates: '20 Nov 2026 – 23 Nov 2026', start: '2026-11-20', end: '2026-11-23', pay: '₹5,000 per day', st: 'Active', apps: 2, newA: 0, posted: '5d ago' },
+        { id: 'p3', title: 'Camera Trainee — Short Film', house: 'Third Bell Collective', ptype: 'Short Film', cat: 'Camera', loc: 'Pune', dur: '4 days', dates: '20 Nov 2026 – 23 Nov 2026', start: '2026-11-20', end: '2026-11-23', pay: 'Not specified', st: 'Active', apps: 0, newA: 0, posted: 'Yesterday' },
+        { id: 'p4', title: 'Focus Puller — Music Video', house: 'Lantern Pictures', ptype: 'Other · Music video', cat: 'Camera', loc: 'Versova, Mumbai', dur: '3 days', dates: '10 Oct 2026 – 12 Oct 2026', start: '2026-10-10', end: '2026-10-12', pay: '₹7,000 per day', st: 'Closed', apps: 12, newA: 0, posted: 'Closed 9 Oct' }
+      ],
+      apps: [
+        { variant: 'main', title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', loc: 'Film City, Mumbai', dur: '32 days', status: 'Shortlisted', applied: '26 Oct 2026', isNew: true },
+        { variant: 'disc', title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', loc: 'Ramoji Film City, Hyderabad', dur: '18 days', status: 'Under Review', applied: '29 Oct 2026' },
+        { variant: 'tvc', title: 'Focus Puller — TVC, 2-day shoot', org: 'Pinewood Ads', loc: 'Bandra, Mumbai', dur: '2 days', status: 'Applied', applied: '1 Nov 2026' },
+        { variant: 'mv', title: 'Camera Operator — Music Video', org: 'Bluebird Records', loc: 'Versova, Mumbai', dur: '3 days', status: 'Rejected', applied: '9 Oct 2026' }
+      ],
+      saved: { 'Gaffer — TVC, 2-day shoot': true }, flash: null, avail: {}
+    };
+  }
+  renderVals() {
+    const both = this.crewData('active');
+    const mk = (crew) => ({ crew, conn: {}, plans: { seeker: 'free' } });
+    return {
+      sNew: mk(this.crewData('new')),
+      sApps: mk({ ...both, posts: [], hiring: { setup: false, desig: '', companies: [] } }),
+      sPosts: mk({ ...both, apps: [] }),
+      sBoth: mk(both), yes: true, act: () => {}
+    };
+  }
+}
+</script>
+</body>
+</html>

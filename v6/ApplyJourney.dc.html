@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Job application journey — applicant view</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div style="padding: 40px; display: flex; flex-direction: column; gap: 28px; background: #EEF5EC; min-height: 100%; font-family: Inter, system-ui, sans-serif; color: #1A1820">
+  <div style="max-width: 1240px"><div class="t-over">Revision 2 · client request</div><div class="t-d" style="margin-top: 4px">Job application journey — what the applicant sees</div><p class="t-b mut" style="margin-top: 6px">Screen by screen, from finding a job to a final decision. Every screen below is the live prototype screen. Statuses and the 7-day categorisation window are summarised underneath. <span class="ph-tag">For client review and approval</span></p></div>
+  <div style="display: flex; gap: 32px; align-items: flex-start">
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Step 1</div><div class="t-h3">Find a job</div><div class="t-c mut">Search and filter. Each card shows the job dates, location and fee (or “Fee not disclosed”).</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="JobSearch" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Step 2</div><div class="t-h3">Read the job details</div><div class="t-c mut">Name of the Production House, Department, job dates, fee and the recruiter’s full requirements.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="JobDetail" variant="main" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Step 3</div><div class="t-h3">Confirm and send</div><div class="t-c mut">Tap Apply now. A sheet shows exactly what the recruiter will see; the applicant confirms and sends.</div></div>
+      <div class="ph" style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative">
+        <div class="bar"><span class="iconbtn" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg></span><div class="ttl">Job details</div></div>
+        <div style="padding: 8px 20px; display: flex; flex-direction: column; gap: 10px; opacity: .45"><div class="t-h1">Focus Puller — Feature Film (Hindi)</div><div class="t-s mut">Lantern Pictures · 4 Nov – 12 Dec 2026</div></div>
+        <div class="scrim" style="position: absolute; inset: 0; display: flex; align-items: flex-end">
+          <div class="sheet" role="dialog" aria-label="Apply with your profile" style="width: 100%">
+            <div class="grab"></div>
+            <div class="t-h2">Apply with your profile</div>
+            <div class="t-s mut">Lantern Pictures will see the details below. You can’t edit an application after sending it.</div>
+            <div class="card" style="gap: 10px"><div class="row" style="gap: 12px"><div class="av" data-ini="VK">VK</div><div class="sp"><div class="t-h3">Varun Khandelwal</div><div class="t-s mut">Crew Member · Mumbai · crew01</div></div></div><div class="t-c mut">Includes your bio, availability for 4 Nov – 12 Dec, and contact details</div></div>
+            <span class="btn btn-p w100">Send application</span>
+            <span class="btn btn-t w100">Cancel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Step 4</div><div class="t-h3">Sent — waiting to be categorised</div><div class="t-c mut">Confirmation shown; the application reads “Uncategorised” until the recruiter reviews it (within 7 days).</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="JobDetail" variant="main" app="Applied" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Step 5</div><div class="t-h3">Track every application</div><div class="t-c mut">Jobs I Have Applied To — with job dates, status and a note when an application lapses after 7 days.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="MyApplications" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #367A22">Step 6</div><div class="t-h3">Decision and remarks</div><div class="t-c mut">The applicant is notified of each status change. The recruiter’s remarks are visible to the applicant.</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #DDE8DA; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative"><dc-import name="JobDetail" variant="main" app="Shortlisted" hint-size="390px,844px"></dc-import></div>
+    </div>
+  </div>
+  <div class="card" style="gap: 14px; max-width: 2500px; background: rgba(255,255,255,.85)">
+    <div class="t-h2">Application statuses (applicant view)</div>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 6px"><span class="badge b-w" style="align-self: flex-start">Uncategorised</span><div class="t-s">Sent. The recruiter hasn’t categorised it yet. Recruiters must categorise within 7 days.</div></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><span class="badge b-p" style="align-self: flex-start">Under Review</span><div class="t-s">The recruiter is actively reviewing the application.</div></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><span class="badge b-g" style="align-self: flex-start">Shortlisted</span><div class="t-s">Moved to the shortlist, with the recruiter’s remarks.</div></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><span class="badge b-w" style="align-self: flex-start">On Hold</span><div class="t-s">Kept for later; the requirement may still be open.</div></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><span class="row" style="gap: 6px"><span class="badge b-g">Selected</span><span class="badge b-e">Rejected</span></span><div class="t-s">Final decision; the requirement can then be closed.</div></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><span class="badge b-n" style="align-self: flex-start">No longer under review</span><div class="t-s">Not categorised within 7 days. The applicant is notified and can apply elsewhere.</div></div>
+    </div>
+    <div class="t-c mut">Every status change sends a notification. Messaging is not part of this phase.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":2600,"height":1480}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My applications</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="SeekerHome.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.my_applications}}</div></div>
+  <div style="flex: none; padding: 0 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+      <div class="card" style="padding: 10px 12px; gap: 0"><div class="t-h2">{{nAll}}</div><div class="t-c mut">{{cct.common.applied}}</div></div>
+      <div class="card" style="padding: 10px 12px; gap: 0"><div class="t-h2" style="color: #7C3AED">{{nActive}}</div><div class="t-c mut">{{cct.common.in_progress}}</div></div>
+      <div class="card" style="padding: 10px 12px; gap: 0"><div class="t-h2" style="color: #2C6619">{{nShort}}</div><div class="t-c mut">{{cct.common.shortlisted}}</div></div>
+    </div>
+    <div class="chips x"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="5"><button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+  </div>
+  <div class="sc" style="padding-top: 0; gap: 12px">
+    <sc-for list="{{rows}}" as="a" hint-placeholder-count="4">
+      <a href="JobDetail.dc.html" data-job="{{a.variant}}" data-app="{{a.status}}" class="card" style="text-decoration: none; gap: 8px">
+        <div class="row" style="align-items: flex-start; gap: 10px"><div class="sp"><div class="t-h3 clamp2">{{a.title}}</div><div class="t-s mut" style="margin-top: 2px">{{a.org}}</div></div><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg></div>
+        <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{a.loc}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{a.dur}}</span></div>
+        <div class="jd"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg><span>{{a.dates}}</span></div>
+        <sc-if value="{{a.hasNote}}" hint-placeholder-val="{{ false }}"><div class="t-c" style="color: #8A5300">{{a.note}}</div></sc-if>
+        <div class="row" style="gap: 8px"><span class="{{a.badge}}">{{a.label}}</span><span class="t-c mut">{{cct.my_applications.applied}}{{a.applied}}</span><span class="sp"></span><sc-if value="{{a.isNew}}" hint-placeholder-val="{{ false }}"><span class="t-c b" style="color: #2C6619">{{cct.my_applications.updated_2h_ago}}</span></sc-if></div>
+      </a>
+    </sc-for>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></div><div class="t-h3">{{cct.my_applications.no_applications_here}}</div><div class="t-s mut">{{cct.my_applications.jobs_you_apply_for_will}}</div><a class="btn btn-s" href="JobSearch.dc.html">{{cct.common.find_jobs}}</a></div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store": {"editor": null}, "$preview": {"width": 390, "height": 844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.data = [
+      { variant: 'main', title: cc("common.focus_puller_feature_film_hindi"), org: cc("common.lantern_pictures"), loc: cc("common.film_city_mumbai"), dur: cc("common.t_32_days"), dates: cc("r2.t_4_nov_12_dec_2026"), status: 'Shortlisted', applied: cc("common.t_26_oct_2026"), isNew: true },
+      { variant: 'disc', title: cc("common.second_unit_camera_operator_action"), org: cc("common.redline_motion_pictures"), loc: cc("common.ramoji_film_city_hyderabad"), dur: cc("common.t_18_days"), dates: cc("r2.t_10_27_nov_2026"), status: 'Under Review', applied: cc("common.t_29_oct_2026") },
+      { variant: 'tvc', title: cc("common.focus_puller_tvc_2_day"), org: cc("common.pinewood_ads"), loc: cc("common.bandra_mumbai"), dur: cc("common.t_2_days"), dates: cc("r2.t_14_15_nov_2026"), status: 'Applied', applied: cc("common.t_1_nov_2026") },
+      { variant: 'mv', title: cc("common.camera_operator_music_video"), org: cc("common.bluebird_records"), loc: cc("common.versova_mumbai"), dur: cc("common.t_3_days"), dates: cc("r2.t_18_20_oct_2026"), status: 'Rejected', applied: cc("common.t_9_oct_2026") }
+    ];
+    // R2: an application the poster hasn't categorised within 7 days is no longer under review.
+    this.data.splice(3, 0, { variant: 'tvc', title: cc("r2.steadicam_operator_web_series_promo"), org: cc("r2.northlight_studios"), loc: cc("r2.andheri_mumbai"), dur: cc("r2.t_1_day"), dates: cc("r2.t_8_nov_2026"), status: 'Lapsed', applied: cc("r2.t_2_nov_2026") });
+    this.state = { tab: 'All' };
+  }
+  renderVals() {
+    const s = this.state;
+    const extra = (this.props.store && this.props.store.applied) || [];
+    const all = extra.concat(this.data);
+    const B = { Lapsed: 'badge b-n', Applied: 'badge b-w', 'Under Review': 'badge b-p', Shortlisted: 'badge b-g', 'On Hold': 'badge b-w', Selected: 'badge b-g', Rejected: 'badge b-e' };
+    const tabs = ['All', 'Applied', 'Under Review', 'Shortlisted', 'Rejected', 'Lapsed'];
+    const LBL = { Applied: cc("r2.uncategorised"), Lapsed: cc("r2.no_longer_under_review") };
+    const list = all.filter((a) => s.tab === 'All' || a.status === s.tab);
+    return {
+      nAll: all.length, nActive: all.filter((a) => a.status !== 'Rejected' && a.status !== 'Selected' && a.status !== 'Lapsed').length, nShort: all.filter((a) => a.status === 'Shortlisted').length,
+      tabs: tabs.map((t) => ({ label: t === 'All' ? cc("my_applications.all") + ccv(all.length) : (LBL[t] || t), on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) })),
+      rows: list.map((a) => ({ ...a, dates: a.dates || '', label: LBL[a.status] || a.status, hasNote: a.status === 'Applied' || a.status === 'Lapsed', note: a.status === 'Lapsed' ? cc("r2.the_job_poster_didn_t_categorise_your") : cc("r2.not_yet_categorised_by_the_job_poster"), badge: B[a.status], isNew: !!a.isNew })), empty: list.length === 0
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

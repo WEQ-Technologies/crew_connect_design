@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My notices — association</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div style="flex: none; padding: 18px 16px 8px 20px; display: flex; align-items: center; gap: 12px">
+    <dc-import name="AssocLogo" code="{{key}}" size="44" hint-size="44px,44px"></dc-import>
+    <div class="sp" style="min-width: 0"><div class="row" style="gap: 6px"><span class="{{typeCls}}" style="height: 20px; font-size: 11px">{{typeLabel}}</span><span class="t-c mut">{{cct.r2.management_dashboard}}</span></div><div class="t-h3 trunc">{{name}}</div></div>
+    <a class="iconbtn" href="Welcome.dc.html" aria-label="{{cct.common.log_out}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"></path></svg></a>
+  </div>
+  <div class="sc" style="gap: 16px; padding-top: 8px">
+    <div class="card" style="gap: 12px">
+      <div class="row"><span class="t-s b sp">{{cct.r2.posting_access}}</span><span class="{{accessCls}}">{{accessLabel}}</span></div>
+      <sc-if value="{{canPublish}}" hint-placeholder-val="{{ true }}"><a class="btn btn-p w100" href="NoticeForm.dc.html" data-mode="create"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{cct.r2.create_notice}}</a></sc-if>
+      <sc-if value="{{blocked}}" hint-placeholder-val="{{ false }}">
+        <div class="alert a-w" role="status" style="align-items: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg><div>{{blockedMsg}} {{cct.r2.your_published_notices_stay_visible_for_help}} <b>support@crewconnect.com</b>.</div></div>
+        <button class="btn w100 dis" disabled="" aria-disabled="true">{{cct.r2.create_notice}}</button>
+      </sc-if>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px"><a class="btn btn-s btn-sm" href="AssociationProfile.dc.html" data-assoc="{{key}}">{{cct.r2.view_public_profile}}</a><a class="btn btn-s btn-sm" href="ForumWall.dc.html">{{cct.r2.forum_wall}}</a></div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+      <div class="card" style="padding: 12px; gap: 2px"><div class="t-h1">{{total}}</div><div class="t-c mut">{{cct.r2.notices_published}}</div></div>
+      <div class="card" style="padding: 12px; gap: 2px"><div class="t-h1">{{recentN}}</div><div class="t-c mut">{{cct.r2.in_the_last_30_days}}</div></div>
+      <div class="card" style="padding: 12px; gap: 2px"><div class="t-h1">{{editedN}}</div><div class="t-c mut">{{cct.r2.edited}}</div></div>
+    </div>
+    <div class="card" style="gap: 10px">
+      <div class="row"><span class="t-s b sp">{{cct.r2.departments_you_cater_to}}</span><span class="t-c mut">{{deptCount}}</span></div>
+      <div class="chips"><sc-for list="{{myDepts}}" as="d" hint-placeholder-count="6"><button class="{{d.cls}}" aria-pressed="{{d.on}}" onClick="{{d.toggle}}">{{d.label}}</button></sc-for></div>
+      <span class="help">{{cct.r2.shown_as_tags_on_your_profile_members_2}}</span>
+    </div>
+    <div class="sec"><h2>{{cct.r2.my_notices}}</h2><span class="t-c mut">{{cct.common.newest_first}}</span></div>
+    <sc-for list="{{rows}}" as="n" hint-placeholder-count="3">
+      <div class="card" style="gap: 8px">
+        <a href="NoticeDetail.dc.html" data-notice="{{n.id}}" class="t-h3" style="color: #1A1820; text-decoration: none">{{n.title}}</a>
+        <div class="chips"><sc-for list="{{n.depts}}" as="d" hint-placeholder-count="2"><span class="tag">{{d}}</span></sc-for></div>
+        <div class="t-c mut">{{cct.r2.published}} {{n.posted}}<sc-if value="{{n.isEdited}}" hint-placeholder-val="{{ false }}"> · {{cct.r2.last_edited}} {{n.edited}}</sc-if><sc-if value="{{n.hasFile}}" hint-placeholder-val="{{ false }}"> · {{cct.r2.pdf_attached_2}}</sc-if></div>
+        <div class="row" style="gap: 8px">
+          <a class="btn btn-s btn-sm" href="NoticeDetail.dc.html" data-notice="{{n.id}}" style="flex: 1">{{cct.r2.preview}}</a>
+          <sc-if value="{{canPublish}}" hint-placeholder-val="{{ true }}"><a class="btn btn-s btn-sm" href="NoticeForm.dc.html" data-mode="edit" data-notice="{{n.id}}" style="flex: 1">{{cct.r2.edit}}</a><button class="btn btn-d btn-sm" onClick="{{n.askDelete}}" aria-label="{{cct.r2.delete}} {{n.title}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button></sc-if>
+          <sc-if value="{{blocked}}" hint-placeholder-val="{{ false }}"><button class="btn btn-sm dis" disabled="" style="flex: 1">{{cct.r2.edit}}</button></sc-if>
+        </div>
+      </div>
+    </sc-for>
+    <sc-if value="{{none}}" hint-placeholder-val="{{ false }}"><div class="empty" style="padding-top: 24px"><div class="t-h3">{{cct.r2.no_notices_yet}}</div><div class="t-s mut">{{cct.r2.notices_you_publish_appear_here_and_on}}</div></div></sc-if>
+  </div>
+  <sc-if value="{{confirm}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c"><div class="dlg" role="alertdialog" aria-label="{{cct.r2.delete_notice}}">
+      <div class="t-h2">{{cct.r2.delete_this_notice}}</div>
+      <div class="t-s mut">“{{cTitle}}” {{cct.r2.will_be_removed_from_the_forum_wall}}</div>
+      <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{cancel}}" style="flex: 1">{{cct.common.cancel}}</button><button class="btn btn-danger" onClick="{{doDelete}}" style="flex: 1">{{cct.r2.delete}}</button></div>
+    </div></div>
+  </sc-if>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status" style="bottom: 24px">{{toastText}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"entity":{"editor":"enum","options":["","CTG","WLA","SSP","IPC","ADG","CMF","EPF","SCA","DCI","SAA"],"default":""},"postingAccess":{"editor":"enum","options":["","granted","revoked"],"default":""},"status":{"editor":"enum","options":["","active","inactive"],"default":""},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* CrewConnect Association & Forum data (mock, from crewconnect_content.json › assoc_module). Shape is ready for a backend API. */
+var AF = (function (w) {
+  if (w.__ccAssoc) return w.__ccAssoc;
+  var m = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.assoc_module) || { entities: [], notices: [], departments: [], variants: {}, recentFrom: '2026-10-20' };
+  var byId = {};
+  m.entities.forEach(function (e) { byId[e.id] = e; });
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmt(iso, withTime) {
+    if (!iso) return '';
+    var d = new Date(iso); if (isNaN(d)) return iso;
+    var s = d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+    if (withTime === false) return s;
+    var h = d.getHours(), mi = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    return s + ', ' + h + ':' + (mi < 10 ? '0' : '') + mi + ' ' + ap;
+  }
+  function nowIso() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':00'; }
+  // Notices = seed data + this session's changes (store.notices: created[], edited{id: patch}, deleted{id: true}).
+  function notices(store) {
+    var n = (store && store.notices) || {}, cr = n.created || [], ed = n.edited || {}, del = n.deleted || {};
+    return cr.concat(m.notices).filter(function (x) { return !del[x.id] && byId[x.entity]; })
+      .map(function (x) { return ed[x.id] ? Object.assign({}, x, ed[x.id]) : x; })
+      .sort(function (a, b) { return a.postedAt < b.postedAt ? 1 : -1; });
+  }
+  function canPublish(e) { return !!e && e.status === 'active' && e.access === 'issued'; }
+  function entityByEmail(em) { em = (em || '').trim().toLowerCase(); for (var i = 0; i < m.entities.length; i++) if (m.entities[i].email === em) return m.entities[i]; return null; }
+  function preview(x) { var b = x.body || []; for (var i = 0; i < b.length; i++) if (typeof b[i] === 'string') return b[i]; return ''; }
+  return (w.__ccAssoc = { m: m, entities: m.entities, byId: byId, depts: m.departments, fmt: fmt, nowIso: nowIso, notices: notices, canPublish: canPublish, entityByEmail: entityByEmail, preview: preview, isOld: function (x) { return x.postedAt < m.recentFrom; } });
+})(window);
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { confirm: null, toast: '', gone: {}, deps: null }; }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state, st = this.props.store || {}, act = this.props.act;
+    // The signed-in entity comes from the login (store.entity); board/demo props can override status and access.
+    const base = AF.byId[this.props.entity || st.entity] || AF.byId.CTG;
+    const E = { ...base, access: this.props.postingAccess === 'revoked' ? 'revoked' : this.props.postingAccess === 'granted' ? 'issued' : base.access, status: this.props.status || base.status };
+    const ok = AF.canPublish(E);
+    const mine = AF.notices(st).filter((x) => x.entity === E.id && !s.gone[x.id]);
+    const deps = s.deps || E.depts.reduce((o, d) => ({ ...o, [d]: true }), {});
+    const nD = AF.depts.filter((d) => deps[d]).length;
+    const flash = (m) => { this.setState({ toast: m }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2200); };
+    const tgt = mine.find((x) => x.id === s.confirm);
+    return {
+      key: E.id, name: E.name, typeLabel: E.type === 'Forum' ? cc("r2.forum") : cc("r2.association"), typeCls: E.type === 'Forum' ? 'badge b-y' : 'badge b-p',
+      canPublish: ok, blocked: !ok,
+      accessLabel: E.status !== 'active' ? cc("r2.account_inactive") : E.access === 'issued' ? cc("r2.issued") : cc("r2.revoked"), accessCls: ok ? 'badge b-g' : 'badge b-e',
+      blockedMsg: E.status !== 'active' ? cc("r2.your_account_is_inactive_so_you_can") : cc("r2.posting_access_has_been_revoked_by_the"),
+      total: mine.length, recentN: mine.filter((x) => !AF.isOld(x)).length, editedN: mine.filter((x) => !!x.editedAt).length,
+      myDepts: AF.depts.map((d) => ({ label: d, on: !!deps[d], cls: deps[d] ? 'chip on' : 'chip', toggle: () => this.setState({ deps: { ...deps, [d]: !deps[d] } }) })), deptCount: nD + ' ' + cc("r2.selected"),
+      rows: mine.map((x) => ({ id: x.id, title: x.title, depts: x.depts, posted: AF.fmt(x.postedAt), isEdited: !!x.editedAt, edited: AF.fmt(x.editedAt), hasFile: !!x.attachment, askDelete: () => this.setState({ confirm: x.id }) })),
+      none: mine.length === 0,
+      confirm: !!tgt, cTitle: tgt ? tgt.title : '', cancel: () => this.setState({ confirm: null }),
+      doDelete: () => { const id = s.confirm; if (act) act('noticeDelete', id); this.setState({ confirm: null, gone: { ...s.gone, [id]: true } }); flash(cc("r2.notice_deleted")); },
+      toast: !!s.toast, toastText: s.toast
+    };
+  }
+}
+ccHook(Component, ["rows","myDepts"]);
+</script>
+</body>
+</html>

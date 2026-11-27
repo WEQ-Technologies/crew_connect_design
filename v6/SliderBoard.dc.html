@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Explore slider, Your jobs and Profile clean-up</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.rv-ph{width:390px;height:844px;border-radius:28px;overflow:hidden;border:1px solid #E1EADF;box-shadow:0 12px 32px rgba(26,24,32,.10);position:relative;background:#F3F8F1;flex:none}
+.rv-shell .ph nav.nav{visibility:hidden!important}
+.rv-nav{position:absolute;left:0;right:0;bottom:0;z-index:30}
+.rv-col{display:flex;flex-direction:column;gap:12px;width:390px;flex:none}
+.rv-row{display:flex;gap:40px;align-items:flex-start}
+.rv-lab{width:150px;flex:none;padding-top:40px}
+.rv-tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:11px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.st-new{background:#E4F2DD;color:#2C6419}.st-mod{background:#FFF1D6;color:#8A5300}.st-reu{background:#E8F1E6;color:#6527C8}
+.rv-coach{position:absolute;left:16px;right:16px;bottom:76px;z-index:40;padding:14px 16px;border-radius:18px;background:rgba(22,48,32,.92);color:#fff;box-shadow:0 18px 40px -12px rgba(22,48,32,.55);font-family:Inter,system-ui,sans-serif}
+.rv-coach:after{content:'';position:absolute;bottom:-7px;width:14px;height:14px;background:rgba(22,48,32,.92);transform:rotate(45deg);left:var(--ca,50%);margin-left:-7px;border-radius:2px}
+.rv-coach b.btn2{display:inline-block;margin-top:10px;border-radius:10px;padding:8px 14px;background:#fff;color:#6527C8;font:600 13px Inter,system-ui,sans-serif}
+</style>
+</helmet>
+<div style="padding: 48px; display: flex; flex-direction: column; gap: 36px; background: #EEF4EC; min-height: 100%; box-sizing: border-box; width: 2500px">
+  <div style="max-width: 1180px"><div class="t-over">Explore slider · Your jobs · Profile</div><div class="t-d" style="margin-top: 4px">Explore slider, Your jobs and Profile clean-up</div><p class="t-b mut" style="margin-top: 8px">Explore CrewConnect becomes a horizontal slider right below the completion card. Users with both Crew modes get one “Your jobs” card with two tabs. Invoices leaves the Profile Account list.</p>
+    <div class="row" style="gap: 10px; margin-top: 12px"><span class="rv-tag st-new">New</span><span class="t-c mut">new screen</span><span class="rv-tag st-mod">Modified</span><span class="t-c mut">existing screen, role-aware now</span><span class="rv-tag st-reu">Reused</span><span class="t-c mut">unchanged</span></div></div>
+  <div style="display: flex; flex-direction: column; gap: 22px">
+    <div class="t-h1" style="border-top: 1px solid #D3DFD1; padding-top: 22px">Explore slider, Your jobs and Profile clean-up</div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED">Explore slider — directions</div><div class="t-c mut" style="margin-top:4px">Same tiles and sizes; only the card surface changes.</div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Explore slider — direction A · Glass wash (chosen)</span></div><div class="t-c mut" style="margin-top: 4px">Tint wash + faint oversized icon; best depth, text stays on near-white</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mS}}" act="{{act}}" slider="a" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Explore slider — direction B · Tinted band</span></div><div class="t-c mut" style="margin-top: 4px">Solid tint band behind the icon; strong but heavier in a row of five</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mS}}" act="{{act}}" slider="b" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Explore slider — direction C · Corner glow</span></div><div class="t-c mut" style="margin-top: 4px">Radial glow; lightest, but tints read weakly on the gradient page</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mS}}" act="{{act}}" slider="c" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED">Home by user type</div><div class="t-c mut" style="margin-top:4px">Slider sits directly below the completion card.</div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Home — Job Seeker</span></div><div class="t-c mut" style="margin-top: 4px">Completion → Explore → Your applications → Jobs for you</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mS}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Home — Recruiter</span></div><div class="t-c mut" style="margin-top: 4px">Completion → Explore → Your active posts</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mP}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dP}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Home — Both modes, Your jobs tabs</span></div><div class="t-c mut" style="margin-top: 4px">Completion → Explore → Your jobs (tabs)</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mB}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dB}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Home — Product Provider only</span></div><div class="t-c mut" style="margin-top: 4px">Completion → Explore (3 cards) → Your listings</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{vV}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rV}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Home — Job Seeker, 100% complete</span></div><div class="t-c mut" style="margin-top: 4px">Card hidden: Explore is the first section</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mSfull}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED">Your jobs (both modes)</div><div class="t-c mut" style="margin-top:4px">One card, two tabs; each tab is its existing card’s contents. Fixed height.</div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Your jobs — Applications tab</span></div><div class="t-c mut" style="margin-top: 4px">Header link: Applications · badge on Job posts (3 new applicants)</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mBapps}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dB}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Your jobs — Job posts tab</span></div><div class="t-c mut" style="margin-top: 4px">Header link: My Posts · badge on Applications (1 new update)</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mBposts}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dB}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Your jobs — empty tab</span></div><div class="t-c mut" style="margin-top: 4px">No posts yet: message centred inside the same height, buttons stay</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mBempty}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dB}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Your jobs — loading</span></div><div class="t-c mut" style="margin-top: 4px">Skeleton at the same height</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mB}}" act="{{act}}" demo="loading" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dB}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED">Turning on the second mode</div><div class="t-c mut" style="margin-top:4px">Single card becomes the tabbed section live.</div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Before — Job Seeker, single card</span></div><div class="t-c mut" style="margin-top: 4px">Your applications · Recruiter card says Turn on</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mS}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">After — Recruiter turned on</span></div><div class="t-c mut" style="margin-top: 4px">Your jobs opens on Job posts with a New badge; coach mark once; card says Open</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mBnew}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{&lt;div class=" rv-coach"="" style="--ca:30%"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.7">New for you</div><div style="font-size:15px;font-weight:700;margin-top:4px">Your jobs now has two tabs</div><div style="font-size:13px;line-height:18px;opacity:.85;margin-top:4px">Job posts is new next to Applications on Home. Tap or swipe the card to switch.</div><b class="btn2">Got it</b></dc-import></div>}}" modes="{{dB}}" active="home" hint-size="390px,96px"&gt;</div></div>
+    </div>
+    </div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED">Profile — Settings (updated in the Settings round)</div><div class="t-c mut" style="margin-top:4px">Invoices stays in the More dock and the Explore slider. Posts, applications, listings and calendar now live only in their own modules.</div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Profile — Job Seeker, no Invoices</span></div><div class="t-c mut" style="margin-top: 4px">App preferences (Hiring?) · Subscription · Payments · Legal · Log out · Delete account</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerProfile" store="{{mS}}" act="{{act}}" demo="account" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="profile" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Profile — Recruiter, no Invoices</span></div><div class="t-c mut" style="margin-top: 4px">App preferences (Looking for work?) · Subscription · Payments · Legal · Log out · Delete account</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerProfile" store="{{mP}}" act="{{act}}" demo="account" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dP}}" active="profile" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Profile — Both modes, no Invoices</span></div><div class="t-c mut" style="margin-top: 4px">App preferences (Crew modes) · Subscription · Payments · Legal · Log out · Delete account</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerProfile" store="{{mB}}" act="{{act}}" demo="account" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dB}}" active="profile" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Profile — Product Provider only, no Invoices</span></div><div class="t-c mut" style="margin-top: 4px">Subscription · Payments · Legal · Log out · Delete account (no App preferences for Vendor only)</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerProfile" store="{{vV}}" act="{{act}}" demo="account" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rV}}" modes="{{dS}}" active="profile" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+  </div>
+  <div class="card" style="max-width: 1180px; gap: 10px">
+    <div class="t-over">Decisions, states and motion</div>
+    <div class="t-s"><b>Chosen direction A, Glass wash:</b> the tint lives in a soft wash and a 12% oversized icon, so each card is distinct, the row reads as one set, and labels sit on near-white for full contrast. B is louder than five cards in a row need; C’s glow fades into the page gradient. <b>Page dots</b> under the row: with 3–5 cards they show how many there are and where you are, which a thin progress bar can’t; they track the snap position. <b>Your jobs</b> keeps one height (the taller tab); an empty tab centres its message inside it and keeps both buttons, so the feed never jumps. Default tab: last viewed; first time, the tab with new activity, else Applications [TBC]. States: default, empty, loading skeleton, “Job Seeker/Recruiter is on” toast from the opt-in. Motion: cards slide in staggered from the right and press to 98%; tabs cross-fade with a 10 px slide; reduced motion uses 0.15 s fades only.</div>
+  </div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":2500,"height":5600}}'>
+class Component extends DCLogic {
+  crew(kind) {
+    if (kind === 'new') return { hiring: { setup: false, desig: '', companies: [] }, posts: [], apps: [], saved: {}, flash: null, avail: {} };
+    return {
+      hiring: { setup: true, desig: 'Line Producer', companies: ['Lantern Pictures', 'Third Bell Collective'] },
+      posts: [{ id: 'p2', title: '1st Assistant Camera — Short Film', house: 'Third Bell Collective', ptype: 'Short Film', cat: 'Camera', loc: 'Pune', dur: '4 days', dates: '20 Nov 2026 – 23 Nov 2026', pay: '₹5,000 per day', st: 'Active', apps: 2, newA: 0, posted: '5d ago' }, { id: 'p1', title: '2nd Assistant Camera — Feature Film', house: 'Lantern Pictures', ptype: 'Feature Film', cat: 'Camera', loc: 'Film City, Mumbai', dur: '32 days', dates: '4 Nov 2026 – 12 Dec 2026', pay: '₹4,000 – ₹6,000 per day', st: 'Active', apps: 7, newA: 3, posted: '2d ago' }],
+      apps: [{ variant: 'main', title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', loc: 'Film City, Mumbai', dur: '32 days', status: 'Shortlisted', applied: '26 Oct 2026', isNew: true },
+        { variant: 'disc', title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', loc: 'Ramoji Film City, Hyderabad', dur: '18 days', status: 'Under Review', applied: '29 Oct 2026' },
+        { variant: 'tvc', title: 'Focus Puller — TVC, 2-day shoot', org: 'Pinewood Ads', loc: 'Bandra, Mumbai', dur: '2 days', status: 'Applied', applied: '1 Nov 2026' },
+        { variant: 'mv', title: 'Camera Operator — Music Video', org: 'Bluebird Records', loc: 'Versova, Mumbai', dur: '3 days', status: 'Rejected', applied: '9 Oct 2026' }],
+      saved: {}, flash: null, avail: {}
+    };
+  }
+  renderVals() {
+    const reveals = [
+      { name: 'Kavya Menon', sub: 'Producer · Lantern Pictures', when: '12 min ago', isNew: true },
+      { name: 'Farhan Siddiqui', sub: '1st Assistant Camera', when: '2h ago', isNew: true },
+      { name: 'Northlight Studios', sub: 'Production house', when: 'Yesterday' }
+    ];
+    const base = { name: 'Priya Nair', email: 'priya.nair@gmail.com', phone: '98765 43210', conn: { 'Vikram Bhosle': 'received', 'Northlight Studios': 'received', 'Ananya Iyer': 'connected' }, plans: { seeker: 'expiring' }, reveals, listings: { total: 12, rent: 9, buy: 3 }, bizName: 'Vendor House' };
+    const mk = (crew, vendor, prof, extra) => ({ ...base, roles: { crew, vendor }, crew: this.crew(crew ? 'active' : 'new'), prof, ...(extra || {}) });
+    const full = this.crew('active');
+    const mm = (seek, post, extra) => ({ ...base, roles: { crew: true, vendor: false }, modes: { seek, post }, prof: { pro: true, refs: false },
+      crew: { ...full, apps: seek ? full.apps : [], posts: post ? full.posts : [], hiring: post ? full.hiring : { setup: false, desig: '', companies: [] } }, ...(extra || {}) });
+    return {
+      mS: mm(true, false), mP: mm(false, true), mB: mm(true, true), mSfull: mm(true, false, { prof: { pro: true, refs: true } }),
+      mBapps: mm(true, true, { homeTab: 'apps' }), mBposts: mm(true, true, { homeTab: 'posts' }),
+      mBempty: mm(true, true, { homeTab: 'posts', crew: { ...full, posts: [] } }), mBnew: mm(true, true, { homeTab: 'posts', coach: 'post' }),
+      vV: { ...base, roles: { crew: false, vendor: true }, prof: { biz: true, contact: false }, crew: this.crew('new') },
+      rV: { crew: false, vendor: true },
+      dS: { seek: true, post: false }, dP: { seek: false, post: true }, dB: { seek: true, post: true },
+      act: () => {}, yes: true, no: false,
+      rC: { crew: true, vendor: false }, rV: { crew: false, vendor: true }, rB: { crew: true, vendor: true },
+      sC: mk(true, false, { pro: true, refs: false }),
+      sV: mk(false, true, { biz: true, contact: false }),
+      sB: mk(true, true, { pro: true, refs: true, biz: true, contact: false }),
+      sCnew: mk(true, false, { pro: false, refs: false }, { name: 'Priya Nair' }),
+      sVnew: mk(false, true, { biz: false, contact: false }, { name: 'Rahul Mehta', bizName: '' }),
+      sCdraft: mk(true, false, { pro: true, refs: false }, { drafts: { vendor: true } }),
+      sVempty: mk(false, true, { biz: true, contact: true }, { reveals: [] }),
+      sCjust: mk(true, true, { pro: true, refs: true, biz: true, contact: false }, { justAdded: 'vendor' }),
+      sVjust: mk(true, true, { pro: true, refs: false, biz: true, contact: false }, { justAdded: 'crew' })
+    };
+  }
+}
+</script>
+</body>
+</html>

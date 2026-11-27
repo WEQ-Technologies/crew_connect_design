@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Available to Buy or Rent</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.al-badge{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;font:700 11.5px/1 Inter,system-ui,sans-serif;letter-spacing:.01em;white-space:nowrap;flex:none}
+.al-sale{background:#FFF2DB;color:#8A5300;border:1px solid #F3D9A6}
+.al-rent{background:#E6F2DC;color:#2C6619;border:1px solid #CFE5BD}
+</style>
+</helmet>
+<section style="display: flex; flex-direction: column; gap: 12px; font-family: Inter, system-ui, sans-serif; color: #1A1820" aria-labelledby="al-title">
+  <div class="row" style="align-items: baseline; gap: 8px"><h2 id="al-title" class="t-h2 sp" style="margin: 0">{{cct.available_listings.available_to_buy_or_rent}}</h2><a href="MyListings.dc.html" class="t-s b" style="color: #7C3AED; text-decoration: none">{{cct.common.view_all}}</a></div>
+  <div class="seg" role="tablist" aria-label="{{cct.available_listings.show_listings_to_buy_or}}" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+    <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button role="tab" class="{{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+  </div>
+  <sc-for list="{{rows}}" as="l" hint-placeholder-count="3">
+    <div class="card" style="gap: 8px">
+      <div class="row" style="align-items: flex-start; gap: 10px">
+        <a href="VendorPublic.dc.html" class="sp" style="text-decoration: none; color: #1A1820; min-width: 0"><div class="t-h3 clamp2">{{l.name}}</div><div class="t-s mut trunc">{{l.vendor}}</div></a>
+        <span class="{{l.badgeCls}}">{{l.badge}}</span>
+      </div>
+      <div class="meta"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg>{{l.cat}}</span><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{l.city}}</span></div>
+      <div class="row" style="gap: 8px"><span class="pay sp">{{l.price}} <span class="t-c mut" style="font-weight: 500">{{l.unit}}</span></span><a class="btn btn-p btn-sm" href="VendorPublic.dc.html">{{cct.available_listings.view_listing}}</a></div>
+    </div>
+  </sc-for>
+  <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+    <div class="card" style="align-items: center; text-align: center; gap: 8px; padding: 22px 18px">
+      <span class="sq g" style="width: 44px; height: 44px; border-radius: 14px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span>
+      <div class="t-h3">{{emptyTitle}}</div>
+      <div class="t-s mut" style="max-width: 260px">{{emptyText}}</div>
+      <sc-if value="{{canReset}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s btn-sm" onClick="{{showAll}}">{{cct.available_listings.show_all_listings}}</button></sc-if>
+    </div>
+  </sc-if>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["all","buy","rent"],"default":"all"},"demo":{"editor":"enum","options":["","empty"],"default":""},"$preview":{"width":350,"height":560}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    // Same three rentals Home showed before, plus two items for sale so the Buy view has content.
+    this.data = [
+      { name: cc("common.arri_alexa_mini_lf_full"), vendor: 'Vendor House', cat: cc("common.camera_bodies"), city: cc("common.goregaon_east_mumbai"), price: cc("common.inr_28_000"), unit: cc("common.per_day"), mode: 'rent' },
+      { name: cc("available_listings.used_sony_fx6_body_1"), vendor: 'Vendor House', cat: cc("common.camera_bodies"), city: cc("common.goregaon_east_mumbai"), price: cc("available_listings.inr_3_85_000"), unit: cc("common.one_time"), mode: 'buy' },
+      { name: cc("common.cooke_s4_i_prime_set"), vendor: 'Vendor House', cat: cc("common.lenses"), city: cc("common.goregaon_east_mumbai"), price: cc("common.inr_12_500"), unit: cc("common.per_day"), mode: 'rent' },
+      { name: cc("available_listings.sennheiser_mkh_416_shotgun_mic"), vendor: cc("common.quiet_room_audio"), cat: 'Sound', city: cc("common.pune"), price: cc("common.inr_62_000"), unit: cc("common.one_time"), mode: 'buy' },
+      { name: cc("common.sony_fx3_cinema_camera_kit"), vendor: 'Vendor House', cat: cc("common.camera_bodies"), city: cc("common.goregaon_east_mumbai"), price: cc("common.inr_4_500"), unit: cc("common.per_day"), mode: 'rent' }
+    ];
+    this.state = { mode: null };
+  }
+  renderVals() {
+    const mode = this.state.mode || this.props.mode || 'all';
+    const src = (this.props.demo || '') === 'empty' ? [] : this.data;
+    const list = src.filter((l) => mode === 'all' || l.mode === mode).slice(0, 3);
+    const W = { all: cc("available_listings.to_buy_or_rent"), buy: cc("available_listings.to_buy"), rent: cc("available_listings.to_rent") };
+    return {
+      tabs: [['all', 'All'], ['buy', 'Buy'], ['rent', 'Rent']].map(([k, l]) => ({ label: l, on: mode === k, cls: mode === k ? 'on' : '', pick: () => this.setState({ mode: k }) })),
+      rows: list.map((l) => ({ ...l, badge: l.mode === 'buy' ? cc("available_listings.for_sale") : cc("available_listings.for_rent"), badgeCls: 'al-badge ' + (l.mode === 'buy' ? 'al-sale' : 'al-rent') })),
+      empty: list.length === 0,
+      emptyTitle: cc("available_listings.nothing") + ccv(W[mode]) + cc("available_listings.yet"),
+      emptyText: cc("available_listings.no_equipment_available") + ccv(W[mode]) + cc("available_listings.right_now_check_back_soon"),
+      canReset: mode !== 'all' && src.length > 0,
+      showAll: () => this.setState({ mode: 'all' })
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>
