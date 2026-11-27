@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Job details — poster view</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="MyJobs.dc.html" aria-label="{{cct.poster_job_detail.back_to_my_jobs}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.job}}</div><a class="btn btn-s btn-sm" href="CreateJob.dc.html" style="margin-right: 12px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>{{cct.common.edit}}</a></div>
+  <div class="sc" style="gap: 16px">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <div class="chips">
+        <sc-if value="{{open}}" hint-placeholder-val="{{ true }}"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle></svg>{{cct.common.published}}</span></sc-if>
+        <sc-if value="{{closed}}" hint-placeholder-val="{{ false }}"><span class="badge b-n"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>{{cct.common.closed}}</span></sc-if>
+        <span class="badge b-n">{{posted}}</span><span class="badge b-p">{{ptype}}</span>
+      </div>
+      <h1 class="t-h1">{{title}}</h1>
+      <div class="t-s mut">{{house}}{{cct.poster_job_detail.posted_by}}{{poster}}, {{desig}}</div>
+      <sc-if value="{{disc}}" hint-placeholder-val="{{ false }}"><div class="alert a-w"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"></path><path d="M12 10v4M12 17v.01"></path></svg><div>{{cct.poster_job_detail.the_poster_may_not_belong}}</div></div></sc-if>
+    </div>
+
+    <sc-if value="{{notNew}}" hint-placeholder-val="{{ true }}">
+    <a href="Applicants.dc.html" class="card" style="text-decoration: none; gap: 12px">
+      <div class="row"><div class="t-h3 sp">{{cct.common.applicants}}</div><span class="t-s b" style="color: #7C3AED">{{cct.poster_job_detail.view_all_18}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #7C3AED"><path d="m9 18 6-6-6-6"></path></svg></div>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; text-align: center">
+        <div><div class="t-h2">{{cct.common.t_9}}</div><div class="t-c mut" style="font-size: 11px">{{cct.common.applied}}</div></div>
+        <div><div class="t-h2" style="color: #6527C8">{{cct.common.t_5}}</div><div class="t-c mut" style="font-size: 11px">{{cct.poster_job_detail.review}}</div></div>
+        <div><div class="t-h2" style="color: #8A5300">{{cct.poster_job_detail.t_2}}</div><div class="t-c mut" style="font-size: 11px">{{cct.common.on_hold}}</div></div>
+        <div><div class="t-h2" style="color: #2C6619">{{cct.common.t_1}}</div><div class="t-c mut" style="font-size: 11px">{{cct.common.selected}}</div></div>
+        <div><div class="t-h2" style="color: #B42318">{{cct.common.t_1}}</div><div class="t-c mut" style="font-size: 11px">{{cct.common.rejected}}</div></div>
+      </div>
+    </a>
+    </sc-if>
+    <sc-if value="{{isNew}}" hint-placeholder-val="{{ false }}">
+      <div class="card" style="gap: 4px"><div class="t-h3">{{cct.common.applicants}}</div><div class="t-s mut">{{cct.poster_job_detail.no_applicants_yet_they_ll}}</div></div>
+    </sc-if>
+
+    <div class="card" style="gap: 2px">
+      <div class="kv"><span>{{cct.common.project_type}}</span><span>{{ptype}}</span></div>
+      <div class="kv"><span>{{cct.common.posted_on_behalf_of}}</span><span>{{house}}</span></div>
+      <div class="kv"><span>{{cct.common.department}}</span><span>{{cat}}</span></div>
+      <div class="kv"><span>{{cct.common.location}}</span><span>{{loc}}</span></div>
+      <div class="kv"><span>{{cct.common.dates}}</span><span>{{dates}}</span></div>
+      <div class="kv"><span>{{cct.common.duration}}</span><span>{{dur}}</span></div>
+      <div class="kv"><span>{{cct.common.fee_budget}} <span class="opt" style="font-weight: 500">{{cct.r2.optional_2}}</span></span><span>{{payShow}}</span></div>
+      <span class="help" style="margin-top: -2px">{{cct.r2.the_fee_is_optional_if_you_leave}}</span>
+      <div class="kv"><span>{{cct.common.job_poster_2}}</span><span>{{poster}} · {{desig}}</span></div>
+    </div>
+
+    <div class="card">
+      <div class="t-over">{{cct.common.job_description}}</div>
+      <p class="t-s" style="white-space: pre-line">{{desc}}</p>
+    </div>
+
+    <sc-if value="{{hasPdf}}" hint-placeholder-val="{{ true }}"><div class="file"><div class="fico">{{cct.common.pdf}}</div><div class="sp"><div class="t-h3 trunc">{{pdf}}</div><div class="t-c mut">{{pdfSize}}{{cct.poster_job_detail.additional_job_details}}</div></div><button class="iconbtn" aria-label="{{cct.common.download_pdf}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"></path></svg></button></div></sc-if>
+
+    <sc-if value="{{open}}" hint-placeholder-val="{{ true }}">
+      <button class="btn btn-d w100" onClick="{{ask}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>{{cct.poster_job_detail.close_job_to_new_applicants}}</button>
+    </sc-if>
+    <sc-if value="{{closed}}" hint-placeholder-val="{{ false }}">
+      <div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.01"></path></svg><div>{{cct.poster_job_detail.this_job_no_longer_accepts}}</div></div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status" style="bottom: 24px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{cct.common.job_closed_to_new_applicants}}</div>
+  </sc-if>
+
+  <sc-if value="{{dlg}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim c">
+      <div class="dlg" role="alertdialog" aria-label="{{cct.common.close_job}}">
+        <div class="t-h2">{{cct.common.close_this_job}}</div>
+        <div class="t-s mut">{{cct.poster_job_detail.job_seekers_won_t_be}}</div>
+        <div class="help">{{cct.poster_job_detail.can_a_closed_job_be}} <span class="ph-tag">{{cct.common.policy_tbc}}</span></div>
+        <div style="display: flex; gap: 10px; margin-top: 4px"><button class="btn btn-s" onClick="{{cancel}}" style="flex: 1">{{cct.common.cancel}}</button><button class="btn btn-p" onClick="{{close}}" style="flex: 1; background: #B42318">{{cct.common.close_job}}</button></div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"job":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { closed: false, dlg: false, toast: false }; }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const s = this.state;
+    const d = { title: cc("common.focus_puller_feature_film_hindi"), ptype: cc("common.feature_film"), house: cc("common.lantern_pictures"), poster: 'Kavya Menon', desig: cc("common.line_producer"), disc: false, cat: 'Camera', loc: cc("common.film_city_mumbai"), dates: cc("common.t_4_nov_2026_12_dec"), dur: cc("poster_job_detail.t_39_days"), pay: cc("common.inr_8_000_inr_12_2"), desc: cc("poster_job_detail.a_camera_focus_puller_for"), pdf: cc("common.focus_puller_brief_lantern_pdf"), pdfSize: cc("common.t_248_kb") };
+    const j = this.props.job ? { ...d, ...this.props.job } : d;
+    return {
+      ...j, payShow: j.pay && j.pay !== cc("create_job.not_specified") ? j.pay : cc("r2.fee_not_disclosed"), hasPdf: !!j.pdf, isNew: !!this.props.job, notNew: !this.props.job, posted: this.props.job ? cc("poster_job_detail.posted_just_now") : cc("poster_job_detail.posted_18_oct_2026"),
+      open: !s.closed, closed: s.closed, dlg: s.dlg, toast: s.toast,
+      ask: () => this.setState({ dlg: true }),
+      cancel: () => this.setState({ dlg: false }),
+      close: () => { this.setState({ dlg: false, closed: true, toast: true }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: false }), 2400); }
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

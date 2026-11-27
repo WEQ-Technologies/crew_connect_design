@@ -1,0 +1,1397 @@
+/* CrewConnect design tokens + shared component classes (Phase 1 MVP) */
+:root{
+  --p900:#3E1A86;--p700:#6527C8;--p600:#7C3AED;--p500:#9366F5;--p300:#C4B1FA;--p100:#EFEAFE;--p50:#F6F3FF;
+  --g700:#2C6619;--g600:#367A22;--g500:#5FA834;--g100:#E6F2DC;--g50:#F3F9EE;
+  --bg:#F3F8F1;--surface:#FFFFFF;--ink:#1A1820;--ink2:#545060;--ink3:#6B6676;--line:#E1EADF;--line2:#CFDACB;--fill:#EEF4EC;
+  --ok:#367A22;--okbg:#E6F2DC;--warn:#8A5300;--warnbg:#FFF2DB;--err:#B42318;--errbg:#FDECEA;
+  --sh1:0 1px 2px rgba(26,24,32,.05),0 1px 1px rgba(26,24,32,.03);--sh2:0 12px 32px rgba(26,24,32,.14);
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:var(--p600);text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3,p{margin:0}
+
+/* phone shell */
+.ph{width:390px;height:844px;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;position:relative;font-family:var(--font);color:var(--ink)}
+.bar{height:60px;display:flex;align-items:center;gap:4px;padding:8px 8px 0;flex:none}
+.bar .ttl{font-size:17px;font-weight:650;letter-spacing:-.01em;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:4px}
+.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:12px;border:0;background:transparent;color:var(--ink);cursor:pointer;flex:none}
+.iconbtn:hover{background:var(--fill)}
+.iconbtn:focus-visible,.btn:focus-visible,.chip:focus-visible,a:focus-visible{outline:3px solid var(--p300);outline-offset:2px}
+.sc{flex:1;overflow-y:auto;padding:8px 20px 28px;display:flex;flex-direction:column;gap:16px}
+.sc>*{flex-shrink:0}
+.sc{scrollbar-width:none}.sc::-webkit-scrollbar{display:none}
+.foot{flex:none;padding:12px 20px 24px;background:var(--surface);border-top:1px solid var(--line);display:flex;gap:12px}
+.nav{flex:none;height:80px;background:rgba(255,255,255,.97);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:8px 4px 16px;box-shadow:0 -4px 16px rgba(26,24,32,.04)}
+.nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:550;color:var(--ink3);min-height:44px;letter-spacing:-.005em;white-space:nowrap}
+.nav .pill{width:60px;height:32px;border-radius:16px;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.nav a.on{color:var(--g700);font-weight:650}
+.nav a.on .pill{background:var(--g100)}
+
+/* icons */
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.i-sm{width:16px;height:16px}
+.i-lg{width:24px;height:24px}
+
+/* type */
+.t-d{font-size:28px;line-height:34px;font-weight:750;letter-spacing:-.028em}
+.t-h1{font-size:22px;line-height:28px;font-weight:700;letter-spacing:-.022em}
+.t-h2{font-size:18px;line-height:24px;font-weight:650;letter-spacing:-.015em}
+.t-h3{font-size:15px;line-height:21px;font-weight:600;letter-spacing:-.01em}
+.t-b{font-size:15px;line-height:23px;letter-spacing:-.005em}
+.t-s{font-size:13px;line-height:19px}
+.t-c{font-size:12px;line-height:16px}
+.t-over{font-size:11px;line-height:14px;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3)}
+.mut{color:var(--ink2)}
+.b{font-weight:600}
+
+/* buttons */
+.btn{min-height:48px;padding:0 20px;border-radius:12px;border:1px solid transparent;font-weight:600;font-size:15px;letter-spacing:-.005em;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;text-align:center;white-space:nowrap;text-decoration:none;transition:background .15s,box-shadow .15s}
+.btn-p{background:var(--p600);color:#fff;box-shadow:0 1px 2px rgba(101,39,200,.25),inset 0 1px 0 rgba(255,255,255,.08)}
+.btn-p:hover{background:var(--p700)}
+.btn-s{background:var(--surface);color:var(--ink);border-color:var(--line2);box-shadow:var(--sh1)}
+.btn-s:hover{background:var(--fill)}
+.btn-g{background:var(--g600);color:#fff}
+.btn-g:hover{background:var(--g700)}
+.btn-t{background:transparent;color:var(--p600);padding:0 10px}
+.btn-t:hover{background:var(--p50)}
+.btn-d{background:var(--surface);color:var(--err);border-color:#F0B6AF}
+.btn-sm{min-height:36px;padding:0 14px;font-size:13px;border-radius:10px}
+.btn.dis,.btn[disabled]{background:var(--fill);color:var(--ink3);border-color:var(--line);cursor:not-allowed}
+.w100{width:100%}
+.spin{width:18px;height:18px;border-radius:9px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:ccspin .8s linear infinite}
+.spin.d{border-color:var(--p100);border-top-color:var(--p600)}
+@keyframes ccspin{to{transform:rotate(360deg)}}
+
+/* forms */
+.fld{display:flex;flex-direction:column;gap:6px}
+.lbl{font-size:13px;font-weight:600;color:var(--ink)}
+.lbl .req{color:var(--err)}
+.lbl .opt{color:var(--ink3);font-weight:500}
+.inp{height:48px;border:1px solid var(--line2);border-radius:12px;background:var(--surface);padding:0 14px;font-size:15px;width:100%;outline:none;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.inp::placeholder{color:#8C8693}
+.inp:focus{border-color:var(--p600);box-shadow:0 0 0 3px var(--p100)}
+.inp.bad{border-color:var(--err);box-shadow:0 0 0 3px var(--errbg)}
+.inp.ro{background:var(--fill);color:var(--ink2)}
+textarea.inp{height:auto;min-height:104px;padding:12px 14px;resize:none;line-height:22px}
+.sel{display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.pre{display:flex;align-items:center;border:1px solid var(--line2);border-radius:12px;background:var(--surface);height:48px;overflow:hidden}
+.pre span{padding:0 12px;height:100%;display:flex;align-items:center;background:var(--fill);color:var(--ink2);font-size:14px;font-weight:600;border-right:1px solid var(--line2)}
+.pre input{border:0;outline:none;flex:1;height:100%;padding:0 12px;font-size:15px;min-width:0;background:transparent}
+.help{font-size:12px;line-height:17px;color:var(--ink2)}
+.errt{font-size:12px;line-height:17px;color:var(--err);display:flex;gap:6px;align-items:flex-start;font-weight:600}
+.srch{height:48px;border-radius:12px;background:var(--surface);border:1px solid var(--line2);display:flex;align-items:center;gap:10px;padding:0 4px 0 14px;color:var(--ink2)}
+.srch input{border:0;outline:none;flex:1;background:transparent;font-size:15px;min-width:0;color:var(--ink)}
+.chk{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line2);display:flex;align-items:center;justify-content:center;flex:none;background:var(--surface)}
+.chk.on{background:var(--g600);border-color:var(--g600);color:#fff}
+.radio{width:22px;height:22px;border-radius:11px;border:1.5px solid var(--line2);flex:none;display:flex;align-items:center;justify-content:center;background:var(--surface)}
+.radio.on{border:6.5px solid var(--g600)}
+
+/* chips, tags, badges */
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips.x{flex-wrap:nowrap;overflow-x:auto;margin:0 -20px;padding:0 20px 2px;scrollbar-width:none}
+.chip{min-height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line2);background:var(--surface);font-size:13px;font-weight:550;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;cursor:pointer;color:var(--ink);transition:background .15s,border-color .15s}
+.chip:hover{border-color:#9FD3B3}
+.chip.on{background:var(--g600);border-color:var(--g600);color:#fff}
+.tag{display:inline-flex;align-items:center;gap:5px;min-height:26px;padding:0 9px;border-radius:7px;background:var(--fill);font-size:12px;font-weight:550;color:var(--ink2);white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px 0 8px;border-radius:12px;font-size:12px;font-weight:600;white-space:nowrap}
+.badge .i{width:13px;height:13px;stroke-width:2.4}
+.b-n{background:var(--fill);color:var(--ink2)}
+.b-p{background:var(--p100);color:var(--p700)}
+.b-g{background:var(--g100);color:var(--g700)}
+.b-w{background:var(--warnbg);color:var(--warn)}
+.b-e{background:var(--errbg);color:var(--err)}
+.b-y{background:#FFF4CC;color:#7A5A00}
+/* availability dot */
+.avail{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;white-space:nowrap}
+.avail::before{content:"";width:8px;height:8px;border-radius:4px;background:currentColor}
+.avail.a-av{color:var(--g700)}.avail.a-un{color:var(--err)}.avail.a-tb{color:#9A6B00}
+
+/* cards & lists */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px;color:var(--ink);box-shadow:var(--sh1)}
+a.card:hover{border-color:var(--p300);box-shadow:var(--sh1)}
+.row{display:flex;align-items:center;gap:8px}
+.col{display:flex;flex-direction:column}
+.sp{flex:1;min-width:0}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;line-height:18px;color:var(--ink2)}
+.meta span{display:inline-flex;align-items:center;gap:5px}
+.pay{font-weight:700;color:var(--ink);font-size:14px}
+.av{width:44px;height:44px;border-radius:22px;background:var(--p100);color:var(--p700);display:flex;align-items:center;justify-content:center;font-weight:650;font-size:15px;flex:none;letter-spacing:-.01em}
+.av.g{background:var(--g100);color:var(--g700)}
+.av.lg{width:64px;height:64px;border-radius:32px;font-size:22px}
+.sq{width:44px;height:44px;border-radius:12px;background:var(--p50);color:var(--p600);display:flex;align-items:center;justify-content:center;flex:none;border:1px solid var(--p100)}
+.sq.g{background:var(--g50);color:var(--g700);border-color:var(--g100)}
+.sec{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sec h2{font-size:16px;font-weight:700}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--sh1)}
+.li{display:flex;align-items:center;gap:12px;padding:12px 16px;min-height:56px;border-bottom:1px solid var(--line);color:var(--ink);background:var(--surface);width:100%;border-left:0;border-right:0;border-top:0;text-align:left;cursor:pointer;font-size:15px}
+.li:last-child{border-bottom:0}
+a.li:hover,button.li:hover{background:var(--fill)}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:20px;padding:5px 0}
+.kv>span:first-child{color:var(--ink2)}
+.kv>span:last-child{text-align:right;font-weight:600}
+.hr{height:1px;background:var(--line);flex:none}
+.trunc{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* feedback */
+.alert{display:flex;gap:10px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:19px;align-items:flex-start}
+.a-i{background:var(--p50);color:var(--p900);border:1px solid var(--p100)}
+.a-ok{background:var(--g50);color:var(--g700);border:1px solid var(--g100)}
+.a-w{background:var(--warnbg);color:#6B4100;border:1px solid #F5DDAE}
+.a-e{background:var(--errbg);color:var(--err);border:1px solid #F6C9C3}
+.ph-tag{display:inline-flex;align-items:center;padding:1px 6px;border-radius:5px;border:1px dashed var(--warn);color:var(--warn);background:var(--warnbg);font-size:12px;font-weight:700}
+.toast{position:absolute;left:16px;right:16px;bottom:96px;background:var(--ink);color:#fff;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:550;box-shadow:var(--sh2);z-index:5}
+.toast .ok{width:24px;height:24px;border-radius:12px;background:var(--g500);display:flex;align-items:center;justify-content:center;flex:none}
+.toast.hi{bottom:104px}
+.scrim{position:absolute;inset:0;background:rgba(29,27,34,.48);z-index:8;display:flex;flex-direction:column;justify-content:flex-end}
+.scrim.c{justify-content:center}
+.sheet{background:var(--surface);border-radius:24px 24px 0 0;padding:10px 20px 28px;display:flex;flex-direction:column;gap:14px;max-height:88%;overflow-y:auto;box-shadow:var(--sh2)}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line2);align-self:center;margin-bottom:4px;flex:none}
+.dlg{margin:0 24px;background:var(--surface);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--sh2)}
+.skel{background:#E6EDE4;border-radius:8px}
+.prog{height:6px;border-radius:3px;background:var(--line);overflow:hidden;flex:none}
+.prog>div{height:100%;background:var(--g600);border-radius:3px}
+.seg{display:grid;gap:4px;background:var(--fill);padding:4px;border-radius:12px;border:1px solid var(--line)}
+.seg button{border:0;background:transparent;min-height:38px;border-radius:9px;font-size:13px;font-weight:600;color:var(--ink2);cursor:pointer;font-family:inherit}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--sh1)}
+.file{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.fico{width:40px;height:44px;border-radius:8px;background:var(--errbg);color:var(--err);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:.04em;flex:none}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:0;background:none;padding:12px 10px;font-weight:700;font-size:14px;color:var(--ink3);border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;white-space:nowrap}
+.tabs button.on{color:var(--g700);border-color:var(--g600)}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:32px 16px}
+.empty .ring{width:64px;height:64px;border-radius:32px;background:var(--p50);border:1px solid var(--p100);color:var(--p600);display:flex;align-items:center;justify-content:center}
+.fab{position:absolute;right:20px;bottom:96px;height:52px;border-radius:16px;padding:0 18px;background:var(--p600);color:#fff;display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;box-shadow:var(--sh2);z-index:4}
+.stepper{display:flex;gap:6px}
+.stepper div{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.stepper div.on{background:var(--p600)}
+.stepper div.done{background:var(--g600)}
+
+/* Admin panel (web) — add-on */
+.adm{display:flex;flex-wrap:wrap;min-height:1000px;background:var(--bg);font-family:var(--font);color:var(--ink)}
+.adm-side{flex:1 1 220px;background:var(--surface);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:4px}
+.adm-nav{display:flex;flex-direction:column;gap:2px}
+.adm-nav a{display:flex;align-items:center;gap:10px;padding:0 12px;min-height:40px;border-radius:10px;color:var(--ink2);font-weight:600;font-size:14px}
+.adm-nav a:hover{background:var(--fill)}
+.adm-nav a.on{background:var(--p100);color:var(--p700)}
+.adm-nav .grp{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:14px 12px 6px}
+.adm-main{flex:999 1 560px;min-width:0;padding:28px 32px 40px;display:flex;flex-direction:column;gap:20px}
+.adm-split{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.adm-split>.l{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.adm-split>.r{flex:1 1 340px;min-width:0}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.tbl{width:100%;border-collapse:collapse;min-width:720px;font-size:14px}
+.tbl th{text-align:left;font-size:12px;font-weight:700;color:var(--ink2);background:var(--fill);padding:10px 14px;white-space:nowrap}
+.tbl td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:middle}
+.tbl tr.sel td{background:var(--p50)}
+.tbl tr:hover td{background:#FBFAFC}
+.switch{width:44px;height:26px;border-radius:13px;background:var(--line2);position:relative;border:0;cursor:pointer;flex:none;padding:0}
+.switch.on{background:var(--g600)}
+.switch>span{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:10px;background:#fff;transition:left .15s}
+.switch.on>span{left:21px}
+.adm-tool{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.adm-tool .srch{flex:1 1 240px}
+.adm-tool select.inp{width:auto;min-width:160px}
+.modal-bg{position:fixed;inset:0;background:rgba(29,27,34,.48);z-index:20;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--surface);border-radius:18px;padding:24px;width:100%;max-width:440px;display:flex;flex-direction:column;gap:12px}
+.adm-toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:var(--ink);color:#fff;border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;box-shadow:var(--sh2);z-index:30}
+
+/* Crew Member profile photos (illustrated placeholders) — feedback #7 */
+.av[data-ini]{background-size:cover;background-position:center 35%;background-repeat:no-repeat}
+.av[data-ini="PN"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="KM"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="MJ"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="VB"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="AI"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="FS"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="AK"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="SM"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="AR"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="RD"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="KS"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="NV"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="RM"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.av[data-ini="IS"]{color:transparent;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+
+/* mutual connections stack — feedback #8 */
+.mstack{display:inline-flex;padding-left:6px}
+.av.xs{width:22px;height:22px;border-radius:11px;font-size:8px;margin-left:-6px;border:2px solid #fff;box-shadow:none}
+.av.xs[data-ini]{border:2px solid #fff;box-shadow:none}
+
+/* Unified Crew Member nav — persistent Post a job action */
+.nav a.post{color:var(--p600);font-weight:650}
+.nav a.post .pill{background:var(--p600);color:#fff;width:44px;height:32px;border-radius:12px;box-shadow:0 2px 6px rgba(101,39,200,.3)}
+.hire-badge{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;font-size:12px;font-weight:650;background:#3A1880;color:#fff;white-space:nowrap;text-decoration:none}
+.hire-badge::before{content:"";width:7px;height:7px;border-radius:4px;background:#8FD16A}
+.dot-new{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#B42318;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.iconbtn.on-bmk{color:var(--p600)}.iconbtn.on-bmk svg{fill:var(--p100)}
+[role="option"] .chk:not(.on) svg{visibility:hidden}
+/* Account switcher */
+.acct-sw{flex-direction:row;align-items:center;gap:12px;padding:12px 14px;width:100%;font:inherit;color:inherit;cursor:pointer;border:1px solid #E3D6F0;background:#F7FBF5;flex:none}
+.acct-sw:hover{border-color:#C9B1E3}
+.acct-sw:focus-visible{outline:2px solid #7C3AED;outline-offset:2px}
+.acct-sw-btn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:16px;background:#7C3AED;color:#fff;font-size:13px;font-weight:700;flex:none}
+.acct-sw-btn .i{color:#fff}
+.acct-row{gap:12px;padding:12px 14px}
+.acct-row.on{background:#F6F3FF;cursor:default}
+.acct-switching{position:absolute;inset:0;z-index:40;background:rgba(247,246,250,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:32px}
+.acct-switching .ring{width:64px;height:64px;border-radius:32px;background:#F2EEFF;color:#7C3AED;display:flex;align-items:center;justify-content:center}
+
+/* ==========================================================================
+   GLASS LAYER — CrewConnect glassmorphism (visual-only enhancement)
+   One system: atmospheric background · 3 glass tiers · 1 blur · 1 edge light.
+   Layout, sizes and component structure above are untouched.
+   ========================================================================== */
+:root{
+  /* atmosphere — minimal neutral ground, soft top light, barely-there brand ambience */
+  --cc-bg:
+    linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 30%),
+    radial-gradient(85% 38% at 0% 40%, rgba(155,123,247,.16) 0%, rgba(155,123,247,0) 70%),
+    radial-gradient(70% 28% at 100% 26%, rgba(255,182,110,.40) 0%, rgba(255,182,110,0) 70%),
+    radial-gradient(70% 30% at 100% 62%, rgba(240,150,198,.18) 0%, rgba(240,150,198,0) 70%),
+    radial-gradient(70% 28% at 95% 100%, rgba(120,196,96,.44) 0%, rgba(120,196,96,0) 70%),
+    radial-gradient(90% 36% at 10% 96%, rgba(92,200,150,.40) 0%, rgba(92,200,150,0) 70%),
+    linear-gradient(180deg,#E8F4E4 0%,#EFF5EC 45%,#E1F1E7 100%);
+  /* mirrored composition — same palette, used on the onboarding flow for gentle variety */
+  --cc-bg-alt:
+    linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 30%),
+    radial-gradient(85% 38% at 100% 40%, rgba(155,123,247,.16) 0%, rgba(155,123,247,0) 70%),
+    radial-gradient(70% 28% at 0% 26%, rgba(255,182,110,.40) 0%, rgba(255,182,110,0) 70%),
+    radial-gradient(70% 30% at 0% 62%, rgba(240,150,198,.18) 0%, rgba(240,150,198,0) 70%),
+    radial-gradient(70% 28% at 5% 100%, rgba(120,196,96,.44) 0%, rgba(120,196,96,0) 70%),
+    radial-gradient(90% 36% at 90% 96%, rgba(92,200,150,.40) 0%, rgba(92,200,150,0) 70%),
+    linear-gradient(180deg,#E8F4E4 0%,#EFF5EC 45%,#E1F1E7 100%);
+  --ink3:#615C6D;
+  /* glass tiers — the ground is a mid-light neutral so white glass reads as a lifted, frosted layer */
+  --glass-lo:rgba(255,255,255,.38);
+  --glass:rgba(255,255,255,.52);
+  --glass-hi:rgba(255,255,255,.76);
+  --glass-dark:rgba(20,40,28,.80);
+  --glass-edge:rgba(255,255,255,.88);
+  --glass-fill:linear-gradient(160deg,rgba(255,255,255,.80) 0%,rgba(255,255,255,.52) 46%,rgba(255,255,255,.40) 100%);
+  --glass-fill-hi:linear-gradient(160deg,rgba(255,255,255,.92) 0%,rgba(255,255,255,.70) 100%);
+  --glass-blur:blur(20px) saturate(170%);
+  --glass-sh:0 16px 36px -16px rgba(24,44,30,.26),0 2px 6px rgba(24,44,30,.06),0 0 0 .5px rgba(24,44,30,.07),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.25);
+  /* tokens re-pointed to glass */
+  --bg:#F1F8EF;
+  --surface:var(--glass);
+  --fill:rgba(228,239,226,.70);
+  --line:rgba(101,39,200,.12);
+  --line2:rgba(101,39,200,.22);
+  --p50:rgba(246,243,255,.78);
+  --sh1:var(--glass-sh);
+  --sh2:0 24px 48px -16px rgba(24,44,30,.32),0 4px 12px rgba(24,44,30,.08),inset 0 1px 0 rgba(255,255,255,.8);
+}
+
+/* atmospheric background on every phone screen */
+.ph{background:var(--cc-bg);isolation:isolate}
+.ph::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(55% 20% at 80% 30%, rgba(255,255,255,.70) 0%, rgba(255,255,255,0) 70%),
+    radial-gradient(60% 20% at 20% 66%, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 70%),
+    radial-gradient(55% 18% at 52% 50%, rgba(140,204,120,.16) 0%, rgba(140,204,120,0) 70%);
+  filter:blur(28px)}
+.ph.bg-alt{background:var(--cc-bg-alt)}
+.ph.bg-alt::before{transform:scaleX(-1)}
+
+/* shared glass recipe */
+.card,.list,.li,.file,.srch,.chip,.seg,.inp,.pre,.btn-s,.btn-d,.chk,.radio,.acct-sw,.tbl-wrap,.modal{
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+
+/* containers */
+.card{background:var(--glass-fill);border-color:var(--glass-edge);box-shadow:var(--glass-sh)}
+a.card:hover{background:var(--glass-fill-hi)}
+.list{background:var(--glass-fill);border-color:var(--glass-edge);box-shadow:var(--glass-sh)}
+.list .li{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom-color:var(--line)}
+.li{background:var(--glass-fill)}
+a.li:hover,button.li:hover{background:rgba(255,255,255,.55)}
+.file{background:var(--glass-fill);border-color:var(--glass-edge);box-shadow:var(--glass-sh)}
+.acct-sw{background:rgba(251,248,254,.66);border-color:rgba(201,177,227,.85)}
+.acct-row.on{background:rgba(246,243,255,.8)}
+.tag{background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 1px rgba(101,39,200,.08)}
+.sq{background:rgba(246,243,255,.72);border-color:rgba(255,255,255,.85);box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+.empty .ring{background:rgba(246,243,255,.72);border-color:rgba(255,255,255,.85)}
+.skel{background:rgba(228,239,226,.8)}
+
+/* top bar & bottom areas — frosted, so content scrolls under them */
+.bar{background:transparent}
+.iconbtn:hover{background:rgba(255,255,255,.55)}
+.foot{background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.44));border-top-color:rgba(255,255,255,.9);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:0 -10px 28px -16px rgba(24,44,30,.24),inset 0 1px 0 rgba(255,255,255,.95)}
+.nav{background:linear-gradient(180deg,rgba(255,255,255,.64),rgba(255,255,255,.46));border-top-color:rgba(255,255,255,.9);
+  -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);
+  box-shadow:0 -10px 28px -14px rgba(24,44,30,.20),inset 0 1px 0 rgba(255,255,255,.9)}
+.nav a.on .pill{background:rgba(220,238,208,.95);box-shadow:inset 0 0 0 1px rgba(54,122,34,.18)}
+
+/* buttons — primary stays solid & obvious; secondary is clear glass; disabled is flat and dim */
+.btn-p{background:linear-gradient(180deg,#8A4DF2 0%,var(--p600) 100%);border-color:rgba(255,255,255,.18);
+  box-shadow:0 8px 20px -8px rgba(101,39,200,.55),inset 0 1px 0 rgba(255,255,255,.22)}
+.btn-p:hover{background:var(--p700)}
+.btn-g{background:linear-gradient(180deg,#3F8A28 0%,var(--g600) 100%);border-color:rgba(255,255,255,.18);
+  box-shadow:0 8px 20px -8px rgba(44,102,25,.5),inset 0 1px 0 rgba(255,255,255,.22)}
+.btn-g:hover{background:var(--g700)}
+.btn-s{background:var(--glass-fill-hi);border-color:rgba(255,255,255,.9);box-shadow:var(--glass-sh)}
+.btn-s:hover{background:rgba(255,255,255,.92)}
+.btn-d{background:var(--glass-hi);border-color:#F0B6AF}
+.btn-t:hover{background:rgba(255,255,255,.5)}
+.btn.dis,.btn[disabled]{background:rgba(226,221,234,.55);color:#6B6676;border-color:rgba(101,39,200,.10);
+  box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.fab{background:linear-gradient(180deg,#8A4DF2 0%,var(--p600) 100%);box-shadow:0 14px 30px -10px rgba(101,39,200,.6),inset 0 1px 0 rgba(255,255,255,.22)}
+.acct-sw-btn{background:linear-gradient(180deg,#8A4DF2 0%,#7C3AED 100%)}
+
+/* inputs — most opaque glass tier so text stays crisp */
+.inp,.pre,.srch{background:var(--glass-hi);border-color:rgba(101,39,200,.22);box-shadow:inset 0 1px 2px rgba(24,44,30,.06),0 1px 0 rgba(255,255,255,.7)}
+.inp:focus{background:rgba(255,255,255,.92);border-color:var(--p600);box-shadow:0 0 0 3px rgba(183,154,214,.45)}
+.inp.bad{background:rgba(255,255,255,.88)}
+.inp.ro{background:rgba(228,239,226,.6)}
+.pre span{background:rgba(228,239,226,.6)}
+.chk,.radio{background:var(--glass-hi)}
+
+/* chips, segmented control, tabs */
+.chip{background:var(--glass-fill);border-color:rgba(255,255,255,.9);box-shadow:0 2px 8px -4px rgba(24,44,30,.18),inset 0 1px 0 rgba(255,255,255,.8)}
+.chip:hover{background:var(--glass-hi)}
+.chip.on{background:linear-gradient(180deg,#3F8A28 0%,var(--g600) 100%);border-color:rgba(255,255,255,.2);box-shadow:0 6px 14px -6px rgba(44,102,25,.5)}
+.seg{background:rgba(228,239,226,.55);border-color:rgba(255,255,255,.75)}
+.seg button.on{background:rgba(255,255,255,.92);box-shadow:0 2px 8px -2px rgba(24,44,30,.18)}
+.tabs{border-bottom-color:rgba(101,39,200,.12)}
+
+/* overlays */
+.scrim{background:rgba(18,36,24,.32);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.sheet,.dlg,.modal{background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);
+  border:1px solid rgba(255,255,255,.9)}
+.sheet{border-bottom:0}
+.toast{background:var(--glass-dark);-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);
+  border:1px solid rgba(255,255,255,.14)}
+.acct-switching{background:rgba(243,238,249,.72);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+
+/* alerts keep their semantic tint, softened into glass */
+.alert{-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+.a-i{background:rgba(246,243,255,.78);border-color:rgba(240,235,254,.95)}
+
+/* logo tile — the supplied app logo, shown as-is, clipped to its own rounded tile */
+.cc-logo{display:block;border-radius:10%;box-shadow:0 18px 40px -16px rgba(24,44,30,.35),0 0 0 1px rgba(255,255,255,.9)}
+
+/* unified bottom navigation: Home · Jobs · [More → Calendar, Invoices] · Listings · Profile */
+.nav{grid-template-columns:repeat(5,minmax(0,1fr));padding:8px 4px 16px;position:relative;z-index:30;overflow:visible}
+.nav a{min-width:0}
+
+/* ---- Footer "More" dock: one round trigger reveals Calendar + Invoices in a compact floating glass dock ----
+   Pure CSS (checkbox inside a label), identical on every screen. The dock rises out of the trigger,
+   then the two action cards float up one after the other. Tap the trigger again or anywhere outside to close. */
+:root{--nm-spring:cubic-bezier(.34,1.45,.64,1);--nm-out:cubic-bezier(.4,0,.2,1)}
+.nm{position:relative;display:flex;justify-content:center;align-items:flex-start}
+.nm-btn{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;min-height:44px;-webkit-tap-highlight-color:transparent;user-select:none}
+.nm-t{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.nm-scrim{position:absolute;left:-1200px;right:-1200px;top:-1600px;bottom:-120px;z-index:-1;pointer-events:none;
+  background:rgba(18,36,24,0);transition:background-color .3s ease}
+.nm-t:checked ~ .nm-scrim{background:rgba(18,36,24,.16);pointer-events:auto;cursor:default}
+/* trigger */
+.nm-core{position:relative;margin-top:-24px;width:56px;height:56px;border-radius:28px;display:flex;align-items:center;justify-content:center;color:#fff;
+  background-image:linear-gradient(180deg,#8A4DF2 0%,#7C3AED 50%,#6527C8 100%);background-size:100% 200%;background-position:0 0;
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:0 0 0 4px rgba(255,255,255,.78),0 14px 28px -10px rgba(101,39,200,.6),inset 0 1px 0 rgba(255,255,255,.38);
+  transition:transform .45s var(--nm-spring),box-shadow .25s ease,background-position .25s ease}
+.nm-ico{width:22px;height:22px;transition:transform .45s var(--nm-spring),opacity .2s ease}
+/* the close "×" is drawn by two bars that grow in as the grid icon spins away */
+.nm-core::before,.nm-core::after{content:"";position:absolute;left:50%;top:50%;width:20px;height:2.4px;margin:-1.2px 0 0 -10px;border-radius:2px;background:#fff;
+  opacity:0;transform:rotate(0) scaleX(.2);transition:transform .45s var(--nm-spring),opacity .2s ease}
+.nm-lbl{font-size:11px;font-weight:550;color:var(--ink3);transition:color .2s ease}
+@media (hover:hover){.nm-btn:hover .nm-core{background-position:0 100%;transform:translateY(-2px);
+  box-shadow:0 0 0 4px rgba(255,255,255,.85),0 0 0 7px rgba(183,154,214,.3),0 16px 30px -10px rgba(101,39,200,.62),inset 0 1px 0 rgba(255,255,255,.4)}}
+.nm-btn:active .nm-core{transform:scale(.94);transition-duration:.12s}
+.nm-t:focus-visible ~ .nm-core{box-shadow:0 0 0 4px rgba(255,255,255,.85),0 0 0 7px rgba(183,154,214,.7)}
+.nm-t:checked ~ .nm-core{background-position:0 100%;transform:translateY(-2px)}
+.nm-t:checked ~ .nm-core .nm-ico{opacity:0;transform:rotate(90deg) scale(.4)}
+.nm-t:checked ~ .nm-core::before{opacity:1;transform:rotate(45deg) scaleX(1)}
+.nm-t:checked ~ .nm-core::after{opacity:1;transform:rotate(-45deg) scaleX(1)}
+.nm-t:checked ~ .nm-lbl,.nm.on .nm-lbl{color:var(--p600);font-weight:650}
+.nm.on .nm-core{box-shadow:0 0 0 4px var(--p100),0 14px 28px -10px rgba(101,39,200,.6),inset 0 1px 0 rgba(255,255,255,.38)}
+
+/* dock: a compact frosted tray floating 12px above the trigger, with a small pointer back to it */
+.nm-menu{position:absolute;left:50%;top:4px;width:0;height:0}
+.nm-arc{position:absolute;left:-112px;top:-134px;width:224px;height:94px;border-radius:24px;pointer-events:none;
+  background:linear-gradient(165deg,rgba(255,255,255,.94) 0%,rgba(250,247,253,.86) 55%,rgba(243,238,249,.84) 100%);
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 0 0 .5px rgba(101,39,200,.10),0 22px 44px -18px rgba(24,44,30,.42),0 6px 14px -8px rgba(24,44,30,.18),inset 0 1px 0 #fff,inset 0 -1px 0 rgba(183,154,214,.18);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  transform-origin:50% 120%;transform:translateY(18px) scale(.86);opacity:0;
+  transition:transform .28s var(--nm-out),opacity .2s ease .06s}
+.nm-arc::after{content:"";position:absolute;left:50%;bottom:-6px;width:12px;height:12px;margin-left:-6px;border-radius:3px;transform:rotate(45deg);
+  background:rgba(244,239,250,.9);border-right:1px solid rgba(255,255,255,.95);border-bottom:1px solid rgba(255,255,255,.95);
+  box-shadow:4px 4px 8px -4px rgba(24,44,30,.14)}
+/* action cards */
+.nav a.nm-opt{position:absolute;top:-126px;width:100px;height:78px;min-height:0;padding:0;gap:7px;justify-content:center;
+  border-radius:17px;color:var(--ink);font-size:12.5px;font-weight:650;letter-spacing:-.005em;
+  background:linear-gradient(170deg,rgba(255,255,255,.72) 0%,rgba(255,255,255,.38) 100%);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 1px 2px rgba(24,44,30,.06),inset 0 1px 0 #fff;
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(14px) scale(.9);
+  transition:transform .22s var(--nm-out),opacity .16s ease,visibility 0s linear .3s,background-color .2s ease,border-color .2s ease,box-shadow .2s ease}
+.nav a.nm-o1{left:-106px}
+.nav a.nm-o2{left:6px}
+.nm-orb{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  color:var(--p600);background:linear-gradient(160deg,#F5F1FF 0%,#E6DEFD 100%);
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 6px 12px -6px rgba(124,58,237,.45),inset 0 1px 0 #fff,inset 0 -1px 0 rgba(124,58,237,.10);
+  transition:transform .3s var(--nm-spring),box-shadow .2s ease}
+.nm-orb .i{width:19px;height:19px;stroke-width:1.9}
+.nm-o2 .nm-orb{color:var(--g700);background:linear-gradient(160deg,#F1F8EC 0%,#DCEED0 100%);
+  box-shadow:0 6px 12px -6px rgba(54,122,34,.45),inset 0 1px 0 #fff,inset 0 -1px 0 rgba(54,122,34,.12)}
+.nm-tag{background:none;padding:0;box-shadow:none;white-space:nowrap;color:var(--ink)}
+@media (hover:hover){
+  .nav a.nm-opt:hover{color:var(--ink);background-color:rgba(255,255,255,.5);border-color:rgba(183,154,214,.65);
+    box-shadow:0 0 0 3px rgba(183,154,214,.18),0 12px 22px -12px rgba(101,39,200,.4),inset 0 1px 0 #fff}
+  .nm:has(.nm-t:checked) a.nm-opt:hover{transform:translateY(-2px) scale(1)}
+  .nav a.nm-opt:hover .nm-orb{transform:scale(1.06)}
+}
+.nm:has(.nm-t:checked) a.nm-opt:active{transform:scale(.97);transition-duration:.1s}
+.nav a.nm-opt:focus-visible{box-shadow:0 0 0 3px rgba(183,154,214,.7),inset 0 1px 0 #fff}
+.nav a.nm-opt.on{background:linear-gradient(170deg,rgba(246,243,255,.95) 0%,rgba(240,235,254,.8) 100%);border-color:rgba(183,154,214,.6);color:var(--p700)}
+.nav a.nm-opt.on .nm-orb{background:linear-gradient(180deg,#8A4DF2 0%,#7C3AED 100%);color:#fff;border-color:rgba(255,255,255,.4)}
+/* open: the tray rises out of the trigger, then the cards float up — Calendar first, Invoices 70ms later */
+.nm:has(.nm-t:checked) .nm-arc{transform:none;opacity:1;transition:transform .5s var(--nm-spring),opacity .18s ease}
+.nm:has(.nm-t:checked) a.nm-opt{opacity:1;visibility:visible;pointer-events:auto;transform:none;
+  transition:transform .55s var(--nm-spring),opacity .25s ease,visibility 0s,background-color .2s ease,border-color .2s ease,box-shadow .2s ease}
+.nm:has(.nm-t:checked) a.nm-o1{transition-delay:.06s,.06s,0s,0s,0s,0s}
+.nm:has(.nm-t:checked) a.nm-o2{transition-delay:.13s,.13s,0s,0s,0s,0s}
+@media (prefers-reduced-motion:reduce){
+  .nm-core,.nm-ico,.nm-core::before,.nm-core::after,.nm-arc,.nav a.nm-opt,.nm-orb{transition-duration:.01ms!important;transition-delay:0s!important}
+}
+
+/* listings: keep touch scrolling, hide the visible scrollbar */
+.no-sbar,.no-sbar .sc,.no-sbar .chips.x{scrollbar-width:none;-ms-overflow-style:none}
+.no-sbar::-webkit-scrollbar,.no-sbar .sc::-webkit-scrollbar,.no-sbar .chips.x::-webkit-scrollbar{display:none;width:0;height:0}
+
+/* ==========================================================================
+   Interaction states — one system for every button in the app
+   Hover: gentle tint shift + slight lift on filled buttons; glass buttons
+   brighten with a soft inner wash (no hard background swaps, so every change
+   can transition). Active: press down. Focus: lavender ring. Disabled: inert.
+   ========================================================================== */
+:root{--ix-dur:180ms;--ix-ease:cubic-bezier(.2,.7,.2,1);--ix-ring:0 0 0 3px rgba(183,154,214,.55);
+  --ix-p:linear-gradient(180deg,#8A4DF2 0%,#7C3AED 50%,#6527C8 100%);
+  --ix-g:linear-gradient(180deg,#3F8A28 0%,#367A22 50%,#2C6619 100%)}
+
+.btn,.iconbtn,.chip,.seg button,.fab,.li,a.card,.nav a,.nav .pill,.acct-sw,.acct-sw-btn,.file{
+  transition:background-color var(--ix-dur) var(--ix-ease),background-position var(--ix-dur) var(--ix-ease),border-color var(--ix-dur) var(--ix-ease),
+    box-shadow var(--ix-dur) var(--ix-ease),color var(--ix-dur) var(--ix-ease),transform var(--ix-dur) var(--ix-ease),opacity var(--ix-dur) var(--ix-ease)}
+
+/* filled buttons: a taller gradient that slides darker on hover */
+.btn-p,.fab,.chip.on,.acct-sw-btn{background-image:var(--ix-p);background-size:100% 200%;background-position:0 0}
+.btn-g{background-image:var(--ix-g);background-size:100% 200%;background-position:0 0}
+
+@media (hover:hover){
+  /* filled (primary / green / FAB): same colour family one shade deeper, glass sheen (::before), white hairline, soft halo */
+  .btn-p:not(:disabled):not(.dis):hover,.fab:hover{background-image:var(--ix-p);background-size:100% 200%;background-position:0 100%;border-color:rgba(255,255,255,.45);
+    box-shadow:0 0 0 3px rgba(183,154,214,.32),0 14px 28px -12px rgba(101,39,200,.6),inset 0 1px 0 rgba(255,255,255,.4);transform:translateY(-1px)}
+  .btn-g:not(:disabled):not(.dis):hover{background-image:var(--ix-g);background-size:100% 200%;background-position:0 100%;border-color:rgba(255,255,255,.45);
+    box-shadow:0 0 0 3px rgba(140,204,100,.30),0 14px 28px -12px rgba(44,102,25,.55),inset 0 1px 0 rgba(255,255,255,.4);transform:translateY(-1px)}
+  /* secondary / outlined: brighter frosted pane, deeper blur, lavender hairline, gentle glow */
+  .btn-s:not(:disabled):not(.dis):hover{background-image:var(--glass-fill-hi);border-color:rgba(255,255,255,.95);color:var(--p700);
+    -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+    box-shadow:0 0 0 1px rgba(183,154,214,.6),0 14px 28px -14px rgba(101,39,200,.35),inset 0 0 0 200px rgba(255,255,255,.35),inset 0 1px 0 #fff;transform:translateY(-1px)}
+  /* ghost / text and icon buttons: a frosted chip appears behind the label */
+  .btn-t:not(:disabled):not(.dis):hover{background-color:rgba(255,255,255,.66);color:var(--p700);
+    -webkit-backdrop-filter:blur(16px) saturate(170%);backdrop-filter:blur(16px) saturate(170%);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 0 0 1px rgba(183,154,214,.4),0 8px 18px -12px rgba(101,39,200,.35)}
+  .iconbtn:not(:disabled):hover{background-color:rgba(255,255,255,.66);color:var(--p600);
+    -webkit-backdrop-filter:blur(16px) saturate(170%);backdrop-filter:blur(16px) saturate(170%);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 0 0 1px rgba(183,154,214,.4),0 8px 18px -12px rgba(101,39,200,.35)}
+  /* destructive: frosted blush, text stays dark red */
+  .btn-d:not(:disabled):not(.dis):hover{background-color:rgba(253,236,234,.86);border-color:#E8968B;color:#9B1C12;
+    -webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);
+    box-shadow:0 10px 22px -12px rgba(180,35,24,.35),inset 0 1px 0 #fff}
+  .chip:not(.on):not(:disabled):hover{background-image:var(--glass-fill);border-color:var(--p300);color:var(--p700);
+    box-shadow:0 0 0 1px rgba(183,154,214,.35),0 6px 14px -8px rgba(101,39,200,.3),inset 0 0 0 200px rgba(255,255,255,.35),inset 0 1px 0 #fff}
+  .chip.on:hover{background-image:var(--ix-p);background-position:0 100%}
+  .seg button:not(.on):hover{background-color:rgba(255,255,255,.55);color:var(--ink)}
+  .nav a:not(.on):hover{color:var(--p600)}
+  .nav a:not(.on):hover .pill{background-color:rgba(124,58,237,.07)}
+  a.li:hover,button.li:hover{background-image:var(--glass-fill);box-shadow:inset 0 0 0 200px rgba(255,255,255,.4)}
+  a.card:hover{background-image:var(--glass-fill);border-color:rgba(183,154,214,.75);
+    box-shadow:0 20px 40px -18px rgba(24,44,30,.32),0 2px 6px rgba(24,44,30,.06),inset 0 0 0 200px rgba(255,255,255,.2),inset 0 1px 0 #fff}
+  .acct-sw:hover{border-color:#C9B1E3}
+  .acct-sw:hover .acct-sw-btn{background-position:0 100%}
+}
+
+/* pressed */
+.btn:not(:disabled):not(.dis):active,.fab:active,.chip:active,.iconbtn:not(:disabled):active{transform:translateY(0) scale(.98);transition-duration:80ms}
+.btn-p:not(:disabled):not(.dis):active,.fab:active{background-position:0 100%;box-shadow:0 4px 10px -6px rgba(101,39,200,.6),inset 0 1px 2px rgba(0,0,0,.18)}
+.btn-g:not(:disabled):not(.dis):active{background-position:0 100%;box-shadow:0 4px 10px -6px rgba(44,102,25,.55),inset 0 1px 2px rgba(0,0,0,.18)}
+.btn-s:not(:disabled):not(.dis):active{box-shadow:inset 0 1px 3px rgba(24,44,30,.14)}
+.btn-t:not(:disabled):not(.dis):active,.iconbtn:not(:disabled):active{background-color:rgba(124,58,237,.14)}
+.seg button:active{transform:scale(.98)}
+a.li:active,button.li:active{box-shadow:inset 0 0 0 200px rgba(124,58,237,.06)}
+
+/* keyboard focus — same ring everywhere, never on mouse click */
+.btn:focus-visible,.iconbtn:focus-visible,.chip:focus-visible,.seg button:focus-visible,.fab:focus-visible,a.card:focus-visible,.nav a:focus-visible{
+  outline:none;box-shadow:var(--ix-ring)}
+.li:focus-visible{outline:3px solid var(--p300);outline-offset:-3px}
+
+/* disabled — flat, dim, no hover/press feedback */
+.btn.dis,.btn[disabled],.btn.dis:hover,.btn[disabled]:hover{background:rgba(226,221,234,.55);color:#6B6676;border-color:rgba(101,39,200,.10);
+  box-shadow:none;transform:none;cursor:not-allowed}
+.iconbtn:disabled,.chip:disabled,.seg button:disabled,.li:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* transitions include the frosted blur so the glass fades in rather than snapping */
+.btn,.iconbtn,.chip,.fab{transition:background-color var(--ix-dur) var(--ix-ease),background-position var(--ix-dur) var(--ix-ease),border-color var(--ix-dur) var(--ix-ease),
+  box-shadow var(--ix-dur) var(--ix-ease),color var(--ix-dur) var(--ix-ease),transform var(--ix-dur) var(--ix-ease),
+  -webkit-backdrop-filter var(--ix-dur) var(--ix-ease),backdrop-filter var(--ix-dur) var(--ix-ease)}
+
+/* glass sheen — a soft top highlight that fades in on hover. It sits above the button fill and below
+   the label (isolation + z-index:-1), so it can never cover text or icons. */
+.btn{position:relative}
+.btn,.fab{isolation:isolate}
+.btn::before,.fab::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;opacity:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.24) 0%,rgba(255,255,255,.07) 46%,rgba(255,255,255,0) 100%);
+  transition:opacity var(--ix-dur) var(--ix-ease)}
+@media (hover:hover){.btn:not(:disabled):not(.dis):hover::before,.fab:hover::before{opacity:1}}
+
+/* ROOT-CAUSE FIX for vanishing labels: every screen's page style declares a{color:#7C3AED}a:hover{color:#6527C8}.
+   a:hover (specificity 0,1,1) outranked .btn-p{color:#fff} (0,1,0), so any <a class="btn btn-p"> — most CTAs in the
+   app — turned its white label dark purple on a dark purple fill and it disappeared. Components now own their text
+   colour in every state at a specificity above that page-level link rule. */
+a.btn-p,a.btn-p:hover,a.btn-p:active,a.btn-p:focus-visible,
+a.btn-g,a.btn-g:hover,a.btn-g:active,a.btn-g:focus-visible,
+a.fab,a.fab:hover,a.fab:active,a.chip.on,a.chip.on:hover{color:#fff}
+a.btn-s{color:var(--ink)}a.btn-s:hover,a.btn-s:active{color:var(--p700)}
+a.btn-t{color:var(--p600)}a.btn-t:hover,a.btn-t:active{color:var(--p700)}
+a.btn-d{color:var(--err)}a.btn-d:hover,a.btn-d:active{color:#9B1C12}
+a.iconbtn{color:var(--ink)}a.iconbtn:hover,a.iconbtn:active{color:var(--p600)}
+a.card,a.card:hover,a.li,a.li:hover{color:var(--ink)}
+a.btn.dis,a.btn.dis:hover{color:#6B6676}
+.btn-p .i,.btn-g .i,.fab .i,.btn-s .i,.btn-t .i,.btn-d .i,.iconbtn .i{stroke:currentColor}
+
+@media (prefers-reduced-motion:reduce){
+  .btn,.iconbtn,.chip,.seg button,.fab,.li,a.card,.nav a,.nav .pill{transition-duration:1ms!important;transform:none!important}
+  .btn::before,.fab::before{transition:none}
+}
+
+
+/* =====================================================================================
+   GLASS v2 — audit fixes (approved 18 Nov 2026). Additive layer: same palette, type, logo.
+   ===================================================================================== */
+/* R1 · blur tiers — one source of truth; R4 · named depth ladder; R3 · edge light; R7 · contrast */
+:root{
+  --blur-sm:blur(8px) saturate(140%);
+  --blur-md:blur(20px) saturate(170%);
+  --blur-lg:blur(28px) saturate(175%);
+  --glass-blur:var(--blur-md);
+  --elev-1:none;
+  --elev-2:var(--glass-sh);
+  --elev-3:var(--sh2);
+  --glass-sh:0 16px 36px -16px rgba(24,44,30,.26),0 2px 6px rgba(24,44,30,.06),0 0 0 .5px rgba(24,44,30,.07),inset 0 1px 0 rgba(255,255,255,.95),inset 1px 0 0 rgba(255,255,255,.35),inset -1px 0 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.25);
+  /* tinted glass (R2): brand / semantic tint at low alpha over the glass fill */
+  --tint-p:linear-gradient(160deg,rgba(246,243,255,.86) 0%,rgba(240,235,254,.62) 100%);
+  --tint-g:linear-gradient(160deg,rgba(243,249,238,.88) 0%,rgba(230,242,220,.62) 100%);
+  --tint-w:linear-gradient(160deg,rgba(255,248,230,.88) 0%,rgba(255,242,219,.62) 100%);
+  --tint-e:linear-gradient(160deg,rgba(253,240,238,.9) 0%,rgba(253,236,234,.64) 100%);
+  --ov-ease:cubic-bezier(.22,1,.36,1);
+}
+.nav{-webkit-backdrop-filter:var(--blur-md);backdrop-filter:var(--blur-md)}
+.sheet,.dlg,.modal,.nm-arc{-webkit-backdrop-filter:var(--blur-lg);backdrop-filter:var(--blur-lg)}
+.toast,.acct-switching{-webkit-backdrop-filter:var(--blur-md);backdrop-filter:var(--blur-md)}
+.scrim{-webkit-backdrop-filter:var(--blur-sm);backdrop-filter:var(--blur-sm)}
+.btn.dis,.btn[disabled],.btn.dis:hover,.btn[disabled]:hover,a.btn.dis,a.btn.dis:hover{color:#5F5A6A}
+
+/* shared panels: one material for every bespoke floating glass panel (R6) */
+.glass-panel{background:var(--glass-fill);border:1px solid var(--glass-edge);border-radius:20px;box-shadow:var(--elev-2);
+  -webkit-backdrop-filter:var(--blur-md);backdrop-filter:var(--blur-md)}
+.card.tint-p{background:var(--tint-p);border-color:rgba(240,235,254,.95)}
+.card.tint-g{background:var(--tint-g);border-color:rgba(214,234,199,.95)}
+.card.tint-w{background:var(--tint-w);border-color:rgba(248,226,180,.95)}
+.card.tint-e{background:var(--tint-e);border-color:rgba(246,201,195,.95)}
+/* inset glass strip (duration rows, notes) and inset glass track (progress bars) */
+.glass-inset{background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.75);border-radius:10px;box-shadow:inset 0 1px 2px rgba(24,44,30,.06)}
+.glass-track{background:rgba(228,239,226,.55);box-shadow:inset 0 1px 2px rgba(24,44,30,.10),0 1px 0 rgba(255,255,255,.7)}
+/* ghost glass: dashed call-to-action rows (M12) */
+.ghost-glass{border:1px dashed rgba(183,154,214,.85);border-radius:14px;background:rgba(255,255,255,.34);
+  -webkit-backdrop-filter:var(--blur-md);backdrop-filter:var(--blur-md);
+  transition:background-color var(--ix-dur) var(--ix-ease),border-color var(--ix-dur) var(--ix-ease),box-shadow var(--ix-dur) var(--ix-ease)}
+@media (hover:hover){.ghost-glass:hover{background-color:rgba(255,255,255,.62);border-color:var(--p300);box-shadow:0 10px 24px -14px rgba(24,44,30,.3)}}
+.ghost-glass:focus-visible{outline:3px solid var(--p300);outline-offset:2px}
+/* glass upload zone (M4) */
+.file.drop{border:1.5px dashed rgba(183,154,214,.9);background:var(--glass-hi);box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+.file.drop .sq{background:var(--glass-fill-hi)}
+@media (hover:hover){.file.drop:hover{background:rgba(255,255,255,.9);border-color:var(--p600)}}
+/* dark glass hero (M14) */
+.card.glass-dark{background:linear-gradient(160deg,rgba(101,39,200,.86) 0%,rgba(42,17,69,.88) 100%);border-color:rgba(255,255,255,.16);color:#fff;
+  box-shadow:0 18px 40px -16px rgba(42,17,69,.6),inset 0 1px 0 rgba(255,255,255,.18)}
+/* glass success tick (SetupDone) */
+.glass-tick{background:linear-gradient(180deg,#3F8A28 0%,#2C6619 100%);box-shadow:0 0 0 4px rgba(255,255,255,.9),0 10px 22px -8px rgba(44,102,25,.55),inset 0 1px 0 rgba(255,255,255,.3)}
+
+/* H1 · destructive buttons — red family end to end (no purple halo) */
+:root{--ix-e:linear-gradient(180deg,#C8392C 0%,#B42318 50%,#8E1B12 100%)}
+.btn-danger{background:linear-gradient(180deg,#C8392C 0%,#B42318 100%);color:#fff;border-color:rgba(255,255,255,.18);
+  box-shadow:0 8px 20px -8px rgba(180,35,24,.5),inset 0 1px 0 rgba(255,255,255,.22)}
+@media (hover:hover){.btn-danger:not(:disabled):not(.dis):hover{background-image:var(--ix-e);background-size:100% 200%;background-position:0 100%;border-color:rgba(255,255,255,.45);
+  box-shadow:0 0 0 3px rgba(240,182,175,.45),0 14px 28px -12px rgba(180,35,24,.55),inset 0 1px 0 rgba(255,255,255,.35);transform:translateY(-1px)}}
+.btn-danger:not(:disabled):not(.dis):active{background-image:var(--ix-e);background-size:100% 200%;background-position:0 100%;transform:scale(.98);
+  box-shadow:0 4px 10px -6px rgba(180,35,24,.6),inset 0 1px 2px rgba(0,0,0,.18)}
+.btn-danger:focus-visible{outline:3px solid #F0B6AF;outline-offset:2px}
+a.btn-danger,a.btn-danger:hover,a.btn-danger:active,a.btn-danger:focus-visible{color:#fff}
+.btn-danger .i{stroke:currentColor}
+/* soft semantic buttons (Tentatively booked / Unavailable) */
+.btn-soft-w{background:var(--tint-w);color:#7A5A00;border-color:#E8B92E}
+.btn-soft-e{background:var(--tint-e);color:#B42318;border-color:#F0B6AF}
+@media (hover:hover){
+  .btn-soft-w:not(:disabled):hover{background:#FFF4CC;box-shadow:0 0 0 3px rgba(232,185,46,.22);transform:translateY(-1px)}
+  .btn-soft-e:not(:disabled):hover{background:#FDECEA;box-shadow:0 0 0 3px rgba(240,182,175,.35);transform:translateY(-1px)}}
+.btn-soft-w:active,.btn-soft-e:active{transform:scale(.98)}
+
+/* H3 · fallback when backdrop-filter is unsupported or disabled: raise glass to near-opaque tiers */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  :root{--glass-lo:rgba(255,255,255,.86);--glass:rgba(255,255,255,.92);--glass-hi:rgba(255,255,255,.97);--glass-dark:rgba(20,40,28,.96);
+    --glass-fill:linear-gradient(160deg,rgba(255,255,255,.98) 0%,rgba(255,255,255,.92) 100%);--glass-fill-hi:linear-gradient(160deg,#fff 0%,rgba(255,255,255,.97) 100%);
+    --tint-p:linear-gradient(160deg,#F5FAF3,#F2ECF8);--tint-g:linear-gradient(160deg,#F5FAF1,#ECF5E4)}
+  .nav,.foot{background:rgba(255,255,255,.96)}
+  .sheet,.dlg,.modal{background:rgba(255,255,255,.98)}
+  .scrim{background:rgba(18,36,24,.5)}
+  .nm-arc{background:rgba(250,247,253,.98)}
+  .ghost-glass{background:rgba(255,255,255,.8)}
+  .glass-panel{background:var(--glass-fill)}
+}
+
+/* T7 · no blur stacked inside blur: glass children of a glass parent reuse the parent's blur */
+:is(.card,.sheet,.dlg,.modal,.list,.alert,.glass-panel,.foot,.nav) :is(.chip,.inp,.srch,.seg,.pre,.chk,.radio,.file,.btn-s,.btn-d,.btn-t,.iconbtn,.tbl-wrap,.acct-sw,.ghost-glass){
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+
+/* H2 · overlays settle in instead of popping (entrance; exits are instant because sc-if unmounts) */
+@keyframes ccScrimIn{from{background-color:rgba(18,36,24,0);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0)}}
+@keyframes ccSheetIn{from{transform:translateY(32px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes ccDlgIn{from{transform:scale(.95) translateY(6px);opacity:0}to{transform:none;opacity:1}}
+@keyframes ccToastIn{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+.scrim{animation:ccScrimIn .22s ease-out both}
+.scrim>.sheet,.sheet{animation:ccSheetIn .34s var(--ov-ease) both}
+.scrim.c>.dlg,.dlg,.modal{animation:ccDlgIn .24s var(--ov-ease) both}
+.toast{animation:ccToastIn .28s var(--ov-ease) both}
+
+/* A2 · segmented controls: the selected pill glides in; MyListings/Discover link segments share the .seg look */
+@keyframes ccSegOn{from{transform:scale(.9);opacity:.35;box-shadow:none}to{transform:none;opacity:1}}
+.seg button{transition:color var(--ix-dur) var(--ix-ease),background-color var(--ix-dur) var(--ix-ease)}
+.seg button.on{animation:ccSegOn .26s var(--ov-ease)}
+.ph .ls-seg{background:rgba(228,239,226,.55);border-color:rgba(255,255,255,.75);box-shadow:none;-webkit-backdrop-filter:var(--blur-md);backdrop-filter:var(--blur-md)}
+.ph .ls-seg a{transition:color var(--ix-dur) var(--ix-ease),background-color var(--ix-dur) var(--ix-ease);color:var(--ink2)}
+.ph .ls-seg a.on{background:rgba(255,255,255,.92);color:var(--ink);box-shadow:0 2px 8px -2px rgba(24,44,30,.18);animation:ccSegOn .26s var(--ov-ease)}
+@media (hover:hover){.ph .ls-seg a:not(.on):hover{background-color:rgba(255,255,255,.55);color:var(--ink)}}
+.ph .ls-seg a:focus-visible{outline:3px solid var(--p300);outline-offset:-1px}
+
+/* A4 · accordion bodies and listboxes reveal; disclosure chevrons rotate */
+@keyframes ccReveal{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.cc-reveal{animation:ccReveal .26s var(--ov-ease) both;transform-origin:top}
+[aria-haspopup][aria-expanded] > svg:last-child{transition:transform .24s var(--ov-ease)}
+[aria-haspopup][aria-expanded="true"] > svg:last-child{transform:rotate(180deg)}
+
+/* A6 · skeleton shimmer */
+@keyframes ccShim{from{background-position:200% 0}to{background-position:-200% 0}}
+.skel{background:linear-gradient(90deg,rgba(228,239,226,.8) 0%,rgba(228,239,226,.8) 35%,rgba(255,255,255,.75) 50%,rgba(228,239,226,.8) 65%,rgba(228,239,226,.8) 100%);
+  background-size:200% 100%;animation:ccShim 1.4s linear infinite}
+
+/* A7 · underline tabs */
+.tabs button{transition:color .18s var(--ix-ease),border-color .18s var(--ix-ease)}
+@media (hover:hover){.tabs button:not(.on):hover{color:var(--ink2)}}
+.tabs button:focus-visible{outline:3px solid var(--p300);outline-offset:-3px;border-radius:6px}
+
+/* R5 · faint grain keeps large glass gradients from banding */
+.ph::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.035;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* T10 · reduced motion for everything above */
+@media (prefers-reduced-motion:reduce){
+  .scrim,.sheet,.dlg,.modal,.toast,.cc-reveal,.seg button.on,.ph .ls-seg a.on{animation:ccFadeOnly .15s ease both!important}
+  .skel{animation:none;background:rgba(228,239,226,.8)}
+  [aria-haspopup][aria-expanded] > svg:last-child,.ghost-glass,.tabs button{transition:none}
+  .btn-danger,.btn-soft-w,.btn-soft-e{transform:none!important}
+}
+@keyframes ccFadeOnly{from{opacity:0}to{opacity:1}}
+
+/* Profile photos embedded in the file so they survive HTML export */
+.av[data-ini="PN"],.me-photo{background-image:url(data:image/jpeg;base64,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)}
+.av[data-ini="KM"],.av[data-ini="MJ"],.av[data-ini="NV"]{background-image:url(data:image/jpeg;base64,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)}
+.av[data-ini="VB"],.av[data-ini="AK"],.av[data-ini="KS"],.av[data-ini="RM"]{background-image:url(data:image/jpeg;base64,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)}
+.av[data-ini="AI"],.av[data-ini="SM"]{background-image:url(data:image/jpeg;base64,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)}
+.av[data-ini="FS"],.av[data-ini="AR"],.av[data-ini="RD"],.av[data-ini="IS"]{background-image:url(data:image/jpeg;base64,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)}
+
+/* App logo, embedded so it survives HTML export (replaces the stored /_blob logo in screens) */
+.cc-logo-mark{display:block;flex:none;background:url(data:image/webp;base64,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) center/contain no-repeat}
+
+/* Text from crewconnect_content.json renders inside span.sc-interp: keep that wrapper neutral inside prefixed inputs (+91, ₹) */
+.pre span.sc-interp{padding:0;height:auto;display:inline;background:none;border:0}
+
+/* ==========================================================================
+   REVISION 2 — client feedback round (Nov 2026)
+   ========================================================================== */
+/* plan / option cards (Free vs Premium, Association vs Forum, role choice) */
+.plan-opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;padding:14px;border-radius:16px;border:1.5px solid var(--glass-edge);background:var(--glass-fill);box-shadow:var(--glass-sh);cursor:pointer;font:inherit;color:var(--ink);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+.plan-opt.on{border-color:var(--g600);box-shadow:0 0 0 3px rgba(54,122,34,.16),var(--glass-sh)}
+.plan-opt .pp{font-size:15px;font-weight:700}
+.plan-opt ul{margin:6px 0 0;padding-left:18px;font-size:12px;line-height:17px;color:var(--ink2)}
+/* section header with its own icon (Home sections, Find talent groups) */
+.sec-ic{display:flex;align-items:center;gap:10px}
+.sec-ic .ic{width:32px;height:32px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;flex:none;background:var(--g50);color:var(--g700);border:1px solid var(--g100)}
+.sec-ic .ic.p{background:var(--p50);color:var(--p600);border-color:var(--p100)}
+.sec-ic .ic.w{background:#FFF6E3;color:#8A5300;border-color:#F5DDAE}
+.sec-ic .ic.b{background:#EAF2FB;color:#1F5A96;border-color:#CFE0F3}
+.home-sec{border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(160deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,.42) 100%);border:1px solid rgba(255,255,255,.9);box-shadow:var(--glass-sh)}
+/* match reasons in notifications / job cards */
+.why{display:flex;flex-wrap:wrap;gap:6px}
+.why span{display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:0 8px;border-radius:12px;background:var(--g50);color:var(--g700);border:1px solid var(--g100);font-size:12px;font-weight:600}
+/* job dates on cards */
+.jd{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--ink)}
+.jd .i{width:14px;height:14px;color:var(--g700)}
+/* pinned forum */
+.pin-b{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:11px;background:#FFF4CC;color:#7A5A00;font-size:11px;font-weight:700}
+.pinned-zone{position:sticky;top:0;z-index:2;display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:18px;background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.95);box-shadow:0 10px 24px -14px rgba(28,40,32,.35);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+/* edit history on notices */
+.edit-h{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:17px;color:var(--ink2);padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.6);border:1px dashed var(--line2)}
+/* undisclosed fee */
+.fee-hid{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--ink2)}
+/* invoice print mode: no violet fills, black text on white, prints cleanly in black & white */
+.inv-print, .inv-print *{background:#fff !important;color:#111 !important;box-shadow:none !important;border-color:#999 !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
+@media print{.inv-doc, .inv-doc *{background:#fff !important;color:#000 !important;box-shadow:none !important}}
+
+/* ==========================================================================
+   GLASS v3 — Revision 6 (Nov 2026): restore a visible glassmorphism feel.
+   Audit: the glass layer above was intact (no screen CSS overrides it), but the
+   ground behind it had become an almost uniform pale green, so white glass at
+   40–80 % sat on near-white and read as flat solid cards; blur had nothing to
+   frost. Headers were fully transparent. This layer is additive and visual only:
+   same palette (violet · green · warm peach), same layouts, sizes and flows.
+   ========================================================================== */
+:root{
+  /* ground — palette colour fields deep enough for glass to read against, light enough for body text */
+  --cc-bg:
+    radial-gradient(70% 34% at 0% 8%, rgba(167,139,250,.42) 0%, rgba(167,139,250,0) 72%),
+    radial-gradient(62% 30% at 100% 24%, rgba(255,179,120,.50) 0%, rgba(255,179,120,0) 72%),
+    radial-gradient(60% 30% at 0% 58%, rgba(124,198,140,.42) 0%, rgba(124,198,140,0) 72%),
+    radial-gradient(70% 30% at 100% 74%, rgba(196,177,250,.42) 0%, rgba(196,177,250,0) 72%),
+    radial-gradient(90% 34% at 30% 104%, rgba(95,168,52,.34) 0%, rgba(95,168,52,0) 72%),
+    linear-gradient(170deg,#EAE6F7 0%,#EEF2EA 42%,#E4F0E3 100%);
+  --cc-bg-alt:
+    radial-gradient(70% 34% at 100% 8%, rgba(167,139,250,.42) 0%, rgba(167,139,250,0) 72%),
+    radial-gradient(62% 30% at 0% 24%, rgba(255,179,120,.50) 0%, rgba(255,179,120,0) 72%),
+    radial-gradient(60% 30% at 100% 58%, rgba(124,198,140,.42) 0%, rgba(124,198,140,0) 72%),
+    radial-gradient(70% 30% at 0% 74%, rgba(196,177,250,.42) 0%, rgba(196,177,250,0) 72%),
+    radial-gradient(90% 34% at 70% 104%, rgba(95,168,52,.34) 0%, rgba(95,168,52,0) 72%),
+    linear-gradient(190deg,#EAE6F7 0%,#EEF2EA 42%,#E4F0E3 100%);
+  /* glass tiers — lower alpha so the colour behind shows through, frosted by blur */
+  --glass-fill:linear-gradient(150deg,rgba(255,255,255,.70) 0%,rgba(255,255,255,.46) 55%,rgba(255,255,255,.36) 100%);
+  --glass-fill-hi:linear-gradient(150deg,rgba(255,255,255,.84) 0%,rgba(255,255,255,.60) 100%);
+  --glass-edge:rgba(255,255,255,.78);
+  --blur-md:blur(22px) saturate(180%);
+  --glass-blur:var(--blur-md);
+  /* depth — soft violet-grey drop + bright top edge light + faint inner rim */
+  --glass-sh:0 18px 40px -18px rgba(52,36,92,.30),0 3px 8px -2px rgba(30,40,34,.07),inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 1px rgba(255,255,255,.22);
+  --sh1:var(--glass-sh);
+  --surface:rgba(255,255,255,.56);
+}
+/* soft floating light orbs under the glass (behind content, no layout impact) */
+.ph::before{
+  background:
+    radial-gradient(38% 16% at 82% 18%, rgba(255,255,255,.75) 0%, rgba(255,255,255,0) 70%),
+    radial-gradient(42% 18% at 14% 44%, rgba(183,154,214,.38) 0%, rgba(183,154,214,0) 70%),
+    radial-gradient(40% 16% at 86% 62%, rgba(255,200,150,.34) 0%, rgba(255,200,150,0) 70%),
+    radial-gradient(46% 18% at 30% 86%, rgba(140,204,120,.30) 0%, rgba(140,204,120,0) 70%);
+  filter:blur(24px)}
+
+/* cards, lists, sections, option tiles — one glass recipe */
+.card,.list,.home-sec,.plan-opt,.tbl-wrap,.file{
+  background:var(--glass-fill);border-color:var(--glass-edge);box-shadow:var(--glass-sh);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+.home-sec{background:linear-gradient(150deg,rgba(255,255,255,.50) 0%,rgba(255,255,255,.26) 100%)}
+.home-sec .card,.home-sec .list{background:var(--glass-fill-hi)}
+.card .card,.card .list{background:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(30,40,34,.05)}
+a.card:hover,a.li:hover,button.li:hover{background:rgba(255,255,255,.62)}
+
+/* headers — a light frosted band with a hairline, so the title reads as a layer */
+.bar{background:linear-gradient(180deg,rgba(255,255,255,.40) 0%,rgba(255,255,255,.16) 100%);
+  border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 1px 0 rgba(101,39,200,.05);
+  -webkit-backdrop-filter:var(--blur-sm);backdrop-filter:var(--blur-sm);position:relative;z-index:3}
+
+/* bottom navigation and fixed footers — floating frosted dock */
+.nav{background:linear-gradient(180deg,rgba(255,255,255,.58) 0%,rgba(255,255,255,.40) 100%);
+  border-top:1px solid rgba(255,255,255,.85);
+  -webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);
+  box-shadow:0 -12px 30px -16px rgba(52,36,92,.28),inset 0 1px 0 rgba(255,255,255,.95)}
+.nav a.on .pill{background:linear-gradient(180deg,rgba(230,242,220,.95),rgba(214,236,200,.85));box-shadow:inset 0 0 0 1px rgba(54,122,34,.16),inset 0 1px 0 #fff}
+.foot{background:linear-gradient(180deg,rgba(255,255,255,.58) 0%,rgba(255,255,255,.40) 100%);
+  border-top-color:rgba(255,255,255,.85);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%)}
+
+/* buttons — glass secondary, lit primary */
+.btn-s,.btn-d{background:var(--glass-fill-hi);border-color:rgba(255,255,255,.85);
+  -webkit-backdrop-filter:var(--blur-sm);backdrop-filter:var(--blur-sm);
+  box-shadow:0 6px 16px -10px rgba(52,36,92,.35),inset 0 1px 0 #fff}
+.btn-p,.fab{box-shadow:0 10px 24px -10px rgba(101,39,200,.60),inset 0 1px 0 rgba(255,255,255,.32),inset 0 -1px 0 rgba(62,26,134,.25)}
+.btn-g{box-shadow:0 10px 24px -10px rgba(44,102,25,.55),inset 0 1px 0 rgba(255,255,255,.30),inset 0 -1px 0 rgba(28,64,16,.25)}
+.bar .iconbtn{background:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.6);-webkit-backdrop-filter:var(--blur-sm);backdrop-filter:var(--blur-sm)}
+.bar .iconbtn:hover{background:rgba(255,255,255,.66)}
+
+/* inputs — frosted wells with a clear edge; solid enough for legible typing */
+.inp,.pre,.srch,textarea.inp,select.inp{background:rgba(255,255,255,.62);border-color:rgba(101,39,200,.20);
+  -webkit-backdrop-filter:var(--blur-sm);backdrop-filter:var(--blur-sm);
+  box-shadow:inset 0 1px 2px rgba(30,40,34,.07),0 1px 0 rgba(255,255,255,.8)}
+.inp:focus,.srch:focus-within{background:rgba(255,255,255,.88);border-color:var(--p600);box-shadow:0 0 0 3px rgba(183,154,214,.45)}
+.inp.ro{background:rgba(238,244,236,.62)}
+
+/* chips, segmented controls, tags */
+.chip{background:linear-gradient(150deg,rgba(255,255,255,.72),rgba(255,255,255,.44));border-color:rgba(255,255,255,.85);
+  -webkit-backdrop-filter:var(--blur-sm);backdrop-filter:var(--blur-sm);box-shadow:0 4px 10px -6px rgba(52,36,92,.25),inset 0 1px 0 #fff}
+.seg{background:rgba(255,255,255,.30);border-color:rgba(255,255,255,.7);-webkit-backdrop-filter:var(--blur-sm);backdrop-filter:var(--blur-sm);
+  box-shadow:inset 0 1px 2px rgba(30,40,34,.06)}
+.seg button.on{background:rgba(255,255,255,.92);box-shadow:0 4px 10px -4px rgba(52,36,92,.25),inset 0 1px 0 #fff}
+.tag{background:rgba(255,255,255,.58);box-shadow:inset 0 0 0 1px rgba(255,255,255,.7),inset 0 0 0 1.5px rgba(101,39,200,.06)}
+
+/* overlays — sheets and dialogs stay readable (higher alpha), scrim frosts the screen behind */
+.scrim{background:rgba(30,24,52,.30);-webkit-backdrop-filter:blur(8px) saturate(120%);backdrop-filter:blur(8px) saturate(120%)}
+.sheet,.dlg,.modal{background:linear-gradient(170deg,rgba(255,255,255,.86) 0%,rgba(255,255,255,.74) 100%);
+  border:1px solid rgba(255,255,255,.9);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:0 -18px 44px -18px rgba(52,36,92,.35),inset 0 1px 0 #fff}
+.pinned-zone{background:linear-gradient(150deg,rgba(255,255,255,.80),rgba(255,255,255,.60))}
+
+/* print / invoice document mode stays flat on white (rules above use !important) */
+@media (prefers-reduced-transparency:reduce){
+  .card,.list,.home-sec,.plan-opt,.nav,.foot,.bar,.sheet,.dlg,.modal,.chip,.inp,.srch,.btn-s{background:rgba(255,255,255,.94)!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+
+/* R8 · mapped profile fields */
+.pf-grp{display:flex;flex-direction:column;gap:16px}
+.pf-grp + .pf-grp{padding-top:14px;border-top:1px solid rgba(101,39,200,.1)}
+.pf-dd[disabled]{opacity:.55;cursor:not-allowed}
+.pf-step{gap:4px;align-items:center}
+.pf-step .iconbtn{width:36px;height:36px;font-size:20px;font-weight:600;color:#6527C8}
+.pf-range{width:100%;accent-color:#7C3AED;height:28px}
+.pf-sheet{height:92%;max-height:92%;display:flex;flex-direction:column;gap:12px}
+.pf-opts{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding-bottom:4px}
+.pf-sel{max-height:76px;overflow-y:auto}
+.chip button svg{width:13px;height:13px}
+
+/* =====================================================================================
+   LIQUID GLASS v5 — material engine (Nov 2026, rev. 2)
+   Replaces the v4 layer. Audit of v4 (why it still read as frosted glassmorphism):
+   - every surface was a white wash + backdrop blur 16–36px: blur hid what was behind,
+     so nothing ever looked *refracted*, only fogged;
+   - edges were uniform inset box-shadows: the same brightness all round, i.e. a border;
+   - highlights were static linear gradients; the pointer only moved a flat white spot;
+   - one recipe for every component, so nav, chips, buttons and sheets had the same depth;
+   - hover = opacity/scale tweaks; no change in how light sat on the surface.
+   v5 changes the material itself:
+   - LOW blur (3–8px) + SVG lens displacement at the edges (Chromium; cc-liquid.js builds a
+     displacement map per component size), with slight chromatic split on prominent glass;
+   - a conic RIM LIGHT whose bright side follows a shared light angle (pointer, scroll);
+   - internal reflections: a curved top dome and a bottom caustic that drift against
+     each other as the light moves (reads as a thick, curved, polished lens);
+   - edge thickness (inner glow) + bottom absorption + layered contact/ambient shadows;
+   - five material variants with their own tint, blur, rim, specular, depth and refraction;
+   - interaction = light: hover raises rim + specular intensity (animated registered
+     properties), press compresses and blooms light from the contact point, release springs.
+   Three layers are unchanged: PRIMARY content stays calm and readable (no liquid effects);
+   GLASS (navigation + controls) carries the liquid material; FLOATING is the richest.
+   ===================================================================================== */
+
+/* ---- animatable light properties (registered so they glide instead of jumping) ---- */
+@property --la{syntax:'<angle>';inherits:true;initial-value:315deg}
+@property --lx{syntax:'<percentage>';inherits:true;initial-value:32%}
+@property --ly{syntax:'<percentage>';inherits:true;initial-value:0%}
+@property --lgi{syntax:'<number>';inherits:true;initial-value:0}
+
+:root{
+  /* ---------- motion ---------- */
+  --lg-dur-xs:90ms;--lg-dur-s:160ms;--lg-dur-m:260ms;--lg-dur-l:440ms;--lg-dur-xl:580ms;
+  --lg-ease:cubic-bezier(.2,.8,.2,1);
+  --lg-ease-out:cubic-bezier(.22,1,.36,1);
+  --lg-spring:cubic-bezier(.34,1.5,.64,1);           /* press release, thumbs, dates */
+  --lg-spring-soft:cubic-bezier(.32,1.2,.58,1);      /* large surfaces */
+  --lg-light:600ms cubic-bezier(.22,1,.36,1);        /* how fast light follows the pointer */
+  /* ---------- shape / elevation / layers ---------- */
+  --lg-r-xs:8px;--lg-r-s:12px;--lg-r-m:16px;--lg-r-l:22px;--lg-r-xl:28px;--lg-r-pill:999px;
+  --lg-lift-1:-1px;--lg-lift-2:-2px;--lg-press:.965;
+  --lg-z-content:0;--lg-z-sticky:3;--lg-z-glass:4;--lg-z-scrim:8;--lg-z-float:22;--lg-z-nav:30;--lg-z-overlay:40;--lg-z-toast:60;
+  --lg-focus-ring:#7C3AED;
+
+  /* ---------- L1 · PRIMARY (content) — unchanged calm surface ---------- */
+  --l1-fill:linear-gradient(180deg,rgba(255,255,255,.86) 0%,rgba(255,255,255,.76) 100%);
+  --l1-fill-sub:rgba(255,255,255,.62);
+  --l1-edge:rgba(255,255,255,.94);
+  --l1-line:rgba(26,24,32,.075);
+  --l1-blur:blur(10px) saturate(140%);
+  --l1-shadow:0 1px 1px rgba(30,40,34,.04),0 10px 26px -18px rgba(52,36,92,.26),inset 0 1px 0 rgba(255,255,255,.92);
+
+  /* ---------- material shadows ---------- */
+  --lg-sh-control:0 1px 1px rgba(30,20,60,.10),0 6px 14px -8px rgba(52,36,92,.38);
+  --lg-sh-control-hi:0 2px 3px rgba(30,20,60,.10),0 14px 26px -12px rgba(52,36,92,.46);
+  --lg-sh-glass:0 1px 2px rgba(30,20,60,.08),0 12px 30px -16px rgba(52,36,92,.42);
+  --lg-sh-float:0 0 0 .5px rgba(52,36,92,.10),0 2px 4px rgba(30,20,60,.06),0 34px 70px -26px rgba(30,20,60,.50),0 14px 28px -16px rgba(30,20,60,.24);
+
+  --sh1:var(--l1-shadow);--glass-sh:var(--l1-shadow);
+}
+
+/* =====================================================================================
+   MATERIAL VARIANTS — tokens only. Use the class on any element, or rely on the mapping
+   below that assigns each existing component its material.
+   --m-rgb tint colour · --m-a/--m-a2 body alpha (top/mid) · --m-blur · --m-sat
+   --m-rim edge light 0–1 · --m-rimw edge width · --m-spec specular 0–1
+   --m-depth edge thickness · --m-glow thickness light · --m-sh shadow · --m-refract lens px
+   ===================================================================================== */
+.liquid-glass-subtle,a.card,button.card,.plan-opt{
+  --m-rgb:255 255 255;--m-a:.84;--m-a2:.72;--m-blur:10px;--m-sat:150%;
+  --m-rim:.62;--m-rimw:1px;--m-spec:.32;--m-depth:10px;--m-glow:.20;--m-sh:var(--l1-shadow);--m-refract:0;--m-chroma:0}
+.liquid-glass,.srch,.acct-sw{
+  --m-rgb:255 255 255;--m-a:.50;--m-a2:.24;--m-blur:4px;--m-sat:190%;
+  --m-rim:.9;--m-rimw:1.25px;--m-spec:.62;--m-depth:14px;--m-glow:.30;--m-sh:var(--lg-sh-glass);--m-refract:16;--m-chroma:0}
+.liquid-glass-prominent,.nav,.foot{
+  --m-rgb:255 255 255;--m-a:.56;--m-a2:.36;--m-blur:3.5px;--m-sat:210%;
+  --m-rim:1;--m-rimw:1.5px;--m-spec:.8;--m-depth:22px;--m-glow:.36;--m-sh:var(--lg-sh-glass);--m-refract:38;--m-chroma:1}
+.liquid-glass-control,.btn-s,.btn-d,.chip,.bar .iconbtn,.cal-card .iconbtn,.pn-btn,.seg button.on,.ph .ls-seg a.on,.nav-cap{
+  --m-rgb:255 255 255;--m-a:.46;--m-a2:.16;--m-blur:3px;--m-sat:190%;
+  --m-rim:1;--m-rimw:1.5px;--m-spec:.75;--m-depth:9px;--m-glow:.48;--m-sh:var(--lg-sh-control);--m-refract:12;--m-chroma:0}
+.liquid-glass-floating,.dlg,.modal,.lg-pop,[role="tooltip"],[role="menu"] [role="menuitem"]{
+  --m-rgb:255 255 255;--m-a:.90;--m-a2:.78;--m-blur:24px;--m-sat:200%;
+  --m-rim:1;--m-rimw:1.25px;--m-spec:.55;--m-depth:20px;--m-glow:.36;--m-sh:var(--lg-sh-float);--m-refract:0;--m-chroma:0}
+[role="menu"] [role="menuitem"]{--m-a:.74;--m-a2:.56;--m-blur:10px;--m-refract:20}
+/* tinted liquid (brand colour carried by the glass itself; alpha stays high for label contrast) */
+.liquid-glass-tinted,.btn-p,.fab,.cal-d.is-sel{--m-rgb:124 58 237;--m-a:.97;--m-a2:.90;--m-refract:0;--m-spec:.36;--m-press:.26;--m-glow:.22;--m-sh:0 2px 3px rgba(62,26,134,.18),0 10px 22px -10px rgba(101,39,200,.62)}
+.btn-g,.chip.on{--m-rgb:54 122 34;--m-a:.97;--m-a2:.90;--m-refract:0;--m-spec:.34;--m-press:.26;--m-glow:.2;--m-sh:0 2px 3px rgba(28,64,16,.18),0 10px 22px -10px rgba(44,102,25,.55)}
+.btn-danger{--m-rgb:180 35 24;--m-a:.97;--m-a2:.90;--m-refract:0;--m-spec:.34;--m-press:.26;--m-glow:.2;--m-sh:0 2px 3px rgba(90,20,12,.18),0 10px 22px -10px rgba(180,35,24,.5)}
+.nav-cap{--m-rgb:232 246 222;--m-a:.80;--m-a2:.46;--m-blur:2px;--m-rim:1;--m-rimw:1.5px;--m-spec:.85;--m-glow:.55;--m-depth:10px;--m-refract:10;
+  --m-sh:0 1px 2px rgba(28,64,16,.10),0 8px 18px -10px rgba(44,102,25,.45)}
+.toast,.adm-toast{--m-rgb:30 24 48;--m-a:.80;--m-a2:.72;--m-blur:18px;--m-sat:180%;--m-rim:.55;--m-rimw:1px;--m-spec:.22;--m-depth:16px;--m-glow:.10;--m-sh:0 22px 44px -18px rgba(14,10,30,.62);--m-refract:0}
+.chip{--m-a:.50;--m-a2:.20;--m-depth:8px;--m-refract:10}
+.btn-d{--m-rgb:255 248 247}
+
+/* =====================================================================================
+   MATERIAL ENGINE — one implementation, driven by the tokens above.
+   :not(#lg) lifts specificity over the GLASS v1–v3 rules without !important.
+   ===================================================================================== */
+:is(.liquid-glass,.liquid-glass-subtle,.liquid-glass-prominent,.liquid-glass-control,.liquid-glass-floating,.liquid-glass-tinted,
+    a.card,button.card,.plan-opt,.srch,.acct-sw,
+    .btn-s,.btn-d,.btn-p,.btn-g,.btn-danger,.fab,.chip,.bar .iconbtn,.cal-card .iconbtn,.pn-btn,
+    .seg button.on,.ph .ls-seg a.on,.nav-cap,.cal-d.is-sel,
+    .dlg,.modal,.toast,.adm-toast,.lg-pop,[role="tooltip"],[role="menu"] [role="menuitem"]):not(#lg){
+  --la:calc(315deg + var(--lg-sa,0deg) + var(--lg-sb,0deg));--m-host:self;
+  position:relative;isolation:isolate;transform:none;
+  background:
+    radial-gradient(70% 90% at var(--lx) var(--ly),rgb(255 255 255 / calc(var(--m-spec) * (.16 + var(--lgi) * .30))) 0%,rgb(255 255 255 / 0) 70%),
+    linear-gradient(180deg,rgb(var(--m-rgb) / var(--m-a)) 0%,rgb(var(--m-rgb) / var(--m-a2)) 55%,rgb(var(--m-rgb) / calc(var(--m-a2) + .07)) 100%);
+  border-color:transparent;
+  -webkit-backdrop-filter:blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05);
+  backdrop-filter:blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05);
+  box-shadow:
+    inset 0 0 0 .5px rgb(255 255 255 / calc(var(--m-rim) * .30)),
+    inset 0 0 var(--m-depth) rgb(255 255 255 / var(--m-glow)),
+    inset 0 -5px 9px -7px rgb(30 20 60 / calc(var(--m-glow) * .45)),
+    var(--m-sh);
+  transition:--lx var(--lg-light),--ly var(--lg-light),--la var(--lg-light),--lgi var(--lg-dur-l) var(--lg-ease),
+    box-shadow var(--lg-dur-m) var(--lg-ease),translate var(--lg-dur-l) var(--lg-spring),scale var(--lg-dur-l) var(--lg-spring),
+    color var(--lg-dur-s) var(--lg-ease),outline-color var(--lg-dur-m) var(--lg-ease),outline-offset var(--lg-dur-m) var(--lg-spring)}
+
+/* edge light: a conic rim whose bright arc faces the light (and the pointer), with a softer
+   counter-reflection opposite — the thing that makes an edge read as curved polished glass */
+:is(.liquid-glass,.liquid-glass-subtle,.liquid-glass-prominent,.liquid-glass-control,.liquid-glass-floating,.liquid-glass-tinted,
+    a.card,button.card,.plan-opt,.srch,.acct-sw,
+    .btn-s,.btn-d,.btn-p,.btn-g,.btn-danger,.fab,.chip,.bar .iconbtn,.cal-card .iconbtn,.pn-btn,
+    .seg button.on,.ph .ls-seg a.on,.nav-cap,.cal-d.is-sel,
+    .dlg,.modal,.toast,.adm-toast,.lg-pop,[role="tooltip"],[role="menu"] [role="menuitem"]):not(#lg)::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;padding:var(--m-rimw);
+  background:conic-gradient(from var(--la),
+    rgb(255 255 255 / calc(var(--m-rim) * 1)) 0deg,
+    rgb(255 255 255 / calc(var(--m-rim) * .42)) 38deg,
+    rgb(60 40 110 / calc(var(--m-rim) * .14)) 95deg,
+    rgb(255 255 255 / calc(var(--m-rim) * .70)) 180deg,
+    rgb(60 40 110 / calc(var(--m-rim) * .14)) 265deg,
+    rgb(255 255 255 / calc(var(--m-rim) * .42)) 322deg,
+    rgb(255 255 255 / calc(var(--m-rim) * 1)) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  opacity:calc(.80 + var(--lgi) * .20);
+  background-size:auto;animation:none;transition:none;transform:none}
+
+/* internal reflections: the curved top dome and the bottom caustic drift against each other
+   as the light moves; a press blooms light from the contact point (--px/--py) */
+:is(.liquid-glass,.liquid-glass-subtle,.liquid-glass-prominent,.liquid-glass-control,.liquid-glass-floating,.liquid-glass-tinted,
+    a.card,button.card,.plan-opt,.srch,.acct-sw,
+    .btn-s,.btn-d,.btn-p,.btn-g,.btn-danger,.fab,.chip,.bar .iconbtn,.cal-card .iconbtn,.pn-btn,
+    .seg button.on,.ph .ls-seg a.on,.nav-cap,.cal-d.is-sel,
+    .dlg,.modal,.toast,.adm-toast,.lg-pop,[role="tooltip"],[role="menu"] [role="menuitem"]):not(#lg)::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(70% 16% at calc(50% + (var(--lx) - 50%) * .5) 7%,rgb(255 255 255 / calc(var(--m-spec) * (.55 + var(--lgi) * .3))) 0%,rgb(255 255 255 / 0) 100%),
+    radial-gradient(140% 70% at calc(50% + (var(--lx) - 50%) * .40) -28%,rgb(255 255 255 / calc(var(--m-spec) * (.50 + var(--lgi) * .18))) 0%,rgb(255 255 255 / 0) 56%),
+    radial-gradient(90% 55% at calc(50% - (var(--lx) - 50%) * .30) 132%,rgb(255 255 255 / calc(var(--m-spec) * (.32 + var(--lgi) * .16))) 0%,rgb(255 255 255 / 0) 64%);
+  opacity:1;animation:none;background-size:auto;transition:opacity var(--lg-dur-m) var(--lg-ease)}
+:is(.btn,.fab,.chip,.iconbtn,.pn-btn,a.card,button.card,.plan-opt,.seg button,.ph .ls-seg a,.cal-d,[role="menuitem"],.acct-sw,.srch)[data-lg-press]:not(#lg)::after{
+  background:
+    radial-gradient(110px circle at var(--px,50%) var(--py,50%),rgb(255 255 255 / var(--m-press,.5)) 0%,rgb(255 255 255 / 0) 70%),
+    radial-gradient(140% 70% at 50% -28%,rgb(255 255 255 / calc(var(--m-spec) * .6)) 0%,rgb(255 255 255 / 0) 56%)}
+
+/* refraction (Chromium): cc-liquid.js sets --lg-bf to a lens filter sized to this element */
+html[data-lg-refract] [data-lg-f]:not(#lg){
+  -webkit-backdrop-filter:var(--lg-bf) blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05)!important;
+  backdrop-filter:var(--lg-bf) blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05)!important}
+
+/* ---- interaction: light, not opacity ---- */
+@media (hover:hover){
+  :is(.liquid-glass,.liquid-glass-control,.liquid-glass-subtle,.liquid-glass-tinted,a.card,button.card,.plan-opt,.acct-sw,
+      .btn-s,.btn-d,.btn-p,.btn-g,.btn-danger,.fab,.chip,.bar .iconbtn,.cal-card .iconbtn,.pn-btn,[role="menu"] [role="menuitem"]):not(#lg):not(:disabled):not(.dis):hover{
+    --lgi:1;translate:0 var(--lg-lift-1);
+    box-shadow:inset 0 0 0 .5px rgb(255 255 255 / calc(var(--m-rim) * .45)),inset 0 0 calc(var(--m-depth) * 1.2) rgb(255 255 255 / calc(var(--m-glow) * 1.25)),
+      inset 0 -5px 9px -7px rgb(30 20 60 / calc(var(--m-glow) * .45)),var(--lg-sh-control-hi)}
+  :is(a.card,button.card):not(#lg):hover{translate:0 var(--lg-lift-2)}
+}
+:is(.btn-s,.btn-d,.btn-p,.btn-g,.btn-danger,.fab,.chip,.bar .iconbtn,.cal-card .iconbtn,.pn-btn,a.card,button.card,.plan-opt,[role="menu"] [role="menuitem"],.acct-sw):not(#lg):not(:disabled):not(.dis):active{
+  scale:var(--lg-press);translate:0 0;--lgi:.6;transition-duration:var(--lg-dur-xs),var(--lg-dur-xs),var(--lg-dur-xs),var(--lg-dur-xs),var(--lg-dur-xs),var(--lg-dur-xs),var(--lg-dur-xs)}
+:is(a.card,button.card,.plan-opt):not(#lg):active{scale:.985}
+/* reflective focus: a violet lens ring that springs out, plus full edge light */
+:is(.btn,.fab,.chip,.iconbtn,.pn-btn,a.card,button.card,.plan-opt,.seg button,.ph .ls-seg a,.nav a,.cal-d,[role="menuitem"],.acct-sw):focus-visible{
+  --lgi:1;outline:2.5px solid var(--lg-focus-ring)!important;outline-offset:3px;box-shadow:0 0 0 6px rgba(183,154,214,.35),var(--lg-sh-control)!important}
+
+/* disabled = no material: flat, dim, no light */
+.btn.dis,.btn[disabled]{background:rgba(226,221,234,.55)!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.btn.dis::before,.btn.dis::after,.btn[disabled]::before,.btn[disabled]::after{display:none!important}
+
+/* =====================================================================================
+   COMPONENT NOTES (shape and specifics only — the look comes from the engine)
+   ===================================================================================== */
+/* L1 primary content: calm, readable, no liquid effects */
+.card,.list,.tbl-wrap,.file{background:var(--l1-fill);border-color:var(--l1-edge);box-shadow:var(--l1-shadow);-webkit-backdrop-filter:var(--l1-blur);backdrop-filter:var(--l1-blur)}
+.home-sec{background:linear-gradient(160deg,rgba(255,255,255,.52) 0%,rgba(255,255,255,.30) 100%);border-color:rgba(255,255,255,.8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 8px 24px -18px rgba(52,36,92,.24);-webkit-backdrop-filter:var(--l1-blur);backdrop-filter:var(--l1-blur)}
+.home-sec .card,.home-sec .list{background:var(--l1-fill)}
+.card .card,.card .list,.sheet .card,.dlg .card{background:var(--l1-fill-sub);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(30,40,34,.05)}
+:is(.home-sec,.card,.list,.sheet,.dlg,.modal) :is(.card,.list,.file,.tbl-wrap){-webkit-backdrop-filter:none;backdrop-filter:none}
+.list .li,.li{border-bottom-color:var(--l1-line)}
+.list .li{background:transparent}
+.tbl td{border-top-color:var(--l1-line)}.tbl th{background:rgba(238,244,236,.7)}
+.hr{background:var(--l1-line)}
+.alert{box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+.card.tint-p,.card.tint-g,.card.tint-w,.card.tint-e{box-shadow:var(--l1-shadow)}
+.card.tint-p:not(#lg),.card.tint-g:not(#lg),.card.tint-w:not(#lg),.card.tint-e:not(#lg){isolation:auto}
+.plan-opt.on:not(#lg){box-shadow:0 0 0 2px var(--g600),0 0 0 5px rgba(54,122,34,.14),var(--lg-sh-control)}
+a.li,button.li{transition:background-color var(--lg-dur-s) var(--lg-ease)}
+@media (hover:hover){a.li:hover,button.li:hover{background:radial-gradient(60% 120% at var(--lx) 50%,rgba(255,255,255,.6),rgba(255,255,255,.28) 70%);box-shadow:none}}
+
+/* header: clear at rest like iOS — title on the page, glass only on the round controls;
+   once content scrolls it gains a soft frosted edge */
+.bar{background:transparent;border-bottom:1px solid transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;
+  transition:background-color var(--lg-dur-l) var(--lg-ease),box-shadow var(--lg-dur-l) var(--lg-ease),border-color var(--lg-dur-l) var(--lg-ease)}
+.ph[data-lg-scrolled] .bar{background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.22));border-bottom-color:rgba(255,255,255,.6);
+  box-shadow:0 12px 20px -18px rgba(52,36,92,.45);-webkit-backdrop-filter:blur(14px) saturate(180%);backdrop-filter:blur(14px) saturate(180%)}
+.bar .iconbtn:not(#lg),.cal-card .iconbtn:not(#lg){border-radius:22px;border:0}
+.iconbtn .i{transition:transform var(--lg-dur-m) var(--lg-spring)}
+@media (hover:hover){.iconbtn:not(:disabled):hover .i{transform:scale(1.08)}}
+.iconbtn:not(:disabled):active .i{transform:scale(.9);transition-duration:var(--lg-dur-xs)}
+
+/* bottom dock — iOS-style floating capsule drawn inside the bar's existing box (layout unchanged):
+   the .nav box becomes clear; ::before is the liquid capsule (refracted in Chromium), ::after its rim */
+.nav:not(#lg){--la:calc(315deg + var(--lg-sa,0deg) + var(--lg-sb,0deg));background:transparent;border-top-color:transparent;box-shadow:none;
+  -webkit-backdrop-filter:none;backdrop-filter:none;isolation:isolate;--m-host:before;
+  transition:--la var(--lg-light),--lx var(--lg-light)}
+.nav:not(#lg)::before,.nav:not(#lg)::after{content:"";position:absolute;left:8px;right:8px;top:4px;bottom:10px;border-radius:30px;pointer-events:none;z-index:-1}
+.nav:not(#lg)::before{
+  background:
+    radial-gradient(40% 140% at var(--lx) -20%,rgb(255 255 255 / .34) 0%,rgb(255 255 255 / 0) 70%),
+    radial-gradient(120% 70% at 50% -30%,rgb(255 255 255 / calc(var(--m-spec) * .5)) 0%,rgb(255 255 255 / 0) 55%),
+    radial-gradient(80% 60% at 50% 135%,rgb(255 255 255 / calc(var(--m-spec) * .34)) 0%,rgb(255 255 255 / 0) 62%),
+    linear-gradient(180deg,rgb(255 255 255 / var(--m-a)) 0%,rgb(255 255 255 / var(--m-a2)) 55%,rgb(255 255 255 / calc(var(--m-a2) + .08)) 100%);
+  -webkit-backdrop-filter:var(--lg-bf,) blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05);
+  backdrop-filter:var(--lg-bf,) blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05);
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.35),inset 0 0 var(--m-depth) rgb(255 255 255 / var(--m-glow)),inset 0 -6px 10px -8px rgba(30,20,60,.16),
+    0 1px 2px rgba(30,20,60,.08),0 18px 36px -16px rgba(52,36,92,.45),0 4px 10px -6px rgba(52,36,92,.18)}
+.nav:not(#lg)::after{padding:1.5px;
+  background:conic-gradient(from var(--la),rgba(255,255,255,1) 0deg,rgba(255,255,255,.45) 40deg,rgba(60,40,110,.14) 95deg,rgba(255,255,255,.7) 180deg,rgba(60,40,110,.14) 265deg,rgba(255,255,255,.45) 320deg,rgba(255,255,255,1) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.nav a .pill{transition:transform var(--lg-dur-l) var(--lg-spring)}
+.nav a .pill .i{transition:transform var(--lg-dur-m) var(--lg-spring)}
+@media (hover:hover){.nav a:not(.on):hover .pill .i{transform:translateY(-1px) scale(1.06)}}
+.nav a:active .pill{transform:scale(.9);transition-duration:var(--lg-dur-xs)}
+.nav a:not(.on):hover .pill{background-color:transparent}
+.nav a.nm-opt:not(#lg){background:linear-gradient(180deg,rgba(255,255,255,.66),rgba(255,255,255,.34));box-shadow:inset 0 0 0 .5px rgba(255,255,255,.6),inset 0 0 10px rgba(255,255,255,.35),0 2px 6px -2px rgba(30,40,34,.10)}
+/* "More" trigger — liquid violet orb (its ::before/::after draw the ×, so light lives in shadows) */
+.nm-core{background-image:radial-gradient(90% 60% at 50% -10%,rgba(255,255,255,.55),rgba(255,255,255,0) 60%),radial-gradient(70% 50% at 50% 120%,rgba(255,255,255,.35),rgba(255,255,255,0) 65%),linear-gradient(180deg,#8A4DF2 0%,#7C3AED 55%,#6527C8 100%);
+  background-size:100% 100%;border-color:rgba(255,255,255,.55);
+  box-shadow:0 0 0 4px rgba(255,255,255,.55),inset 0 1px 1px rgba(255,255,255,.7),inset 0 0 12px rgba(255,255,255,.22),inset 0 -6px 10px -6px rgba(30,10,70,.35),0 14px 28px -10px rgba(101,39,200,.6)}
+
+/* footers (CTA / selection bars): the same floating capsule as the dock, drawn inside the bar's box */
+.foot:not(#lg){background:transparent;border-top-color:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;--m-host:before;
+  animation:lgRise var(--lg-dur-l) var(--lg-ease-out) both}
+.foot:not(#lg){position:relative;isolation:isolate;--la:calc(315deg + var(--lg-sa,0deg) + var(--lg-sb,0deg));transition:--la var(--lg-light),--lx var(--lg-light)}
+.foot:not(#lg)::before,.foot:not(#lg)::after{content:"";position:absolute;inset:6px 8px 12px;border-radius:26px;pointer-events:none}
+.foot:not(#lg)::before{z-index:-1;padding:1.5px;
+  background:conic-gradient(from var(--la),rgba(255,255,255,1) 0deg,rgba(255,255,255,.45) 40deg,rgba(60,40,110,.14) 95deg,rgba(255,255,255,.7) 180deg,rgba(60,40,110,.14) 265deg,rgba(255,255,255,.45) 320deg,rgba(255,255,255,1) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.foot:not(#lg)::after{z-index:-2;
+  background:
+    radial-gradient(40% 140% at var(--lx) -20%,rgb(255 255 255 / .30) 0%,rgb(255 255 255 / 0) 70%),
+    radial-gradient(120% 70% at 50% -30%,rgb(255 255 255 / calc(var(--m-spec) * .5)) 0%,rgb(255 255 255 / 0) 55%),
+    linear-gradient(180deg,rgb(255 255 255 / var(--m-a)) 0%,rgb(255 255 255 / var(--m-a2)) 55%,rgb(255 255 255 / calc(var(--m-a2) + .08)) 100%);
+  -webkit-backdrop-filter:var(--lg-bf,) blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05);
+  backdrop-filter:var(--lg-bf,) blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05);
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.35),inset 0 0 var(--m-depth) rgb(255 255 255 / var(--m-glow)),inset 0 -6px 10px -8px rgba(30,20,60,.16),
+    0 1px 2px rgba(30,20,60,.08),0 18px 36px -16px rgba(52,36,92,.45)}
+
+/* buttons */
+.btn-s,.btn-d{color:var(--ink)}
+.btn-d:not(#lg){color:var(--err)}
+.btn .i{transition:transform var(--lg-dur-m) var(--lg-spring)}
+@media (hover:hover){.btn:not(:disabled):not(.dis):hover .i{transform:translateX(1px) scale(1.04)}}
+/* keep positioned components positioned (the engine defaults others to relative for its light layers) */
+.fab:not(#lg):not(#lg){position:absolute}
+.toast:not(#lg):not(#lg){position:absolute}
+.adm-toast:not(#lg):not(#lg){position:fixed}
+.lg-pop:not(#lg):not(#lg),[role="tooltip"]:not(#lg):not(#lg){position:var(--lg-pos,absolute)}
+.cal-d.is-sel:not(#lg){position:relative}
+
+/* search: liquid capsule */
+.srch:not(#lg){border:0;border-radius:24px}
+.srch:focus-within:not(#lg){--lgi:1;outline:2px solid rgba(124,58,237,.65);outline-offset:2px}
+.inp,.pre,textarea.inp,select.inp{background:rgba(255,255,255,.72);border-color:rgba(101,39,200,.18);
+  box-shadow:inset 0 1px 2px rgba(30,40,34,.08),inset 0 -1px 0 rgba(255,255,255,.7),0 1px 0 rgba(255,255,255,.85);
+  -webkit-backdrop-filter:var(--blur-sm);backdrop-filter:var(--blur-sm);
+  transition:background-color var(--lg-dur-m) var(--lg-ease),border-color var(--lg-dur-m) var(--lg-ease),box-shadow var(--lg-dur-m) var(--lg-ease)}
+.inp:focus,.pre:focus-within{background:rgba(255,255,255,.94);border-color:var(--p600);box-shadow:0 0 0 3px rgba(183,154,214,.45),0 8px 20px -14px rgba(101,39,200,.45),inset 0 1px 0 #fff}
+.inp.bad{box-shadow:0 0 0 3px var(--errbg),inset 0 1px 2px rgba(30,40,34,.06)}
+
+/* chips */
+.chip:not(#lg){border:0}
+.chip.on:not(#lg){color:#fff;animation:lgPop var(--lg-dur-l) var(--lg-spring)}
+@media (hover:hover){.chip:not(.on):not(:disabled):hover{color:var(--p700)}}
+
+/* segmented controls: recessed glass track, liquid lens thumb */
+.seg,.ph .ls-seg{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.55);
+  box-shadow:inset 0 1px 3px rgba(30,40,34,.12),inset 0 -1px 0 rgba(255,255,255,.7),0 1px 0 rgba(255,255,255,.6)}
+.seg button.on:not(#lg),.ph .ls-seg a.on:not(#lg){animation:lgThumb var(--lg-dur-l) var(--lg-spring);color:var(--ink)}
+.seg button.on:not(#lg)::before,.ph .ls-seg a.on:not(#lg)::before{opacity:1}
+
+/* status pills keep semantic colour and gain a glassy cap */
+.badge{box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 0 0 1px rgba(26,24,32,.05)}
+.b-p{box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 0 0 1px rgba(124,58,237,.16)}
+.b-g{box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 0 0 1px rgba(54,122,34,.18)}
+.b-w{box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 0 0 1px rgba(138,83,0,.18)}
+.b-e{box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 0 0 1px rgba(180,35,24,.22)}
+.b-y{box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 0 0 1px rgba(122,90,0,.18)}
+.badge.b-tent{box-shadow:inset 0 1px 0 rgba(255,255,255,.75);outline:1.5px dashed rgba(176,128,0,.75);outline-offset:-1.5px}
+.tag{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 0 0 1px rgba(101,39,200,.07)}
+.sq{box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -6px 10px -8px rgba(255,255,255,.7),0 4px 10px -8px rgba(52,36,92,.3)}
+
+/* toggles */
+.switch{box-shadow:inset 0 1px 3px rgba(30,40,34,.18);transition:background-color var(--lg-dur-m) var(--lg-ease)}
+.switch>span{background:radial-gradient(80% 60% at 50% 0%,#fff,rgba(255,255,255,.85) 70%);box-shadow:0 2px 6px rgba(30,40,34,.25),inset 0 -2px 4px rgba(183,154,214,.25),inset 0 0 0 .5px rgba(255,255,255,.9);
+  transition:left var(--lg-dur-l) var(--lg-spring),width var(--lg-dur-s) var(--lg-ease)}
+.switch:active>span{width:26px}.switch.on:active>span{left:15px}
+.chk,.radio{transition:background-color var(--lg-dur-s) var(--lg-ease),border-color var(--lg-dur-s) var(--lg-ease)}
+.chk.on,.radio.on{animation:lgPop var(--lg-dur-l) var(--lg-spring)}
+
+/* =====================================================================================
+   L3 · FLOATING
+   ===================================================================================== */
+.scrim{background:rgba(24,20,44,.26);-webkit-backdrop-filter:blur(4px) saturate(115%);backdrop-filter:blur(4px) saturate(115%);animation:lgScrimIn var(--lg-dur-m) var(--lg-ease-out) both}
+.modal-bg{background:rgba(24,20,44,.26);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.dlg:not(#lg),.modal:not(#lg){border:0;border-radius:28px}
+.scrim.c>.dlg,.dlg,.modal{animation:lgDlgIn var(--lg-dur-l) var(--lg-spring) both}
+/* sheets scroll, so their light lives in the background layers (fixed to the sheet box), not pseudos */
+.sheet{--m-spec:.55;border:0;border-radius:30px 30px 0 0;
+  background:
+    radial-gradient(120% 60px at 50% 0%,rgba(255,255,255,.75) 0%,rgba(255,255,255,0) 100%) no-repeat,
+    linear-gradient(180deg,rgba(255,255,255,.86) 0%,rgba(250,248,254,.74) 100%);
+  -webkit-backdrop-filter:blur(26px) saturate(200%) brightness(1.04);backdrop-filter:blur(26px) saturate(200%) brightness(1.04);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,1),inset 1px 0 0 rgba(255,255,255,.5),inset -1px 0 0 rgba(255,255,255,.3),inset 0 0 22px rgba(255,255,255,.4),
+    0 -2px 6px rgba(30,20,60,.06),0 -26px 60px -24px rgba(30,20,60,.45);
+  animation:lgSheetIn var(--lg-dur-xl) var(--lg-spring-soft) both}
+.grab{background:rgba(26,24,32,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
+.toast,.adm-toast{color:#fff;z-index:var(--lg-z-toast);border:0!important;animation:lgToastIn var(--lg-dur-l) var(--lg-spring) both}
+.toast .ok{box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 0 10px rgba(95,168,52,.5)}
+.acct-switching{background:linear-gradient(170deg,rgba(250,248,254,.82),rgba(241,236,250,.74));-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%)}
+.nm-arc{background:linear-gradient(170deg,rgba(255,255,255,.82),rgba(248,245,253,.66));border-color:transparent;
+  -webkit-backdrop-filter:blur(20px) saturate(200%) brightness(1.04);backdrop-filter:blur(20px) saturate(200%) brightness(1.04);
+  box-shadow:inset 0 1.5px 0 #fff,inset 0 0 0 .5px rgba(255,255,255,.7),inset 0 0 18px rgba(255,255,255,.45),inset 0 -6px 12px -8px rgba(30,20,60,.14),var(--lg-sh-float)}
+/* the Home "Create" menu: floating capsules (their inline glass is overridden), staggered spring */
+[role="menu"] [role="menuitem"]:not(#lg){border:0!important;border-radius:22px!important;
+  background:
+    radial-gradient(70% 90% at var(--lx) var(--ly),rgb(255 255 255 / calc(.12 + var(--lgi) * .22)) 0%,rgb(255 255 255 / 0) 70%),
+    linear-gradient(180deg,rgb(255 255 255 / var(--m-a)) 0%,rgb(255 255 255 / var(--m-a2)) 55%,rgb(255 255 255 / calc(var(--m-a2) + .07)) 100%)!important;
+  -webkit-backdrop-filter:blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05)!important;backdrop-filter:blur(var(--m-blur)) saturate(var(--m-sat)) brightness(1.05)!important;
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.4),inset 0 0 var(--m-depth) rgb(255 255 255 / var(--m-glow)),inset 0 -5px 9px -7px rgba(30,20,60,.16),var(--lg-sh-float)!important;
+  animation:lgMenuIn var(--lg-dur-l) var(--lg-spring) both;transform-origin:100% 100%}
+[role="menu"] > :nth-child(1) [role="menuitem"],[role="menu"] > [role="menuitem"]:nth-child(1){animation-delay:90ms}
+[role="menu"] > :nth-child(2) [role="menuitem"],[role="menu"] > [role="menuitem"]:nth-child(2){animation-delay:45ms}
+.pinned-zone{background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(255,255,255,.66));border-color:transparent;
+  -webkit-backdrop-filter:blur(18px) saturate(190%);backdrop-filter:blur(18px) saturate(190%);
+  box-shadow:inset 0 1.5px 0 #fff,inset 0 0 0 .5px rgba(255,255,255,.7),inset 0 0 16px rgba(255,255,255,.4),0 14px 30px -18px rgba(30,20,60,.4)}
+.lg-pop,[role="tooltip"]{z-index:var(--lg-z-overlay);animation:lgPopIn var(--lg-dur-m) var(--lg-spring) both;transform-origin:var(--lg-origin,50% 0)}
+.lg-pop{border-radius:var(--lg-r-l)}
+[role="tooltip"]{border-radius:12px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--ink)}
+.cc-reveal{animation:lgReveal var(--lg-dur-l) var(--lg-spring-soft) both}
+
+/* ambient: background light drifts slower than content (parallax, set by cc-liquid.js) */
+.ph::before{transform:translate3d(0,calc(var(--lg-sy,0) * -.06px),0)}
+.ph.bg-alt::before{transform:scaleX(-1) translate3d(0,calc(var(--lg-sy,0) * -.06px),0)}
+
+/* =====================================================================================
+   CALENDAR — grid is L1 content; arrows / note buttons are control glass; the selected
+   date is a violet liquid lens; booking states stay solid (unavailable) vs dashed (tentative)
+   ===================================================================================== */
+.cal-card{background:var(--l1-fill)}
+.cal-d{color:var(--ink);font-weight:500;background:transparent;border:1px solid transparent;cursor:pointer;
+  transition:background-color var(--lg-dur-m) var(--lg-ease),border-color var(--lg-dur-m) var(--lg-ease),color var(--lg-dur-s) var(--lg-ease),
+    box-shadow var(--lg-dur-m) var(--lg-ease),transform var(--lg-dur-l) var(--lg-spring),scale var(--lg-dur-l) var(--lg-spring)}
+.cal-d.is-empty{border:0;cursor:default;pointer-events:none}
+.cal-d.is-past{color:#ADA7B3;cursor:not-allowed}
+@media (hover:hover){
+  .cal-d.is-free:hover,.cal-d.is-today:hover{background:radial-gradient(70% 70% at var(--lx) var(--ly),rgba(255,255,255,.95),rgba(255,255,255,.55) 75%);
+    box-shadow:inset 0 0 0 .5px rgba(255,255,255,.9),inset 0 1px 1px #fff,inset 0 0 8px rgba(255,255,255,.6),0 6px 12px -8px rgba(52,36,92,.4);transform:translateY(-1px)}
+  .cal-d.is-un:hover,.cal-d.is-tent:hover{transform:translateY(-1px);box-shadow:0 6px 12px -8px rgba(52,36,92,.35),inset 0 1px 0 rgba(255,255,255,.8)}
+}
+.cal-d:not(.is-past):not(.is-empty):active{scale:.88;transition-duration:var(--lg-dur-xs)}
+.cal-d.is-today{background-color:rgba(255,255,255,.85);color:#7C3AED;font-weight:800;border:2px solid #7C3AED;box-shadow:inset 0 1px 0 #fff,0 0 0 3px rgba(183,154,214,.25)}
+.cal-d.is-sel:not(#lg){color:#fff;font-weight:700;border:0}
+.cal-d.is-sel.is-today:not(#lg){outline:2px solid #7C3AED;outline-offset:2px}
+.cal-d.is-un{background:linear-gradient(180deg,#FEF1EF 0%,#FBE2DE 100%);color:#B42318;font-weight:700;border:1px solid #F0B6AF;text-decoration:line-through;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.cal-d.is-tent{background:linear-gradient(180deg,#FFF8DD 0%,#FFEFBF 100%);color:#7A5A00;font-weight:700;border:1.5px dashed #C99A12;box-shadow:inset 0 1px 0 rgba(255,255,255,.85)}
+.cal-d span[aria-hidden="true"]{box-shadow:0 0 0 1.5px rgba(255,255,255,.95),0 1px 2px rgba(30,20,60,.25)}
+.cal-grid.fwd.a .cal-d:not(.is-empty){animation:lgCalFwdA var(--lg-dur-l) var(--lg-ease-out) both}
+.cal-grid.fwd.b .cal-d:not(.is-empty){animation:lgCalFwdB var(--lg-dur-l) var(--lg-ease-out) both}
+.cal-grid.back.a .cal-d:not(.is-empty){animation:lgCalBackA var(--lg-dur-l) var(--lg-ease-out) both}
+.cal-grid.back.b .cal-d:not(.is-empty){animation:lgCalBackB var(--lg-dur-l) var(--lg-ease-out) both}
+
+/* ===================== keyframes ===================== */
+@keyframes lgThumb{0%{transform:scale(.8,.88);opacity:.45}55%{opacity:1}100%{transform:none;opacity:1}}
+@keyframes lgPop{0%{transform:scale(.9)}100%{transform:none}}
+@keyframes lgRise{from{transform:translateY(12px);opacity:.6}to{transform:none;opacity:1}}
+@keyframes lgScrimIn{from{background-color:rgba(24,20,44,0);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0)}}
+@keyframes lgSheetIn{from{transform:translateY(60px);opacity:.3}to{transform:none;opacity:1}}
+@keyframes lgDlgIn{from{transform:scale(.88) translateY(10px);opacity:0}to{transform:none;opacity:1}}
+@keyframes lgToastIn{from{transform:translateY(18px) scale(.92);opacity:0}to{transform:none;opacity:1}}
+@keyframes lgMenuIn{from{transform:translateY(16px) scale(.86);opacity:0}to{transform:none;opacity:1}}
+@keyframes lgPopIn{from{transform:scale(.92) translateY(-4px);opacity:0}to{transform:none;opacity:1}}
+@keyframes lgReveal{from{opacity:0;transform:translateY(-6px) scale(.99)}to{opacity:1;transform:none}}
+@keyframes lgCalFwdA{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+@keyframes lgCalFwdB{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+@keyframes lgCalBackA{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+@keyframes lgCalBackB{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+
+/* ===================== fallbacks & preferences ===================== */
+/* no backdrop-filter at all: glass becomes near-opaque so text never sits on raw colour */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .liquid-glass,.liquid-glass-prominent,.liquid-glass-control,.liquid-glass-floating,.srch,.acct-sw,.btn-s,.chip:not(.on),.bar .iconbtn,.seg button.on,.dlg,.modal,[role="menu"] [role="menuitem"]{--m-a:.95;--m-a2:.88}
+  .nav{--m-a:.95;--m-a2:.9}
+}
+/* registered properties unsupported: light still renders, it just doesn't glide */
+@media (prefers-reduced-transparency:reduce){
+  .liquid-glass,.liquid-glass-prominent,.liquid-glass-control,.liquid-glass-floating,.liquid-glass-subtle,.srch,.acct-sw,.btn-s,.btn-d,.chip:not(.on),.bar .iconbtn,.seg button.on,.dlg,.modal,.nav,.foot,[role="menu"] [role="menuitem"]{--m-a:.97;--m-a2:.95;--m-blur:0px}
+  html[data-lg-refract] [data-lg-f]{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .sheet,.nm-arc,.pinned-zone{background:rgba(255,255,255,.97)}
+}
+@media (prefers-contrast:more){
+  .liquid-glass,.liquid-glass-prominent,.liquid-glass-control,.srch,.btn-s,.chip:not(.on),.bar .iconbtn,.nav{--m-a:.96;--m-a2:.92}
+  .card,.list,.inp{border-color:rgba(26,24,32,.32)}
+  :is(.btn-s,.chip,.srch,.bar .iconbtn):not(#lg){box-shadow:inset 0 0 0 1px rgba(26,24,32,.45),var(--lg-sh-control)}
+}
+@media (hover:none){:is(a.card,button.card,.plan-opt,.chip,.btn):hover{translate:none}}
+@media (prefers-reduced-motion:reduce){
+  :is(.liquid-glass,.liquid-glass-subtle,.liquid-glass-prominent,.liquid-glass-control,.liquid-glass-floating,.liquid-glass-tinted,a.card,button.card,.plan-opt,.srch,.acct-sw,
+      .btn-s,.btn-d,.btn-p,.btn-g,.btn-danger,.fab,.chip,.bar .iconbtn,.cal-card .iconbtn,.pn-btn,.seg button.on,.ph .ls-seg a.on,.nav-cap,.cal-d,.dlg,.modal,.toast,[role="menu"] [role="menuitem"],.nav):not(#lg){
+    transition-duration:1ms!important;translate:none!important;scale:none!important}
+  .scrim,.sheet,.dlg,.modal,.toast,.adm-toast,.foot,.lg-pop,[role="tooltip"],[role="menu"] [role="menuitem"],.cc-reveal{animation:ccFadeOnly .15s ease both!important}
+  .nav-cap,.nav a.on .pill .i,.seg button.on,.ph .ls-seg a.on,.chip.on,.chk.on,.radio.on,.cal-grid .cal-d{animation:none!important}
+  .ph::before{transform:none}.ph.bg-alt::before{transform:scaleX(-1)}
+}
+@media print{:is(.btn,.fab,.chip,.card,.nav,.foot,.dlg)::before,:is(.btn,.fab,.chip,.card,.nav,.foot,.dlg)::after{display:none!important}}
+
+/* dock floats over content (iOS 26): the scroll area runs on beneath the capsule so the glass
+   has something to refract; a spacer keeps the last item reachable. At rest nothing moves. */
+.ph:has(.nav):not(:has(.foot)) > .sc{margin-bottom:-80px}
+.ph:has(.nav):not(:has(.foot)) > .sc::after{content:"";display:block;flex:none;height:80px}
+
+/* =====================================================================================
+   TABS · ONE MOTION SYSTEM — every tab-like control shares a single liquid "lens" indicator
+   that slides, resizes and morphs to the selected item (positioned by cc-liquid.js, which
+   writes --ti-x/--ti-y/--ti-w/--ti-h on the group). Covered: bottom bar (.nav), segmented
+   controls (.seg — tabs, filters, modes, pickers), link segments (.ls-seg), underline tabs
+   (.tabs), single-choice chip groups (.chips[role=radiogroup|tablist]).
+   Without the script every control keeps its own static active style (v5 above).
+   ===================================================================================== */
+:root{
+  --ti-dur:var(--lg-dur-xl);                       /* indicator travel */
+  --ti-ease:cubic-bezier(.3,1.32,.55,1);           /* spring: ~4% overshoot, settles fast */
+  --ti-content-dur:340ms;                          /* content swap (used by cc-liquid.js) */
+  --ti-content-shift:14px;
+}
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"],nav.nav){
+  --la:calc(315deg + var(--lg-sa,0deg) + var(--lg-sb,0deg))}
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-ti]{position:relative;isolation:isolate}
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-ti] > :is(button,a,.chip){position:relative;z-index:1}
+
+/* the lens: ::before = body (tint, internal reflections, depth), ::after = rim light */
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-ti]::before,
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-ti]::after,
+.nav-cap:not(#lg):not(#lg){
+  content:"";position:absolute;left:0;top:0;z-index:0;pointer-events:none;border-radius:var(--ti-r,10px);
+  width:var(--ti-w,0px);height:var(--ti-h,0px);translate:var(--ti-x,0px) var(--ti-y,0px);transform:none;
+  transition:translate var(--ti-dur) var(--ti-ease),width var(--ti-dur) var(--ti-ease),height var(--lg-dur-l) var(--ti-ease),
+    scale var(--lg-dur-l) var(--lg-spring),opacity var(--lg-dur-s) var(--lg-ease)}
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-ti]::before{
+  background:
+    radial-gradient(70% 18% at calc(50% + (var(--lx) - 50%) * .5) 8%,rgb(255 255 255 / calc(.7 + var(--lgi) * .3)) 0%,rgb(255 255 255 / 0) 100%),
+    radial-gradient(140% 70% at calc(50% + (var(--lx) - 50%) * .4) -28%,rgb(255 255 255 / calc(.5 + var(--lgi) * .2)) 0%,rgb(255 255 255 / 0) 56%),
+    radial-gradient(90% 55% at calc(50% - (var(--lx) - 50%) * .3) 132%,rgb(255 255 255 / .35) 0%,rgb(255 255 255 / 0) 64%),
+    linear-gradient(180deg,rgb(var(--ti-rgb,255 255 255) / var(--ti-a,.94)) 0%,rgb(var(--ti-rgb,255 255 255) / var(--ti-a2,.76)) 100%);
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.6),inset 0 0 10px rgb(255 255 255 / .5),inset 0 -5px 9px -7px var(--ti-shade,rgba(30,20,60,.16)),var(--ti-sh,0 1px 2px rgba(30,20,60,.10),0 6px 14px -7px rgba(52,36,92,.40))}
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-ti]::after{
+  padding:1.4px;
+  background:conic-gradient(from var(--la),rgba(255,255,255,1) 0deg,rgba(255,255,255,.45) 40deg,rgba(60,40,110,.14) 95deg,rgba(255,255,255,.7) 180deg,rgba(60,40,110,.14) 265deg,rgba(255,255,255,.45) 320deg,rgba(255,255,255,1) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+/* per-family shape and tint — same motion, same material */
+.seg[data-lg-ti]{--ti-r:9px}
+.ph .ls-seg[data-lg-ti]{--ti-r:9px}
+.tabs[data-lg-ti]{--ti-r:14px;--ti-rgb:232 246 222;--ti-a:.82;--ti-a2:.5;--ti-shade:rgba(28,64,16,.18);--ti-sh:0 1px 2px rgba(28,64,16,.10),0 8px 16px -10px rgba(44,102,25,.45)}
+.chips[data-lg-ti]{--ti-r:18px;--ti-rgb:54 122 34;--ti-a:.97;--ti-a2:.9;--ti-shade:rgba(10,30,5,.3);--ti-sh:0 2px 3px rgba(28,64,16,.18),0 10px 22px -10px rgba(44,102,25,.55)}
+/* the active item hands its own background to the lens (no swap, no flicker) */
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-ti] > :is(button,a,.chip):not(#lg):not(#lg){
+  background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;animation:none!important;
+  transition:color var(--lg-dur-m) var(--lg-ease),scale var(--lg-dur-l) var(--lg-spring)}
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-ti] > :is(button,a,.chip):not(#lg):not(#lg)::before,
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-ti] > :is(button,a,.chip):not(#lg):not(#lg)::after{display:none}
+.tabs[data-lg-ti] > button{border-bottom-color:transparent!important}
+.tabs[data-lg-ti] > button.on{color:var(--g700)}
+.chips[data-lg-ti] > .chip:not(.on):not(#lg):not(#lg){background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.22))!important;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.7),inset 0 1px 0 rgba(255,255,255,.9),0 3px 8px -5px rgba(52,36,92,.3)!important}
+.chips[data-lg-ti] > .chip.on{color:#fff}
+/* inactive items stay minimal; a pressed item compresses, the lens squeezes with it */
+:is(.seg,.ph .ls-seg,.tabs,.chips)[data-lg-ti] > :is(button,a,.chip):active{scale:.95}
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-press]::before,
+:is(.seg,.ph .ls-seg,.tabs,.chips[role="radiogroup"],.chips[role="tablist"])[data-lg-press]::after{scale:.95}
+
+/* bottom bar uses the same lens as a real element (.nav-cap) so it can sit above the dock glass */
+.nav > a{position:relative;z-index:1;transition:color var(--lg-dur-m) var(--lg-ease)}
+.nav > a .pill,.nav > a.on .pill,.nav a.on .pill:not(#lg){background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.nav-cap{--m-rgb:232 246 222;--m-a:.80;--m-a2:.46;--m-blur:2px;--m-rim:1;--m-rimw:1.5px;--m-spec:.85;--m-glow:.55;--m-depth:10px;--m-refract:10;
+  --m-sh:0 1px 2px rgba(28,64,16,.10),0 8px 18px -10px rgba(44,102,25,.45)}
+.nav-cap:not(#lg):not(#lg){--ti-r:20px;opacity:0;transition:translate var(--ti-dur) var(--ti-ease),width var(--ti-dur) var(--ti-ease),height var(--lg-dur-l) var(--ti-ease),
+    opacity var(--lg-dur-s) var(--lg-ease),scale var(--lg-dur-l) var(--lg-spring),--lx var(--lg-light),--la var(--lg-light),--lgi var(--lg-dur-l) var(--lg-ease)}
+.nav[data-lg-ti] .nav-cap:not(#lg):not(#lg){opacity:1}
+.nav[data-lg-press] .nav-cap:not(#lg):not(#lg){scale:.94}
+
+/* shared morph: the lens stretches along its travel, light sweeps across, then it settles */
+[data-lg-ti-instant]:not(nav)::before,[data-lg-ti-instant]:not(nav)::after,[data-lg-ti-instant] .nav-cap:not(#lg):not(#lg){transition:none!important}
+[data-lg-morph="r"]:not(nav)::before,[data-lg-morph="r"]:not(nav)::after,[data-lg-morph="r"] > .nav-cap:not(#lg):not(#lg){animation:lgTiMorphR var(--ti-dur) var(--lg-ease-out)}
+[data-lg-morph="l"]:not(nav)::before,[data-lg-morph="l"]:not(nav)::after,[data-lg-morph="l"] > .nav-cap:not(#lg):not(#lg){animation:lgTiMorphL var(--ti-dur) var(--lg-ease-out)}
+@keyframes lgTiMorphR{0%{scale:1;--lgi:.3;--lx:15%}30%{scale:1.1 .9;--lgi:1;--lx:70%}62%{scale:.97 1.03;--lx:85%}100%{scale:1;--lgi:0;--lx:50%}}
+@keyframes lgTiMorphL{0%{scale:1;--lgi:.3;--lx:85%}30%{scale:1.1 .9;--lgi:1;--lx:30%}62%{scale:.97 1.03;--lx:15%}100%{scale:1;--lgi:0;--lx:50%}}
+/* the newly selected icon settles in */
+.nav > a.on .pill .i,[data-lg-ti] > :is(button,a).on > svg{animation:lgIconPop var(--lg-dur-l) var(--lg-spring) both}
+@keyframes lgIconPop{0%{transform:scale(.86)}100%{transform:none}}
+.nav > a:active .pill{transform:scale(.92)}
+
+/* no script: the active nav item itself wears the capsule */
+.nav:not([data-lg-ti]) > a.on{margin:2px 3px 0;border-radius:20px;
+  background:radial-gradient(120% 60% at 50% -20%,rgba(255,255,255,.75),rgba(255,255,255,0) 60%),linear-gradient(180deg,rgba(232,246,222,.82),rgba(232,246,222,.5));
+  box-shadow:inset 0 1.5px 0 #fff,inset 0 0 0 .5px rgba(255,255,255,.7),inset 0 0 10px rgba(255,255,255,.5),inset 0 -5px 9px -7px rgba(28,64,16,.2),0 8px 18px -10px rgba(44,102,25,.45)}
+
+@media (prefers-reduced-motion:reduce){
+  [data-lg-ti]:not(nav)::before,[data-lg-ti]:not(nav)::after,.nav-cap:not(#lg):not(#lg){transition-duration:1ms!important;animation:none!important}
+  .nav > a.on .pill .i,[data-lg-ti] > :is(button,a).on > svg{animation:none!important}
+}

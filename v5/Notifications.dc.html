@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notifications</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="SeekerHome.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.notifications}}</div>
+    <sc-if value="{{hasUnread}}" hint-placeholder-val="{{ true }}"><button class="btn btn-t btn-sm" onClick="{{markAll}}" style="margin-right: 8px">{{cct.notifications.mark_all_read}}</button></sc-if>
+  </div>
+  <div style="flex: none; padding: 0 20px 10px"><div class="chips x"><sc-for list="{{cats}}" as="c" hint-placeholder-count="4"><button class="{{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div></div>
+  <div class="sc" style="gap: 12px; padding-top: 0">
+    <sc-if value="{{hasItems}}" hint-placeholder-val="{{ true }}">
+      <div class="list">
+        <sc-for list="{{items}}" as="n" hint-placeholder-count="5">
+          <div class="li" style="{{n.rowStyle}}">
+            <div style="position: relative; flex: none">
+              <a href="UserProfile.dc.html" class="{{n.av}}" style="text-decoration: none" data-ini="{{n.ini}}">{{n.ini}}</a>
+              <span style="{{n.typeStyle}}" aria-hidden="true">
+                <sc-if value="{{n.isReq}}" hint-placeholder-val="{{ true }}"><svg class="i" viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke-width: 2.6"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><path d="M9 12h6"></path></svg></sc-if>
+                <sc-if value="{{n.isDigest}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 11px; height: 11px; stroke-width: 2.6"><path d="m3 8 4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg></sc-if>
+                <sc-if value="{{n.isPpl}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 11px; height: 11px; stroke-width: 2.6"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path></svg></sc-if>
+                <sc-if value="{{n.isShort}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 11px; height: 11px; stroke-width: 2.6"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path></svg></sc-if>
+                <sc-if value="{{n.isAcc}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></sc-if>
+                <sc-if value="{{n.isReveal}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" style="width: 11px; height: 11px; stroke-width: 2.6"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></sc-if>
+              </span>
+            </div>
+            <div class="sp" style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+              <div><div class="t-s"><b>{{n.name}}</b> {{n.text}}</div><div class="t-c mut" style="margin-top: 2px">{{n.when}}</div></div>
+              <sc-if value="{{n.isDue}}" hint-placeholder-val="{{ false }}">
+                <a href="ApplicantDetail.dc.html" class="card" style="padding: 10px 12px; gap: 2px; flex-direction: row; align-items: center; text-decoration: none; background: #FDECEA; border-color: #F6C9C3; color: #1A1820"><span class="sp" style="min-width: 0"><span class="t-s b" style="display: block">{{cct.r2.focus_puller_feature_film_hindi}}</span><span class="t-c" style="color: #B42318">{{cct.r2.overdue_review_and_categorise_the_application}}</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+              </sc-if>
+              <sc-if value="{{n.isLapsed}}" hint-placeholder-val="{{ false }}">
+                <a href="JobDetail.dc.html" data-job="tvc" data-app="Lapsed" class="card" style="padding: 10px 12px; gap: 2px; flex-direction: row; align-items: center; text-decoration: none; background: rgba(255,255,255,.75); color: #1A1820"><span class="sp" style="min-width: 0"><span class="t-s b" style="display: block">{{cct.r2.steadicam_operator_web_series_promo}}</span><span class="row" style="gap: 6px; margin-top: 2px"><span class="badge b-n" style="height: 20px; font-size: 11px">{{cct.r2.no_longer_under_review}}</span></span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+              </sc-if>
+              <sc-if value="{{n.isMatch}}" hint-placeholder-val="{{ false }}">
+                <a href="JobDetail.dc.html" data-job="tvc" class="card" style="padding: 10px 12px; gap: 8px; text-decoration: none; background: rgba(255,255,255,.75); color: #1A1820">
+                  <span class="row" style="gap: 6px"><span class="t-s b sp">{{cct.r2.why_this_job_matches_you}}</span><span class="badge b-y" style="height: 20px; font-size: 11px">{{cct.common.premium}}</span></span>
+                  <span class="why"><sc-for list="{{n.why}}" as="w" hint-placeholder-count="3"><span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="width: 12px; height: 12px"><path d="m5 12 5 5 9-10"></path></svg>{{w}}</span></sc-for></span>
+                  <span class="t-c mut">{{cct.r2.pinewood_ads_14_15_nov_2026_bandra}}</span>
+                </a>
+              </sc-if>
+              <sc-if value="{{n.isDigest}}" hint-placeholder-val="{{ false }}">
+                <a href="JobDigest.dc.html" class="card" style="padding: 10px 12px; gap: 2px; flex-direction: row; align-items: center; text-decoration: none; background: rgba(255,255,255,.75)"><span class="sp" style="min-width: 0"><span class="row" style="gap: 6px"><span class="t-s b">{{cct.notifications.today_s_job_digest}}</span><span class="badge b-y" style="height: 20px; font-size: 11px">{{cct.common.premium}}</span></span><span class="t-c mut">{{cct.common.focus_puller_1st_assistant_camera}}</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+              </sc-if>
+              <sc-if value="{{n.isNewApp}}" hint-placeholder-val="{{ false }}">
+                <a href="Applicants.dc.html" class="card" style="padding: 10px 12px; gap: 2px; flex-direction: row; align-items: center; text-decoration: none; background: rgba(255,255,255,.75)"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.job}}</span><span class="t-c mut">{{cct.notifications.review_applicant}}</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+              </sc-if>
+              <sc-if value="{{n.isApps}}" hint-placeholder-val="{{ false }}">
+                <a href="Applicants.dc.html" class="card" style="padding: 10px 12px; gap: 2px; flex-direction: row; align-items: center; text-decoration: none; background: rgba(255,255,255,.75)"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.job}}</span><span class="t-c mut">{{cct.notifications.passed_5_applications_view_applicants}}</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+              </sc-if>
+              <sc-if value="{{n.isShort}}" hint-placeholder-val="{{ false }}">
+                <a href="JobDetail.dc.html" data-app="Shortlisted" class="card" style="padding: 10px 12px; gap: 2px; flex-direction: row; align-items: center; text-decoration: none; background: rgba(255,255,255,.75)"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.job}}</span><span class="t-c mut">{{n.org}}{{cct.notifications.view_application}}</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+              </sc-if>
+              <sc-if value="{{n.isReveal}}" hint-placeholder-val="{{ false }}">
+                <a href="UserProfile.dc.html" aria-label="{{cct.notifications.open}}{{n.name}}" class="card" style="padding: 10px 12px; gap: 2px; flex-direction: row; align-items: center; text-decoration: none; background: rgba(255,255,255,.75)"><span class="sp" style="min-width: 0"><span class="t-s b trunc" style="display: block">{{n.sub}}</span><span class="t-c mut">{{cct.notifications.from_your_public_vendor_page}}</span></span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a>
+              </sc-if>
+              <sc-if value="{{n.showActions}}" hint-placeholder-val="{{ false }}">
+                <div class="row" style="gap: 8px"><button class="btn btn-s btn-sm" onClick="{{n.decline}}" style="flex: 1">{{cct.common.decline}}</button><button class="btn btn-p btn-sm" onClick="{{n.accept}}" style="flex: 1">{{cct.common.accept}}</button></div>
+              </sc-if>
+              <sc-if value="{{n.resolved}}" hint-placeholder-val="{{ false }}"><span class="{{n.resolvedCls}}" style="align-self: flex-start">{{n.resolvedText}}</span></sc-if>
+            </div>
+            <sc-if value="{{n.unread}}" hint-placeholder-val="{{ true }}"><span style="width: 10px; height: 10px; border-radius: 5px; background: #7C3AED; flex: none; margin-top: 6px" aria-label="{{cct.notifications.unread}}"></span></sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <a href="Connections.dc.html" class="btn btn-s w100">{{cct.notifications.view_all_connection_requests}}</a>
+    </sc-if>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty" style="padding-top: 80px"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg></div><div class="t-h2">{{cct.common.you_re_all_caught_up}}</div><div class="t-s mut">{{cct.notifications.nothing_in_this_category_yet}}</div></div>
+    </sc-if>
+  </div>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status" style="bottom: 24px"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{toastText}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"empty":{"editor":"boolean","default":false},"role":{"editor":"enum","options":["seeker","poster","vendor"],"default":"seeker"},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = {
+      toast: '', cat: p.cat || 'all',
+      items: [
+        { id: -5, type: 'reveal', name: 'Kavya Menon', sub: cc("common.producer_lantern_pictures"), when: cc("common.t_12_min_ago"), unread: true, done: null },
+        { id: -6, type: 'reveal', name: 'Farhan Siddiqui', sub: '1st Assistant Camera', when: cc("common.t_2h_ago"), unread: true, done: null },
+        { id: -2, type: 'apps', name: cc("common.focus_puller_feature_film"), when: cc("common.just_now"), unread: true, done: null, job: cc("common.focus_puller_feature_film_hindi") },
+        { id: -3, type: 'newapp', name: 'Aditya Rao', when: cc("common.t_2h_ago"), unread: true, done: null, job: '' },
+        { id: -4, type: 'due', name: 'Sana Mirza', when: cc("r2.just_now"), unread: true, done: null },
+        { id: -5, type: 'lapsed', name: 'Northlight Studios', when: cc("r2.t_1_day_ago"), unread: true, done: null },
+        { id: -3, type: 'match', name: cc("common.focus_puller_tvc_2_day"), when: cc("r2.t_12_min_ago"), unread: true, done: null },
+        { id: -1, type: 'digest', name: cc("common.job_digest"), when: cc("notifications.t_8_00_am"), unread: true, done: null },
+        { id: 0, type: 'short', name: 'Kavya Menon', when: cc("common.t_2h_ago"), unread: true, done: null, job: cc("common.focus_puller_feature_film_hindi"), org: cc("common.lantern_pictures") },
+        { id: 1, type: 'req', name: 'Vikram Bhosle', when: cc("common.t_2h_ago"), unread: true, done: null },
+        { id: 2, type: 'acc', name: 'Farhan Siddiqui', when: cc("common.t_5h_ago"), unread: true, done: null },
+        { id: 3, type: 'req', name: 'Northlight Studios', when: cc("common.yesterday"), unread: false, done: null, vendorish: false },
+        { id: 4, type: 'acc', name: 'Vendor House', when: cc("common.t_3_days_ago"), unread: false, done: null, v: true },
+        { id: 5, type: 'req', name: 'Ananya Iyer', when: cc("notifications.last_week"), unread: false, done: 'accepted' }
+      ]
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  flash(m) { this.setState({ toast: m }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    const s = this.state;
+    const empty = this.props.empty ?? false;
+    const ini = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const upd = (id, patch) => this.setState({ items: s.items.map((x) => (x.id === id ? { ...x, ...patch } : x)) });
+    const st = this.props.store, act = this.props.act;
+    // Unified prototype: request outcomes follow the shared connection store.
+    const doneOf = (n) => (st && n.type === 'req' ? (st.conn[n.name] === 'received' ? null : st.conn[n.name] === 'connected' ? 'accepted' : 'declined') : n.done);
+    const role = this.props.role ?? 'seeker';
+    const crew = (st && st.crew) || { posts: [] };
+    const top = crew.posts.filter((x) => x.st === 'Active').sort((a, b) => (b.apps || 0) - (a.apps || 0))[0];
+    const CAT = { due: 'posts', lapsed: 'apps', match: 'apps', apps: 'posts', newapp: 'posts', short: 'apps', digest: 'apps', req: 'net', acc: 'net', reveal: 'reveals' };
+    // Roles decide which notification types exist: Crew → applications, posts, digest; Vendor → contact reveals; everyone → network.
+    const R = (st && st.roles) || { crew: true, vendor: true };
+    // Crew modes: application updates and the digest are Job Seeker; new applicants are Job Poster.
+    const MD = (st && st.modes) || { seek: true, post: true };
+    const SEEK = !!R.crew && !!MD.seek, POST = !!R.crew && !!MD.post;
+    const allowed = (t) => (CAT[t] === 'net') || (t === 'reveal' ? !!R.vendor : CAT[t] === 'apps' ? SEEK : CAT[t] === 'posts' ? POST : !!R.crew);
+    const catDefs = [['all', 'All']].concat(SEEK ? [['apps', cc("common.applications")]] : [], POST ? [['posts', cc("common.my_posts")]] : [], R.vendor ? [['reveals', cc("common.contact_reveals")]] : [], [['net', cc("common.network")]]);
+    const cat = catDefs.some((c) => c[0] === s.cat) ? s.cat : 'all';
+    const all = empty ? [] : s.items.filter((n) => allowed(n.type)).filter((n) => n.type !== 'match' || !(st && st.plans && st.plans.seeker === 'free')).filter((n) => (n.type !== 'apps' && n.type !== 'newapp') || (top && top.apps > 5) || (n.type === 'newapp' && top)).map((n) => ({ ...n, done: doneOf(n), name: n.type === 'apps' && top ? top.title : n.name, job: top && (n.type === 'apps' || n.type === 'newapp') ? top.title : n.job }));
+    const list = all.filter((n) => cat === 'all' || CAT[n.type] === cat);
+    return {
+      cats: catDefs.map(([k, l]) => { const n = all.filter((x) => k === 'all' || CAT[x.type] === k).length; return { label: ccv(l) + ' · ' + ccv(n), on: cat === k, cls: cat === k ? 'chip on' : 'chip', pick: () => this.setState({ cat: k }) }; }),
+      hasItems: list.length > 0, empty: list.length === 0,
+      hasUnread: list.some((x) => x.unread),
+      markAll: () => this.setState({ items: s.items.map((x) => ({ ...x, unread: false })) }),
+      items: list.map((n) => {
+        const isDue = n.type === 'due', isLapsed = n.type === 'lapsed', isMatch = n.type === 'match', isReq = n.type === 'req', isShort = n.type === 'short', isDigest = n.type === 'digest', isApps = n.type === 'apps', isNewApp = n.type === 'newapp', isReveal = n.type === 'reveal';
+        return {
+          ...n, ini: isNewApp ? 'AR' : isApps ? 'LP' : isDigest || isMatch ? 'CC' : ini(n.name), av: n.v || isApps || isDigest || isMatch ? 'av g' : 'av', isReq, isShort, isDigest, isApps, isNewApp, isPpl: isApps || isNewApp, isAcc: n.type === 'acc', isReveal, isMatch, isDue, isLapsed, why: isMatch ? [cc("r2.free_in_your_calendar_on_14_15"), cc("r2.t_6_yrs_as_focus_puller"), cc("r2.mumbai_your_primary_location"), cc("r2.skill_wireless_follow_focus")] : [],
+          text: isDue ? cc("r2.s_application_passed_the_48_hour_review") : isLapsed ? cc("r2.didn_t_categorise_your_application_within_48") : isMatch ? cc("r2.a_new_job_matches_your_profile") : isReveal ? cc("notifications.viewed_your_contact_details") : isNewApp ? cc("notifications.applied_to_your_post") : isApps ? cc("notifications.has_received_more_than_5") : isDigest ? cc("notifications.t_3_new_jobs_match_your") : isShort ? cc("common.shortlisted_your_job_application") : isReq ? cc("notifications.sent_you_a_connection_request") : cc("notifications.accepted_your_connection_request_you"),
+          rowStyle: 'cursor:default;align-items:flex-start;' + (n.unread ? 'background:#F6F3FF;' : ''),
+          typeStyle: 'position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:10px;border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;background:' + (isReveal ? '#367A22' : isReq || isNewApp ? '#7C3AED' : isShort ? '#8A5300' : isDigest ? '#9A6B00' : isApps ? '#6527C8' : '#367A22'),
+          showActions: isReq && !n.done,
+          resolved: isReq && !!n.done,
+          resolvedText: n.done === 'accepted' ? cc("notifications.accepted") : cc("notifications.declined"),
+          resolvedCls: n.done === 'accepted' ? 'badge b-g' : 'badge b-n',
+          accept: () => { if (st && act) { act('conn', n.name, 'connected'); upd(n.id, { unread: false }); } else upd(n.id, { done: 'accepted', unread: false }); this.flash(cc("notifications.you_and") + n.name + cc("notifications.are_now_connected")); },
+          decline: () => { if (st && act) { act('conn', n.name, 'none'); upd(n.id, { unread: false }); } else upd(n.id, { done: 'declined', unread: false }); this.flash(cc("common.request_declined")); }
+        };
+      }),
+      toast: !!s.toast, toastText: s.toast
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

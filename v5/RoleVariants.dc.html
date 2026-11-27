@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Role variants — Crew only vs Product Provider only</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.rv-ph{width:390px;height:844px;border-radius:28px;overflow:hidden;border:1px solid #E1EADF;box-shadow:0 12px 32px rgba(26,24,32,.10);position:relative;background:#F3F8F1;flex:none}
+.rv-shell .ph nav.nav{visibility:hidden!important}
+.rv-nav{position:absolute;left:0;right:0;bottom:0;z-index:30}
+.rv-col{display:flex;flex-direction:column;gap:12px;width:390px;flex:none}
+.rv-row{display:flex;gap:40px;align-items:flex-start}
+.rv-lab{width:150px;flex:none;padding-top:40px}
+.rv-tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:11px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.st-new{background:#E4F2DD;color:#2C6419}.st-mod{background:#FFF1D6;color:#8A5300}.st-reu{background:#E8F1E6;color:#6527C8}
+.rv-coach{position:absolute;left:16px;right:16px;bottom:76px;z-index:40;padding:14px 16px;border-radius:18px;background:rgba(22,48,32,.92);color:#fff;box-shadow:0 18px 40px -12px rgba(22,48,32,.55);font-family:Inter,system-ui,sans-serif}
+.rv-coach:after{content:'';position:absolute;bottom:-7px;width:14px;height:14px;background:rgba(22,48,32,.92);transform:rotate(45deg);left:var(--ca,50%);margin-left:-7px;border-radius:2px}
+.rv-coach b.btn2{display:inline-block;margin-top:10px;border-radius:10px;padding:8px 14px;background:#fff;color:#6527C8;font:600 13px Inter,system-ui,sans-serif}
+</style>
+</helmet>
+<div style="padding: 48px; display: flex; flex-direction: column; gap: 36px; background: #EEF4EC; min-height: 100%; box-sizing: border-box; width: 1660px">
+  <div style="max-width: 1180px"><div class="t-over">Role-based UX · side by side</div><div class="t-d" style="margin-top: 4px">Role variants — Crew only vs Product Provider only</div><p class="t-b mut" style="margin-top: 8px">Each screen as a Crew-only account, a Product Provider-only account and (third column) a dual-role or edge state. Hide, don’t disable: nothing from a locked role appears. Bottom bar is drawn by RoleNav from the account’s roles.</p>
+    <div class="row" style="gap: 10px; margin-top: 12px"><span class="rv-tag st-new">New</span><span class="t-c mut">new screen</span><span class="rv-tag st-mod">Modified</span><span class="t-c mut">existing screen, role-aware now</span><span class="rv-tag st-reu">Reused</span><span class="t-c mut">unchanged</span></div></div>
+  <div style="display: flex; flex-direction: column; gap: 22px">
+    <div class="t-h1" style="border-top: 1px solid #D3DFD1; padding-top: 22px">Home</div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED"></div><div class="t-c mut" style="margin-top:4px"></div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Home — Crew only</span></div><div class="t-c mut" style="margin-top: 4px">Completion · Jobs for you · Need gear? · Crew · Network. + menu: Job Post, List your equipment.</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{sC}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Home — Product Provider only</span></div><div class="t-c mut" style="margin-top: 4px">Completion · Your listings · Contact reveals · Invoices · Network. No jobs, no crew.</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{sV}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rV}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Home — Crew + Product Provider</span></div><div class="t-c mut" style="margin-top: 4px">Completion · Jobs for you · Your listings · Contact reveals · Available to Buy or Rent · Crew · Network.</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{sB}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rB}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 22px">
+    <div class="t-h1" style="border-top: 1px solid #D3DFD1; padding-top: 22px">Listings</div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED"></div><div class="t-c mut" style="margin-top:4px"></div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Listings — Crew only</span></div><div class="t-c mut" style="margin-top: 4px">Browse gear + Discover products. No My listings. One upsell at the end.</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="MyListings" store="{{sC}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Listings — Product Provider only</span></div><div class="t-c mut" style="margin-top: 4px">My listings (default) · Discover products segment · Add listing.</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="MyListings" store="{{sV}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rV}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Listings — Crew + Product Provider</span></div><div class="t-c mut" style="margin-top: 4px">Same as Product Provider: My listings first.</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="MyListings" store="{{sB}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rB}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 22px">
+    <div class="t-h1" style="border-top: 1px solid #D3DFD1; padding-top: 22px">Profile</div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED"></div><div class="t-c mut" style="margin-top:4px"></div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Profile — Crew only</span></div><div class="t-c mut" style="margin-top: 4px">Crew sections · “Add a Product Provider profile” card · crew account rows.</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerProfile" store="{{sC}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" active="profile" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Profile — Product Provider only</span></div><div class="t-c mut" style="margin-top: 4px">Business first · Preview public page · “Add a crew profile” card.</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerProfile" store="{{sV}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rV}}" active="profile" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Profile — Crew, Product Provider draft</span></div><div class="t-c mut" style="margin-top: 4px">Left the add-Product Provider flow part-way: “Finish your Product Provider profile”.</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerProfile" store="{{sCdraft}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" active="profile" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 22px">
+    <div class="t-h1" style="border-top: 1px solid #D3DFD1; padding-top: 22px">Stage 2</div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED"></div><div class="t-c mut" style="margin-top:4px"></div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Stage 2 — Crew only</span></div><div class="t-c mut" style="margin-top: 4px">Professional info · External refs · optional availability. 34% → 67% → 100% [TBC].</div></div>
+      <div class="rv-ph"><dc-import name="CompleteProfile" store="{{sCnew}}" act="{{act}}" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Stage 2 — Product Provider only</span></div><div class="t-c mut" style="margin-top: 4px">Business details · Contact &amp; GST. 34% → 67% → 100% [TBC].</div></div>
+      <div class="rv-ph"><dc-import name="CompleteProfile" store="{{sVnew}}" act="{{act}}" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Setup success — Product Provider only</span></div><div class="t-c mut" style="margin-top: 4px">Suggests “Add your first listing”.</div></div>
+      <div class="rv-ph"><dc-import name="SetupDone" store="{{sVnew}}" hint-size="390px,844px"></dc-import></div>
+    </div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 22px">
+    <div class="t-h1" style="border-top: 1px solid #D3DFD1; padding-top: 22px">Notifications &amp; plan</div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED"></div><div class="t-c mut" style="margin-top:4px"></div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Notifications — Crew only</span></div><div class="t-c mut" style="margin-top: 4px">Applications · My Posts · Network. No contact reveals.</div></div>
+      <div class="rv-ph"><dc-import name="Notifications" store="{{sC}}" act="{{act}}" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Notifications — Product Provider only</span></div><div class="t-c mut" style="margin-top: 4px">Contact reveals · Network. No job types.</div></div>
+      <div class="rv-ph"><dc-import name="Notifications" store="{{sV}}" act="{{act}}" hint-size="390px,844px"></dc-import></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Subscription — Product Provider only</span></div><div class="t-c mut" style="margin-top: 4px">Rows: listings, invoices, visibility, support.</div></div>
+      <div class="rv-ph"><dc-import name="Subscription" roles="{{rV}}" plan="expiring" act="{{act}}" hint-size="390px,844px"></dc-import></div>
+    </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1660,"height":5300}}'>
+class Component extends DCLogic {
+  crew(kind) {
+    if (kind === 'new') return { hiring: { setup: false, desig: '', companies: [] }, posts: [], apps: [], saved: {}, flash: null, avail: {} };
+    return {
+      hiring: { setup: true, desig: 'Focus Puller', companies: ['Lantern Pictures'] },
+      posts: [{ id: 'p1', title: '2nd Assistant Camera — Feature Film', house: 'Lantern Pictures', ptype: 'Feature Film', cat: 'Camera', loc: 'Film City, Mumbai', dur: '32 days', dates: '4 Nov 2026 – 12 Dec 2026', pay: '₹4,000 – ₹6,000 per day', st: 'Active', apps: 7, newA: 3, posted: '2d ago' }],
+      apps: [{ variant: 'main', title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', loc: 'Film City, Mumbai', dur: '32 days', status: 'Shortlisted', applied: '26 Oct 2026', isNew: true }],
+      saved: {}, flash: null, avail: {}
+    };
+  }
+  renderVals() {
+    const reveals = [
+      { name: 'Kavya Menon', sub: 'Producer · Lantern Pictures', when: '12 min ago', isNew: true },
+      { name: 'Farhan Siddiqui', sub: '1st Assistant Camera', when: '2h ago', isNew: true },
+      { name: 'Northlight Studios', sub: 'Production house', when: 'Yesterday' }
+    ];
+    const base = { name: 'Priya Nair', email: 'priya.nair@gmail.com', phone: '98765 43210', conn: { 'Vikram Bhosle': 'received', 'Northlight Studios': 'received', 'Ananya Iyer': 'connected' }, plans: { seeker: 'expiring' }, reveals, listings: { total: 12, rent: 9, buy: 3 }, bizName: 'Vendor House' };
+    const mk = (crew, vendor, prof, extra) => ({ ...base, roles: { crew, vendor }, crew: this.crew(crew ? 'active' : 'new'), prof, ...(extra || {}) });
+    return {
+      act: () => {}, yes: true, no: false,
+      rC: { crew: true, vendor: false }, rV: { crew: false, vendor: true }, rB: { crew: true, vendor: true },
+      sC: mk(true, false, { pro: true, refs: false }),
+      sV: mk(false, true, { biz: true, contact: false }),
+      sB: mk(true, true, { pro: true, refs: true, biz: true, contact: false }),
+      sCnew: mk(true, false, { pro: false, refs: false }, { name: 'Priya Nair' }),
+      sVnew: mk(false, true, { biz: false, contact: false }, { name: 'Rahul Mehta', bizName: '' }),
+      sCdraft: mk(true, false, { pro: true, refs: false }, { drafts: { vendor: true } }),
+      sVempty: mk(false, true, { biz: true, contact: true }, { reveals: [] }),
+      sCjust: mk(true, true, { pro: true, refs: true, biz: true, contact: false }, { justAdded: 'vendor' }),
+      sVjust: mk(true, true, { pro: true, refs: false, biz: true, contact: false }, { justAdded: 'crew' })
+    };
+  }
+}
+</script>
+</body>
+</html>

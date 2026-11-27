@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewConnect — Interactive iPhone prototype</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;overflow:hidden;height:100%}
+a{color:#7C3AED}a:hover{color:#6527C8}
+/* Device viewport: the app runs edge to edge on the whole 390×891 screen, like an installed app.
+   Backgrounds extend under the status bar, Dynamic Island and home indicator; content keeps iOS safe areas
+   (47px top, 34px bottom). Only the prototype frame applies this — the standalone 390×844 artboards are unchanged. */
+.pv-app .ph{height:891px;padding-top:47px;box-sizing:border-box}
+.pv-app .nav{height:96px;padding-bottom:34px}
+.pv-app .foot{padding-bottom:34px}
+/* Full-screen Filters page: keep its header below the status bar / Dynamic Island and its footer above the home indicator. */
+.pv-app .fp-root{padding-top:47px;box-sizing:border-box}
+.pv-app .fp-foot{padding-bottom:40px}
+.pv-app .fab{bottom:112px!important}
+.pv-app [role="menu"][aria-label="Create"]{bottom:180px!important}
+/* Role-aware shell: on tab screens the prototype draws ONE bottom bar shaped by the account's roles (RoleNav).
+   The screen's own bar keeps its space but is hidden, so layouts do not shift. */
+.pv-shell .ph nav.nav{visibility:hidden!important}
+.pv-coach{position:absolute;left:16px;right:16px;bottom:108px;z-index:40;padding:14px 16px;border-radius:18px;background:rgba(22,48,32,.92);color:#fff;box-shadow:0 18px 40px -12px rgba(22,48,32,.55);font-family:Inter,system-ui,sans-serif;animation:pvCoach .45s cubic-bezier(.2,.9,.3,1.2) both}
+.pv-coach:after{content:'';position:absolute;bottom:-7px;width:14px;height:14px;background:rgba(22,48,32,.92);transform:rotate(45deg);left:var(--ca,50%);margin-left:-7px;border-radius:2px}
+.pv-coach button{margin-top:10px;border:0;border-radius:10px;padding:8px 14px;background:#fff;color:#6527C8;font:600 13px Inter,system-ui,sans-serif;cursor:pointer}
+@keyframes pvCoach{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.pv-coach{animation:none}}
+/* Full-screen overlays (Filters page, sheets, dialogs) on the visible screen sit above the shared bottom bar: hide the bar while one is open. */
+.pv-app:has([style*="display:block"] .fp-root, [style*="display: block"] .fp-root, [style*="display:block"] .scrim, [style*="display: block"] .scrim) .pv-navwrap{display:none}
+@keyframes pvFwd{from{transform:translateX(12px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pvBack{from{transform:translateX(-12px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pvFade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){[style*='pvFwd'],[style*='pvBack'],[style*='pvFade']{animation:none!important}}
+</style>
+</helmet>
+<!-- Preview stage: centres the device in the viewport and scales it to fit (never above 100%), keeping its proportions. -->
+<div class="pv-stage" style="{{stageStyle}}">
+<div style="width: 498px; height: 999px; box-sizing: border-box; background: transparent; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1A1820; display: flex; padding: 40px; overflow: hidden; flex: none; transform-origin: center center; {{deviceScale}}">
+
+  <!-- iPhone -->
+  <div style="position: relative; flex: none; width: 418px; height: 919px; border-radius: 64px; background: #1A1820; padding: 14px; box-sizing: border-box; box-shadow: 0 0 0 2px #3A3740, 0 30px 80px rgba(29,27,34,.28)">
+    <span style="position: absolute; left: -4px; top: 168px; width: 4px; height: 34px; border-radius: 2px 0 0 2px; background: #2C2932" aria-hidden="true"></span>
+    <span style="position: absolute; left: -4px; top: 226px; width: 4px; height: 62px; border-radius: 2px 0 0 2px; background: #2C2932" aria-hidden="true"></span>
+    <span style="position: absolute; left: -4px; top: 302px; width: 4px; height: 62px; border-radius: 2px 0 0 2px; background: #2C2932" aria-hidden="true"></span>
+    <span style="position: absolute; right: -4px; top: 250px; width: 4px; height: 96px; border-radius: 0 2px 2px 0; background: #2C2932" aria-hidden="true"></span>
+
+    <div style="position: relative; width: 390px; height: 891px; border-radius: 50px; overflow: hidden; background: #F1F8EF">
+      <!-- Status bar -->
+      <div style="position: absolute; left: 0; right: 0; top: 0; height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px 0 38px; box-sizing: border-box; background: transparent; z-index: 3; font-size: 16px; font-weight: 700; letter-spacing: -0.01em" aria-hidden="true">
+        <span>{{cct.prototype.t_9_41}}</span>
+        <span style="display: flex; align-items: center; gap: 6px">
+          <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#1A1820"></rect><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#1A1820"></rect><rect x="10" y="3" width="3" height="9" rx="1" fill="#1A1820"></rect><rect x="15" y="0" width="3" height="12" rx="1" fill="#1A1820"></rect></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2 10.3 8.6a3.3 3.3 0 0 0-4.6 0z" fill="#1A1820"></path><path d="M3.6 6.6a6.2 6.2 0 0 1 8.8 0" stroke="#1A1820" stroke-width="1.8" fill="none" stroke-linecap="round"></path><path d="M1.2 4a9.6 9.6 0 0 1 13.6 0" stroke="#1A1820" stroke-width="1.8" fill="none" stroke-linecap="round"></path></svg>
+          <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="#1A1820" stroke-opacity=".4" fill="none"></rect><rect x="2" y="2" width="17" height="9" rx="2" fill="#1A1820"></rect><path d="M24.5 4.5v4a2 2 0 0 0 0-4z" fill="#1A1820" fill-opacity=".45"></path></svg>
+        </span>
+      </div>
+      <!-- Dynamic Island -->
+      <div style="position: absolute; top: 11px; left: 50%; margin-left: -63px; width: 126px; height: 37px; border-radius: 19px; background: #000; z-index: 4" aria-hidden="true"></div>
+
+      <!-- App viewport -->
+      <div ref="{{screenRef}}" class="{{appCls}}" style="position: absolute; left: 0; top: 0; width: 390px; height: 891px; overflow: hidden; background: #F1F8EF">
+        <sc-if value="{{m.Splash}}" hint-placeholder-val="{{ true }}"><div style="{{d.Splash}}"><dc-import name="Splash" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Onboarding}}" hint-placeholder-val="{{ false }}"><div style="{{d.Onboarding}}"><dc-import name="Onboarding" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Welcome}}" hint-placeholder-val="{{ false }}"><div style="{{d.Welcome}}"><dc-import name="Welcome" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SignUp}}" hint-placeholder-val="{{ false }}"><div style="{{d.SignUp}}"><dc-import name="SignUp" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.LogIn}}" hint-placeholder-val="{{ false }}"><div style="{{d.LogIn}}"><dc-import name="LogIn" act="{{act}}" email="{{store.email}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Otp}}" hint-placeholder-val="{{ false }}"><div style="{{d.Otp}}"><dc-import name="Otp" email="{{store.email}}" next="{{otpNext}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.RoleChoice}}" hint-placeholder-val="{{ false }}"><div style="{{d.RoleChoice}}"><dc-import name="RoleChoice" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.AddRole}}" hint-placeholder-val="{{ false }}"><div style="{{d.AddRole}}"><dc-import name="AddRole" role="{{addRole}}" gate="{{addGate}}" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.ModeChoice}}" hint-placeholder-val="{{ false }}"><div style="{{d.ModeChoice}}"><dc-import name="ModeChoice" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.AddMode}}" hint-placeholder-val="{{ false }}"><div style="{{d.AddMode}}"><dc-import name="AddMode" mode="{{addMode}}" gate="{{modeGate}}" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SetupBasic}}" hint-placeholder-val="{{ false }}"><div style="{{d.SetupBasic}}"><dc-import name="SetupBasic" act="{{act}}" email="{{store.email}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SetupDone}}" hint-placeholder-val="{{ false }}"><div style="{{d.SetupDone}}"><dc-import name="SetupDone" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.CompleteProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.CompleteProfile}}"><dc-import name="CompleteProfile" act="{{act}}" store="{{store}}" setup="{{inSetup}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SetupPoster}}" hint-placeholder-val="{{ false }}"><div style="{{d.SetupPoster}}"><dc-import name="SetupPoster" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SeekerHome}}" hint-placeholder-val="{{ false }}"><div style="{{d.SeekerHome}}"><dc-import name="SeekerHome" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.JobSearch}}" hint-placeholder-val="{{ false }}"><div style="{{d.JobSearch}}"><dc-import name="JobSearch" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.JobDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.JobDetail}}"><dc-import name="JobDetail" app="{{jobApp}}" variant="{{jobVariant}}" act="{{act}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.SeekerProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.SeekerProfile}}"><dc-import name="SeekerProfile" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Calendar}}" hint-placeholder-val="{{ false }}"><div style="{{d.Calendar}}"><dc-import name="Calendar" extra="{{store.crew.avail}}" fresh="{{calFresh}}" job="{{calJob}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.PosterHome}}" hint-placeholder-val="{{ false }}"><div style="{{d.PosterHome}}"><dc-import name="PosterHome" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.CreateJob}}" hint-placeholder-val="{{ false }}"><div style="{{d.CreateJob}}"><dc-import name="CreateJob" act="{{act}}" roles="{{roles}}" me="{{store.name}}" hiring="{{store.crew.hiring}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.MyJobs}}" hint-placeholder-val="{{ false }}"><div style="{{d.MyJobs}}"><dc-import name="MyJobs" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.PosterJobDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.PosterJobDetail}}"><dc-import name="PosterJobDetail" job="{{newJob}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Applicants}}" hint-placeholder-val="{{ false }}"><div style="{{d.Applicants}}"><dc-import name="Applicants" store="{{store}}" act="{{act}}" job="{{appsJob}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.ApplicantDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.ApplicantDetail}}"><dc-import name="ApplicantDetail" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Talent}}" hint-placeholder-val="{{ false }}"><div style="{{d.Talent}}"><dc-import name="Talent" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.PosterProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.PosterProfile}}"><dc-import name="PosterProfile" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.MyListings}}" hint-placeholder-val="{{ false }}"><div style="{{d.MyListings}}"><dc-import name="MyListings" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.ListingForm}}" hint-placeholder-val="{{ false }}"><div style="{{d.ListingForm}}"><dc-import name="ListingForm" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.VendorPublic}}" hint-placeholder-val="{{ false }}"><div style="{{d.VendorPublic}}"><dc-import name="VendorPublic" preview="{{vpPreview}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Discover}}" hint-placeholder-val="{{ false }}"><div style="{{d.Discover}}"><dc-import name="Discover" role="{{appRole}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Subscription}}" hint-placeholder-val="{{ false }}"><div style="{{d.Subscription}}"><dc-import name="Subscription" role="{{appRole}}" roles="{{roles}}" modes="{{modes}}" plan="{{plan}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.ProfileDetails}}" hint-placeholder-val="{{ false }}"><div style="{{d.ProfileDetails}}"><dc-import name="ProfileDetails" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.ForumOlder}}" hint-placeholder-val="{{ false }}"><div style="{{d.ForumOlder}}"><dc-import name="ForumOlder" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.PaymentHistory}}" hint-placeholder-val="{{ false }}"><div style="{{d.PaymentHistory}}"><dc-import name="PaymentHistory" payments="{{store.payments}}" plan="{{plan}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Legal}}" hint-placeholder-val="{{ false }}"><div style="{{d.Legal}}"><dc-import name="Legal" doc="{{legalDoc}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.DeleteAccount}}" hint-placeholder-val="{{ false }}"><div style="{{d.DeleteAccount}}"><dc-import name="DeleteAccount" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Invoices}}" hint-placeholder-val="{{ false }}"><div style="{{d.Invoices}}"><dc-import name="Invoices" role="{{appRole}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.InvoiceCreate}}" hint-placeholder-val="{{ false }}"><div style="{{d.InvoiceCreate}}"><dc-import name="InvoiceCreate" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.InvoiceDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.InvoiceDetail}}"><dc-import name="InvoiceDetail" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.DiscoverFeed}}" hint-placeholder-val="{{ false }}"><div style="{{d.DiscoverFeed}}"><dc-import name="DiscoverFeed" role="{{feedRole}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Associations}}" hint-placeholder-val="{{ false }}"><div style="{{d.Associations}}"><dc-import name="Associations" role="{{appRole}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.MyApplications}}" hint-placeholder-val="{{ false }}"><div style="{{d.MyApplications}}"><dc-import name="MyApplications" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.JobDigest}}" hint-placeholder-val="{{ false }}"><div style="{{d.JobDigest}}"><dc-import name="JobDigest" plan="{{seekerPlan}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Jobs}}" hint-placeholder-val="{{ false }}"><div style="{{d.Jobs}}"><dc-import name="Jobs" store="{{store}}" act="{{act}}" tab="{{jobsTab}}" tabKey="{{jobsKey}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.UserProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.UserProfile}}"><dc-import name="UserProfile" person="{{person}}" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.FollowList}}" hint-placeholder-val="{{ false }}"><div style="{{d.FollowList}}"><dc-import name="FollowList" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.FollowingFeed}}" hint-placeholder-val="{{ false }}"><div style="{{d.FollowingFeed}}"><dc-import name="FollowingFeed" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Connections}}" hint-placeholder-val="{{ false }}"><div style="{{d.Connections}}"><dc-import name="Connections" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.Notifications}}" hint-placeholder-val="{{ false }}"><div style="{{d.Notifications}}"><dc-import name="Notifications" store="{{store}}" act="{{act}}" role="{{appRole}}" cat="{{notifCat}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.ForumWall}}" hint-placeholder-val="{{ false }}"><div style="{{d.ForumWall}}"><dc-import name="ForumWall" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.NoticeDetail}}" hint-placeholder-val="{{ false }}"><div style="{{d.NoticeDetail}}"><dc-import name="NoticeDetail" notice="{{noticeId}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.AssociationProfile}}" hint-placeholder-val="{{ false }}"><div style="{{d.AssociationProfile}}"><dc-import name="AssociationProfile" assoc="{{assoc}}" store="{{store}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.AssocLogin}}" hint-placeholder-val="{{ false }}"><div style="{{d.AssocLogin}}"><dc-import name="AssocLogin" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.AssocNotices}}" hint-placeholder-val="{{ false }}"><div style="{{d.AssocNotices}}"><dc-import name="AssocNotices" store="{{store}}" act="{{act}}" entity="{{store.entity}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <sc-if value="{{m.NoticeForm}}" hint-placeholder-val="{{ false }}"><div style="{{d.NoticeForm}}"><dc-import name="NoticeForm" mode="{{noticeMode}}" notice="{{noticeId}}" entity="{{store.entity}}" store="{{store}}" act="{{act}}" hint-size="390px,844px"></dc-import></div></sc-if>
+        <!-- One role-aware bottom bar for every tab screen -->
+        <sc-if value="{{showNav}}" hint-placeholder-val="{{ false }}"><div class="pv-navwrap" style="position: absolute; left: 0; right: 0; bottom: 0; height: 96px; z-index: 30"><dc-import name="RoleNav" roles="{{roles}}" modes="{{modes}}" active="{{navActive}}" tall="{{navTall}}" hint-size="390px,96px"></dc-import></div></sc-if>
+        <!-- Coach mark after a role is added -->
+        <sc-if value="{{showCoach}}" hint-placeholder-val="{{ false }}"><div class="pv-coach" role="dialog" aria-label="{{cct.prototype.what_is_new}}" style="{{coachStyle}}"><div style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .7">{{cct.prototype.new_for_you}}</div><div style="font-size: 15px; font-weight: 700; margin-top: 4px">{{coachTitle}}</div><div style="font-size: 13px; line-height: 18px; opacity: .85; margin-top: 4px">{{coachBody}}</div><button type="button" onClick="{{dismissCoach}}">{{cct.prototype.got_it}}</button></div></sc-if>
+      </div>
+
+      <!-- Home indicator -->
+      <div style="position: absolute; bottom: 8px; left: 50%; margin-left: -67px; width: 134px; height: 5px; border-radius: 3px; background: #1A1820; z-index: 6; pointer-events: none" aria-hidden="true"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"journey":{"editor":"enum","options":["","crew","vendor","both","seeker","poster","crewboth"],"default":""},"entry":{"editor":"enum","options":["new","returning","home"],"default":"new"},"sample":{"editor":"enum","options":["has","none"],"default":"has"},"complete":{"editor":"enum","options":["","full"],"default":""},"$preview":{"width":498,"height":999}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* CrewConnect Association & Forum data (mock, from crewconnect_content.json › assoc_module). Shape is ready for a backend API. */
+var AF = (function (w) {
+  if (w.__ccAssoc) return w.__ccAssoc;
+  var m = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.assoc_module) || { entities: [], notices: [], departments: [], variants: {}, recentFrom: '2026-10-20' };
+  var byId = {};
+  m.entities.forEach(function (e) { byId[e.id] = e; });
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmt(iso, withTime) {
+    if (!iso) return '';
+    var d = new Date(iso); if (isNaN(d)) return iso;
+    var s = d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+    if (withTime === false) return s;
+    var h = d.getHours(), mi = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    return s + ', ' + h + ':' + (mi < 10 ? '0' : '') + mi + ' ' + ap;
+  }
+  function nowIso() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':00'; }
+  // Notices = seed data + this session's changes (store.notices: created[], edited{id: patch}, deleted{id: true}).
+  function notices(store) {
+    var n = (store && store.notices) || {}, cr = n.created || [], ed = n.edited || {}, del = n.deleted || {};
+    return cr.concat(m.notices).filter(function (x) { return !del[x.id] && byId[x.entity]; })
+      .map(function (x) { return ed[x.id] ? Object.assign({}, x, ed[x.id]) : x; })
+      .sort(function (a, b) { return a.postedAt < b.postedAt ? 1 : -1; });
+  }
+  function canPublish(e) { return !!e && e.status === 'active' && e.access === 'issued'; }
+  function entityByEmail(em) { em = (em || '').trim().toLowerCase(); for (var i = 0; i < m.entities.length; i++) if (m.entities[i].email === em) return m.entities[i]; return null; }
+  function preview(x) { var b = x.body || []; for (var i = 0; i < b.length; i++) if (typeof b[i] === 'string') return b[i]; return ''; }
+  return (w.__ccAssoc = { m: m, entities: m.entities, byId: byId, depts: m.departments, fmt: fmt, nowIso: nowIso, notices: notices, canPublish: canPublish, entityByEmail: entityByEmail, preview: preview, isOld: function (x) { return x.postedAt < m.recentFrom; } });
+})(window);
+
+/* R7: sample accounts (crewconnect_content.json › accounts) — the one place names, roles and the vendor profile are defined. */
+var ACC = (function (w) { if (w.__ccAcc) return w.__ccAcc;
+  var d = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.accounts) || {"about": "Sample accounts (Revision 7). Single source of truth for who can log in, their roles and their vendor profile. Every screen reads this block (via the ACC helper); no screen hardcodes these names or roles. Log in with the account ID (crew01 / crew02) or its demo email. Personal details follow sample_profiles: only name, city and public links are shown; designation, skills, bio, phone and bank details are left empty until verified.", "default": "crew01", "list": [{"id": "crew01", "name": "Varun Khandelwal", "email": "crew01@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": false}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster"], "vendor": null}, {"id": "crew02", "name": "Ria Bhavsar", "email": "crew02@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": true}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster", "Vendor"], "vendor": "vendor-house"}], "vendors": [{"id": "vendor-house", "name": "Vendor House", "type": "Vendor", "owner": "crew02", "city": "Mumbai", "initials": "VH", "contact": {"person": "Ria Bhavsar", "phone": "", "email": "", "website": "", "gstin": ""}, "note": "Business category, description, offices (city level), clientele and listings are sample demo content carried over from the previous sample vendor. Contact identifiers (phone, email, website, GSTIN, street address) are not set."}], "labels": {"notAdded": "Not added yet", "demoHint": "Demo accounts: crew01 · crew02", "crewMember": "Crew Member"}};
+  var by = {}, vb = {}, vn = {}; d.list.forEach(function (a) { by[a.id] = a; }); d.vendors.forEach(function (v) { vb[v.id] = v; vn[v.name] = v; });
+  function byLogin(s) { s = String(s || '').trim().toLowerCase(); for (var i = 0; i < d.list.length; i++) { var a = d.list[i]; if (a.id === s || a.email === s) return a; } return null; }
+  function def() { return by[d.default]; }
+  function byName(n) { for (var i = 0; i < d.list.length; i++) if (d.list[i].name === n) return d.list[i]; return null; }
+  function vendorOf(a) { return a && a.vendor ? vb[a.vendor] || null : null; }
+  function forStore(st) { return st && st.acct ? by[st.acct] || null : (st && st.name ? byName(st.name) : null); }
+  // Standalone artboards have no logged-in store: pick the sample account whose roles match the artboard's (default: all roles → crew02).
+  function byRoles(r) { r = r || { crew: true, vendor: true }; for (var i = 0; i < d.list.length; i++) { var x = d.list[i]; if (!!x.roles.crew === !!r.crew && !!x.roles.vendor === !!r.vendor) return x; } return def(); }
+  function me(st) { st = st || {}; return forStore(st) || (st.name ? null : byRoles(st.roles)); }
+  function name(st) { st = st || {}; var a = me(st); return st.name || (a ? a.name : def().name); }
+  function storeFor(a) { var v = vendorOf(a); return { acct: a.id, name: a.name, email: a.email, roles: { crew: !!a.roles.crew, vendor: !!a.roles.vendor }, modes: { seek: !!a.modes.seek, post: !!a.modes.post },
+    bizName: v ? v.name : '', phone: '', photo: false, prof: { pro: !!a.roles.crew, refs: !!a.roles.crew, biz: !!v, contact: false } }; }
+  return (w.__ccAcc = { d: d, list: d.list, labels: d.labels, byId: function (i) { return by[i] || null; }, byLogin: byLogin, byName: byName, def: def,
+    vendorOf: vendorOf, vendorByName: function (n) { return vn[n] || null; }, ownerOf: function (v) { return v ? by[v.owner] || null : null; }, forStore: forStore, me: me, name: name, storeFor: storeFor }); })(window);
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.SCREENS = ['Splash', 'Welcome', 'SignUp', 'LogIn', 'Otp', 'Onboarding', 'RoleChoice', 'ModeChoice', 'AddRole', 'AddMode', 'SetupBasic', 'SetupDone', 'CompleteProfile', 'SetupPoster',
+      'SeekerHome', 'JobSearch', 'JobDetail', 'SeekerProfile', 'Calendar',
+      'PosterHome', 'CreateJob', 'MyJobs', 'PosterJobDetail', 'Applicants', 'ApplicantDetail', 'Talent', 'PosterProfile',
+      'MyListings', 'ListingForm', 'VendorPublic', 'Discover',
+      'Subscription', 'PaymentHistory', 'Legal', 'DeleteAccount', 'ProfileDetails', 'ForumOlder', 'Invoices', 'InvoiceCreate', 'InvoiceDetail',
+      'UserProfile', 'FollowList', 'FollowingFeed', 'Connections', 'Notifications',
+      'DiscoverFeed', 'Associations', 'Jobs', 'MyApplications', 'JobDigest', 'ForumWall', 'NoticeDetail', 'AssociationProfile', 'AssocLogin', 'AssocNotices', 'NoticeForm'];
+    this.TITLES = { Splash: 'Splash', Welcome: 'Welcome', SignUp: cc("common.sign_up"), LogIn: cc("common.log_in"), Otp: cc("prototype.email_verification"), RoleSelect: cc("prototype.set_up_account"),
+      SetupPoster: cc("prototype.company_setup"), SetupVendor: cc("prototype.edit_product_provider_profile"), SeekerHome: 'Home', JobSearch: cc("common.discover_jobs"), JobDetail: cc("common.job_details"),
+      SeekerProfile: cc("common.profile"), Calendar: cc("prototype.unavailability"), PosterHome: 'Home', CreateJob: cc("common.post_a_job"), MyJobs: cc("common.my_jobs"), PosterJobDetail: cc("prototype.job_poster_view"),
+      Applicants: 'Applicants', ApplicantDetail: cc("common.applicant"), Talent: cc("common.find_talent"), PosterProfile: cc("common.company_page"), VendorHome: 'Home', MyListings: cc("common.my_listings"),
+      ListingForm: cc("common.listing"), VendorPublic: cc("prototype.product_page"), Discover: cc("common.discover_products"), VendorProfile: cc("prototype.product_provider_profile"), Subscription: 'Subscription',
+      Invoices: 'Invoices', InvoiceCreate: cc("common.new_invoice"), InvoiceDetail: cc("prototype.invoice"), UserProfile: cc("prototype.user_profile"), FollowList: cc("common.followers_and_following"),
+      FollowingFeed: cc("common.following_feed"), Connections: 'Connections', Notifications: 'Notifications', ForumWall: cc("common.forum"), DiscoverFeed: 'Discover', Jobs: 'Jobs', MyApplications: cc("common.my_applications"), JobDigest: cc("common.job_digest"), Associations: 'Associations', NoticeDetail: cc("common.notice"),
+      AssociationProfile: cc("common.association"), AssocLogin: cc("common.association_login"), AssocNotices: cc("prototype.my_notices"), NoticeForm: cc("prototype.notice_editor") };
+    Object.assign(this.TITLES, { ModeChoice: cc("common.as_crew_what_will_you"), AddMode: cc("prototype.turn_on_a_crew_mode"), RoleChoice: cc("common.how_will_you_use_crewconnect"), AddRole: cc("prototype.add_a_role"), Invoices: 'Invoices', Calendar: 'Calendar', Onboarding: 'Onboarding', SetupBasic: cc("common.basic_profile"), SetupDone: cc("prototype.profile_set_up"), CompleteProfile: cc("prototype.complete_profile"), SeekerProfile: cc("common.profile"), MyListings: cc("common.listings") });
+    Object.assign(this.TITLES, { PaymentHistory: cc("common.payment_history"), Legal: cc("common.legal_and_privacy"), DeleteAccount: cc("common.delete_account"), ProfileDetails: cc("common.profile_details"), ForumOlder: cc("common.older_notices"), MyListings: 'Shop' });
+    // One unified profile: Crew Member and Vendor share a single home, navigation and profile.
+    this.HOMES = { SeekerHome: 'seeker', PosterHome: 'poster', AssocNotices: 'association' };
+    this.HOME_OF = { seeker: 'SeekerHome', poster: 'PosterHome', association: 'AssocNotices', guest: 'Welcome' };
+    // Role-based shell. Tab screens get the role-aware bar; Crew-only screens gate to the add-a-role flow.
+    this.NAV_TAB = { SeekerHome: 'home', Jobs: 'jobs', JobSearch: 'jobs', MyListings: 'listings', SeekerProfile: 'profile', Invoices: 'invoices', Calendar: 'calendar', DiscoverFeed: 'network', Associations: '' };
+    this.CREW_GATE = { Jobs: '', JobSearch: '', MyApplications: '', JobDigest: '', Calendar: '', CreateJob: 'post', MyJobs: 'post', PosterJobDetail: 'post', Applicants: 'post', ApplicantDetail: 'post', Talent: 'talent' };
+    // Crew modes. A locked mode's screens open that mode's opt-in (Flow D: Job Seeker, Flow E: Job Poster), then return.
+    // Availability calendar is open to all Crew Members (client decision), so it is not gated.
+    this.SEEK_GATE = { JobSearch: '', MyApplications: '', JobDigest: '' };
+    this.POST_GATE = { CreateJob: 'post', MyJobs: 'post', PosterJobDetail: 'post', Applicants: 'post', ApplicantDetail: 'post', Talent: 'talent' };
+    this.MJ = { seeker: { seek: true, post: false }, poster: { seek: false, post: true }, crewboth: { seek: true, post: true } };
+    this.state = { stack: ['Splash'], role: 'guest', person: 'Meera Joshi', hide: null, noticeMode: 'create', store: this.initialStore() };
+    this.boot(p);
+    this.screenEl = null;
+    this.onClick = this.onClick.bind(this);
+    this.screenRef = (el) => {
+      if (el === this.screenEl) return;
+      if (this.screenEl) this.screenEl.removeEventListener('click', this.onClick, true);
+      this.screenEl = el;
+      if (el) el.addEventListener('click', this.onClick, true);
+    };
+    this.act = (type, name, val) => {
+      const s = this.state.store;
+      if (type === 'follow') this.setState({ store: { ...s, follow: { ...s.follow, [name]: !!val } } });
+      if (type === 'conn') this.setState({ store: { ...s, conn: { ...s.conn, [name]: val } } });
+      if (type === 'job') this.setState({ store: { ...s, lastJob: name } });
+      if (type === 'post') this.setState({ store: { ...s, posts: [name].concat(s.posts || []) } });
+      const c = s.crew;
+      if (type === 'name') this.setState({ store: { ...s, name: name } });
+      if (type === 'email') this.setState({ store: { ...s, email: name } });
+      if (type === 'hiring') this.setState({ store: { ...s, crew: { ...c, hiring: name } } });
+      if (type === 'crewPost') this.setState({ store: { ...s, crew: { ...c, posts: [{ ...name, id: 'n' + Date.now(), st: 'Active', apps: 0, newA: 0, posted: cc("common.just_now") }].concat(c.posts), flash: name } } });
+      if (type === 'flash') this.setState({ store: { ...s, crew: { ...c, flash: null } } });
+      if (type === 'postSt') this.setState({ store: { ...s, crew: { ...c, posts: c.posts.map((x) => (x.id === name ? { ...x, st: val } : x)) } } });
+      if (type === 'save') this.setState({ store: { ...s, crew: { ...c, saved: { ...c.saved, [name]: !c.saved[name] } } } });
+      const MD = s.modes || { seek: true, post: true };
+      if (type === 'apply' && (s.roles || {}).crew && (s.prof || {}).pro && MD.seek) this.setState({ store: { ...s, crew: { ...c, apps: [name].concat(c.apps.filter((x) => x.title !== name.title)) } } });
+      if (type === 'avail') this.setState({ store: { ...s, crew: { ...c, avail: { ...(c.avail || {}), ...name }, flash: null } } });
+      // Subscribing or renewing also records the payment shown in Settings › Payment history (gateway fields stay [TBC]).
+      if (type === 'plan') this.setState({ store: { ...s, plans: { ...s.plans, [name]: val }, payments: val === 'active' ? [{ id: 'pay-' + Date.now(), plan: cc("common.premium"), kind: (s.plans || {})[name] === 'free' ? 'Subscription' : cc("prototype.renewal"), amt: cc("common.inr_100"), st: 'Paid', date: cc("common.just_now"), ref: '' }].concat(s.payments || []) : s.payments } });
+      // Revision 2: plan picked during profile setup (Free or Premium ₹299/month). Premium is paid after setup [payment gateway screen TBC].
+      if (type === 'setupPlan') this.setState({ store: { ...s, setupPlan: name, plans: name === 'premium' ? { seeker: 'active', poster: 'active', vendor: 'active' } : { seeker: 'free', poster: 'free', vendor: 'free' } } });
+      // Association & Forum notices: session changes on top of the mock data (assoc_module). Backend: POST/PATCH/DELETE /notices.
+      const NT = s.notices || { created: [], edited: {}, deleted: {} };
+      if (type === 'noticeCreate') this.setState({ store: { ...s, notices: { ...NT, created: [name].concat(NT.created || []) } } });
+      if (type === 'noticeEdit') this.setState({ store: { ...s, notices: (NT.created || []).some((x) => x.id === name) ? { ...NT, created: NT.created.map((x) => (x.id === name ? { ...x, ...val } : x)) } : { ...NT, edited: { ...(NT.edited || {}), [name]: { ...((NT.edited || {})[name] || {}), ...val } } } } });
+      if (type === 'noticeDelete') this.setState({ store: { ...s, notices: { ...NT, deleted: { ...(NT.deleted || {}), [name]: true } } } });
+      if (type === 'photo') this.setState({ store: { ...s, photo: !!name } });
+      // R8: mapped profile fields (workbook › Field UI) saved from profile creation / editing.
+      if (type === 'pf') this.setState({ store: { ...s, pf: name } });
+      // Single source of truth for profile details: every screen reads store.name / photo / phone / bizName.
+      if (type === 'profile') this.setState({ store: { ...s, ...name } });
+      if (type === 'prof') this.setState({ store: { ...s, ...(val || {}), prof: { ...(s.prof || {}), [name]: true } } });
+      // Roles on one account. Picked once after OTP; added later, never removed.
+      if (type === 'roles') this.setState({ store: { ...s, roles: { crew: !!name.crew, vendor: !!name.vendor } } });
+      if (type === 'draft') this.setState({ store: { ...s, drafts: { ...(s.drafts || {}), [name]: true } } });
+      // Coach marks show once per session: dismissing one remembers it.
+      if (type === 'coach') this.setState({ store: { ...s, coach: null, coachSeen: { ...(s.coachSeen || {}), [s.coach]: true } } });
+      // Your jobs (both modes): last-viewed tab, remembered for the session.
+      if (type === 'homeTab') this.setState({ store: { ...s, homeTab: name } });
+      // Crew modes: picked at sign-up (ModeChoice), turned on later (AddMode), never removed [TBC].
+      if (type === 'modes') this.setState({ store: { ...s, modes: { seek: !!name.seek, post: !!name.post } } });
+      if (type === 'hireDraft') this.setState({ store: { ...s, hireDraft: name } });
+      // Your applications card: opening a row (or the Applications link, '*') clears its update pill.
+      if (type === 'appSeen') this.setState({ store: { ...s, crew: { ...c, apps: c.apps.map((x) => (name === '*' || x.title === name ? { ...x, isNew: false } : x)) } } });
+      if (type === 'optin') this.setState({ store: { ...s, optinCollapsed: !!name } });
+      if (type === 'addMode') {
+        const seen = (s.coachSeen || {})[name];
+        let crewNow = c;
+        if (name === 'post') crewNow = { ...c, hiring: { setup: true, desig: (val || {}).desig || c.hiring.desig, companies: (val || {}).companies || c.hiring.companies } };
+        if (name === 'seek' && s.pendingApply && (s.prof || {}).pro) crewNow = { ...c, apps: [s.pendingApply].concat(c.apps.filter((x) => x.title !== s.pendingApply.title)) };
+        this.setState({ store: { ...s, crew: crewNow, modes: { ...MD, [name]: true }, hireDraft: name === 'post' ? null : s.hireDraft,
+          pendingApply: name === 'seek' && (s.prof || {}).pro ? null : s.pendingApply, coach: seen ? s.coach : name, optinCollapsed: false,
+          homeTab: name === 'seek' ? 'apps' : 'posts' } });
+      }
+      if (type === 'addRole') {
+        const had = !!(s.roles || {})[name];
+        const dr = { ...(s.drafts || {}) }; delete dr[name];
+        const crewNow = name === 'crew' && s.pendingApply ? { ...c, apps: [s.pendingApply].concat(c.apps.filter((x) => x.title !== s.pendingApply.title)) } : c;
+        this.setState({ store: { ...s, ...(val || {}), crew: crewNow, pendingApply: null, drafts: dr, coach: had ? s.coach : name, justAdded: had ? s.justAdded : name,
+          roles: { ...(s.roles || {}), [name]: true }, prof: { ...(s.prof || {}), [name === 'vendor' ? 'biz' : 'pro']: true } } });
+      }
+      // Applying needs the Crew role: keep the application, unlock Crew, then come back to the job.
+      if (type === 'apply' && (s.roles || {}).crew && !MD.seek) {
+        // Job Poster only: Apply opens “Turn on Job Seeker to apply”, then returns here and submits.
+        this.setState({ store: { ...s, pendingApply: name } });
+        this.go('AddMode', { extra: { addMode: 'seek', modeGate: 'apply' } });
+      } else if (type === 'apply' && !((s.roles || {}).crew && (s.prof || {}).pro)) {
+        this.setState({ store: { ...s, pendingApply: name } });
+        this.go('AddRole', { extra: { addRole: 'crew', addGate: 'apply' } });
+      }
+    };
+    this.dismissCoach = () => this.act('coach');
+  }
+  initialStore() {
+    const meta = {
+      'Meera Joshi': { sub: cc("common.focus_puller_camera"), role: 'Job Seeker' },
+      'Kavya Menon': { sub: cc("common.producer_lantern_pictures"), role: 'Job Poster' },
+      'Vendor House': { sub: cc("common.camera_and_lenses_mumbai"), role: 'Product Provider' },
+      'Vikram Bhosle': { sub: cc("common.gaffer_lighting"), role: 'Job Seeker', when: cc("common.t_2h_ago"), s1: cc("common.lighting_design"), s2: 'HMI', s3: cc("common.led_walls"), bio: cc("prototype.gaffer_on_tvcs_and_features") },
+      'Northlight Studios': { sub: cc("common.production_house_mumbai"), role: 'Job Poster', when: cc("common.yesterday"), bio: cc("prototype.production_house_making_web_series") },
+      'Ananya Iyer': { sub: cc("common.editor_editing_and_post"), role: 'Job Seeker', s1: cc("common.premiere_pro"), s2: cc("common.davinci_resolve"), s3: cc("common.assembly_cuts"), bio: cc("prototype.editor_for_short_films_and") },
+      'Kilowatt Lighting Co.': { sub: cc("common.lighting_and_grip_mumbai"), role: 'Product Provider', when: cc("common.t_1_week_ago"), bio: cc("prototype.hmis_led_panels_generators_and") },
+      'Farhan Siddiqui': { sub: cc("common.t_1st_assistant_camera_camera"), role: 'Job Seeker', s1: cc("common.camera_prep"), s2: 'RED', s3: cc("common.data_wrangling"), bio: cc("prototype.camera_assistant_on_telugu_and") },
+      'Arjun Kulkarni': { sub: cc("common.sound_recordist_sound"), role: 'Job Seeker', city: cc("common.pune"), s1: cc("common.location_sound"), s2: cc("common.boom_ops"), s3: cc("common.sound_devices"), bio: cc("prototype.location_sound_for_documentaries_and") },
+      'Sana Mirza': { sub: cc("common.production_designer_art"), role: 'Job Seeker', when: cc("common.t_3_days_ago"), s1: cc("common.period_sets"), s2: cc("common.set_dressing"), s3: 'SketchUp', bio: cc("prototype.production_designer_for_web_series") }
+    };
+    return {
+      meta,
+      conn: { 'Kavya Menon': 'connected', 'Farhan Siddiqui': 'connected', 'Vendor House': 'connected', 'Arjun Kulkarni': 'connected', 'Ananya Iyer': 'connected',
+        'Vikram Bhosle': 'received', 'Northlight Studios': 'received', 'Sana Mirza': 'pending', 'Kilowatt Lighting Co.': 'pending' },
+      follow: { 'Meera Joshi': true, 'Kavya Menon': true, 'Vendor House': true, 'Northlight Studios': true, 'Kilowatt Lighting Co.': true },
+      followers: { 'Meera Joshi': true, 'Kavya Menon': true, 'Vikram Bhosle': true, 'Ananya Iyer': true, 'Kilowatt Lighting Co.': true },
+      plans: { seeker: 'expiring', poster: 'free', vendor: 'expiring' },
+      // The Premium payment behind the current plan (₹299, from Subscription). Date and reference come from the gateway [TBC].
+      payments: [{ id: 'pay-1', plan: cc("common.premium"), kind: 'Subscription', amt: cc("common.inr_100"), st: 'Paid', date: '', ref: '' }],
+      roles: { crew: true, vendor: true }, drafts: {}, coach: null, justAdded: null, pendingApply: null,
+      modes: { seek: true, post: true }, coachSeen: {}, optinCollapsed: false, hireDraft: null, availability: cc("common.available"),
+      listings: { total: 12, rent: 9, buy: 3 },
+      reveals: [
+        { name: 'Kavya Menon', sub: cc("common.producer_lantern_pictures"), when: cc("common.t_12_min_ago"), isNew: true },
+        { name: 'Farhan Siddiqui', sub: '1st Assistant Camera', when: cc("common.t_2h_ago"), isNew: true },
+        { name: 'Northlight Studios', sub: cc("common.production_house"), when: cc("common.yesterday") },
+        { name: 'Arjun Kulkarni', sub: 'Sound Recordist', when: cc("common.t_2_days_ago") }
+      ],
+      posts: [], lastJob: null,
+      // R7: the default sample account (crew01) — name, roles, modes and vendor profile come from crewconnect_content.json › accounts.
+      ...ACC.storeFor(ACC.def()),
+      crew: this.acctCrew(ACC.def().modes),
+      notes: { 'Vikram Bhosle': cc("prototype.we_were_both_on_the") }
+    };
+  }
+  // Journey presets: Crew only / Vendor only / Both, starting as a new user (sign-up), a returning user (log in) or signed in at Home.
+  journeyRoles() { const j = this.props.journey || ''; if (this.MJ[j]) return { crew: true, vendor: false }; return j ? { crew: j !== 'vendor', vendor: j !== 'crew' } : null; }
+  // Reviewer control: profile completion below 100% (one section left) or at 100% (completion card hidden).
+  profFor(roles, complete) { const f = complete === 'full'; return { pro: !!roles.crew, refs: !!roles.crew && f, biz: !!roles.vendor, contact: !!roles.vendor && f }; }
+  journeyModes() { return this.MJ[this.props.journey || ''] || null; }
+  crewFor(md) { const a = this.crewData('active'); return { ...a, posts: md.post ? a.posts : [], apps: md.seek ? a.apps : [], hiring: md.post ? a.hiring : { setup: false, desig: '', companies: [] } }; }
+  // R7: presets that match a sample account use that account (crew / crewboth → crew01, both → crew02). Seeker-only, poster-only and vendor-only presets keep their own demo identities.
+  acctForJourney(j) { return ACC.byId({ crew: 'crew01', crewboth: 'crew01', both: 'crew02' }[j] || '') ; }
+  journeyName() { const j = this.props.journey || '', A = this.acctForJourney(j); return A ? A.name : j === 'vendor' ? cc("common.rahul_mehta") : 'Priya Nair'; }
+  journeyStore(j) { const A = this.acctForJourney(j); return A ? { ...ACC.storeFor(A), roles: undefined, modes: undefined, prof: undefined } : { acct: null, bizName: j === 'vendor' ? 'Reelhouse Camera Rentals' : '' }; }
+  // Sample accounts post jobs without a stated designation (not verified); demo posts and applications stay.
+  acctCrew(md) { const c = this.crewFor(md); return { ...c, hiring: { ...c.hiring, desig: '' } }; }
+  boot(p) {
+    const j = p.journey || '', en = p.entry || 'new';
+    if (!j) return;
+    const md = this.MJ[j] || null;
+    const roles = md ? { crew: true, vendor: false } : { crew: j !== 'vendor', vendor: j !== 'crew' };
+    const base = { ...this.state.store, modes: md || { seek: true, post: true } };
+    const A = this.acctForJourney(j);
+    const email = A ? A.email : { vendor: cc("prototype.rahul_vendor_reelhouse_in"), crew: cc("prototype.priya_crew_gmail_com"), seeker: cc("prototype.priya_seeker_gmail_com"), poster: cc("prototype.priya_hires_gmail_com"), crewboth: cc("prototype.priya_crew_gmail_com") }[j] || cc("common.priya_nair_gmail_com");
+    if (en === 'returning') { this.state = { ...this.state, stack: ['Welcome', 'LogIn'], role: 'guest', store: { ...base, email } }; return; }
+    if (en === 'home' && p.sample === 'none') {
+      // Reviewer sample data: “no applications yet”.
+      const cr = md ? this.crewFor(md) : this.crewData(roles.crew ? 'active' : 'new');
+      this.state = { ...this.state, stack: ['SeekerHome'], role: 'seeker', lastRole: 'seeker',
+        store: { ...base, ...this.clean(this.journeyStore(j)), email, roles, name: this.journeyName(), crew: { ...cr, apps: [], posts: [] }, prof: this.profFor(roles, p.complete) } };
+      return;
+    }
+    if (en === 'home') {
+      this.state = { ...this.state, stack: ['SeekerHome'], role: 'seeker', lastRole: 'seeker',
+        store: { ...base, ...this.clean(this.journeyStore(j)), email, roles, name: this.journeyName(), crew: A ? this.acctCrew(md || { seek: true, post: true }) : md ? this.crewFor(md) : this.crewData(roles.crew ? 'active' : 'new'), prof: this.profFor(roles, p.complete) } };
+    }
+  }
+  clean(o) { const r = {}; for (const k in o) if (o[k] !== undefined) r[k] = o[k]; return r; }
+  postJob(p) {
+    if (!p) return null;
+    const h = this.state.store.crew.hiring;
+    return { title: p.title, ptype: p.ptype, house: p.house, poster: ACC.name(this.state.store), desig: h.desig || ACC.labels.crewMember, disc: !!p.disc, cat: p.cat, loc: p.loc, dates: p.dates, dur: p.dur, pay: p.pay,
+      desc: p.desc || cc("prototype.looking_for_crew_to_join"), pdf: '', pdfSize: '', apps: p.apps, st: p.st };
+  }
+  crewData(kind) {
+    if (kind === 'new') return { hiring: { setup: false, desig: '', companies: [] }, posts: [], apps: [], saved: {}, flash: null, avail: {} };
+    return {
+      hiring: { setup: true, desig: 'Focus Puller', companies: [cc("common.lantern_pictures"), cc("common.third_bell_collective")] },
+      posts: [
+        { id: 'p1', title: cc("common.t_2nd_assistant_camera_feature_film"), house: cc("common.lantern_pictures"), ptype: cc("common.feature_film"), cat: 'Camera', loc: cc("common.film_city_mumbai"), dur: cc("common.t_32_days"), dates: cc("common.t_4_nov_2026_12_dec"), start: '2026-11-04', end: '2026-12-12', pay: cc("prototype.inr_4_000_inr_6"), st: 'Active', apps: 7, newA: 3, posted: cc("common.t_2d_ago") },
+        { id: 'p2', title: cc("prototype.t_1st_assistant_camera_short_film"), house: cc("common.third_bell_collective"), ptype: cc("common.short_film"), cat: 'Camera', loc: cc("common.pune"), dur: cc("common.t_4_days"), dates: cc("prototype.t_20_nov_2026_23_nov"), start: '2026-11-20', end: '2026-11-23', pay: cc("prototype.inr_5_000_per_day"), st: 'Active', apps: 2, newA: 0, posted: cc("common.t_5d_ago") },
+        { id: 'p3', title: cc("prototype.camera_trainee_short_film"), house: cc("common.third_bell_collective"), ptype: cc("common.short_film"), cat: 'Camera', loc: cc("common.pune"), dur: cc("common.t_4_days"), dates: cc("prototype.t_20_nov_2026_23_nov"), start: '2026-11-20', end: '2026-11-23', pay: cc("prototype.inr_2_500_per_day"), st: 'Active', apps: 0, newA: 0, posted: cc("common.yesterday") },
+        { id: 'p4', title: cc("prototype.dit_web_series_6_episodes"), house: cc("common.lantern_pictures"), ptype: cc("common.web_series"), cat: 'Camera', loc: cc("common.andheri_west_mumbai"), dur: cc("common.t_5_weeks"), dates: cc("prototype.t_1_dec_2026_4_jan"), start: '2026-12-01', end: '2027-01-04', pay: cc("prototype.inr_6_000_inr_8"), st: 'Active', apps: 0, newA: 0, posted: cc("common.today") }
+      ],
+      apps: [
+        { variant: 'main', title: cc("common.focus_puller_feature_film_hindi"), org: cc("common.lantern_pictures"), loc: cc("common.film_city_mumbai"), dur: cc("common.t_32_days"), dates: cc("r2.t_4_nov_12_dec_2026"), status: 'Shortlisted', applied: cc("common.t_26_oct_2026"), isNew: true },
+        { variant: 'disc', title: cc("common.second_unit_camera_operator_action"), org: cc("common.redline_motion_pictures"), loc: cc("common.ramoji_film_city_hyderabad"), dur: cc("common.t_18_days"), dates: cc("r2.t_10_27_nov_2026"), status: 'Under Review', applied: cc("common.t_29_oct_2026") },
+        { variant: 'tvc', title: cc("common.focus_puller_tvc_2_day"), org: cc("common.pinewood_ads"), loc: cc("common.bandra_mumbai"), dur: cc("common.t_2_days"), dates: cc("r2.t_14_15_nov_2026"), status: 'Applied', applied: cc("common.t_1_nov_2026") },
+        { variant: 'mv', title: cc("common.camera_operator_music_video"), org: cc("common.bluebird_records"), loc: cc("common.versova_mumbai"), dur: cc("common.t_3_days"), dates: cc("r2.t_18_20_oct_2026"), status: 'Rejected', applied: cc("common.t_9_oct_2026") }
+      ],
+      saved: { 'Gaffer — TVC, 2-day shoot': true }, flash: null, avail: {}
+    };
+  }
+  componentWillUnmount() { if (this.screenEl) this.screenEl.removeEventListener('click', this.onClick, true); clearTimeout(this.rt); if (typeof window !== 'undefined' && this.onFit) window.removeEventListener('resize', this.onFit); }
+
+  // Find who a profile link refers to, from the tapped element and its row or card.
+  personFrom(a) {
+    const lab = a.getAttribute('aria-label') || '';
+    if (/^Open /.test(lab)) return lab.slice(5);
+    const own = a.querySelector('.t-h1, .t-h3');
+    if (own) return own.textContent.trim();
+    if (!a.children.length && a.textContent.trim()) return a.textContent.trim();
+    const box = a.closest('.sheet, .li, .card');
+    const el = box && box.querySelector('.t-h1, .t-h3, b');
+    return el ? el.textContent.trim() : this.state.person;
+  }
+
+  onClick(e) {
+    const path = e.composedPath ? e.composedPath() : [];
+    let a = null;
+    for (const n of path) { if (n === this.screenEl) break; if (n.tagName === 'A' && n.hasAttribute('href')) { a = n; break; } }
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    if (/^https?:/i.test(href)) return;
+    e.preventDefault();
+    // Close any open footer "More" menu (Calendar · Invoices) so screens kept in the back stack come back collapsed.
+    if (this.screenEl) this.screenEl.querySelectorAll('.nm-t:checked').forEach((x) => { x.checked = false; });
+    const m = href.match(/([A-Za-z0-9_-]+)\.dc\.html/);
+    if (!m) return;
+    e.stopPropagation();
+    const target = m[1];
+    if (this.SCREENS.indexOf(target) < 0) return;
+    const lab = (a.getAttribute('aria-label') || '').toLowerCase();
+    const isBack = /^back/.test(lab) || lab === 'close';
+    const inTabBar = !!a.closest('nav.nav');
+    const extra = {};
+    if (target === 'UserProfile') extra.person = this.personFrom(a);
+    if (target === 'JobDetail') { extra.jobApp = a.getAttribute('data-app') || ''; extra.jobVariant = a.getAttribute('data-job') || ''; }
+    if (target === 'Calendar') extra.calJob = a.getAttribute('data-caljob') || '';
+    if (target === 'AssociationProfile') extra.assoc = a.getAttribute('data-assoc') || 'CTG';
+    if (target === 'Jobs') { extra.jobsTab = a.getAttribute('data-tab') || ''; extra.jobsKey = (this.state.jobsKey || 0) + 1; }
+    if (target === 'PosterJobDetail') extra.postId = a.getAttribute('data-post') || '';
+    if (target === 'Applicants') extra.appsJob = a.getAttribute('data-post') || '';
+    if (target === 'VendorPublic') extra.vpPreview = /preview/i.test(a.textContent);
+    if (target === 'NoticeForm') { extra.noticeMode = a.getAttribute('data-mode') || (/edit/i.test(a.textContent) ? 'edit' : 'create'); extra.noticeId = a.getAttribute('data-notice') || ''; }
+    if (target === 'NoticeDetail') extra.noticeId = a.getAttribute('data-notice') || '';
+    if (target === 'AddRole') { extra.addRole = a.getAttribute('data-role') || 'vendor'; extra.addGate = a.getAttribute('data-gate') || ''; }
+    if (target === 'AddMode') { extra.addMode = a.getAttribute('data-mode') || 'post'; extra.modeGate = a.getAttribute('data-gate') || ''; }
+    if (target === 'Notifications') extra.notifCat = a.getAttribute('data-cat') || '';
+    if (target === 'Legal') extra.legalDoc = a.getAttribute('data-doc') || 'terms';
+    if (a.getAttribute('data-seen')) this.act('appSeen', a.getAttribute('data-seen'));
+    this.go(target, { isBack, inTabBar, extra });
+  }
+
+  go(target, o) {
+    const s = this.state;
+    const stack = s.stack.slice();
+    const cur = stack[stack.length - 1];
+    const patch = { ...(o && o.extra) };
+    if (target === 'PosterJobDetail') { patch.newJob = cur === 'CreateJob'; if (!(o && o.extra && o.extra.postId)) patch.postId = ''; }
+    if (o && o.isBack && stack.length > 1) { stack.pop(); return this.setState({ ...patch, stack }); }
+    // Gates: an action that needs a role the account does not have opens the add-a-role flow, then returns.
+    const R = s.store.roles || { crew: true, vendor: true };
+    if (s.role === 'seeker' && !R.crew && this.CREW_GATE[target] !== undefined) { patch.addRole = 'crew'; patch.addGate = this.CREW_GATE[target]; patch.gateTo = target; target = 'AddRole'; }
+    else if (s.role === 'seeker' && (!R.vendor || !(s.store.prof || {}).biz) && target === 'ListingForm') { patch.addRole = 'vendor'; patch.addGate = 'listing'; patch.gateTo = target; target = 'AddRole'; }
+    // Crew modes: hidden features open the matching opt-in instead of an error or a blank screen.
+    const MD = s.store.modes || { seek: true, post: true };
+    if (target !== 'AddRole' && s.role === 'seeker' && R.crew) {
+      if (!MD.seek && this.SEEK_GATE[target] !== undefined) { patch.addMode = 'seek'; patch.modeGate = this.SEEK_GATE[target]; target = 'AddMode'; }
+      else if (!MD.post && this.POST_GATE[target] !== undefined) { patch.addMode = 'post'; patch.modeGate = this.POST_GATE[target]; target = 'AddMode'; }
+    }
+    // Leaving an add-a-role or turn-on-a-mode flow forwards replaces it, so Back goes to where the person started.
+    if ((cur === 'AddRole' && target !== 'AddRole') || (cur === 'AddMode' && target !== 'AddMode')) stack.pop();
+    if (target === 'RoleChoice' && cur === 'Otp') patch.store = { ...s.store, acct: null, email: s.store.email, crew: this.crewData('new'), name: '', photo: false, phone: '', bizName: '', roles: { crew: false, vendor: false }, modes: { seek: false, post: false }, coachSeen: {}, optinCollapsed: false, hireDraft: null, drafts: {}, coach: null, justAdded: null, prof: { pro: false, refs: false, biz: false, contact: false } };
+    if (target === 'AssocNotices' && cur === 'Otp') { const ent = AF.entityByEmail(s.store.email); patch.store = { ...s.store, entity: ent ? ent.id : 'CTG' }; }
+    if (target === 'SetupBasic' && cur === 'Otp') patch.store = { ...s.store, acct: null, crew: this.crewData('new'), name: '', photo: false, phone: '', bizName: '', prof: { pro: false, refs: false, biz: false, contact: false } };
+    if (target === 'SeekerHome' && cur === 'Otp') {
+      // Returning user: roles come from the account, never asked again.
+      // R7: a sample account ID or its email (crew01 / crew02) logs into that account; any other email logs into the default account (crew01).
+      // Reviewer presets keep their demo identities: emails with "vendor", "seeker" or "hires" log into single-role / single-mode accounts.
+      const em = (s.store.email || '').toLowerCase();
+      const A = ACC.byLogin(em) || this.acctForJourney(this.props.journey || '') || (!this.journeyRoles() && !/vendor|crew|seeker|hires|poster/.test(em) ? ACC.def() : null);
+      if (A) {
+        const AS = ACC.storeFor(A);
+        patch.store = { ...s.store, ...AS, crew: this.acctCrew(AS.modes), coach: null, justAdded: null };
+      } else {
+      const roles = this.journeyRoles() || (/vendor/.test(em) ? { crew: false, vendor: true } : /crew/.test(em) ? { crew: true, vendor: false } : (s.store.roles && (s.store.roles.crew || s.store.roles.vendor) ? s.store.roles : { crew: true, vendor: true }));
+      const md = this.journeyModes() || (/seeker/.test(em) ? this.MJ.seeker : /hires|poster/.test(em) ? this.MJ.poster : (s.store.modes && (s.store.modes.seek || s.store.modes.post) ? s.store.modes : this.MJ.crewboth));
+      patch.store = { ...s.store, acct: null, bizName: roles.vendor ? 'Reelhouse Camera Rentals' : '', roles, modes: md, crew: roles.crew ? this.crewFor(md) : this.crewData('new'), name: roles.crew ? 'Priya Nair' : cc("common.rahul_mehta"), coach: null, justAdded: null, prof: { ...(s.store.prof || {}), pro: !!roles.crew, refs: !!roles.crew, biz: !!roles.vendor } };
+      }
+    }
+    if (target === 'Jobs' && cur === 'CreateJob') return this.setState({ ...patch, stack: [this.HOME_OF[s.role] || 'SeekerHome', 'Jobs'] });
+    if (target === 'Welcome') return this.setState({ ...patch, stack: ['Welcome'], role: 'guest' });
+    if (this.HOMES[target]) {
+      const i = stack.indexOf(target);
+      // Reaching a home means that account exists for this login (Individual = SeekerHome, Vendor = VendorHome).
+      const ak = target === 'VendorHome' ? 'vendor' : target === 'SeekerHome' ? 'individual' : null;
+      const base = patch.store || s.store;
+      if (ak && !(base.accts || {})[ak]) patch.store = { ...base, accts: { ...(base.accts || {}), [ak]: true } };
+      return this.setState({ ...patch, role: this.HOMES[target], lastRole: this.HOMES[target], stack: i >= 0 ? stack.slice(0, i + 1) : [target] });
+    }
+    if (o && o.inTabBar) {
+      const home = this.HOME_OF[s.role] || target;
+      return this.setState({ ...patch, stack: target === home ? [home] : [home, target] });
+    }
+    if (cur === 'Splash') return this.setState({ ...patch, stack: [target] });
+    if (target === cur) {
+      this.setState({ ...patch, hide: target });
+      clearTimeout(this.rt); this.rt = setTimeout(() => this.setState({ hide: null }), 30);
+      return;
+    }
+    const i = stack.indexOf(target);
+    this.setState({ ...patch, stack: i >= 0 ? stack.slice(0, i + 1) : [...stack, target] });
+  }
+
+  start(role, screens) { this.setState({ role, stack: screens, hide: null }); }
+
+  renderVals() {
+    const s = this.state;
+    // Responsive preview: fit the 498×999 device into the available viewport, centred, never scaled above 100%.
+    if (typeof window !== 'undefined' && !this.onFit) { this.onFit = () => this.setState({ vp: [window.innerWidth, window.innerHeight] }); window.addEventListener('resize', this.onFit); }
+    const vw = (s.vp && s.vp[0]) || (typeof window !== 'undefined' ? window.innerWidth : 498) || 498;
+    const vh = (s.vp && s.vp[1]) || (typeof window !== 'undefined' ? window.innerHeight : 999) || 999;
+    const fit = Math.max(0.3, Math.min(1, vw / 498, vh / 999));
+    const cur = s.stack[s.stack.length - 1];
+    // Report the visible screen to a host board (Interactive journeys) so it can tick off journey steps.
+    if (this.props.onScreen && cur !== this.rep) { this.rep = cur; const f = this.props.onScreen; setTimeout(() => f(cur), 0); }
+    const m = {}, d = {};
+    // Page transitions: forward push slides in from the right, back slides from the left, tab switches crossfade.
+    const pvLen = s.stack.length;
+    const pvDir = this._pc === cur ? (this._pd || 'pvFade') : pvLen > (this._pl || 0) ? 'pvFwd' : pvLen < (this._pl || 0) ? 'pvBack' : 'pvFade';
+    this._pc = cur; this._pl = pvLen; this._pd = pvDir;
+    this.SCREENS.forEach((k) => {
+      m[k] = s.stack.indexOf(k) >= 0 && s.hide !== k;
+      d[k] = 'position:absolute;inset:0;' + (k === cur ? 'display:block;animation:' + pvDir + ' .26s cubic-bezier(.22,1,.36,1)' : 'display:none');
+    });
+    const appRole = s.role === 'poster' ? 'poster' : s.role === 'vendor' ? 'vendor' : 'seeker';
+    const roles = s.store.roles || { crew: true, vendor: true };
+    const tab = this.NAV_TAB[cur];
+    const showNav = s.role === 'seeker' && tab !== undefined;
+    const vOnly = roles.vendor && !roles.crew;
+    const coach = showNav && s.store.coach && (cur === 'SeekerHome' || cur === 'MyListings' || cur === 'Jobs') ? s.store.coach : null;
+    const modes = s.store.modes || { seek: true, post: true };
+    const CM = {
+      vendor: [cc("prototype.buy_sell_rent_now_holds"), vOnly ? cc("prototype.manage_listings_see_who_revealed") : cc("prototype.open_buy_sell_rent_to"), vOnly ? '--ca:30%' : '--ca:70%'],
+      crew: [cc("prototype.jobs_is_now_in_your"), cc("prototype.find_and_apply_to_jobs"), '--ca:30%'],
+      seek: [cc("prototype.your_jobs_now_has_two"), cc("prototype.applications_is_new_next_to"), '--ca:30%'],
+      post: [cc("prototype.your_jobs_now_has_two"), cc("prototype.job_posts_is_new_next"), '--ca:30%']
+    }[coach] || ['', '', ''];
+    const pendingIn = Object.values(s.store.conn).filter((v) => v === 'received').length;
+    return {
+      notifCat: s.notifCat || '', legalDoc: s.legalDoc || 'terms',
+      // Sign-up: Step 1 SetupBasic → Step 2 CompleteProfile → SetupDone. Reached from Profile later, CompleteProfile returns to Home.
+      inSetup: s.stack.indexOf('SetupBasic') >= 0,
+      stageStyle: 'width: 100%; height: ' + vh + cc("prototype.px_min_height_100_display"),
+      deviceScale: fit < 0.999 ? 'transform: scale(' + fit.toFixed(4) + ')' : '',
+      appCls: showNav ? 'pv-app pv-shell' : 'pv-app', showNav, roles, navActive: tab || '', navTall: true,
+      addRole: s.addRole || 'vendor', addGate: s.addGate || '',
+      showCoach: !!coach, dismissCoach: this.dismissCoach,
+      coachTitle: CM[0], coachBody: CM[1], coachStyle: CM[2],
+      modes, addMode: s.addMode || 'post', modeGate: s.modeGate || '',
+      m, d, store: s.store, act: this.act, person: s.person, screenRef: this.screenRef, noticeMode: s.noticeMode, vpPreview: !!s.vpPreview,
+      appRole, isVendor: s.role === 'vendor',
+      // Login (returning user) → last-used home; sign-up → role selection.
+      // One login for everyone: an email registered to an onboarded Association or Forum opens its dashboard.
+      otpNext: s.stack.indexOf('LogIn') >= 0 ? (AF.entityByEmail(s.store.email) ? 'AssocNotices' : (this.HOME_OF[s.lastRole] === 'AssocNotices' ? 'SeekerHome' : (this.HOME_OF[s.lastRole] || 'SeekerHome'))) : 'RoleChoice',
+      plan: s.store.plans[appRole],
+      noticeId: s.noticeId || '', jobApp: s.jobApp || '', jobVariant: s.jobVariant || '', calJob: s.calJob || '', seekerPlan: s.store.plans.seeker, assoc: s.assoc || 'CTG', newJob: s.postId ? this.postJob(s.store.crew.posts.find((x) => x.id === s.postId)) : s.newJob ? (s.store.lastJob || null) : null,
+      appsJob: s.appsJob || '', switching: !!s.switching, switched: !!s.switched, switchMsg: cc("prototype.you_re_now_using_your") + (s.switchLabel || '').toLowerCase(), switchingMsg: cc("prototype.switching_to_your") + (s.switchLabel || '').toLowerCase() + '…',
+      calFresh: !s.store.crew.apps.length && !s.store.crew.hiring.setup,
+      jobsTab: s.jobsTab || '', jobsKey: s.jobsKey || 0,
+      feedRole: s.role === 'association' ? 'association' : appRole,
+      roleLabel: { guest: cc("prototype.signed_out"), seeker: 'Job Seeker', poster: 'Job Poster', vendor: 'Product Provider', association: cc("common.association") }[s.role],
+      screenTitle: (this.TITLES[cur] || cur) + (cur === 'UserProfile' ? ' · ' + ccv(s.person) : ''),
+      trail: s.stack.map((k) => this.TITLES[k] || k).join('  ›  '),
+      cantBack: s.stack.length < 2,
+      pendingIn: pendingIn + cc("prototype.new"),
+      back: () => { if (s.stack.length > 1) this.setState({ stack: s.stack.slice(0, -1) }); },
+      goHome: () => this.setState({ stack: [this.HOME_OF[s.role] || 'Welcome'] }),
+      startNew: () => this.start('guest', ['Splash']),
+      startSeeker: () => this.start('seeker', ['SeekerHome']),
+      startPoster: () => this.start('poster', ['PosterHome']),
+      startVendor: () => this.start('vendor', ['VendorHome']),
+      startAssoc: () => this.setState({ role: 'guest', stack: ['Welcome', 'LogIn'], hide: null, store: { ...this.state.store, email: 'notices@ctgm.org' } }),
+      tryConnect: () => this.start('poster', ['PosterHome', 'Talent']),
+      tryRequests: () => this.start('seeker', ['SeekerHome', 'Notifications']),
+      tryForum: () => this.start('seeker', ['SeekerHome', 'ForumWall']),
+      tryNotice: () => this.setState({ role: 'association', stack: ['AssocNotices'], noticeMode: 'create' }),
+      reset: () => this.setState({ stack: ['Splash'], role: 'guest', person: 'Meera Joshi', hide: null, store: this.initialStore() })
+    };
+  }
+}
+ccHook(Component, ["noticeId","calJob","act","store","otpNext","addRole","addGate","addMode","modeGate","inSetup","jobApp","jobVariant","calFresh","newJob","appsJob","vpPreview","appRole","roles","modes","plan","legalDoc","feedRole","seekerPlan","jobsTab","jobsKey","person","notifCat","assoc","noticeMode","navActive","navTall"]);
+</script>
+</body>
+</html>

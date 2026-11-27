@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Job details</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="JobSearch.dc.html" aria-label="{{cct.job_detail.back_to_results}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.job_details}}</div></div>
+
+  <div class="sc" style="gap: 20px">
+    <sc-if value="{{fromNote}}" hint-placeholder-val="{{ false }}">
+      <div class="card" style="{{appCardStyle}}">
+        <div class="t-over" style="{{appOverStyle}}">{{cct.job_detail.your_application}}</div>
+        <sc-if value="{{isShort}}" hint-placeholder-val="{{ false }}"><div class="row" style="gap: 12px"><span class="av" data-ini="KM">{{cct.job_detail.km}}</span><div class="sp"><div class="t-s"><b>{{cct.common.kavya_menon}}</b> {{cct.common.shortlisted_your_job_application}}</div><div class="t-c mut" style="margin-top: 2px">{{cct.job_detail.lantern_pictures_2h_ago}}</div></div></div></sc-if>
+        <sc-if value="{{notShort}}" hint-placeholder-val="{{ false }}"><div class="t-s">{{appMsg}}</div></sc-if>
+        <div class="row" style="gap: 8px"><span class="t-c mut">{{cct.job_detail.applied}}{{j.applied}}</span><span class="sp"></span><span class="{{statusCls}}">{{status}}</span></div>
+      </div>
+    </sc-if>
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <div class="chips"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle></svg>{{cct.common.open}}</span><span class="badge b-n">{{cct.job_detail.posted_2_days_ago}}</span><span class="badge b-n">{{j.durShort}}</span></div>
+      <h1 class="t-h1">{{j.title}}</h1>
+      <div class="t-s mut">{{j.org}}{{cct.job_detail.posted_by}}{{j.poster}}, {{j.desig}} <span class="badge b-p" style="height: 20px; font-size: 11px; vertical-align: 1px">{{cct.r2.as_recruiter}}</span></div>
+      <sc-if value="{{j.disc}}" hint-placeholder-val="{{ false }}"><div class="alert a-w" role="note"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"></path><path d="M12 10v4M12 17v.01"></path></svg><div><b>{{cct.job_detail.disclaimer}}</b> {{cct.r2.job_posters_may_be_employees}}</div></div></sc-if>
+    </div>
+
+    <div class="card" style="padding: 4px 16px; gap: 0">
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E1EADF; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"></path></svg><span class="t-s mut" style="width: 112px; flex: none">{{cct.common.project_type}}</span><span class="t-s b sp">{{j.ptype}}</span></div>
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E1EADF; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-3h4v3"></path></svg><span class="t-s mut" style="width: 112px; flex: none">{{cct.r2.name_of_the_production_house}}</span><span class="t-s b sp">{{j.org}}</span></div>
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E1EADF; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #7C3AED"><rect x="4" y="4" width="7" height="7" rx="1"></rect><rect x="13" y="4" width="7" height="7" rx="1"></rect><rect x="4" y="13" width="7" height="7" rx="1"></rect><rect x="13" y="13" width="7" height="7" rx="1"></rect></svg><span class="t-s mut" style="width: 112px; flex: none">{{cct.common.department}}</span><span class="t-s b sp">{{j.cat}}</span></div>
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E1EADF; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #7C3AED"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span class="t-s mut" style="width: 112px; flex: none">{{cct.common.location}}</span><span class="t-s b sp">{{j.loc}}</span></div>
+      <div class="row" style="padding: 12px 0; border-bottom: 1px solid #E1EADF; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><span class="t-s mut" style="width: 112px; flex: none">{{cct.r2.job_dates}}</span><span class="t-s b sp">{{j.dur}}</span><a class="iconbtn" href="Calendar.dc.html" data-caljob="{{variantKey}}" aria-label="{{cct.r2.check_my_calendar_for_these_dates}}" style="width: 36px; height: 36px; color: #367A22; margin: -8px -6px -8px 0"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></a></div>
+      <div class="row" style="padding: 12px 0; gap: 12px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #7C3AED"><path d="M7 5h10M7 9h10M13 19 7 12h2.5a3.5 3.5 0 0 0 0-7"></path></svg><span class="t-s mut" style="width: 112px; flex: none">{{cct.common.fee_budget}}</span><span class="t-s b sp">{{j.pay}}</span></div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <h2 class="t-h2">{{cct.job_detail.about_the_job}}</h2>
+      <p class="t-b">{{j.a1}}</p>
+      <p class="t-b">{{j.a2}}</p>
+      <h3 class="t-h3" style="margin-top: 4px">{{cct.job_detail.what_we_need}}</h3>
+      <div class="t-b" style="display: flex; flex-direction: column; gap: 6px">
+        <sc-for list="{{j.needs}}" as="nd" hint-placeholder-count="3"><div class="row" style="align-items: flex-start"><span style="color: #367A22; padding-top: 1px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></span><span>{{nd}}</span></div></sc-for>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <h2 class="t-h2">{{cct.job_detail.additional_job_details}}</h2>
+      <div class="file">
+        <div class="fico">{{cct.common.pdf}}</div>
+        <div class="sp"><div class="t-h3 trunc">{{j.pdf}}</div><div class="t-c mut">{{cct.job_detail.pdf}}{{j.pdfSize}}{{cct.job_detail.added_by}}{{j.poster}}</div></div>
+        <button class="iconbtn" aria-label="{{cct.job_detail.view_pdf}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+        <button class="iconbtn" aria-label="{{cct.common.download_pdf}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"></path></svg></button>
+      </div>
+    </div>
+
+    <div class="card" style="gap: 8px">
+      <div class="t-over">{{cct.job_detail.posted_by_2}}</div>
+      <div class="row"><div class="sq"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M10 21v-3h4v3"></path></svg></div><div class="sp"><div class="t-h3">{{j.org}}</div><div class="t-s mut">{{cct.common.production_house}}</div></div></div>
+      <div class="kv" style="padding: 0"><span>{{cct.common.job_poster_2}}</span><span>{{j.poster}} · {{j.desig}}</span></div>
+      <a href="#" class="t-s b row" style="gap: 6px">{{cct.common.lanternpictures_in}}<svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status"><span class="ok"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>{{cct.job_detail.application_sent_to}}{{j.org}}</div>
+  </sc-if>
+
+  <div class="foot" style="flex-direction: column; gap: 10px">
+    <sc-if value="{{isOwn}}" hint-placeholder-val="{{ false }}">
+      <div class="row" style="gap: 12px"><div class="sp"><div class="row" style="gap: 6px"><span class="badge b-p">{{cct.job_detail.this_is_your_post}}</span></div><div class="t-c mut" style="margin-top: 4px">{{cct.job_detail.you_can_t_apply_to}}</div></div><a class="btn btn-p btn-sm" href="Applicants.dc.html">{{cct.job_detail.manage_applicants}}</a></div>
+    </sc-if>
+    <sc-if value="{{notApplied}}" hint-placeholder-val="{{ true }}">
+      <button class="btn btn-p w100" onClick="{{openSheet}}">{{cct.job_detail.apply_now}}</button>
+    </sc-if>
+    <sc-if value="{{applied}}" hint-placeholder-val="{{ false }}">
+      <div class="row" style="gap: 12px">
+        <div class="sp"><div class="t-s b">{{appliedText}}</div><div class="row t-c mut" style="gap: 6px; margin-top: 2px">{{cct.common.status}} <span class="{{statusCls}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg>{{status}}</span></div></div>
+        <a class="btn btn-s btn-sm" href="SeekerProfile.dc.html">{{cct.job_detail.view_profile}}</a>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{sheet}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim">
+      <div class="sheet" role="dialog" aria-label="{{cct.job_detail.confirm_application}}">
+        <div class="grab"></div>
+        <div class="t-h2">{{cct.job_detail.apply_with_your_profile}}</div>
+        <div class="t-s mut">{{cct.job_detail.lantern_pictures_will_see_the}}</div>
+        <div class="card" style="gap: 8px; background: rgba(255,255,255,.45)">
+          <div class="row"><div class="av" data-ini="{{me.ini}}">{{me.ini}}</div><div class="sp"><div class="t-h3">{{me.name}}</div><div class="t-s mut">{{me.sub}}</div></div></div>
+          <sc-if value="{{me.fake}}" hint-placeholder-val="{{ true }}"><div class="chips"><span class="tag">{{cct.common.focus_pulling}}</span><span class="tag">{{cct.common.arri_alexa}}</span><span class="tag">{{cct.common.sony_venice}}</span></div></sc-if>
+          <div class="t-c mut">{{cct.job_detail.includes_email_phone_imdb_and}}</div>
+        </div>
+        <div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.01"></path></svg><div>{{cct.job_detail.free_plan_applications_left_this}} <span class="ph-tag">{{cct.job_detail.quota_tbc}}</span></div></div>
+        <sc-if value="{{sending}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>{{cct.job_detail.sending_application}}</button></sc-if>
+        <sc-if value="{{notSending}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{confirm}}">{{cct.job_detail.send_application}}</button></sc-if>
+        <button class="btn btn-t w100" onClick="{{closeSheet}}">{{cct.common.cancel}}</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"act":{"editor":null},"variant":{"editor":"enum","options":["main","disc","tvc","mv","own"],"default":"main"},"app":{"editor":"text","default":""},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* R7: sample accounts (crewconnect_content.json › accounts) — the one place names, roles and the vendor profile are defined. */
+var ACC = (function (w) { if (w.__ccAcc) return w.__ccAcc;
+  var d = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.accounts) || {"about": "Sample accounts (Revision 7). Single source of truth for who can log in, their roles and their vendor profile. Every screen reads this block (via the ACC helper); no screen hardcodes these names or roles. Log in with the account ID (crew01 / crew02) or its demo email. Personal details follow sample_profiles: only name, city and public links are shown; designation, skills, bio, phone and bank details are left empty until verified.", "default": "crew01", "list": [{"id": "crew01", "name": "Varun Khandelwal", "email": "crew01@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": false}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster"], "vendor": null}, {"id": "crew02", "name": "Ria Bhavsar", "email": "crew02@demo.crewconnect.in", "city": "Mumbai", "roles": {"crew": true, "vendor": true}, "modes": {"seek": true, "post": true}, "roleLabels": ["Job Seeker", "Job Poster", "Vendor"], "vendor": "vendor-house"}], "vendors": [{"id": "vendor-house", "name": "Vendor House", "type": "Vendor", "owner": "crew02", "city": "Mumbai", "initials": "VH", "contact": {"person": "Ria Bhavsar", "phone": "", "email": "", "website": "", "gstin": ""}, "note": "Business category, description, offices (city level), clientele and listings are sample demo content carried over from the previous sample vendor. Contact identifiers (phone, email, website, GSTIN, street address) are not set."}], "labels": {"notAdded": "Not added yet", "demoHint": "Demo accounts: crew01 · crew02", "crewMember": "Crew Member"}};
+  var by = {}, vb = {}, vn = {}; d.list.forEach(function (a) { by[a.id] = a; }); d.vendors.forEach(function (v) { vb[v.id] = v; vn[v.name] = v; });
+  function byLogin(s) { s = String(s || '').trim().toLowerCase(); for (var i = 0; i < d.list.length; i++) { var a = d.list[i]; if (a.id === s || a.email === s) return a; } return null; }
+  function def() { return by[d.default]; }
+  function byName(n) { for (var i = 0; i < d.list.length; i++) if (d.list[i].name === n) return d.list[i]; return null; }
+  function vendorOf(a) { return a && a.vendor ? vb[a.vendor] || null : null; }
+  function forStore(st) { return st && st.acct ? by[st.acct] || null : (st && st.name ? byName(st.name) : null); }
+  // Standalone artboards have no logged-in store: pick the sample account whose roles match the artboard's (default: all roles → crew02).
+  function byRoles(r) { r = r || { crew: true, vendor: true }; for (var i = 0; i < d.list.length; i++) { var x = d.list[i]; if (!!x.roles.crew === !!r.crew && !!x.roles.vendor === !!r.vendor) return x; } return def(); }
+  function me(st) { st = st || {}; return forStore(st) || (st.name ? null : byRoles(st.roles)); }
+  function name(st) { st = st || {}; var a = me(st); return st.name || (a ? a.name : def().name); }
+  function storeFor(a) { var v = vendorOf(a); return { acct: a.id, name: a.name, email: a.email, roles: { crew: !!a.roles.crew, vendor: !!a.roles.vendor }, modes: { seek: !!a.modes.seek, post: !!a.modes.post },
+    bizName: v ? v.name : '', phone: '', photo: false, prof: { pro: !!a.roles.crew, refs: !!a.roles.crew, biz: !!v, contact: false } }; }
+  return (w.__ccAcc = { d: d, list: d.list, labels: d.labels, byId: function (i) { return by[i] || null; }, byLogin: byLogin, byName: byName, def: def,
+    vendorOf: vendorOf, vendorByName: function (n) { return vn[n] || null; }, ownerOf: function (v) { return v ? by[v.owner] || null : null; }, forStore: forStore, me: me, name: name, storeFor: storeFor }); })(window);
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { applied: false, sheet: false, sending: false, toast: false }; }
+  componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.b); }
+  renderVals() {
+    const s = this.state;
+    const J = {
+      main: { title: cc("common.focus_puller_feature_film_hindi"), org: cc("common.lantern_pictures"), poster: 'Kavya Menon', desig: cc("common.line_producer"), disc: false, ptype: cc("common.feature_film"), cat: 'Camera', loc: cc("job_detail.film_city_goregaon_east_mumbai"), dur: cc("job_detail.t_32_days_4_nov_12"), durShort: cc("common.t_32_days"), pay: cc("common.inr_8_000_inr_12_2"),
+        a1: cc("job_detail.we_re_looking_for_an"),
+        a2: cc("job_detail.you_ll_work_closely_with"),
+        applied: cc("common.t_26_oct_2026"), needs: [cc("job_detail.t_3_years_pulling_focus_on"), cc("job_detail.comfortable_with_arri_alexa_35"), cc("job_detail.available_4_nov_12_dec")], pdf: cc("common.focus_puller_brief_lantern_pdf"), pdfSize: cc("common.t_248_kb") },
+      disc: { title: cc("common.second_unit_camera_operator_action"), org: cc("common.redline_motion_pictures"), poster: 'Imran Shaikh', desig: 'Stunt Coordinator', disc: true, ptype: cc("common.feature_film"), cat: 'Camera', loc: cc("common.ramoji_film_city_hyderabad"), dur: cc("job_detail.t_18_days_10_27_nov"), durShort: cc("common.t_18_days"), pay: cc("job_detail.inr_10_000_inr_14"),
+        a1: cc("job_detail.second_unit_camera_operator_for"),
+        a2: cc("job_detail.you_ll_operate_on_gimbal"),
+        applied: cc("common.t_29_oct_2026"), needs: [cc("job_detail.t_4_years_operating_on_action"), cc("job_detail.gimbal_and_handheld_experience"), cc("job_detail.available_10_27_nov_in")], pdf: cc("job_detail.second_unit_brief_pdf"), pdfSize: cc("job_detail.t_196_kb") }
+    };
+    J.tvc = { title: cc("common.focus_puller_tvc_2_day"), org: cc("common.pinewood_ads"), poster: cc("common.rahul_mehta"), desig: cc("common.production_manager"), disc: false, ptype: cc("common.advertisement"), cat: 'Camera', loc: cc("common.bandra_mumbai"), dur: cc("job_detail.t_2_days_14_15_nov"), durShort: cc("common.t_2_days"), pay: cc("r2.not_disclosed_by_the_job_poster"), applied: cc("common.t_1_nov_2026"),
+      a1: cc("job_detail.focus_puller_for_a_two"), a2: cc("job_detail.high_speed_and_macro_inserts"), needs: [cc("job_detail.experience_on_commercials"), cc("job_detail.comfortable_with_high_speed_setups")], pdf: cc("job_detail.pinewood_tvc_callsheet_pdf"), pdfSize: cc("job_detail.t_120_kb") };
+    J.mv = { title: cc("common.camera_operator_music_video"), org: cc("common.bluebird_records"), poster: 'Nisha Verma', desig: cc("common.producer"), disc: false, ptype: cc("job_detail.other_music_video"), cat: 'Camera', loc: cc("common.versova_mumbai"), dur: cc("job_detail.t_3_days_18_20_oct"), durShort: cc("common.t_3_days"), pay: cc("job_detail.inr_7_000_per_day"), applied: cc("common.t_9_oct_2026"),
+      a1: cc("job_detail.operator_for_a_three_day"), a2: cc("job_detail.gimbal_heavy_performance_coverage"), needs: [cc("job_detail.gimbal_operation"), cc("job_detail.music_video_experience")], pdf: cc("job_detail.bluebird_mv_brief_pdf"), pdfSize: cc("job_detail.t_98_kb") };
+    const own = ((this.props.store && this.props.store.crew && this.props.store.crew.posts) || []).find((x) => x.st === 'Active');
+    if (own) J.own = { title: own.title, org: own.house, poster: ACC.name(this.props.store), desig: (this.props.store.crew.hiring || {}).desig || ACC.labels.crewMember, disc: !!own.disc, ptype: own.ptype, cat: own.cat, loc: own.loc, dur: own.dur + ' · ' + own.dates, durShort: own.dur, pay: own.pay || cc("r2.not_disclosed_by_the_job_poster"), applied: '',
+      a1: cc("job_detail.looking_for_crew_to_join"), a2: cc("job_detail.schedule_and_call_times_are"), needs: [cc("job_detail.relevant_experience_in_the_camera"), cc("job_detail.available_for_the_full_schedule")], pdf: cc("job_detail.job_details_pdf"), pdfSize: cc("job_detail.t_120_kb") };
+    const isOwn = this.props.variant === 'own' && !!J.own;
+    const j = J[J[this.props.variant] ? this.props.variant : 'main'];
+    const app = this.props.app || '';
+    // Crew modes: a Job Poster tapping Apply goes to “Turn on Job Seeker to apply”; the application is kept and sent after opting in.
+    const stx = this.props.store || {};
+    const seekOn = ((stx.modes || { seek: true }).seek !== false) && !!(stx.roles || { crew: true }).crew;
+    const inApps = seekOn && ((stx.crew && stx.crew.apps) || []).some((x) => x.title === j.title);
+    const payload = { variant: this.props.variant || 'main', title: j.title, org: j.org, loc: j.loc, dur: j.durShort, status: 'Applied', applied: cc("job_detail.t_3_nov_2026") };
+    const applied = s.applied || !!app || inApps;
+    return {
+      // R7: Apply with your profile shows the logged-in account; sample accounts have no designation or skills on file.
+      me: (() => { const m = (() => { const st = this.props.store || {}, A = ACC.me(st), n = ACC.name(st); return { name: n, ini: n.split(/\s+/).map((x) => x[0]).join('').slice(0, 2).toUpperCase(), real: !!A, email: st.email || (A ? A.email : cc("common.priya_nair_gmail_com")), city: A ? A.city : '' }; })(); return { ...m, fake: !m.real, sub: m.real ? ACC.labels.crewMember + (m.city ? ' · ' + m.city : '') : cc("job_detail.focus_puller_camera_mid_level") }; })(),
+      j, fromNote: !!app, isShort: app === 'Shortlisted', notShort: !!app && app !== 'Shortlisted',
+      appMsg: { 'Lapsed': cc("r2.the_recruiter_didn_t_categorise_your_application"), 'Applied': j.org + cc("job_detail.has_your_application_you_ll"), 'Under Review': j.org + cc("job_detail.is_reviewing_your_application"), 'On Hold': j.org + cc("job_detail.has_put_your_application_on"), 'Selected': cc("job_detail.you_ve_been_selected_for"), 'Rejected': j.org + cc("job_detail.isn_t_moving_forward_with") }[app] || '',
+      appCardStyle: 'gap:10px;' + (app === 'Rejected' ? 'background:#FDECEA;border-color:#F6C9C3' : app === 'Shortlisted' || app === 'Selected' ? 'background:#F3F9EE;border-color:#E6F2DC' : 'background:#F6F3FF;border-color:#EFEAFE'),
+      appOverStyle: app === 'Rejected' ? 'color:#B42318' : app === 'Shortlisted' || app === 'Selected' ? 'color:#2C6619' : 'color:#7C3AED', status: (app || 'Applied') === 'Applied' ? cc("r2.uncategorised") : app === 'Lapsed' ? cc("r2.no_longer_under_review") : app, variantKey: this.props.variant || 'main', statusCls: ({ Shortlisted: 'badge b-g', Selected: 'badge b-g', 'Under Review': 'badge b-p', 'On Hold': 'badge b-w', Rejected: 'badge b-e' })[app] || 'badge b-n',
+      appliedText: app ? cc("job_detail.you_applied_on") + ccv(j.applied) : cc("job_detail.you_applied_today"),
+      isOwn, applied: applied && !isOwn, notApplied: !applied && !isOwn, sheet: s.sheet, sending: s.sending, notSending: !s.sending, toast: s.toast,
+      openSheet: () => { if (!seekOn && this.props.act) return this.props.act('apply', payload); this.setState({ sheet: true }); },
+      closeSheet: () => this.setState({ sheet: false }),
+      confirm: () => {
+        this.setState({ sending: true });
+        this.a = setTimeout(() => {
+          this.setState({ sending: false, sheet: false, applied: true, toast: true });
+          if (this.props.act) this.props.act('apply', { variant: this.props.variant || 'main', title: j.title, org: j.org, loc: j.loc, dur: j.durShort, status: 'Applied', applied: cc("job_detail.t_3_nov_2026") });
+          this.b = setTimeout(() => this.setState({ toast: false }), 2600);
+        }, 1000);
+      }
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

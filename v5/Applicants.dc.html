@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Applicants</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="Jobs.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{cct.common.applicants}}</div></div>
+  <div style="flex: none; padding: 4px 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <label class="lbl" for="job" style="margin-bottom: -6px">{{cct.common.job}}</label>
+    <select id="job" class="inp" style="font-weight: 600" value="{{jobSel}}" onChange="{{onJob}}"><sc-for list="{{jobOpts}}" as="o" hint-placeholder-count="2"><option value="{{o.v}}">{{o.l}}</option></sc-for></select>
+    <div class="chips x">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="6"><button class="{{t.cls}}" onClick="{{t.pick}}" aria-pressed="{{t.on}}">{{t.label}}</button></sc-for>
+    </div>
+  </div>
+  <div class="sc" style="padding-top: 0; gap: 12px">
+    <sc-if value="{{hasPending}}" hint-placeholder-val="{{ true }}"><div class="card" style="flex-direction: row; align-items: center; gap: 12px; padding: 12px 14px; border-color: #F5DDAE"><span class="sq" style="width: 40px; height: 40px; background: #FFF6E3; color: #8A5300; border-color: #F5DDAE"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div class="sp"><div class="t-h3">{{pendingTitle}}</div><div class="t-c mut">{{pendingSub}}</div></div></div></sc-if>
+    <div class="alert a-w" role="note" style="padding: 8px 12px"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><div class="t-c">{{cct.r2.categorise_each_application_within_48_hours_uncategorised}}</div></div>
+    <div class="row t-s mut" role="status"><span class="sp"><b style="color: #1A1820">{{count}}</b> {{countWord}}</span><span class="t-c">{{cct.applicants.most_recent_first}}</span></div>
+    <div class="list">
+      <sc-for list="{{rows}}" as="a" hint-placeholder-count="6">
+        <div class="li" style="flex-direction: column; align-items: stretch; gap: 10px; padding: 14px 16px; cursor: default">
+          <a href="ApplicantDetail.dc.html" class="row" style="gap: 12px; align-items: flex-start; text-decoration: none; color: #1A1820">
+            <div class="{{a.avCls}}" data-ini="{{a.ini}}">{{a.ini}}</div>
+            <div class="sp" style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+              <div><div class="t-h3 trunc">{{a.name}}</div><div class="t-c b" style="color: #7C3AED">{{a.titles}}</div><div class="t-c mut">{{a.band}} · {{a.yrs}}{{cct.applicants.yrs_applied}}{{a.when}}</div></div>
+              <div class="row" style="gap: 8px; flex-wrap: wrap"><sc-if value="{{a.hasAvail}}" hint-placeholder-val="{{ true }}"><span class="{{a.availCls}}">{{a.availText}}</span></sc-if><sc-if value="{{a.hasMut}}" hint-placeholder-val="{{ true }}"><span class="row" style="gap: 6px"><span class="mstack"><sc-for list="{{a.mutAv}}" as="mi" hint-placeholder-count="3"><span class="av xs" data-ini="{{mi}}">{{mi}}</span></sc-for></span><span class="t-c mut">{{a.mutText}}</span></span></sc-if></div>
+            </div>
+            <span class="{{a.badgeCls}}">
+                <sc-if value="{{a.iApplied}}" hint-placeholder-val="{{ true }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg></sc-if>
+                <sc-if value="{{a.iReview}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></sc-if>
+                <sc-if value="{{a.iHold}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"></path></svg></sc-if>
+                <sc-if value="{{a.iRej}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></sc-if>
+                <sc-if value="{{a.iSel}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if>
+                {{a.stLabel}}
+              </span>
+          </a>
+          <sc-if value="{{a.pending}}" hint-placeholder-val="{{ true }}"><div class="row" style="gap: 8px; padding-left: 56px"><span class="{{a.dueCls}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{a.dueText}}</span></div></sc-if>
+          <sc-if value="{{a.canAct}}" hint-placeholder-val="{{ true }}"><div class="row" style="gap: 8px; padding-left: 56px"><button class="btn btn-s btn-sm" style="flex: 1; color: #2C6619" onClick="{{a.shortlist}}">{{cct.applicants.shortlist}}</button><button class="btn btn-s btn-sm" style="flex: 1; color: #B42318" onClick="{{a.reject}}">{{cct.applicants.reject}}</button><a class="btn btn-t btn-sm" href="ApplicantDetail.dc.html">{{cct.common.profile}}</a></div></sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path></svg></div><sc-if value="{{noneYet}}" hint-placeholder-val="{{ false }}"><div class="t-h3">{{cct.common.no_applicants_yet}}</div></sc-if><sc-if value="{{someYet}}" hint-placeholder-val="{{ true }}"><div class="t-h3">{{cct.applicants.no_applicants_with_this_status}}</div></sc-if><sc-if value="{{someYet}}" hint-placeholder-val="{{ true }}"><button class="btn btn-s btn-sm" onClick="{{showAll}}">{{cct.applicants.show_all_applicants}}</button></sc-if></div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status">{{toastText}}</div></sc-if>
+  <nav class="nav" aria-label="{{cct.common.main}}"><span class="nav-cap" aria-hidden="true"></span>
+    <a href="SeekerHome.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"></path><path d="M5 10v10h14V10"></path></svg></span>{{cct.common.home}}</a>
+    <a class="on" href="Jobs.dc.html" aria-current="page"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span>{{cct.common.jobs}}</a>
+    <a class="post" href="CreateJob.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.4"><path d="M12 5v14M5 12h14"></path></svg></span>{{cct.common.post_a_job}}</a>
+    <a href="Calendar.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>{{cct.common.calendar}}</a>
+    <a href="SeekerProfile.dc.html"><span class="pill"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>{{cct.common.profile}}</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"job":{"editor":"text"},"store":{"editor":null},"act":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  net(n) {
+    const N = { 'Meera Joshi': [12, 'av'], 'Arjun Kulkarni': [4, 'tb'], 'Sana Mirza': [7, 'av'], 'Farhan Siddiqui': [9, 'un'], 'Ananya Iyer': [3, 'av'], 'Vikram Bhosle': [15, 'tb'], 'Kavya Menon': [18, ''], 'Northlight Studios': [6, ''], 'Vendor House': [11, ''], 'Kilowatt Lighting Co.': [2, ''], 'Nisha Verma': [5, 'av'], 'Aditya Rao': [8, 'av'], 'Priya Nair': [10, 'av'], 'Rohan D’Souza': [1, 'un'], 'Karthik Subramanian': [0, 'av'], 'Imran Shaikh': [2, 'av'] };
+    const pool = ['FS', 'AI', 'MJ', 'VB', 'AK', 'SM', 'KM', 'NV'];
+    const e = N[n] || [0, ''];
+    const me = n.split(' ').map((x) => x[0]).join('').slice(0, 2);
+    const m = e[0];
+    const AV = { av: [cc("common.available"), 'avail a-av'], un: ['Unavailable', 'avail a-un'], tb: ['Tentatively booked', 'avail a-tb'] };
+    return {
+      isHiring: ['Kavya Menon', 'Vikram Bhosle', 'Nisha Verma'].indexOf(n) >= 0,
+      mutN: m, hasMut: m > 0, noMut: m === 0,
+      mutText: m === 0 ? cc("common.no_mutual_connections") : m + (m === 1 ? cc("applicants.mutual_connection") : cc("applicants.mutual_connections")),
+      mutAv: pool.filter((x) => x !== me).slice(0, Math.min(3, m)),
+      hasAvail: !!e[1], availText: e[1] ? AV[e[1]][0] : '', availCls: e[1] ? AV[e[1]][1] : ''
+    };
+  }
+  constructor(p) {
+    super(p);
+    this.data = [
+      { name: 'Aditya Rao', titles: cc("common.t_2nd_assistant_camera_focus_puller"), role: 'Focus Puller', band: cc("common.senior"), yrs: 11, status: 'Applied', when: cc("common.t_2h_ago") },
+      { name: 'Nisha Verma', titles: '2nd Assistant Camera', role: '2nd Assistant Camera', band: cc("common.mid_level"), yrs: 6, status: 'Under Review', when: cc("common.yesterday") },
+      { name: 'Farhan Siddiqui', titles: cc("applicants.t_1st_assistant_camera_focus_puller"), role: '1st Assistant Camera', band: cc("common.mid_level"), yrs: 5, status: 'Under Review', when: cc("common.yesterday") },
+      { name: 'Meera Joshi', titles: cc("common.focus_puller_1st_assistant_camera"), role: 'Focus Puller', band: cc("common.senior"), yrs: 14, status: 'Selected', when: cc("common.t_2d_ago") },
+      { name: 'Rohan D’Souza', titles: '2nd Assistant Camera', role: '2nd Assistant Camera', band: cc("common.junior"), yrs: 2, status: 'On Hold', when: cc("common.t_2d_ago") },
+      { name: 'Karthik Subramanian', titles: cc("applicants.camera_trainee"), role: cc("applicants.camera_technician"), band: cc("common.junior"), yrs: 1, status: 'Rejected', when: cc("common.t_3d_ago") },
+      { name: 'Sana Mirza', titles: '2nd Assistant Camera', role: 'Focus Puller', band: cc("common.mid_level"), yrs: 7, status: 'Applied', when: cc("common.t_3d_ago") },
+      { job: 'p2', name: cc("applicants.vivek_nair"), titles: cc("applicants.t_1st_assistant_camera_focus_puller"), role: '1st Assistant Camera', band: cc("common.mid_level"), yrs: 5, status: 'Applied', when: cc("applicants.t_1d_ago") },
+      { job: 'p2', name: cc("applicants.ishita_rao"), titles: '1st Assistant Camera', role: '1st Assistant Camera', band: cc("common.junior"), yrs: 3, status: 'Under Review', when: cc("common.t_4d_ago") }
+    ];
+    this.state = { tab: 'All', st: {}, toast: '' };
+  }
+  flash(m) { this.setState({ toast: m }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    const s = this.state;
+    const tabs = ['All', 'Applied', 'Under Review', 'Shortlisted', 'On Hold', 'Selected', 'Rejected'];
+    const jobSel = this.state.jobSel || this.props.job || 'p1';
+    const mine = this.data.filter((a) => (a.job || 'p1') === jobSel);
+    const cnt = (t) => { const d = mine.map((a) => ({ ...a, status: this.state.st[a.name] || a.status })); return t === 'All' ? d.length : d.filter((a) => a.status === t).length; };
+    const bc = { 'Shortlisted': 'badge b-g', 'Applied': 'badge b-n', 'Under Review': 'badge b-p', 'On Hold': 'badge b-w', 'Rejected': 'badge b-e', 'Selected': 'badge b-g' };
+    const data = mine.map((a) => ({ ...a, status: this.state.st[a.name] || a.status }));
+    const list = data.filter((a) => s.tab === 'All' || a.status === s.tab);
+    const c = (this.props.store && this.props.store.crew) || { posts: [] };
+    const ps = c.posts.filter((p) => p.st === 'Active' || p.st === 'Closed');
+    // R3: 48-hour categorisation deadline (hours left; 0 or less = missed). Sample values for the prototype.
+    const DUE = { 'Aditya Rao': 46, 'Sana Mirza': 0 };
+    DUE[cc("applicants.vivek_nair")] = 24;
+    const pend = list.filter((a) => a.status === 'Applied');
+    const over = pend.filter((a) => (DUE[a.name] === undefined ? 30 : DUE[a.name]) <= 0).length;
+    return {
+      jobOpts: ps.map((p) => ({ v: p.id, l: p.title + ' · ' + p.apps })), jobSel, onJob: (e) => this.setState({ jobSel: e.target.value, tab: 'All' }), noneYet: mine.length === 0, someYet: mine.length > 0,
+      toast: !!this.state.toast, toastText: this.state.toast,
+      tabs: tabs.map((t) => ({ label: ccv(t) + ' · ' + cnt(t), on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) })),
+      hasPending: pend.length > 0, pendingTitle: pend.length + ' ' + (pend.length === 1 ? cc("r2.application_pending_review") : cc("r2.applications_pending_review")),
+      pendingSub: over > 0 ? over + ' ' + cc("r2.past_the_48_hour_deadline_categorise_now") : cc("r2.categorise_each_one_within_48_hours_of"),
+      rows: list.map((a, i) => ({
+        ...a, ...this.net(a.name), ini: a.name.split(' ').map((x) => x[0]).join('').slice(0, 2),
+        canAct: a.status === 'Applied' || a.status === 'Under Review',
+        stLabel: a.status === 'Applied' ? cc("r2.pending_review") : a.status, pending: a.status === 'Applied',
+        dueText: a.status !== 'Applied' ? '' : (DUE[a.name] === undefined ? 30 : DUE[a.name]) <= 0 ? cc("r2.t_48_hour_deadline_missed_categorise_now") : (DUE[a.name] === undefined ? 30 : DUE[a.name]) + cc("r2.h_left_to_categorise"),
+        dueCls: a.status === 'Applied' && (DUE[a.name] === undefined ? 30 : DUE[a.name]) <= 0 ? 'badge b-e' : 'badge b-w',
+        shortlist: () => { this.setState({ st: { ...this.state.st, [a.name]: 'Shortlisted' } }); this.flash(a.name + cc("applicants.shortlisted_they_ll_be_notified")); },
+        reject: () => { this.setState({ st: { ...this.state.st, [a.name]: 'Rejected' } }); this.flash(a.name + cc("applicants.rejected")); },
+        avCls: i % 2 ? 'av g' : 'av', badgeCls: bc[a.status],
+        iApplied: a.status === 'Applied', iReview: a.status === 'Under Review', iHold: a.status === 'On Hold', iRej: a.status === 'Rejected', iSel: a.status === 'Selected'
+      })),
+      count: list.length, countWord: list.length === 1 ? cc("applicants.applicant") : cc("applicants.applicants"), empty: list.length === 0,
+      showAll: () => this.setState({ tab: 'All' })
+    };
+  }
+}
+ccHook(Component, ["jobSel"]);
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rent/Buy, Home catalog and Your applications</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.rv-ph{width:390px;height:844px;border-radius:28px;overflow:hidden;border:1px solid #E1EADF;box-shadow:0 12px 32px rgba(26,24,32,.10);position:relative;background:#F3F8F1;flex:none}
+.rv-shell .ph nav.nav{visibility:hidden!important}
+.rv-nav{position:absolute;left:0;right:0;bottom:0;z-index:30}
+.rv-col{display:flex;flex-direction:column;gap:12px;width:390px;flex:none}
+.rv-row{display:flex;gap:40px;align-items:flex-start}
+.rv-lab{width:150px;flex:none;padding-top:40px}
+.rv-tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:11px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.st-new{background:#E4F2DD;color:#2C6419}.st-mod{background:#FFF1D6;color:#8A5300}.st-reu{background:#E8F1E6;color:#6527C8}
+.rv-coach{position:absolute;left:16px;right:16px;bottom:76px;z-index:40;padding:14px 16px;border-radius:18px;background:rgba(22,48,32,.92);color:#fff;box-shadow:0 18px 40px -12px rgba(22,48,32,.55);font-family:Inter,system-ui,sans-serif}
+.rv-coach:after{content:'';position:absolute;bottom:-7px;width:14px;height:14px;background:rgba(22,48,32,.92);transform:rotate(45deg);left:var(--ca,50%);margin-left:-7px;border-radius:2px}
+.rv-coach b.btn2{display:inline-block;margin-top:10px;border-radius:10px;padding:8px 14px;background:#fff;color:#6527C8;font:600 13px Inter,system-ui,sans-serif}
+</style>
+</helmet>
+<div style="padding: 48px; display: flex; flex-direction: column; gap: 36px; background: #EEF4EC; min-height: 100%; box-sizing: border-box; width: 2500px">
+  <div style="max-width: 1180px"><div class="t-over">Rent/Buy · catalog · applications</div><div class="t-d" style="margin-top: 4px">Rent/Buy, Home catalog and Your applications</div><p class="t-b mut" style="margin-top: 8px">Job Seeker gets a Rent/Buy tab and a Your applications card that mirrors Your active posts. Every user gets Explore CrewConnect, a catalog of tiles that follows their role and mode.</p>
+    <div class="row" style="gap: 10px; margin-top: 12px"><span class="rv-tag st-new">New</span><span class="t-c mut">new screen</span><span class="rv-tag st-mod">Modified</span><span class="t-c mut">existing screen, role-aware now</span><span class="rv-tag st-reu">Reused</span><span class="t-c mut">unchanged</span></div></div>
+  <div style="display: flex; flex-direction: column; gap: 22px">
+    <div class="t-h1" style="border-top: 1px solid #D3DFD1; padding-top: 22px">Rent/Buy, Home catalog and Your applications</div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED">Rent/Buy tab</div><div class="t-c mut" style="margin-top:4px">Job Seeker only. Feed of gear, not a product provider directory.</div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Rent/Buy — Job Seeker</span></div><div class="t-c mut" style="margin-top: 4px">Default · All · all categories</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="MyListings" store="{{mS}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Rent/Buy — filtered</span></div><div class="t-c mut" style="margin-top: 4px">Rent · Camera &amp; lenses</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="MyListings" store="{{mS}}" demo="rent" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Rent/Buy — search results</span></div><div class="t-c mut" style="margin-top: 4px">“kilowatt” matches product provider</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="MyListings" store="{{mS}}" demo="search" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Rent/Buy — no results</span></div><div class="t-c mut" style="margin-top: 4px">No listings match your filters · Clear filters</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="MyListings" store="{{mS}}" demo="empty" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-reu">Reused</span><span class="t-h3">Listings — Recruiter (label kept)</span></div><div class="t-c mut" style="margin-top: 4px">Same feed, title Listings</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="MyListings" store="{{mP}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dP}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED">Your applications</div><div class="t-c mut" style="margin-top:4px">Mirrors Your active posts exactly; only data and labels change.</div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Home — Job Seeker · Your applications</span></div><div class="t-c mut" style="margin-top: 4px">3 active · 1 new update · Rejected hidden</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mS}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-reu">Reused</span><span class="t-h3">Home — Recruiter · Your active posts</span></div><div class="t-c mut" style="margin-top: 4px">Existing card, for comparison</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mP}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dP}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Your applications — empty</span></div><div class="t-c mut" style="margin-top: 4px">0 active applications · You haven’t applied…</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mSnone}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Your applications — loading</span></div><div class="t-c mut" style="margin-top: 4px">Skeleton matching the card</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mS}}" act="{{act}}" demo="loading" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Home — Both modes</span></div><div class="t-c mut" style="margin-top: 4px">Cards stack: posts first while applicants wait</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mB}}" act="{{act}}" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dB}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+    <div class="rv-row"><div class="rv-lab"><div class="t-over" style="color:#7C3AED">Explore CrewConnect</div><div class="t-c mut" style="margin-top:4px">2-column grid of tiles adapted to role and mode (scrolled to the catalog).</div></div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Home — Job Seeker with catalog</span></div><div class="t-c mut" style="margin-top: 4px">Rent/Buy · Calendar · Invoices · Recruiter (Turn on) · Product Provider (Turn on)</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mS}}" act="{{act}}" demo="catalog" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Home — Recruiter with catalog</span></div><div class="t-c mut" style="margin-top: 4px">Listings · Calendar · Invoices · Job Seeker (Turn on) · Product Provider (Turn on)</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mP}}" act="{{act}}" demo="catalog" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dP}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Catalog — after turning on Recruiter</span></div><div class="t-c mut" style="margin-top: 4px">Recruiter opens My Posts; bar label back to Listings</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{mB}}" act="{{act}}" demo="catalog" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dB}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Home — Crew + Product Provider with catalog</span></div><div class="t-c mut" style="margin-top: 4px">Product Provider tile opens My listings</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{cV}}" act="{{act}}" demo="catalog" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rB}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    <div class="rv-col">
+      <div><div class="row" style="gap: 8px"><span class="rv-tag st-new">New</span><span class="t-h3">Home — Product Provider only with catalog</span></div><div class="t-c mut" style="margin-top: 4px">Listings (Manage) · Invoices · Crew (Turn on)</div></div>
+      <div class="rv-ph rv-shell"><dc-import name="SeekerHome" store="{{vV}}" act="{{act}}" demo="catalog" hint-size="390px,844px"></dc-import><div class="rv-nav"><dc-import name="RoleNav" roles="{{rV}}" modes="{{dS}}" active="home" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 18px">
+    <div class="t-h1" style="border-top: 1px solid #D3DFD1; padding-top: 22px">Bottom bar</div>
+    <div class="row" style="gap: 40px; align-items: flex-start">
+      <div class="rv-col"><div><div class="row" style="gap: 8px"><span class="rv-tag st-mod">Modified</span><span class="t-h3">Job Seeker only</span></div><div class="t-c mut" style="margin-top:4px">Home · Jobs · More · <b>Rent/Buy</b> (price-tag icon) · Profile</div></div><div style="width: 390px; height: 96px; border-radius: 16px; position: relative; background: #F3F8F1; border: 1px solid #E1EADF"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dS}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+      <div class="rv-col"><div><div class="row" style="gap: 8px"><span class="rv-tag st-reu">Reused</span><span class="t-h3">Recruiter · Both modes</span></div><div class="t-c mut" style="margin-top:4px">Listings label and icon unchanged; More dock now has Calendar for all Crew</div></div><div style="width: 390px; height: 96px; border-radius: 16px; position: relative; background: #F3F8F1; border: 1px solid #E1EADF"><dc-import name="RoleNav" roles="{{rC}}" modes="{{dP}}" active="listings" hint-size="390px,96px"></dc-import></div></div>
+    </div>
+  </div>
+  <div class="card" style="max-width: 1180px; gap: 10px">
+    <div class="t-over">States and motion</div>
+    <div class="t-s">Rent/Buy: default, filtered, search results, no results with Clear filters. Your applications: populated with update pills, empty, loading skeleton; opening a row or the Applications link clears pills. Catalog: available tile, “Turn on” tile, and the same tile after opt-in (live). Success toasts come from the existing opt-in flows. Motion: existing 0.18 s button transitions and spring sheets; with reduced motion, short fades.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":2500,"height":3800}}'>
+class Component extends DCLogic {
+  crew(kind) {
+    if (kind === 'new') return { hiring: { setup: false, desig: '', companies: [] }, posts: [], apps: [], saved: {}, flash: null, avail: {} };
+    return {
+      hiring: { setup: true, desig: 'Focus Puller', companies: ['Lantern Pictures'] },
+      posts: [{ id: 'p2', title: '1st Assistant Camera — Short Film', house: 'Third Bell Collective', ptype: 'Short Film', cat: 'Camera', loc: 'Pune', dur: '4 days', dates: '20 Nov 2026 – 23 Nov 2026', pay: '₹5,000 per day', st: 'Active', apps: 2, newA: 0, posted: '5d ago' }, { id: 'p1', title: '2nd Assistant Camera — Feature Film', house: 'Lantern Pictures', ptype: 'Feature Film', cat: 'Camera', loc: 'Film City, Mumbai', dur: '32 days', dates: '4 Nov 2026 – 12 Dec 2026', pay: '₹4,000 – ₹6,000 per day', st: 'Active', apps: 7, newA: 3, posted: '2d ago' }],
+      apps: [{ variant: 'main', title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', loc: 'Film City, Mumbai', dur: '32 days', status: 'Shortlisted', applied: '26 Oct 2026', isNew: true },
+        { variant: 'disc', title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', loc: 'Ramoji Film City, Hyderabad', dur: '18 days', status: 'Under Review', applied: '29 Oct 2026' },
+        { variant: 'tvc', title: 'Focus Puller — TVC, 2-day shoot', org: 'Pinewood Ads', loc: 'Bandra, Mumbai', dur: '2 days', status: 'Applied', applied: '1 Nov 2026' },
+        { variant: 'mv', title: 'Camera Operator — Music Video', org: 'Bluebird Records', loc: 'Versova, Mumbai', dur: '3 days', status: 'Rejected', applied: '9 Oct 2026' }],
+      saved: {}, flash: null, avail: {}
+    };
+  }
+  renderVals() {
+    const reveals = [
+      { name: 'Kavya Menon', sub: 'Producer · Lantern Pictures', when: '12 min ago', isNew: true },
+      { name: 'Farhan Siddiqui', sub: '1st Assistant Camera', when: '2h ago', isNew: true },
+      { name: 'Northlight Studios', sub: 'Production house', when: 'Yesterday' }
+    ];
+    const base = { name: 'Priya Nair', email: 'priya.nair@gmail.com', phone: '98765 43210', conn: { 'Vikram Bhosle': 'received', 'Northlight Studios': 'received', 'Ananya Iyer': 'connected' }, plans: { seeker: 'expiring' }, reveals, listings: { total: 12, rent: 9, buy: 3 }, bizName: 'Vendor House' };
+    const mk = (crew, vendor, prof, extra) => ({ ...base, roles: { crew, vendor }, crew: this.crew(crew ? 'active' : 'new'), prof, ...(extra || {}) });
+    const full = this.crew('active');
+    const mm = (seek, post, extra) => ({ ...base, roles: { crew: true, vendor: false }, modes: { seek, post }, prof: { pro: true, refs: true },
+      crew: { ...full, apps: seek ? full.apps : [], posts: post ? full.posts : [], hiring: post ? full.hiring : { setup: false, desig: '', companies: [] } }, ...(extra || {}) });
+    return {
+      mS: mm(true, false), mP: mm(false, true), mB: mm(true, true), mSnone: mm(true, false, { crew: { ...full, apps: [], posts: [] } }),
+      vV: { ...base, roles: { crew: false, vendor: true }, prof: { biz: true, contact: true }, crew: this.crew('new') },
+      cV: { ...base, roles: { crew: true, vendor: true }, modes: { seek: true, post: false }, prof: { pro: true, refs: true, biz: true, contact: true }, crew: { ...full, posts: [] } },
+      rV: { crew: false, vendor: true },
+      dS: { seek: true, post: false }, dP: { seek: false, post: true }, dB: { seek: true, post: true },
+      act: () => {}, yes: true, no: false,
+      rC: { crew: true, vendor: false }, rV: { crew: false, vendor: true }, rB: { crew: true, vendor: true },
+      sC: mk(true, false, { pro: true, refs: false }),
+      sV: mk(false, true, { biz: true, contact: false }),
+      sB: mk(true, true, { pro: true, refs: true, biz: true, contact: false }),
+      sCnew: mk(true, false, { pro: false, refs: false }, { name: 'Priya Nair' }),
+      sVnew: mk(false, true, { biz: false, contact: false }, { name: 'Rahul Mehta', bizName: '' }),
+      sCdraft: mk(true, false, { pro: true, refs: false }, { drafts: { vendor: true } }),
+      sVempty: mk(false, true, { biz: true, contact: true }, { reveals: [] }),
+      sCjust: mk(true, true, { pro: true, refs: true, biz: true, contact: false }, { justAdded: 'vendor' }),
+      sVjust: mk(true, true, { pro: true, refs: false, biz: true, contact: false }, { justAdded: 'crew' })
+    };
+  }
+}
+</script>
+</body>
+</html>

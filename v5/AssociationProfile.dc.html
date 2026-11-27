@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Association profile</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <div class="bar"><a class="iconbtn" href="ForumWall.dc.html" aria-label="{{cct.r2.back_to_the_forum_wall}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a><div class="ttl">{{typeLabel}}</div></div>
+  <div class="sc" style="gap: 16px">
+    <div class="card" style="align-items: center; text-align: center; padding: 22px 18px; gap: 10px">
+      <dc-import name="AssocLogo" code="{{key}}" size="88" hint-size="88px,88px"></dc-import>
+      <div class="t-h1">{{name}}</div>
+      <div class="chips" style="justify-content: center">
+        <span class="{{typeCls}}">{{typeLabel}}</span>
+        <sc-if value="{{active}}" hint-placeholder-val="{{ true }}"><span class="badge b-g">{{cct.r2.active}}</span></sc-if>
+        <sc-if value="{{inactive}}" hint-placeholder-val="{{ false }}"><span class="badge b-n">{{cct.r2.inactive}}</span></sc-if>
+        <sc-if value="{{hasRegion}}" hint-placeholder-val="{{ true }}"><span class="badge b-n"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>{{region}}</span></sc-if>
+      </div>
+      <p class="t-s mut">{{desc}}</p>
+      <div style="width: 100%; text-align: left; display: flex; flex-direction: column; gap: 6px">
+        <div class="t-over">{{cct.r2.departments_it_caters_to}}</div>
+        <div class="chips"><sc-for list="{{depts}}" as="d" hint-placeholder-count="3"><span class="tag">{{d}}</span></sc-for></div>
+        <div class="t-c mut">{{cct.r2.verified_and_onboarded_by_crewconnect_after_a}}</div>
+      </div>
+    </div>
+    <sc-if value="{{inactive}}" hint-placeholder-val="{{ false }}"><div class="alert a-i"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg><div>{{inactiveNote}}</div></div></sc-if>
+    <div class="sec"><h2>{{cct.r2.notices_2}} {{n}}</h2><span class="t-c mut">{{cct.common.newest_first}}</span></div>
+    <sc-if value="{{hasNotices}}" hint-placeholder-val="{{ true }}">
+      <div class="list">
+        <sc-for list="{{notices}}" as="t" hint-placeholder-count="3">
+          <a class="li" href="NoticeDetail.dc.html" data-notice="{{t.id}}" style="align-items: flex-start">
+            <span class="sp" style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+              <span class="t-h3">{{t.title}}</span>
+              <span class="row t-c mut" style="gap: 8px; flex-wrap: wrap"><span>{{t.date}}</span><sc-if value="{{t.isEdited}}" hint-placeholder-val="{{ false }}"><span>{{cct.r2.edited_2}}</span></sc-if><sc-if value="{{t.hasFile}}" hint-placeholder-val="{{ false }}"><span>{{cct.r2.pdf_attached}}</span></sc-if></span>
+              <span class="chips"><sc-for list="{{t.depts}}" as="d" hint-placeholder-count="2"><span class="tag">{{d}}</span></sc-for></span>
+            </span>
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #6B6676"><path d="m9 18 6-6-6-6"></path></svg>
+          </a>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{noNotices}}" hint-placeholder-val="{{ false }}"><div class="card" style="align-items: center; text-align: center"><div class="t-s mut">{{cct.r2.no_notices_published_yet}}</div></div></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"store":{"editor":null},"assoc":{"editor":"enum","options":["CTG","WLA","SSP","IPC","ADG","CMF","EPF","SCA","DCI","SAA"],"default":"CTG"},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+/* CrewConnect Association & Forum data (mock, from crewconnect_content.json › assoc_module). Shape is ready for a backend API. */
+var AF = (function (w) {
+  if (w.__ccAssoc) return w.__ccAssoc;
+  var m = (w.__ccContent && w.__ccContent.doc && w.__ccContent.doc.assoc_module) || { entities: [], notices: [], departments: [], variants: {}, recentFrom: '2026-10-20' };
+  var byId = {};
+  m.entities.forEach(function (e) { byId[e.id] = e; });
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmt(iso, withTime) {
+    if (!iso) return '';
+    var d = new Date(iso); if (isNaN(d)) return iso;
+    var s = d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+    if (withTime === false) return s;
+    var h = d.getHours(), mi = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    return s + ', ' + h + ':' + (mi < 10 ? '0' : '') + mi + ' ' + ap;
+  }
+  function nowIso() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':00'; }
+  // Notices = seed data + this session's changes (store.notices: created[], edited{id: patch}, deleted{id: true}).
+  function notices(store) {
+    var n = (store && store.notices) || {}, cr = n.created || [], ed = n.edited || {}, del = n.deleted || {};
+    return cr.concat(m.notices).filter(function (x) { return !del[x.id] && byId[x.entity]; })
+      .map(function (x) { return ed[x.id] ? Object.assign({}, x, ed[x.id]) : x; })
+      .sort(function (a, b) { return a.postedAt < b.postedAt ? 1 : -1; });
+  }
+  function canPublish(e) { return !!e && e.status === 'active' && e.access === 'issued'; }
+  function entityByEmail(em) { em = (em || '').trim().toLowerCase(); for (var i = 0; i < m.entities.length; i++) if (m.entities[i].email === em) return m.entities[i]; return null; }
+  function preview(x) { var b = x.body || []; for (var i = 0; i < b.length; i++) if (typeof b[i] === 'string') return b[i]; return ''; }
+  return (w.__ccAssoc = { m: m, entities: m.entities, byId: byId, depts: m.departments, fmt: fmt, nowIso: nowIso, notices: notices, canPublish: canPublish, entityByEmail: entityByEmail, preview: preview, isOld: function (x) { return x.postedAt < m.recentFrom; } });
+})(window);
+
+class Component extends DCLogic {
+  renderVals() {
+    const key = AF.byId[this.props.assoc] ? this.props.assoc : 'CTG';
+    const E = AF.byId[key];
+    const mine = AF.notices(this.props.store).filter((x) => x.entity === key);
+    return {
+      key, name: E.name, desc: E.desc, region: E.region || '', hasRegion: !!E.region, depts: E.depts,
+      typeLabel: E.type === 'Forum' ? cc("r2.forum") : cc("r2.association"), typeCls: E.type === 'Forum' ? 'badge b-y' : 'badge b-p',
+      active: E.status === 'active', inactive: E.status !== 'active',
+      inactiveNote: E.name + ' ' + cc("r2.is_currently_inactive_and_isn_t_publishing"),
+      notices: mine.map((x) => ({ id: x.id, title: x.title, date: AF.fmt(x.postedAt, false), isEdited: !!x.editedAt, hasFile: !!x.attachment, depts: x.depts })),
+      n: mine.length, hasNotices: mine.length > 0, noNotices: mine.length === 0
+    };
+  }
+}
+ccHook(Component, ["notices","depts"]);
+</script>
+</body>
+</html>

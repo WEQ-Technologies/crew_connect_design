@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Association login</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph bg-alt">
+  <div class="bar">
+    <sc-if value="{{stEmail}}" hint-placeholder-val="{{ true }}"><a class="iconbtn" href="Welcome.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a></sc-if>
+    <sc-if value="{{stReqOrDone}}" hint-placeholder-val="{{ false }}"><button class="iconbtn" onClick="{{back}}" aria-label="{{cct.r2.back_to_login}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button></sc-if>
+    <div class="ttl"></div>
+  </div>
+  <div class="sc" style="padding: 16px 24px 24px; gap: 24px">
+    <sc-if value="{{stEmail}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 20px">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <span class="badge b-p" style="align-self: flex-start">{{cct.r2.associations_forums}}</span>
+          <h1 class="t-d">{{cct.r2.association_forum_access}}</h1>
+          <p class="t-b mut">{{cct.r2.onboarded_associations_and_forums_log_in_through}}</p>
+        </div>
+        <a class="btn btn-p w100" href="LogIn.dc.html">{{cct.r2.log_in_to_crewconnect}}</a>
+        <div class="card" style="gap: 10px">
+          <div class="t-h3">{{cct.r2.not_onboarded_yet}}</div>
+          <div class="t-s mut">{{cct.r2.associations_and_forums_are_authorised_by_the}}</div>
+          <button class="btn btn-s w100" onClick="{{openReq}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{cct.r2.request_for_onboarding}}</button>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{stReq}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; flex-direction: column; gap: 8px"><span class="badge b-g" style="align-self: flex-start">{{cct.r2.onboarding_request}}</span><h1 class="t-h1">{{cct.r2.request_for_onboarding}}</h1></div>
+        <div class="alert a-i" style="align-items: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg><div>{{cct.r2.association_and_forum_registrations_are_managed_by}}</div></div>
+        <div class="fld" role="radiogroup" aria-labelledby="ty-l"><span class="lbl" id="ty-l">{{cct.r2.entity_type}} <span class="req">*</span></span>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+            <button type="button" class="{{tyACls}}" role="radio" aria-checked="{{tyA}}" onClick="{{pickA}}"><span class="{{tyARadio}}" aria-hidden="true"></span><span class="sp"><span class="pp">{{cct.r2.association}}</span></span></button>
+            <button type="button" class="{{tyFCls}}" role="radio" aria-checked="{{tyF}}" onClick="{{pickF}}"><span class="{{tyFRadio}}" aria-hidden="true"></span><span class="sp"><span class="pp">{{cct.r2.forum}}</span></span></button>
+          </div>
+        </div>
+        <div class="fld"><label class="lbl" for="rn">{{cct.r2.name}} <span class="req">*</span></label><input id="rn" class="{{rnCls}}" placeholder="{{cct.r2.your_name_or_the_association_forum_name}}" value="{{rName}}" onChange="{{onRName}}">
+          <sc-if value="{{rnErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert">{{cct.r2.enter_a_name_so_our_team_knows}}</span></sc-if></div>
+        <div class="fld"><label class="lbl" for="rp">{{cct.r2.contact_number}} <span class="req">*</span></label><div class="pre"><span>{{cct.common.t_91}}</span><input id="rp" type="tel" inputmode="tel" placeholder="98765 43210" value="{{rPhone}}" onChange="{{onRPhone}}"></div>
+          <sc-if value="{{rpErr}}" hint-placeholder-val="{{ false }}"><span class="errt" role="alert">{{cct.r2.enter_a_valid_10_digit_mobile_number}}</span></sc-if></div>
+        <p class="t-s mut">{{cct.r2.in_case_of_any_queries_please_reach}} <a href="mailto:support@crewconnect.com">support@crewconnect.com</a></p>
+        <div class="t-c mut">{{cct.r2.registration_is_not_approved_automatically_our_team}}</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{stDone}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 12px">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center"><div style="width: 64px; height: 64px; border-radius: 32px; background: #E6F2DC; color: #2C6619; display: flex; align-items: center; justify-content: center"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></div><div class="t-h1">{{cct.r2.contact_details_submitted}}</div><span class="badge b-w">{{cct.r2.verification_pending}}</span><div class="t-s mut" style="max-width: 300px">{{cct.r2.thank_you_the_crewconnect_admin_team_will}}</div></div>
+        <div class="card" style="gap: 0; padding: 6px 14px">
+          <div class="t-over" style="padding: 8px 0">{{cct.r2.verification_status}}</div>
+          <sc-for list="{{vSteps}}" as="v" hint-placeholder-count="5"><div class="row" style="gap: 12px; padding: 9px 0; border-top: 1px solid #E1EADF"><span style="{{v.dot}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span><span class="sp"><span class="t-s b" style="display: block">{{v.t}}</span><span class="t-c mut" style="display: block">{{v.d}}</span></span><span class="{{v.badge}}">{{v.state}}</span></div></sc-for>
+        </div>
+        <p class="t-c mut" style="text-align: center">{{cct.r2.questions_email}} <a href="mailto:support@crewconnect.com">support@crewconnect.com</a></p>
+      </div>
+    </sc-if>
+  </div>
+  <div style="flex: none; padding: 12px 24px 36px">
+    <sc-if value="{{stReq}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" onClick="{{submitReq}}">{{cct.r2.send_onboarding_request}}</button></sc-if>
+    <sc-if value="{{stDone}}" hint-placeholder-val="{{ false }}"><button class="btn btn-s w100" onClick="{{back}}">{{cct.r2.back_to_login}}</button></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { step: 'email', email: '', err: '', code: '', codeErr: false, ty: 'Association', rd: { Camera: true }, rName: '', rPhone: '', rTried: false }; }
+  renderVals() {
+    const s = this.state;
+    const boxes = [0, 1, 2, 3, 4, 5].map((i) => {
+      const ch = s.code[i] || '';
+      const active = i === Math.min(s.code.length, 5);
+      const b = s.codeErr ? '#B42318' : active ? '#7C3AED' : ch ? '#C4B1FA' : '#CFDACB';
+      return { ch, style: 'height:56px;border-radius:12px;border:1.5px solid ' + b + ';background:rgba(255,255,255,.78);backdrop-filter:blur(18px) saturate(165%);-webkit-backdrop-filter:blur(18px) saturate(165%);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700' + (active && !s.codeErr ? ';box-shadow:0 0 0 3px #EFEAFE' : '') };
+    });
+    return {
+      stEmail: s.step === 'email', stCode: s.step === 'code', stReq: s.step === 'req', stDone: s.step === 'done', stReqOrDone: s.step === 'req' || s.step === 'done',
+      openReq: () => this.setState({ step: 'req' }),
+      rName: s.rName, rPhone: s.rPhone, onRName: (e) => this.setState({ rName: e.target.value }), onRPhone: (e) => this.setState({ rPhone: e.target.value }),
+      rnErr: s.rTried && !s.rName.trim(), rpErr: s.rTried && s.rPhone.replace(/\D/g, '').length !== 10, rnCls: s.rTried && !s.rName.trim() ? 'inp bad' : 'inp',
+      submitReq: () => (s.rName.trim() && s.rPhone.replace(/\D/g, '').length === 10 ? this.setState({ step: 'done' }) : this.setState({ rTried: true })),
+      // R3: physical verification states — Contact Details Submitted → Verification Pending → Office Visit Scheduled → Verification in Progress → Verified / Verification Unsuccessful.
+      vSteps: [[cc("r2.contact_details_submitted_2"), cc("r2.received_by_the_admin_team"), 'done'], [cc("r2.verification_pending"), cc("r2.our_team_will_call_you_to_fix"), 'now'], [cc("r2.office_visit_scheduled"), cc("r2.date_and_time_shared_by_phone"), 'next'], [cc("r2.verification_in_progress"), cc("r2.documents_and_authenticity_checked_at_your_office"), 'next'], [cc("r2.verified"), cc("r2.login_credentials_shared_you_re_onboarded"), 'next'], [cc("r2.verification_unsuccessful"), cc("r2.if_documents_can_t_be_verified_we"), 'alt']].map(([t, d, st]) => ({ t, d,
+        state: st === 'done' ? cc("r2.done") : st === 'now' ? cc("r2.current") : st === 'alt' ? cc("r2.if_applicable") : cc("r2.upcoming"),
+        badge: st === 'done' ? 'badge b-g' : st === 'now' ? 'badge b-w' : 'badge b-n',
+        dot: 'width:26px;height:26px;border-radius:13px;flex:none;display:flex;align-items:center;justify-content:center;' + (st === 'done' ? 'background:#367A22;color:#fff' : st === 'now' ? 'background:#FFF2DB;color:#8A5300;border:2px solid #E8B92E' : 'background:#F2F0F5;color:transparent;border:1px solid #D3DFD1') })),
+      tyA: s.ty === 'Association', tyF: s.ty === 'Forum', tyACls: s.ty === 'Association' ? 'plan-opt on' : 'plan-opt', tyFCls: s.ty === 'Forum' ? 'plan-opt on' : 'plan-opt',
+      tyARadio: s.ty === 'Association' ? 'radio on' : 'radio', tyFRadio: s.ty === 'Forum' ? 'radio on' : 'radio',
+      pickA: () => this.setState({ ty: 'Association' }), pickF: () => this.setState({ ty: 'Forum' }),
+      rDepts: ['Camera', 'Direction', 'Editing & Post', 'Sound', 'Lighting & Grip', 'Art & Production Design', 'Production', 'Costume & Make-up', 'VFX', 'Stunts'].map((d) => ({ label: d, on: !!s.rd[d], cls: s.rd[d] ? 'chip on' : 'chip', toggle: () => this.setState({ rd: { ...s.rd, [d]: !s.rd[d] } }) })),
+      email: s.email, err: s.err, errOn: !!s.err, inpCls: s.err ? 'inp bad' : 'inp',
+      onEmail: (e) => this.setState({ email: e.target.value, err: '' }),
+      sendCode: () => {
+        const e = s.email.trim();
+        if (!e) return this.setState({ err: cc("assoc_login.enter_your_registered_email_address") });
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) return this.setState({ err: cc("assoc_login.enter_a_valid_email_address") });
+        if (!/association|guild|council|forum|\.org$/i.test(e)) return this.setState({ err: cc("assoc_login.this_email_isn_t_registered") });
+        this.setState({ step: 'code' });
+      },
+      back: () => this.setState({ step: 'email', code: '', codeErr: false }),
+      code: s.code, boxes, codeErr: s.codeErr,
+      onCode: (e) => this.setState({ code: e.target.value.replace(/\D/g, '').slice(0, 6), codeErr: false }),
+      codeReady: s.step === 'code' && s.code.length === 6,
+      codeNotReady: s.step === 'code' && s.code.length < 6,
+      tryVerify: () => this.setState({ codeErr: true })
+    };
+  }
+}
+ccHook(Component, ["email","code","rName","rPhone"]);
+</script>
+</body>
+</html>

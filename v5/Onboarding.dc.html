@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Onboarding</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+.ob-root{--ease:cubic-bezier(.22,.8,.2,1)}
+.ob-glass{background:linear-gradient(160deg,rgba(255,255,255,.86) 0%,rgba(255,255,255,.62) 100%);border:1px solid rgba(255,255,255,.95);-webkit-backdrop-filter:var(--blur-md);backdrop-filter:var(--blur-md);box-shadow:0 22px 44px -22px rgba(24,44,30,.38),0 2px 6px rgba(24,44,30,.05),inset 0 1px 0 #fff;border-radius:18px}
+/* stage + track */
+.ob-stage{position:relative;flex:1 1 auto;min-height:0;overflow:hidden;touch-action:pan-y;cursor:grab;outline:none;user-select:none;-webkit-user-select:none}
+.ob-stage:active{cursor:grabbing}
+.ob-stage:focus-visible{box-shadow:inset 0 0 0 3px rgba(183,154,214,.6);border-radius:24px}
+.ob-track{position:absolute;inset:0;width:400%;display:flex;will-change:transform;transition:transform .7s var(--ease)}
+.ob-slide{width:25%;height:100%;flex:none;display:flex;flex-direction:column;padding:8px 24px 0;box-sizing:border-box}
+.ob-drag .ob-track,.ob-drag .ob-par,.ob-drag .ob-blob{transition:none!important}
+/* parallax layers move at different rates as the slide travels */
+.ob-par{will-change:transform;transition:transform .7s var(--ease)}
+.ob-p1{transform:translate3d(calc(var(--rel) * 56px),0,0)}
+.ob-p2{transform:translate3d(calc(var(--rel) * 120px),0,0)}
+.ob-p3{transform:translate3d(calc(var(--rel) * -36px),0,0) scale(calc(1 - var(--relabs) * .08))}
+/* staggered entrance: heading, copy and illustration pieces rise in one after another */
+.ob-st{opacity:0;transform:translate3d(0,18px,0);transition:opacity .45s ease,transform .7s var(--ease);transition-delay:0s}
+.ob-slide.on .ob-st{opacity:1;transform:none;transition-delay:var(--d,0s)}
+.ob-float{animation:obfloat 6s ease-in-out infinite}
+.ob-float2{animation:obfloat 7.5s ease-in-out -2.5s infinite}
+@keyframes obfloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-7px,0)}}
+/* background light blobs drift with the whole journey */
+.ob-blob{position:absolute;border-radius:50%;filter:blur(36px);pointer-events:none;transition:transform 1s var(--ease)}
+/* progress */
+.ob-seg{flex:1;height:44px;border:0;background:transparent;padding:0;cursor:pointer;display:flex;align-items:center}
+.ob-seg span{position:relative;display:block;width:100%;height:6px;border-radius:3px;background:rgba(124,58,237,.14);overflow:hidden;box-shadow:inset 0 1px 1px rgba(24,44,30,.08)}
+.ob-seg i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:linear-gradient(90deg,#9366F5,#7C3AED 60%,#367A22);box-shadow:0 0 10px rgba(116,66,168,.55)}
+@keyframes obfillA{from{width:0}to{width:100%}}
+@keyframes obfillB{from{width:0}to{width:100%}}
+.ob-seg:hover span{background:rgba(124,58,237,.22)}
+.ob-hint{display:flex;align-items:center;justify-content:center;gap:8px;color:#545060;font-size:13px;font-weight:600}
+.ob-hint svg{animation:obnudge 1.6s ease-in-out infinite}
+@keyframes obnudge{0%,100%{transform:translateX(0);opacity:.55}50%{transform:translateX(5px);opacity:1}}
+.ob-cta{transition:opacity .5s ease,transform .6s var(--ease)}
+.ob-cta.off{opacity:0;transform:translateY(12px);pointer-events:none}
+.ob-hintwrap{transition:opacity .35s ease}
+/* footer: bare progress on slides 1–3; becomes the glass action drawer on the final slide */
+.ob-foot{position:relative;flex:none;margin:0 16px 20px;padding:0 6px;display:flex;flex-direction:column;gap:2px;border-radius:28px;border:1px solid transparent;transition:background .45s ease,box-shadow .45s ease,padding .45s var(--ease)}
+.ob-foot.ob-glass{padding:6px 18px 18px;margin-bottom:24px;animation:obdrawer .6s var(--ease) both}
+@keyframes obdrawer{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.ob-cta-in{animation:obctain .55s var(--ease) .12s both}
+@keyframes obctain{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+.ob-hintwrap.off{opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:reduce){
+  .ob-track,.ob-par,.ob-blob,.ob-st,.ob-cta,.ob-hintwrap{transition:opacity .2s ease!important;transform:none!important}
+  .ob-foot.ob-glass,.ob-cta-in{animation:none}
+  .ob-float,.ob-float2,.ob-hint svg{animation:none}
+  .ob-seg i{animation:none!important}
+}
+</style>
+</helmet>
+<div class="ph ob-root" style="background: linear-gradient(170deg, #EEE6FA 0%, #F3EEF9 55%, #E6F1EE 100%)">
+  <!-- drifting light (parallax background) -->
+  <div class="ob-blob" aria-hidden="true" style="{{blobA}}"></div>
+  <div class="ob-blob" aria-hidden="true" style="{{blobB}}"></div>
+  <div class="ob-blob" aria-hidden="true" style="{{blobC}}"></div>
+
+  <!-- top bar -->
+  <div style="position: relative; flex: none; padding: 16px 20px 0; display: flex; align-items: center; gap: 10px">
+    <span class="cc-logo-mark" aria-hidden="true" style="width: 32px; height: 38px"></span>
+    <div class="sp" style="font-size: 17px; font-weight: 800; letter-spacing: -0.02em"><span style="color: #5B2A8C">{{cct.common.crew}}</span><span style="color: #367A22">{{cct.common.connect}}</span></div>
+    <sc-if value="{{notLast}}" hint-placeholder-val="{{ true }}"><a class="btn btn-t btn-sm" href="Welcome.dc.html" style="min-height: 44px">{{cct.onboarding.skip}}</a></sc-if>
+  </div>
+
+  <!-- slides: swipe, drag, tap left/right, or arrow keys -->
+  <div class="{{stageCls}}" ref="{{stageRef}}" tabindex="0" role="region" aria-roledescription="carousel" aria-label="{{cct.onboarding.crewconnect_introduction}}" onPointerDown="{{down}}" onPointerMove="{{move}}" onPointerUp="{{up}}" onPointerCancel="{{cancel}}" onKeyDown="{{key}}">
+    <div class="ob-track" style="{{trackStyle}}">
+
+      <!-- 1 · Find work -->
+      <section class="{{c0}}" style="{{v0}}" role="group" aria-roledescription="slide" aria-label="{{cct.onboarding.t_1_of_4}}" aria-hidden="{{h0}}">
+        <div style="position: relative; flex: 1 1 auto; min-height: 0">
+          <div class="ob-par ob-p3" style="position: absolute; left: 10%; top: 10%; width: 80%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(155,123,247,.42) 0%, rgba(155,123,247,0) 68%)" aria-hidden="true"></div>
+          <div class="ob-par ob-p1" style="position: absolute; left: 0; right: 0; top: 24%" aria-hidden="true">
+            <div class="ob-st" style="--d: .12s"><div class="ob-glass ob-float" style="margin: 0 4%; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+              <div class="row" style="gap: 10px"><span class="sq" style="width: 42px; height: 42px"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></span><div class="sp"><div class="t-h3 trunc">{{cct.common.focus_puller_feature_film}}</div><div class="t-c mut trunc">{{cct.onboarding.lantern_pictures_film_city_mumbai}}</div></div></div>
+              <div class="row" style="gap: 6px"><span class="tag">{{cct.common.t_32_days}}</span><span class="tag">{{cct.common.camera}}</span><span class="sp"></span><span class="btn btn-p btn-sm" style="min-height: 30px; padding: 0 12px; font-size: 12px; pointer-events: none">{{cct.onboarding.apply}}</span></div>
+            </div></div>
+          </div>
+          <div class="ob-par ob-p2" style="position: absolute; right: 0; top: 4%" aria-hidden="true"><div class="ob-st" style="--d: .28s"><div class="ob-glass ob-float2" style="padding: 8px 12px; border-radius: 14px"><span class="badge b-g"><svg class="i" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"></path></svg>{{cct.common.shortlisted}}</span></div></div></div>
+          <div class="ob-par ob-p2" style="position: absolute; left: 0; bottom: 6%" aria-hidden="true"><div class="ob-st" style="--d: .38s"><div class="ob-glass ob-float2" style="padding: 10px 14px; display: flex; align-items: center; gap: 10px"><span class="avail a-av">{{cct.common.available}}</span><span class="t-c mut">{{cct.onboarding.from_15_nov}}</span></div></div></div>
+        </div>
+        <div style="flex: none; display: flex; flex-direction: column; gap: 10px; padding: 8px 0 14px">
+          <div class="ob-st" style="--d: .05s"><span class="t-over" style="color: #7C3AED">{{cct.common.find_work}}</span></div>
+          <h1 class="ob-st" style="--d: .14s; font-size: 30px; line-height: 36px; font-weight: 800; letter-spacing: -0.03em">{{cct.onboarding.your_next_opportunity_starts_here}}</h1>
+          <p class="ob-st t-b mut" style="--d: .24s">{{cct.onboarding.actors_dops_editors_crew_and}}</p>
+        </div>
+      </section>
+
+      <!-- 2 · Hire talent -->
+      <section class="{{c1}}" style="{{v1}}" role="group" aria-roledescription="slide" aria-label="{{cct.onboarding.t_2_of_4}}" aria-hidden="{{h1}}">
+        <div style="position: relative; flex: 1 1 auto; min-height: 0">
+          <div class="ob-par ob-p3" style="position: absolute; left: 10%; top: 10%; width: 80%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(240,150,198,.40) 0%, rgba(240,150,198,0) 68%)" aria-hidden="true"></div>
+          <div class="ob-par ob-p1" style="position: absolute; left: 0; right: 0; top: 20%" aria-hidden="true">
+            <div class="ob-st" style="--d: .12s"><div class="ob-glass ob-float" style="margin: 0 6%; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+              <div class="row"><div class="sp"><div class="t-over">{{cct.common.applicants}}</div><div class="t-h3">{{cct.common.t_2nd_assistant_camera}}</div></div><span class="badge b-p">{{cct.onboarding.t_7_new}}</span></div>
+              <div class="row" style="gap: 10px"><div class="av" style="width: 36px; height: 36px; font-size: 13px">{{cct.onboarding.mj}}</div><div class="sp"><div class="t-s b">{{cct.common.meera_joshi}}</div><div class="t-c mut">{{cct.common.focus_puller_camera}}</div></div><span class="avail a-av"></span></div>
+              <div class="row" style="gap: 10px"><div class="av" style="width: 36px; height: 36px; font-size: 13px">{{cct.onboarding.fs}}</div><div class="sp"><div class="t-s b">{{cct.common.farhan_siddiqui}}</div><div class="t-c mut">{{cct.common.t_1st_assistant_camera}}</div></div><span class="avail a-tb"></span></div>
+            </div></div>
+          </div>
+          <div class="ob-par ob-p2" style="position: absolute; right: 0; top: 3%" aria-hidden="true"><div class="ob-st" style="--d: .28s"><div class="ob-glass ob-float2" style="padding: 8px 12px; border-radius: 14px"><span class="hire-badge">{{cct.common.currently_hiring}}</span></div></div></div>
+          <div class="ob-par ob-p2" style="position: absolute; left: 0; bottom: 5%" aria-hidden="true"><div class="ob-st" style="--d: .38s"><div class="ob-glass ob-float2" style="padding: 10px 14px; display: flex; align-items: center; gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" style="color: #7C3AED"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><path d="M9 12h6"></path></svg><span class="t-c b">{{cct.common.connect}}</span></div></div></div>
+        </div>
+        <div style="flex: none; display: flex; flex-direction: column; gap: 10px; padding: 8px 0 14px">
+          <div class="ob-st" style="--d: .05s"><span class="t-over" style="color: #7C3AED">{{cct.common.hire_talent}}</span></div>
+          <h1 class="ob-st" style="--d: .14s; font-size: 30px; line-height: 36px; font-weight: 800; letter-spacing: -0.03em">{{cct.onboarding.post_jobs_and_build_your}}</h1>
+          <p class="ob-st t-b mut" style="--d: .24s">{{cct.onboarding.post_jobs_manage_applicants_and}}</p>
+        </div>
+      </section>
+
+      <!-- 3 · Discover vendors -->
+      <section class="{{c2}}" style="{{v2}}" role="group" aria-roledescription="slide" aria-label="{{cct.onboarding.t_3_of_4}}" aria-hidden="{{h2}}">
+        <div style="position: relative; flex: 1 1 auto; min-height: 0">
+          <div class="ob-par ob-p3" style="position: absolute; left: 10%; top: 10%; width: 80%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(92,200,172,.42) 0%, rgba(92,200,172,0) 68%)" aria-hidden="true"></div>
+          <div class="ob-par ob-p1" style="position: absolute; left: 0; right: 0; top: 24%" aria-hidden="true">
+            <div class="ob-st" style="--d: .12s"><div class="ob-glass ob-float" style="margin: 0 4%; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+              <div class="row" style="gap: 10px"><span class="sq g" style="width: 42px; height: 42px"><svg class="i" viewBox="0 0 24 24"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></span><div class="sp"><div class="t-h3 trunc">{{cct.common.arri_alexa_mini_lf_full}}</div><div class="t-c mut">{{cct.onboarding.camera_bodies_rent}}</div></div></div>
+              <div class="row"><span class="pay">{{cct.common.inr_28_000}} <span class="t-c mut" style="font-weight: 500">{{cct.common.per_day}}</span></span><span class="sp"></span><span class="tag">{{cct.common.rent_and_buy}}</span></div>
+            </div></div>
+          </div>
+          <div class="ob-par ob-p2" style="position: absolute; right: 0; top: 4%" aria-hidden="true"><div class="ob-st" style="--d: .28s"><div class="ob-glass ob-float2" style="padding: 8px 12px; border-radius: 14px; display: flex; align-items: center; gap: 8px"><span class="sq g" style="width: 26px; height: 26px; border-radius: 8px"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M4 9 5.5 4h13L20 9"></path><path d="M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11z"></path><path d="M5 13v7h14v-7"></path></svg></span><span class="t-c b">{{cct.common.product_provider}}</span></div></div></div>
+          <div class="ob-par ob-p2" style="position: absolute; left: 0; bottom: 6%" aria-hidden="true"><div class="ob-st" style="--d: .38s"><div class="ob-glass ob-float2" style="padding: 10px 14px; display: flex; align-items: center; gap: 8px"><svg class="i i-sm" viewBox="0 0 24 24" style="color: #367A22"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span class="t-c b">{{cct.common.goregaon_east_mumbai}}</span></div></div></div>
+        </div>
+        <div style="flex: none; display: flex; flex-direction: column; gap: 10px; padding: 8px 0 14px">
+          <div class="ob-st" style="--d: .05s"><span class="t-over" style="color: #367A22">{{cct.common.discover_products}}</span></div>
+          <h1 class="ob-st" style="--d: .14s; font-size: 30px; line-height: 36px; font-weight: 800; letter-spacing: -0.03em">{{cct.onboarding.equipment_to_rent_or_buy}}</h1>
+          <p class="ob-st t-b mut" style="--d: .24s">{{cct.onboarding.browse_listings_from_product_providers}}</p>
+        </div>
+      </section>
+
+      <!-- 4 · Final: enter the app -->
+      <section class="{{c3}}" style="{{v3}}" role="group" aria-roledescription="slide" aria-label="{{cct.onboarding.t_4_of_4}}" aria-hidden="{{h3}}">
+        <div style="position: relative; flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center">
+          <div class="ob-par ob-p3" style="position: absolute; left: 6%; top: 8%; width: 88%; aspect-ratio: 1; border-radius: 50%; background: conic-gradient(from 200deg, rgba(155,123,247,.35), rgba(240,150,198,.30), rgba(255,182,110,.28), rgba(92,200,172,.32), rgba(155,123,247,.35)); filter: blur(28px)" aria-hidden="true"></div>
+          <div class="ob-par ob-p1" style="position: relative" aria-hidden="true">
+            <div class="ob-st" style="--d: .1s"><div class="ob-glass" style="width: 168px; height: 168px; border-radius: 44px; display: flex; align-items: center; justify-content: center"><span class="cc-logo-mark ob-float" aria-hidden="true" style="width: 120px; height: 143px"></span></div></div>
+          </div>
+          <div class="ob-par ob-p2" style="position: absolute; left: 2%; top: 14%" aria-hidden="true"><div class="ob-st" style="--d: .26s"><div class="ob-glass ob-float2" style="width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #7C3AED"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"></path></svg></div></div></div>
+          <div class="ob-par ob-p2" style="position: absolute; right: 4%; top: 26%" aria-hidden="true"><div class="ob-st" style="--d: .34s"><div class="ob-glass ob-float" style="width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #7C3AED"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg></div></div></div>
+          <div class="ob-par ob-p2" style="position: absolute; left: 12%; bottom: 10%" aria-hidden="true"><div class="ob-st" style="--d: .42s"><div class="ob-glass ob-float" style="width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #367A22"><svg class="i" viewBox="0 0 24 24"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg></div></div></div>
+        </div>
+        <div style="flex: none; display: flex; flex-direction: column; gap: 10px; padding: 8px 0 14px; text-align: center; align-items: center">
+          <div class="ob-st" style="--d: .05s"><span class="t-over" style="color: #7C3AED">{{cct.onboarding.you_re_all_set}}</span></div>
+          <h1 class="ob-st" style="--d: .14s; font-size: 30px; line-height: 36px; font-weight: 800; letter-spacing: -0.03em">{{cct.onboarding.one_profile_for_work_hiring}}</h1>
+          <p class="ob-st t-b mut" style="--d: .24s">{{cct.onboarding.join_the_film_media_and}}</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- progress (slides 1–3: no drawer) + action drawer on slide 4 only -->
+  <div class="{{footCls}}">
+    <div class="row" style="gap: 6px" role="tablist" aria-label="{{cct.onboarding.onboarding_progress}}">
+      <sc-for list="{{segs}}" as="g" hint-placeholder-count="4"><button class="ob-seg" role="tab" aria-selected="{{g.on}}" aria-label="{{g.label}}" onClick="{{g.go}}"><span><i style="{{g.fill}}"></i></span></button></sc-for>
+      <span class="t-c b" style="width: 44px; text-align: right; color: #7C3AED; font-variant-numeric: tabular-nums" aria-live="polite">{{count}}</span>
+    </div>
+    <sc-if value="{{notLast}}" hint-placeholder-val="{{ true }}">
+      <div class="ob-hint" style="padding: 2px 0 4px"><span>{{cct.onboarding.swipe_or_tap_to_continue}}</span><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></div>
+    </sc-if>
+    <sc-if value="{{isLast}}" hint-placeholder-val="{{ false }}">
+      <div class="ob-cta-in" style="display: flex; flex-direction: column; gap: 8px; padding-top: 6px">
+        <a class="btn btn-p w100" href="Welcome.dc.html">{{cct.common.get_started}}<svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+        <a class="btn btn-t w100" href="LogIn.dc.html" style="min-height: 40px">{{cct.onboarding.i_already_have_an_account}}</a>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.N = 4; this.DUR = 5200;
+    this.reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.state = { i: 0, max: 0, gen: 0, dx: 0, dragging: false, paused: false };
+    this.stage = null; this.stageRef = (el) => { this.stage = el; };
+    this.p = null;
+    this.schedule(0, this.DUR);
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  schedule(i, ms) {
+    clearTimeout(this.t); this.t = null;
+    if (this.reduce || i >= this.N - 1) return;
+    this.left = ms; this.started = Date.now();
+    this.t = setTimeout(() => this.go(this.state.i + 1), ms);
+  }
+  go(n) {
+    n = Math.max(0, Math.min(this.N - 1, n));
+    const s = this.state;
+    this.setState({ i: n, max: Math.max(s.max, n), gen: s.gen + 1, dx: 0, dragging: false, paused: false });
+    this.schedule(n, this.DUR);
+  }
+  pause() {
+    if (!this.t) return;
+    clearTimeout(this.t); this.t = null;
+    this.left = Math.max(300, this.left - (Date.now() - this.started));
+    this.setState({ paused: true });
+  }
+  resume() {
+    if (!this.state.paused) return;
+    this.setState({ paused: false });
+    if (!this.reduce && this.state.i < this.N - 1) { this.started = Date.now(); this.t = setTimeout(() => this.go(this.state.i + 1), this.left); }
+  }
+  width() { return (this.stage && this.stage.clientWidth) || 390; }
+  renderVals() {
+    const s = this.state, N = this.N, w = this.width();
+    const frac = s.dx / w;
+    const pos = s.i - frac;
+    const slide = (k) => {
+      const rel = k - pos;
+      return { cls: 'ob-slide' + (k === s.i ? ' on' : ''), style: '--rel:' + rel.toFixed(3) + ';--relabs:' + Math.min(1, Math.abs(rel)).toFixed(3), hidden: k !== s.i };
+    };
+    const S = [0, 1, 2, 3].map(slide);
+    const anim = s.gen % 2 ? 'obfillA' : 'obfillB';
+    const last = s.i === N - 1;
+    return {
+      stageCls: 'ob-stage' + (s.dragging ? ' ob-drag' : ''),
+      trackStyle: 'transform:translate3d(calc(' + (-s.i * 25) + '% + ' + s.dx.toFixed(1) + cc("onboarding.px_0_0"),
+      c0: S[0].cls, c1: S[1].cls, c2: S[2].cls, c3: S[3].cls,
+      v0: S[0].style, v1: S[1].style, v2: S[2].style, v3: S[3].style,
+      h0: S[0].hidden, h1: S[1].hidden, h2: S[2].hidden, h3: S[3].hidden,
+      blobA: 'left:-80px;top:40px;width:300px;height:300px;background:rgba(155,123,247,.40);transform:translate3d(' + (-pos * 34).toFixed(1) + cc("onboarding.px") + (pos * 10).toFixed(1) + cc("onboarding.px_0"),
+      blobB: 'right:-90px;top:160px;width:260px;height:260px;background:rgba(255,182,110,.36);transform:translate3d(' + (-pos * 58).toFixed(1) + cc("onboarding.px_0_0_2"),
+      blobC: 'left:40px;bottom:120px;width:320px;height:240px;background:rgba(92,200,172,.34);transform:translate3d(' + (-pos * 20).toFixed(1) + cc("onboarding.px") + (-pos * 12).toFixed(1) + cc("onboarding.px_0"),
+      segs: [0, 1, 2, 3].map((k) => {
+        let fill;
+        if (k < s.i) fill = 'width:100%';
+        else if (k === s.i) fill = (this.reduce || last) ? 'width:100%;transition:width .5s ease' : 'width:0;animation:' + anim + ' ' + this.DUR + cc("onboarding.ms_linear_forwards_animation_play") + (s.paused || s.dragging ? 'paused' : 'running');
+        else if (k <= s.max) fill = 'width:100%;opacity:.35';
+        else fill = 'width:0';
+        return { on: k === s.i, label: cc("onboarding.slide") + (ccv(k) + 1) + cc("onboarding.of") + ccv(N) + (k <= s.max ? cc("onboarding.seen") : ''), fill, go: () => this.go(k) };
+      }),
+      count: '0' + (s.i + 1) + ' / 0' + N,
+      notLast: !last, isLast: last,
+      footCls: 'ob-foot' + (last ? ' ob-glass' : ''),
+      hintCls: 'ob-hintwrap' + (last ? ' off' : ''),
+      ctaCls: 'ob-cta' + (last ? '' : ' off'), ctaTab: last ? '0' : '-1',
+      down: (e) => {
+        if (e.button && e.button !== 0) return;
+        this.p = { x: e.clientX, y: e.clientY, id: e.pointerId, moved: false };
+        try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {}
+        this.pause();
+      },
+      move: (e) => {
+        if (!this.p || e.pointerId !== this.p.id) return;
+        let dx = e.clientX - this.p.x;
+        if (!this.p.moved && Math.abs(dx) < 6) return;
+        this.p.moved = true;
+        if ((s.i === 0 && dx > 0) || (s.i === N - 1 && dx < 0)) dx *= 0.35;
+        this.setState({ dx, dragging: true });
+      },
+      up: (e) => {
+        const p = this.p; this.p = null;
+        if (!p) return;
+        const dx = e.clientX - p.x;
+        if (p.moved) {
+          const lim = Math.min(80, this.width() * 0.18);
+          if (dx < -lim && s.i < N - 1) return this.go(s.i + 1);
+          if (dx > lim && s.i > 0) return this.go(s.i - 1);
+          this.setState({ dx: 0, dragging: false }); return this.resume();
+        }
+        const r = this.stage ? this.stage.getBoundingClientRect() : { left: 0, width: 390 };
+        const x = (e.clientX - r.left) / r.width;
+        if (x < 0.33) { if (s.i > 0) return this.go(s.i - 1); return this.resume(); }
+        if (s.i < N - 1) return this.go(s.i + 1);
+        this.resume();
+      },
+      cancel: () => { this.p = null; this.setState({ dx: 0, dragging: false }); this.resume(); },
+      key: (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); this.go(s.i + 1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); this.go(s.i - 1); }
+        else if (e.key === 'Home') { e.preventDefault(); this.go(0); }
+        else if (e.key === 'End') { e.preventDefault(); this.go(N - 1); }
+      }
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

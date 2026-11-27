@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Switch role — subscription &amp; offering</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+/* Combined Subscription & Role Offering screen — shown before any role or Crew mode is switched on. */
+.rs-switch{display:grid;grid-template-columns:1fr auto 1.25fr;align-items:center;gap:10px}
+.rs-from{padding:12px;border-radius:16px;background:rgba(255,255,255,.42);border:1px dashed rgba(101,39,200,.22);display:flex;flex-direction:column;gap:4px;min-width:0}
+.rs-to{position:relative;overflow:hidden;padding:12px 14px;border-radius:18px;color:#fff;display:flex;flex-direction:column;gap:4px;min-width:0;box-shadow:0 14px 30px -14px rgba(24,44,30,.55),inset 0 1px 0 rgba(255,255,255,.25)}
+.rs-to::after{content:"";position:absolute;right:-24px;top:-24px;width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.14)}
+.rs-arrow{width:32px;height:32px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:var(--glass-fill-hi);border:1px solid rgba(255,255,255,.9);box-shadow:var(--glass-sh);color:#7C3AED}
+.rs-k{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.rs-n{font-size:15px;font-weight:750;letter-spacing:-.01em;line-height:19px}
+.rs-feat{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(101,39,200,.08)}
+.rs-feat:last-child{border-bottom:0}
+.rs-ico{width:36px;height:36px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center}
+.rs-price{display:flex;align-items:flex-end;gap:6px}
+.rs-amt{font-size:38px;line-height:40px;font-weight:800;letter-spacing:-.03em;color:#1A1820}
+.rs-st{animation:rsUp .42s cubic-bezier(.22,1,.36,1) both}
+@keyframes rsUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes rsPop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.rs-pop{animation:rsPop .45s cubic-bezier(.34,1.45,.64,1) both}
+@media (prefers-reduced-motion:reduce){.rs-st,.rs-pop{animation:none}}
+</style>
+</helmet>
+<div class="ph bg-alt">
+  <div class="bar">
+    <a class="iconbtn" href="{{back}}" aria-label="{{cct.role_subscribe.go_back_without_switching}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a>
+    <div class="ttl">{{cct.role_subscribe.switch_role}}</div>
+    <span class="badge b-y" style="margin-right: 12px">{{cct.common.premium}}</span>
+  </div>
+
+  <div class="sc" style="padding-top: 10px; gap: 16px">
+    <!-- 1 · Current role → destination role -->
+    <div class="rs-st" style="--d: 0s">
+      <div class="t-h1">{{headline}}</div>
+      <p class="t-s mut" style="margin-top: 4px">{{subline}}</p>
+    </div>
+    <div class="rs-switch rs-st" style="animation-delay: .05s" role="group" aria-label="{{cct.role_subscribe.role_change_from}}{{fromLabel}}{{cct.role_subscribe.to}}{{toLabel}}">
+      <div class="rs-from"><span class="rs-k" style="color: #615C6D">{{cct.role_subscribe.current_role}}</span><span class="rs-n" style="color: #4A4552">{{fromLabel}}</span><span class="t-c mut">{{cct.role_subscribe.active_now}}</span></div>
+      <span class="rs-arrow" aria-hidden="true"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+      <div class="rs-to" style="{{toStyle}}"><span class="rs-k">{{cct.role_subscribe.switching_to}}</span><span class="rs-n">{{toLabel}}</span><span class="t-c" style="color: rgba(255,255,255,.85)">{{toTag}}</span></div>
+    </div>
+
+    <!-- 2 · Offerings of the destination role -->
+    <div class="card rs-st" style="gap: 2px; animation-delay: .1s">
+      <div class="row"><div class="t-over sp">{{cct.role_subscribe.what_you_get_as}}{{toLabel}}</div><span class="t-c mut">{{featCount}}</span></div>
+      <sc-for list="{{feats}}" as="f" hint-placeholder-count="5">
+        <div class="rs-feat"><span class="rs-ico" style="{{f.icoStyle}}"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="{{f.icon}}"></path></svg></span><div class="sp"><div class="t-s b">{{f.t}}</div><div class="t-c mut" style="margin-top: 2px">{{f.d}}</div></div></div>
+      </sc-for>
+    </div>
+
+    <!-- 3 · Pricing -->
+    <div class="card tint-p rs-st" style="gap: 10px; animation-delay: .15s">
+      <div class="row"><div class="sp"><div class="t-over" style="color: #7C3AED">{{toLabel}}{{cct.role_subscribe.subscription}}</div><div class="rs-price" style="margin-top: 6px"><span class="rs-amt">{{price}}</span><span class="t-s mut b" style="padding-bottom: 6px">{{cct.r2.month_2}}</span></div><sc-if value="{{tentative}}" hint-placeholder-val="{{ false }}"><span class="ph-tag" style="margin-top: 4px">{{cct.r2.tentative_pending_final_pricing}}</span></sc-if></div><span class="badge b-g">{{cct.role_subscribe.all_features_above}}</span></div>
+      <div class="hr" style="margin: 2px 0"></div>
+      <div class="kv"><span>{{cct.role_subscribe.billing}}</span><span>{{cct.role_subscribe.one_time}} <span>{{cct.common.duration_tbc}}</span></span></div>
+      <div class="kv"><span>{{cct.common.auto_renewal}}</span><span>{{cct.role_subscribe.off_renew_manually}}</span></div>
+      <div class="kv"><span>{{cct.role_subscribe.your_current_role}}</span><span>{{keepLine}}</span></div>
+    </div>
+    <p class="help rs-st" style="text-align: center; animation-delay: .2s">{{toLabel}}{{cct.role_subscribe.turns_on_only_after_payment}}{{fromLabel}}{{cct.role_subscribe.with_nothing_changed}}</p>
+  </div>
+
+  <div class="foot" style="flex-direction: column; gap: 8px">
+    <button class="btn btn-p w100" onClick="{{openPay}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg>{{cct.r2.continue_to_payment}} {{price}}</button>
+    <a class="btn btn-t w100" href="{{back}}">{{cct.role_subscribe.go_back_keep}}{{fromLabel}}</a>
+  </div>
+
+  <!-- Payment -->
+  <sc-if value="{{payOpen}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim">
+      <div class="sheet" role="dialog" aria-modal="true" aria-label="{{cct.role_subscribe.payment_for}}{{toLabel}}" style="gap: 14px">
+        <div class="grab"></div>
+        <sc-if value="{{payForm}}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <div class="row"><div class="t-h2 sp">{{cct.common.payment}}</div><button class="btn btn-t btn-sm" onClick="{{closePay}}">{{cct.common.cancel}}</button></div>
+            <div class="card" style="gap: 2px; background: rgba(255,255,255,.55)">
+              <div class="kv"><span>{{cct.common.plan}}</span><span>{{toLabel}}{{cct.role_subscribe.premium}}</span></div>
+              <div class="kv"><span>{{cct.role_subscribe.switching_from}}</span><span>{{fromLabel}}</span></div>
+              <div class="hr" style="margin: 6px 0"></div>
+              <div class="kv" style="font-size: 17px"><span style="color: #1A1820; font-weight: 700">{{cct.common.total}}</span><span style="font-weight: 800">{{price}} INR</span></div>
+            </div>
+            <div class="alert a-i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.01"></path></svg><div>{{cct.role_subscribe.payment_method_and_gateway}} <span class="ph-tag">{{cct.common.payment_flow_tbc}}</span></div></div>
+            <sc-if value="{{paying}}" hint-placeholder-val="{{ false }}"><button class="btn btn-p w100" aria-busy="true"><span class="spin"></span>{{cct.r2.processing}} {{price}}…</button></sc-if>
+            <sc-if value="{{notPaying}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{pay}}">{{cct.r2.pay}} {{price}}</button></sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{paid}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 8px 0 4px" role="status">
+            <span class="glass-tick rs-pop" style="width: 64px; height: 64px; border-radius: 32px; color: #fff; display: flex; align-items: center; justify-content: center"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 30px; height: 30px; stroke-width: 3"><path d="m5 12 5 5 9-10"></path></svg></span>
+            <div class="t-h2">{{cct.role_subscribe.payment_received}}</div>
+            <div class="t-s mut">{{price}} {{cct.r2.paid_setting_up}} {{toLabel}}…</div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"to":{"editor":"enum","options":["post","seek","crew","vendor"],"default":"post"},"from":{"editor":"text","default":"Crew Member (finding work)"},"back":{"editor":"text","default":"SeekerHome.dc.html"},"act":{"editor":null},"onDone":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { pay: '' }; }
+  componentWillUnmount() { clearTimeout(this.a); clearTimeout(this.b); }
+  renderVals() {
+    const s = this.state;
+    const to = this.props.to || 'post';
+    const I = {
+      brief: 'M3 7h18v13H3zM9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18', ppl: 'M9 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6',
+      srch: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-3.5-3.5', star: 'm12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z', bell: 'M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0',
+      list: 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01', cal: 'M3 5h18v16H3zM8 3v4M16 3v4M3 10h18', cube: 'M3 7.5 12 3l9 4.5v9L12 21l-9-4.5zM3 7.5 12 12l9-4.5M12 12v9',
+      shop: 'M4 9 5.5 4h13L20 9M4 9h16v2a3 3 0 0 1-5.3 2 3 3 0 0 1-5.4 0A3 3 0 0 1 4 11zM5 13v7h14v-7', eye: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',
+      inv: 'M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6', chart: 'M4 20V10M10 20V4M16 20v-7M22 20H2', badge: 'M12 2 4 6v6c0 5 3.5 8.6 8 10 4.5-1.4 8-5 8-10V6z'
+    };
+    // Each destination role carries its own offering — nothing is shared or hard-coded across roles.
+    const R = {
+      post: { label: 'Job Poster', tag: cc("role_subscribe.hire_crew_for_productions"), tint: ['#8A4DF2', '#6527C8'], ico: ['#EFEAFE', '#7C3AED'],
+        head: cc("role_subscribe.start_hiring_on_crewconnect"), sub: cc("role_subscribe.post_jobs_review_applicants_and"),
+        f: [['brief', cc("common.post_jobs"), cc("role_subscribe.create_review_and_publish_job")], ['ppl', cc("common.review_applicants"), cc("role_subscribe.profiles_statuses_shortlists_and_availability")], ['srch', cc("common.find_talent"), cc("role_subscribe.search_the_crew_directory_by")], ['star', cc("role_subscribe.featured_job_posts"), cc("role_subscribe.your_posts_are_highlighted_to")], ['badge', cc("common.currently_hiring_badge"), cc("role_subscribe.shown_on_your_profile_while")]] },
+      seek: { label: 'Job Seeker', tag: cc("common.find_work_and_apply"), tint: ['#9366F5', '#7C3AED'], ico: ['#EFEAFE', '#7C3AED'],
+        head: cc("role_subscribe.start_finding_work"), sub: cc("role_subscribe.get_matched_to_jobs_apply"),
+        f: [['srch', cc("common.find_jobs_2"), cc("common.recommended_and_saved_jobs_search")], ['list', cc("common.applications"), cc("role_subscribe.track_applied_under_review_and")], ['bell', cc("role_subscribe.daily_job_digest_and_alerts"), cc("role_subscribe.new_jobs_that_match_your")], ['cal', cc("common.availability_calendar"), cc("role_subscribe.let_posters_see_when_you")], ['ppl', cc("role_subscribe.visible_in_find_talent"), cc("role_subscribe.job_posters_can_discover_and")]] },
+      crew: { label: cc("common.crew_member"), tag: cc("role_subscribe.work_on_productions"), tint: ['#8A4DF2', '#6527C8'], ico: ['#EFEAFE', '#7C3AED'],
+        head: cc("role_subscribe.join_productions_as_crew"), sub: cc("role_subscribe.add_a_crew_profile_to"),
+        f: [['brief', cc("role_subscribe.find_work_and_apply"), cc("role_subscribe.jobs_matched_to_your_department")], ['ppl', cc("role_subscribe.post_jobs_and_hire"), cc("role_subscribe.turn_on_job_poster_any")], ['cal', cc("common.availability_calendar"), cc("role_subscribe.mark_booked_and_free_dates")], ['srch', cc("role_subscribe.crew_profile_in_find_talent"), cc("role_subscribe.your_work_titles_skills_and")], ['bell', cc("role_subscribe.job_digest_and_alerts"), cc("role_subscribe.new_matching_jobs_delivered_daily")]] },
+      vendor: { label: 'Product Provider', tag: cc("role_subscribe.rent_or_sell_equipment"), tint: ['#3F8A28', '#2C6619'], ico: ['#E6F2DC', '#367A22'],
+        head: cc("role_subscribe.start_renting_and_selling_gear"), sub: cc("role_subscribe.list_equipment_and_products_for"),
+        f: [['cube', cc("role_subscribe.list_equipment_and_products"), cc("role_subscribe.publish_items_to_rent_sell")], ['shop', cc("common.public_product_page"), cc("role_subscribe.your_business_listings_and_contact")], ['eye', cc("common.contact_reveals"), cc("role_subscribe.see_who_viewed_your_contact")], ['inv', 'Invoices', cc("role_subscribe.create_share_and_track_invoices")], ['chart', cc("role_subscribe.higher_visibility"), cc("role_subscribe.featured_placement_in_discover_products")]] }
+    };
+    const D = R[to] || R.post;
+    // R3: Premium Crew Member ₹299/month; Vendor ₹399/month (tentative).
+    const price = to === 'vendor' ? '₹399' : '₹299';
+    const from = this.props.from || cc("common.crew_member");
+    const done = () => { const f = this.props.onDone; if (typeof f === 'function') f(); };
+    return {
+      price, tentative: to === 'vendor',
+      headline: D.head, subline: D.sub, fromLabel: from, toLabel: D.label, toTag: D.tag,
+      toStyle: 'background:linear-gradient(150deg,' + D.tint[0] + ' 0%,' + D.tint[1] + ' 100%)',
+      featCount: D.f.length + cc("role_subscribe.features"),
+      feats: D.f.map(([ic, t, d]) => ({ t, d, icon: I[ic], icoStyle: 'background:linear-gradient(150deg,#fff,' + D.ico[0] + cc("role_subscribe.color") + D.ico[1] + ';box-shadow:inset 0 0 0 1px rgba(255,255,255,.9)' })),
+      keepLine: cc("role_subscribe.stays_active") + ccv(from) + ')',
+      back: this.props.back || 'SeekerHome.dc.html',
+      payOpen: !!s.pay, payForm: s.pay === 'form' || s.pay === 'paying', paying: s.pay === 'paying', notPaying: s.pay === 'form', paid: s.pay === 'paid',
+      openPay: () => this.setState({ pay: 'form' }), closePay: () => this.setState({ pay: '' }),
+      pay: () => {
+        this.setState({ pay: 'paying' });
+        this.a = setTimeout(() => {
+          this.setState({ pay: 'paid' });
+          const act = this.props.act; if (typeof act === 'function') act('plan', to === 'post' ? 'poster' : to === 'vendor' ? 'vendor' : 'seeker', 'active');
+          this.b = setTimeout(done, 1100);
+        }, 1200);
+      }
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>

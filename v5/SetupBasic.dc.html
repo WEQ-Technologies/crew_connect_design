@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Set up your profile</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph bg-alt">
+  <div class="bar">
+    <div class="ttl" style="padding-left: 12px">{{cct.common.basic_profile}}</div>
+    <span class="t-s mut b" style="padding-right: 12px">{{cct.setup_basic.step_1_of_2}}</span>
+  </div>
+  <div style="padding: 0 20px 4px"><div class="stepper"><div class="on"></div><div></div></div></div>
+
+  <div class="sc" style="padding-top: 20px; gap: 20px">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div class="badge b-g" style="align-self: flex-start"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg> {{cct.common.email_verified}}</div>
+      <h1 class="t-d">{{cct.setup_basic.set_up_your_profile}}</h1>
+      <p class="t-b mut">{{cct.setup_basic.just_the_basics_for_now}}</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+      <button onClick="{{openPick}}" aria-label="{{photoAria}}" style="position: relative; width: 112px; height: 112px; border-radius: 56px; padding: 0; border: 0; background: transparent; cursor: pointer">
+        <sc-if value="{{hasPhoto}}" hint-placeholder-val="{{ false }}">
+          <span class="me-photo" style="width: 112px; height: 112px; border-radius: 56px; overflow: hidden; display: flex; background-color: #EFEAFE; background-position: center 35%; background-size: cover; background-repeat: no-repeat; box-shadow: 0 12px 28px -12px rgba(24,44,30,.45), 0 0 0 3px rgba(255,255,255,.9)" role="img" aria-label="{{cct.common.your_profile_picture}}"></span>
+        </sc-if>
+        <sc-if value="{{noPhoto}}" hint-placeholder-val="{{ true }}">
+          <span style="width: 112px; height: 112px; border-radius: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #7C3AED; background: rgba(255,255,255,.6); border: 2px dashed #C4B1FA; -webkit-backdrop-filter: blur(18px) saturate(165%); backdrop-filter: blur(18px) saturate(165%)"><span style="font-size: 28px; font-weight: 800; letter-spacing: -0.02em">{{ini}}</span></span>
+        </sc-if>
+        <span style="position: absolute; right: 2px; bottom: 2px; width: 36px; height: 36px; border-radius: 18px; background: #7C3AED; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px #fff"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg></span>
+      </button>
+      <div class="t-s b" style="color: #7C3AED">{{photoLabel}}</div>
+      <span class="help" style="text-align: center">{{cct.setup_basic.profile_picture}} <span class="opt">{{cct.common.optional}}</span> {{cct.setup_basic.jpg_or_png_max}} <span class="ph-tag">{{cct.setup_basic.size_tbc}}</span></span>
+    </div>
+
+    <div class="fld"><label class="lbl" for="nm">{{cct.common.full_name}} <span class="req">*</span></label><input id="nm" class="{{nameCls}}" placeholder="{{cct.setup_basic.e_g_priya_nair}}" value="{{name}}" onChange="{{onName}}" autocomplete="name">
+      <sc-if value="{{nameErr}}" hint-placeholder-val="{{ false }}"><span class="errt"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg>{{cct.setup_basic.enter_your_full_name}}</span></sc-if>
+    </div>
+    <div class="fld"><label class="lbl" for="em">{{cct.common.email}}</label><div style="position: relative"><input id="em" class="inp ro" type="email" value="{{email}}" readonly="" disabled="" aria-readonly="true" aria-describedby="em-help" style="width: 100%; box-sizing: border-box; padding-right: 44px; cursor: not-allowed; -webkit-text-fill-color: var(--ink2); opacity: 1"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #8A8594"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></div><span id="em-help" class="help">{{cct.setup_basic.your_verified_sign_up_email}}</span></div>
+    <div class="fld"><label class="lbl" for="pn">{{cct.setup_basic.phone_number}} <span class="opt">{{cct.common.optional}}</span></label><div class="pre"><span>{{cct.common.t_91}}</span><input id="pn" type="tel" inputmode="tel" placeholder="98765 43210" value="{{phone}}" onChange="{{onPhone}}"></div><span class="help">{{cct.setup_basic.shown_as_contact_information_only}}</span></div>
+    <div class="fld" role="radiogroup" aria-labelledby="plan-l">
+      <span class="lbl" id="plan-l">{{cct.r2.choose_your_plan}} <span class="req">*</span></span>
+      <button type="button" class="{{freeCls}}" role="radio" aria-checked="{{isFree}}" onClick="{{pickFree}}">
+        <span class="{{freeRadio}}" aria-hidden="true"></span>
+        <span class="sp"><span class="row" style="gap: 8px"><span class="pp sp">{{cct.r2.free}}</span><span class="t-s b">{{cct.r2.t_0}}</span></span>
+          <ul><li>{{cct.r2.create_your_profile_and_discover_jobs}}</li><li>{{cct.r2.apply_to_jobs_and_post_jobs}}</li><li>{{cct.r2.follow_connect_and_read_forum_association_notices}}</li></ul></span>
+      </button>
+      <button type="button" class="{{premCls}}" role="radio" aria-checked="{{isPrem}}" onClick="{{pickPrem}}">
+        <span class="{{premRadio}}" aria-hidden="true"></span>
+        <span class="sp"><span class="row" style="gap: 8px"><span class="pp sp">{{cct.r2.premium}}</span><span class="t-s b">{{cct.r2.t_299_month}}</span></span>
+          <ul><li>{{cct.r2.job_match_alerts_and_notifications_that_explain}}</li><li>{{cct.r2.pin_forums_for_your_work_titles_to}}</li><li>{{cct.r2.invoice_management_required_for_vendors}}</li><li>{{cct.r2.talent_and_vendor_search_with_all_filters}}</li></ul></span>
+      </button>
+      <span class="help">{{cct.r2.premium_is_billed_monthly_and_stays_active}}</span>
+      <sc-if value="{{isPrem}}" hint-placeholder-val="{{ false }}"><div class="alert a-i"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg><div>{{cct.r2.you_will_pay_for_premium_after_your}} <span class="ph-tag">{{cct.r2.payment_gateway_screen_pending_client_decision}}</span></div></div></sc-if>
+    </div>
+  </div>
+
+  <div class="foot">
+    <sc-if value="{{valid}}" hint-placeholder-val="{{ false }}"><a class="btn btn-p w100" href="CompleteProfile.dc.html">{{cct.common.save_and_continue}}</a></sc-if>
+    <sc-if value="{{invalid}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p w100" onClick="{{submit}}">{{cct.common.save_and_continue}}</button></sc-if>
+  </div>
+
+  <sc-if value="{{pick}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim" onClick="{{closePick}}">
+      <div class="sheet" role="dialog" aria-modal="true" aria-label="{{cct.setup_basic.profile_picture}}" onClick="{{stop}}">
+        <div class="grab"></div>
+        <div class="t-h2">{{cct.setup_basic.profile_picture}}</div>
+        <div class="list">
+          <button class="li" onClick="{{choose}}" style="min-height: 52px"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg></span><span class="sp t-s b" style="text-align: left">{{cct.setup_basic.take_photo}}</span></button>
+          <button class="li" onClick="{{choose}}" style="min-height: 52px"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 16-5-5-9 9"></path></svg></span><span class="sp t-s b" style="text-align: left">{{cct.setup_basic.choose_from_library}}</span></button>
+          <sc-if value="{{hasPhoto}}" hint-placeholder-val="{{ false }}"><button class="li" onClick="{{remove}}" style="min-height: 52px"><span class="sq" style="width: 36px; height: 36px; border-radius: 10px; background: #FDECEA; color: #B42318; border-color: #F6C9C3"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></span><span class="sp t-s b" style="text-align: left; color: #B42318">{{cct.setup_basic.remove_photo}}</span></button></sc-if>
+        </div>
+        <button class="btn btn-t w100" onClick="{{closePick}}">{{cct.common.cancel}}</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"act":{"editor":null},"email":{"editor":"text","default":""},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { name: '', email: p.email || cc("common.priya_nair_gmail_com"), phone: '', photo: false, pick: false, tried: false, plan: 'free' }; }
+  renderVals() {
+    const s = this.state, act = this.props.act || (() => {});
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.email.trim());
+    // Email is the verified sign-up email: shown read-only, never validated or edited here.
+    const valid = !!s.name.trim();
+    const ini = s.name.trim() ? s.name.trim().split(/\s+/).map((x) => x[0]).join('').slice(0, 2).toUpperCase() : '+';
+    const setPhoto = (v) => { this.setState({ photo: v, pick: false }); act('photo', v); };
+    return {
+      hasPhoto: s.photo, noPhoto: !s.photo, ini,
+      photoLabel: s.photo ? cc("common.change_photo") : cc("setup_basic.add_a_profile_picture"),
+      photoAria: s.photo ? cc("setup_basic.change_profile_picture") : cc("setup_basic.add_a_profile_picture"),
+      pick: s.pick, openPick: () => this.setState({ pick: true }), closePick: () => this.setState({ pick: false }), stop: (e) => e.stopPropagation(),
+      choose: () => setPhoto(true), remove: () => setPhoto(false),
+      name: s.name, email: s.email,
+      nameErr: s.tried && !s.name.trim(), nameCls: s.tried && !s.name.trim() ? 'inp bad' : 'inp',
+      emailErr: s.tried && !emailOk, emailCls: s.tried && !emailOk ? 'inp bad' : 'inp',
+      onName: (e) => { this.setState({ name: e.target.value }); act('name', e.target.value.trim()); },
+      onEmail: (e) => this.setState({ email: e.target.value }),
+      phone: s.phone, onPhone: (e) => { this.setState({ phone: e.target.value }); act('profile', { phone: e.target.value.trim() }); },
+      isFree: s.plan === 'free', isPrem: s.plan === 'premium',
+      freeCls: s.plan === 'free' ? 'plan-opt on' : 'plan-opt', premCls: s.plan === 'premium' ? 'plan-opt on' : 'plan-opt',
+      freeRadio: s.plan === 'free' ? 'radio on' : 'radio', premRadio: s.plan === 'premium' ? 'radio on' : 'radio',
+      pickFree: () => { this.setState({ plan: 'free' }); act('setupPlan', 'free'); }, pickPrem: () => { this.setState({ plan: 'premium' }); act('setupPlan', 'premium'); },
+      valid, invalid: !valid, submit: () => this.setState({ tried: true })
+    };
+  }
+}
+ccHook(Component, ["name","email","phone"]);
+</script>
+</body>
+</html>

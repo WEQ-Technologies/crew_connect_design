@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home feed — before / after</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div style="padding: 40px; display: flex; flex-direction: column; gap: 28px; background: #EEF4EC; min-height: 100%">
+  <div style="max-width: 1100px"><div class="t-over">Home feed · Crew Member</div><div class="t-d" style="margin-top: 4px">Before / after</div><p class="t-b mut" style="margin-top: 6px">The busiest case — a user with active posts, new applicants and pending applications — before and after the refinement.</p></div>
+  <div style="display: flex; gap: 32px; align-items: flex-start">
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #7C3AED">Before</div><div class="t-h3">Current Home (v81)</div><div class="t-c mut">Context cards + search + filter chips + type chips + one mixed feed</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #E1EADF; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative; background: #F3F8F1">
+        <dc-import name="HomeBefore" store="{{sBoth}}" act="{{act}}" hint-size="390px,844px"></dc-import>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 390px; flex: none">
+      <div><div class="t-over" style="color: #7C3AED">After</div><div class="t-h3">Refined Home</div><div class="t-c mut">Ordered sections · alerts under the bell · filters moved to See all</div></div>
+      <div style="width: 390px; height: 844px; border-radius: 28px; overflow: hidden; border: 1px solid #E1EADF; box-shadow: 0 12px 32px rgba(26,24,32,.10); position: relative; background: #F3F8F1">
+        <dc-import name="SeekerHome" store="{{sBoth}}" act="{{act}}" hint-size="390px,844px"></dc-import>
+      </div>
+    </div>
+    <div style="width: 420px; flex: none; display: flex; flex-direction: column; gap: 14px">
+      <div class="t-h2">What changed</div>
+      <div class="card" style="gap: 8px"><div class="t-over" style="color: #367A22">Moved to the bell</div><div class="t-s">“Your hiring” and “Your applications” cards removed from Home. New applicants, the &gt;5 applications alert and application status changes are reached from the notification bell only (no duplicate on Home).</div></div>
+      <div class="card" style="gap: 8px"><div class="t-over" style="color: #B42318">Removed from Home</div><div class="t-s">Search bar, Skill / Role / Location filter chips and the All · Jobs · Crew · Network type chips. Filters now live on the See all screens (Discover jobs, Find talent). The mixed, interleaved feed is gone.</div></div>
+      <div class="card" style="gap: 8px"><div class="t-over" style="color: #7C3AED">Reordered into fixed sections</div><div class="t-s">1 Jobs for you (3 cards + subtle Premium summary) → 2 Crew to connect with / Crew for your open roles (3 cards) → 3 From your network (3 rows). Same header style and “See all” placement on every section.</div></div>
+      <div class="card" style="gap: 8px"><div class="t-over">Card rules</div><div class="t-s">Job card: title, production house, location, duration, dates, posted time, one primary action (View &amp; apply); Save / Share / Not interested in the ⋯ menu. Crew card: photo, name, Work Title(s), department, availability, mutual connections, one primary action (Connect); Follow / Hide in the ⋯ menu.</div></div>
+      <div class="card" style="gap: 8px"><div class="t-over">Moved</div><div class="t-s">“Hiring for a project?” prompt now sits inside the Crew section (new users only). The Premium digest card became one subtle row at the end of Jobs for you.</div></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1400, "height": 1040}}'>
+class Component extends DCLogic {
+  crewData(kind) {
+    if (kind === 'new') return { hiring: { setup: false, desig: '', companies: [] }, posts: [], apps: [], saved: {}, flash: null, avail: {} };
+    return {
+      hiring: { setup: true, desig: 'Focus Puller', companies: ['Lantern Pictures', 'Third Bell Collective'] },
+      posts: [
+        { id: 'p1', title: '2nd Assistant Camera — Feature Film', house: 'Lantern Pictures', ptype: 'Feature Film', cat: 'Camera', loc: 'Film City, Mumbai', dur: '32 days', dates: '4 Nov 2026 – 12 Dec 2026', start: '2026-11-04', end: '2026-12-12', pay: '₹4,000 – ₹6,000 per day', st: 'Active', apps: 7, newA: 3, posted: '2d ago' },
+        { id: 'p2', title: '1st Assistant Camera — Short Film', house: 'Third Bell Collective', ptype: 'Short Film', cat: 'Camera', loc: 'Pune', dur: '4 days', dates: '20 Nov 2026 – 23 Nov 2026', start: '2026-11-20', end: '2026-11-23', pay: '₹5,000 per day', st: 'Active', apps: 2, newA: 0, posted: '5d ago' },
+        { id: 'p3', title: 'Camera Trainee — Short Film', house: 'Third Bell Collective', ptype: 'Short Film', cat: 'Camera', loc: 'Pune', dur: '4 days', dates: '20 Nov 2026 – 23 Nov 2026', start: '2026-11-20', end: '2026-11-23', pay: 'Not specified', st: 'Active', apps: 0, newA: 0, posted: 'Yesterday' },
+        { id: 'p4', title: 'Focus Puller — Music Video', house: 'Lantern Pictures', ptype: 'Other · Music video', cat: 'Camera', loc: 'Versova, Mumbai', dur: '3 days', dates: '10 Oct 2026 – 12 Oct 2026', start: '2026-10-10', end: '2026-10-12', pay: '₹7,000 per day', st: 'Closed', apps: 12, newA: 0, posted: 'Closed 9 Oct' }
+      ],
+      apps: [
+        { variant: 'main', title: 'Focus Puller — Feature Film (Hindi), 32-day schedule', org: 'Lantern Pictures', loc: 'Film City, Mumbai', dur: '32 days', status: 'Shortlisted', applied: '26 Oct 2026', isNew: true },
+        { variant: 'disc', title: 'Second Unit Camera Operator — Action Feature', org: 'Redline Motion Pictures', loc: 'Ramoji Film City, Hyderabad', dur: '18 days', status: 'Under Review', applied: '29 Oct 2026' },
+        { variant: 'tvc', title: 'Focus Puller — TVC, 2-day shoot', org: 'Pinewood Ads', loc: 'Bandra, Mumbai', dur: '2 days', status: 'Applied', applied: '1 Nov 2026' },
+        { variant: 'mv', title: 'Camera Operator — Music Video', org: 'Bluebird Records', loc: 'Versova, Mumbai', dur: '3 days', status: 'Rejected', applied: '9 Oct 2026' }
+      ],
+      saved: { 'Gaffer — TVC, 2-day shoot': true }, flash: null, avail: {}
+    };
+  }
+  renderVals() {
+    const both = this.crewData('active');
+    const mk = (crew) => ({ crew, conn: {}, plans: { seeker: 'free' } });
+    return {
+      sNew: mk(this.crewData('new')),
+      sApps: mk({ ...both, posts: [], hiring: { setup: false, desig: '', companies: [] } }),
+      sPosts: mk({ ...both, apps: [] }),
+      sBoth: mk(both), yes: true, act: () => {}
+    };
+  }
+}
+</script>
+</body>
+</html>

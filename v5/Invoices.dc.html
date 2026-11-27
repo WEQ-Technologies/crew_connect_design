@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invoices</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+</style>
+</helmet>
+<div class="ph">
+  <!-- Create invoice: bottom-right floating button, same position and style as Add listing -->
+  <a class="fab" href="InvoiceCreate.dc.html" style="z-index: 20"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{cct.invoices.create_invoice}}</a>
+  <div class="bar">
+    <sc-if value="{{isPoster}}" hint-placeholder-val="{{ false }}"><a class="iconbtn" href="PosterProfile.dc.html" aria-label="{{cct.common.back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a></sc-if>
+    <div class="ttl" style="padding-left: 12px; font-size: 20px">{{cct.common.invoices}}</div>
+  </div>
+  <div style="flex: none; padding: 4px 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <div class="card" style="padding: 12px; gap: 2px"><div class="t-c mut">{{cct.common.outstanding}}</div><div class="t-h2">{{cct.common.inr_1_53_400}}</div><div class="t-c" style="color: #B42318; font-weight: 700">{{cct.common.t_1_overdue}}</div></div>
+      <div class="card" style="padding: 12px; gap: 2px"><div class="t-c mut">{{cct.invoices.paid_in_october}}</div><div class="t-h2">{{cct.common.inr_82_600}}</div><div class="t-c" style="color: #367A22; font-weight: 700">{{cct.common.t_2_invoices}}</div></div>
+    </div>
+    <div class="srch"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{cct.invoices.search_by_client_or_invoice}}" value="{{q}}" onChange="{{onQ}}" aria-label="{{cct.invoices.search_invoices}}"></div>
+    <div class="row" style="gap: 10px"><button class="{{fBtnCls}}" onClick="{{openF}}" aria-label="{{cct.invoices.open_filters}}{{fN}}{{cct.invoices.selected}}" style="display: inline-flex; align-items: center; gap: 6px; flex: none"><svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>{{cct.common.filters}}<sc-if value="{{fHasN}}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #fff; color: #7C3AED; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">{{fN}}</span></sc-if></button><span class="t-c mut trunc sp">{{fSummary}}</span></div>
+  </div>
+  <div class="sc" style="padding-top: 0; gap: 12px; padding-bottom: 96px">
+    <div class="list">
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+        <a class="li" href="InvoiceDetail.dc.html" style="align-items: flex-start; padding: 14px 16px">
+          <div class="sp"><div class="t-h3 trunc">{{r.client}}</div><div class="t-c mut" style="margin-top: 2px">{{r.no}} · {{r.date}}</div></div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px">
+            <span class="t-s b">{{r.amt}}</span>
+            <span class="{{r.badge}}">
+              <sc-if value="{{r.iSent}}" hint-placeholder-val="{{ true }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg></sc-if>
+              <sc-if value="{{r.iPaid}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if>
+              <sc-if value="{{r.iOver}}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.01"></path></svg></sc-if>
+              {{r.st}}
+            </span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="empty"><div class="ring"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></div><div class="t-h3">{{cct.invoices.no_invoices_match}}</div><div class="t-s mut">{{cct.invoices.try_another_status_or_search}}</div><a class="btn btn-p btn-sm" href="InvoiceCreate.dc.html">{{cct.invoices.create_invoice}}</a></div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{fOpen}}" hint-placeholder-val="{{ false }}"><dc-import name="FiltersPage" title="{{fTitle}}" sections="{{fSecs}}" value="{{fVal}}" preview="{{fPrev}}" noun="{{fNoun}}" onApply="{{fApply}}" onClose="{{fClose}}" hint-size="390px,844px" style="position: absolute; inset: 0; z-index: 60"></dc-import></sc-if>
+  <sc-if value="{{hasNav}}" hint-placeholder-val="{{ true }}">
+    <dc-import name="RoleNav" fit="yes" active="invoices" hint-size="390px,80px"></dc-import>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"role":{"editor":"enum","options":["seeker","poster","vendor"],"default":"seeker"},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.data = [
+      { no: cc("common.inv_2026_014"), client: cc("common.lantern_pictures"), date: '18 Oct 2026', amt: cc("common.inr_76_700"), st: 'Sent' },
+      { no: cc("invoices.inv_2026_013"), client: 'Northlight Studios', date: cc("invoices.t_2_oct_2026"), amt: cc("common.inr_76_700"), st: 'Overdue' },
+      { no: cc("invoices.inv_2026_012"), client: cc("common.pinewood_ads"), date: cc("invoices.t_28_sep_2026"), amt: cc("invoices.inr_23_600"), st: 'Paid' },
+      { no: cc("invoices.inv_2026_011"), client: cc("invoices.third_bell_collective_short_film"), date: cc("invoices.t_20_sep_2026"), amt: cc("invoices.inr_59_000"), st: 'Paid' }
+    ];
+    this.state = { q: '', tab: 'All' };
+  }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const role = this.props.role ?? 'seeker';
+    const bc = { Sent: 'badge b-p', Paid: 'badge b-g', Overdue: 'badge b-e' };
+    const list = this.data.filter((r) => (Array.isArray(s.tab) ? (!s.tab.length || s.tab.indexOf(r.st) >= 0) : (s.tab === 'All' || r.st === s.tab)) && (!q || (r.no + r.client).toLowerCase().includes(q)));
+    // Filters page: the same invoice statuses, same filtering.
+    const TB = Array.isArray(s.tab) ? s.tab : s.tab === 'All' ? [] : [s.tab];
+    const fN = TB.length;
+    const fRet = { fOpen: !!s.fOpen, openF: () => this.setState({ fOpen: true }), fClose: () => this.setState({ fOpen: false }),
+      fSecs: [{ k: 'tab', title: cc("common.status"), multi: true, def: [], hint: cc("common.pick_one_or_more"), opts: ['Sent', 'Paid', 'Overdue'].map((t) => ({ v: t, l: t })) }],
+      fVal: { tab: TB }, fN, fHasN: fN > 0, fBtnCls: fN ? 'chip on' : 'chip', fSummary: fN ? TB.join(' · ') : cc("common.all_statuses"), fTitle: 'Invoices', fNoun: 'invoices',
+      fPrev: (d) => this.data.filter((r) => (!d.tab.length || d.tab.indexOf(r.st) >= 0) && (!q || (r.no + r.client).toLowerCase().includes(q))).length,
+      fApply: (d) => this.setState({ tab: d.tab, fOpen: false }) };
+    return {
+      ...fRet,
+      hasNav: role !== 'poster', isPoster: role === 'poster',
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      tabs: ['All', 'Sent', 'Paid', 'Overdue'].map((t) => ({ label: t, on: s.tab === t, cls: s.tab === t ? 'chip on' : 'chip', pick: () => this.setState({ tab: t }) })),
+      rows: list.map((r) => ({ ...r, badge: bc[r.st], iSent: r.st === 'Sent', iPaid: r.st === 'Paid', iOver: r.st === 'Overdue' })),
+      empty: list.length === 0
+    };
+  }
+}
+ccHook(Component, ["q","fTitle","fSecs","fVal","fPrev","fNoun","fApply","fClose"]);
+</script>
+</body>
+</html>

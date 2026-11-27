@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Filters</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./cc.css">
+<script src="./cc-liquid.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7C3AED}a:hover{color:#6527C8}
+/* Dedicated Filters page: opens over the screen it filters, keeps that screen's state underneath. */
+.fp-root{position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;background:linear-gradient(170deg,#F1EBFA 0%,#F6F3FA 55%,#ECF4F1 100%);font-family:Inter,system-ui,sans-serif;color:#1A1820;animation:fpIn .34s cubic-bezier(.22,.8,.2,1) both}
+@keyframes fpIn{from{transform:translateX(28px);opacity:0}to{transform:none;opacity:1}}
+.fp-wrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;width:100%;max-width:720px;margin:0 auto}
+.fp-head{flex:none;display:flex;align-items:center;gap:8px;padding:10px 12px 4px}
+.fp-n{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;border-radius:11px;background:#7C3AED;color:#fff;font:800 12px/1 Inter,system-ui,sans-serif;margin-left:8px;vertical-align:2px;animation:fpPop .28s cubic-bezier(.34,1.5,.64,1) both}
+@keyframes fpPop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.fp-body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:6px 20px 24px;display:grid;grid-template-columns:1fr;gap:14px;align-content:start}
+@media (min-width:640px){.fp-body{grid-template-columns:1fr 1fr}.fp-sec.wide{grid-column:1 / -1}}
+.fp-sec{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.66));border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 30px -20px rgba(24,44,30,.4),inset 0 1px 0 #fff;transition:box-shadow .2s ease,transform .2s ease}
+.fp-sec:hover{box-shadow:0 18px 36px -20px rgba(24,44,30,.5),inset 0 1px 0 #fff}
+.fp-sec h2{margin:0;font-size:15px;line-height:1.3;font-weight:800}
+.fp-opts{display:flex;flex-wrap:wrap;gap:8px}
+.fp-opt{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #E2DCEC;background:rgba(255,255,255,.85);color:#3D3A45;font:600 13.5px/1.2 Inter,system-ui,sans-serif;cursor:pointer;transition:background .18s ease,border-color .18s ease,color .18s ease,transform .15s ease,box-shadow .18s ease}
+.fp-opt:hover{border-color:#C4B1FA;box-shadow:0 6px 14px -10px rgba(24,44,30,.45);transform:translateY(-1px)}
+.fp-opt:active{transform:scale(.97)}
+.fp-opt:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(183,154,214,.55)}
+.fp-opt.on{background:#7C3AED;border-color:#7C3AED;color:#fff;box-shadow:0 8px 18px -10px rgba(124,58,237,.7)}
+.fp-opt svg{width:14px;height:14px;flex:none}
+.fp-foot{flex:none;display:flex;gap:10px;padding:12px 20px 28px;background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.44));border-top:1px solid rgba(255,255,255,.9);-webkit-backdrop-filter:var(--blur-md);backdrop-filter:var(--blur-md);box-shadow:0 -10px 28px -16px rgba(24,44,30,.24),inset 0 1px 0 rgba(255,255,255,.95)}
+.fp-link{border:0;background:none;padding:6px 4px;font:700 13px/1 Inter,system-ui,sans-serif;color:#7C3AED;cursor:pointer;border-radius:8px;transition:background .15s ease}
+.fp-link:hover{background:rgba(124,58,237,.08)}
+.fp-link[disabled]{color:#A9A4B2;cursor:default;background:none}
+.fp-gl{font:700 11px/1.3 Inter,system-ui,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B6676}
+.fp-s{font-weight:500;font-size:11.5px;opacity:.72;margin-left:2px}
+.fp-opt.on .fp-s{opacity:.85}
+.fp-q{height:42px}
+.fp-range{accent-color:#7C3AED;height:28px}
+.fp-sel{display:flex;flex-wrap:wrap;gap:8px;grid-column:1 / -1}
+.fp-sel .chip svg{width:13px;height:13px;margin-left:2px}
+@media (prefers-reduced-motion:reduce){.fp-root,.fp-n{animation:none}.fp-opt,.fp-sec{transition:none}}
+</style>
+</helmet>
+<div class="fp-root" role="dialog" aria-modal="true" aria-labelledby="fp-title">
+  <div class="fp-wrap">
+    <div class="fp-head">
+      <button class="iconbtn" onClick="{{close}}" aria-label="{{cct.filters_page.back_without_applying}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+      <div class="sp" style="min-width: 0"><div id="fp-title" class="t-h2">{{cct.common.filters}}<sc-if value="{{hasN}}" hint-placeholder-val="{{ true }}"><span class="fp-n" aria-label="{{n}}{{cct.filters_page.selected}}">{{n}}</span></sc-if></div><div class="t-c mut trunc">{{title}}</div></div>
+      <button class="fp-link" onClick="{{reset}}" disabled="{{noChange}}" aria-label="{{cct.filters_page.reset_to_the_filters_you}}">{{cct.filters_page.reset}}</button>
+    </div>
+    <div class="fp-body">
+      <sc-if value="{{hasChips}}" hint-placeholder-val="{{ false }}"><div class="fp-sel" aria-label="Selected filters"><sc-for list="{{chips}}" as="c" hint-placeholder-count="3"><button class="chip on" onClick="{{c.remove}}" aria-label="Remove {{c.label}}">{{c.label}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></sc-for></div></sc-if>
+      <sc-for list="{{secs}}" as="g" hint-placeholder-count="3">
+        <section class="{{g.cls}}" aria-labelledby="{{g.id}}">
+          <div class="row" style="gap: 8px; align-items: baseline">
+            <h2 id="{{g.id}}" class="sp">{{g.title}}</h2>
+            <span class="t-c mut">{{g.state}}</span>
+            <sc-if value="{{g.canClear}}" hint-placeholder-val="{{ false }}"><button class="fp-link" onClick="{{g.clear}}" aria-label="{{cct.filters_page.clear}}{{g.title}}">{{cct.common.clear}}</button></sc-if>
+          </div>
+          <sc-if value="{{g.hasHint}}" hint-placeholder-val="{{ false }}"><div class="t-c mut" style="margin-top: -6px">{{g.hint}}</div></sc-if>
+          <sc-if value="{{g.isRange}}" hint-placeholder-val="{{ false }}"><div class="row" style="gap: 12px"><input class="fp-range sp" type="range" min="{{g.min}}" max="{{g.max}}" step="{{g.step}}" value="{{g.rv}}" onChange="{{g.onRange}}" aria-label="{{g.title}}"><span class="t-s b" style="min-width: 76px; text-align: right">{{g.rangeLabel}}</span></div></sc-if>
+          <sc-if value="{{g.hasSearch}}" hint-placeholder-val="{{ false }}"><div class="srch fp-q"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input placeholder="{{g.searchPh}}" value="{{g.q}}" onChange="{{g.onQ}}" aria-label="{{g.searchPh}}"></div></sc-if>
+          <sc-if value="{{g.isOpts}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 10px">
+            <sc-for list="{{g.groups}}" as="gr" hint-placeholder-count="1"><div style="display: flex; flex-direction: column; gap: 8px"><sc-if value="{{gr.hasLabel}}" hint-placeholder-val="{{ false }}"><div class="fp-gl">{{gr.label}}</div></sc-if>
+            <div class="fp-opts" role="{{g.role}}" aria-label="{{g.title}}">
+              <sc-for list="{{gr.opts}}" as="o" hint-placeholder-count="4"><button class="{{o.cls}}" role="{{o.role}}" aria-checked="{{o.on}}" onClick="{{o.pick}}"><sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if>{{o.l}}<sc-if value="{{o.hasS}}" hint-placeholder-val="{{ false }}"><span class="fp-s">{{o.s}}</span></sc-if></button></sc-for>
+            </div></div></sc-for>
+            <sc-if value="{{g.noOpts}}" hint-placeholder-val="{{ false }}"><div class="t-c mut">{{g.emptyText}}</div></sc-if>
+            <sc-if value="{{g.hasMore}}" hint-placeholder-val="{{ false }}"><button class="fp-link" onClick="{{g.toggleMore}}" style="align-self: flex-start">{{g.moreLabel}}</button></sc-if>
+          </div></sc-if>
+        </section>
+      </sc-for>
+    </div>
+    <div class="fp-foot">
+      <button class="btn btn-s" onClick="{{clearAll}}" disabled="{{noneSel}}" style="flex: 1">{{cct.filters_page.clear_all}}</button>
+      <button class="btn btn-p" onClick="{{apply}}" style="flex: 2">{{applyLabel}}</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"title":{"editor":"text","default":"Job search"},"sections":{"editor":null},"value":{"editor":null},"preview":{"editor":null},"noun":{"editor":"text","default":"results"},"onApply":{"editor":null},"onClose":{"editor":null},"$preview":{"width":390,"height":844}}'>
+/* CrewConnect content: user-facing text is read from crewconnect_content.json by content key. Edit the text there, not here. */
+var CC = (function (w) {
+  if (w.__ccContent) return w.__ccContent;
+  var doc = null, src = './crewconnect_content.json';
+  try {
+    var R = w.__resources, B = w.__resourceBlobs, k, v;
+    if (R) for (k in R) if (/crewconnect_content\.json$/.test(k)) { v = R[k]; if (B && B[v] instanceof Blob) v = URL.createObjectURL(B[v]); else if (B && B[k] instanceof Blob) v = URL.createObjectURL(B[k]); src = v; break; }
+    var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(null);
+    if (x.status === 200 || (x.status === 0 && x.responseText)) doc = JSON.parse(x.responseText);
+  } catch (e) { console.error('[CrewConnect] crewconnect_content.json could not be loaded', e); }
+  var flat = {}, tree = {}, vmap = {}, changed = false;
+  function put(e) {
+    var t = (e.client_text === undefined || e.client_text === null || e.client_text === '') ? e.original_text : String(e.client_text);
+    flat[e.content_key] = t;
+    var p = e.content_key.split('.'), o = tree;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] || (o[p[i]] = {});
+    o[p[p.length - 1]] = t;
+    if (e.binding && e.binding !== 'direct' && t !== e.original_text) { vmap[e.original_text] = t; changed = true; }
+  }
+  if (doc) { (doc.shared || []).forEach(put); (doc.screens || []).forEach(function (s) { (s.content || []).forEach(put); }); }
+  else console.error('[CrewConnect] content file missing: text keys will show instead of copy');
+  return (w.__ccContent = { doc: doc, ok: !!doc, flat: flat, tree: tree, vmap: vmap, changed: changed });
+})(window);
+var cct = CC.tree;
+function cc(key, vars) {
+  var t = CC.flat[key];
+  if (t === undefined) return CC.ok ? '' : '[' + key + ']';
+  return vars ? t.replace(/\{(\w+)\}/g, function (m, n) { return Object.prototype.hasOwnProperty.call(vars, n) ? vars[n] : m; }) : t;
+}
+function ccv(x) { return (CC.changed && typeof x === 'string' && Object.prototype.hasOwnProperty.call(CC.vmap, x)) ? CC.vmap[x] : x; }
+function ccHook(C, skip) {
+  var rv = C.prototype.renderVals;
+  function tr(v, d, keep) {
+    if (typeof v === 'string') return ccv(v);
+    if (!v || typeof v !== 'object' || d > 6 || keep.indexOf(v) >= 0) return v;
+    var proto = Object.getPrototypeOf(v), out = v, i, k, n;
+    if (Array.isArray(v)) { for (i = 0; i < v.length; i++) { n = tr(v[i], d + 1, keep); if (n !== v[i]) { if (out === v) out = v.slice(); out[i] = n; } } return out; }
+    if (proto !== Object.prototype && proto !== null) return v;
+    for (k in v) { if (/^(v|value|id|key|href|src|cls|class\w*|\w*Cls|style|\w*Style|ini|data\w*|code|store|act)$/.test(k)) continue; n = tr(v[k], d + 1, keep); if (n !== v[k]) { if (out === v) out = Object.assign({}, v); out[k] = n; } }
+    return out;
+  }
+  C.prototype.renderVals = function () {
+    var o = rv.apply(this, arguments) || {};
+    if (CC.changed) {
+      var keep = [], self = this, k;
+      ['props', 'state'].forEach(function (s) { var x = self[s]; if (x && typeof x === 'object') { keep.push(x); for (k in x) if (x[k] && typeof x[k] === 'object') keep.push(x[k]); } });
+      var r = {};
+      for (k in o) r[k] = (skip.indexOf(k) >= 0) ? o[k] : tr(o[k], 0, keep);
+      o = r;
+    }
+    o.cct = cct;
+    return o;
+  };
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    // Draft starts from the filters currently applied on the screen; nothing changes there until Apply.
+    const v = p.value || {};
+    this.start = JSON.parse(JSON.stringify(v));
+    this.state = { d: JSON.parse(JSON.stringify(v)), q: {}, more: {} };
+  }
+  secs() {
+    return this.props.sections || [
+      { k: 'cats', title: cc("common.department"), multi: true, def: [], opts: ['Camera', 'Direction', 'Editing & Post', 'Sound'].map((x) => ({ v: x, l: x })) },
+      { k: 'locs', title: cc("common.location"), multi: true, def: [], opts: [cc("common.mumbai"), cc("common.hyderabad"), cc("common.pune")].map((x) => ({ v: x, l: x })) }
+    ];
+  }
+  // R8: sections may declare parent (cascading options), search (searchable list), type 'range' (slider) and grouped / sub-labelled options.
+  // Changing a parent removes child values that no longer belong to it, down the whole chain.
+  prune(S, d, k) {
+    const out = { ...d };
+    const kids = S.filter((g) => g.parent === k);
+    kids.forEach((g) => {
+      const par = out[k] || [];
+      if (par.length && Array.isArray(out[g.k])) out[g.k] = out[g.k].filter((v) => { const o = g.opts.find((x) => x.v === v); return !o || !o.p || o.p.some((x) => par.indexOf(x) >= 0); });
+      Object.assign(out, this.prune(S, out, g.k));
+    });
+    return out;
+  }
+  renderVals() {
+    const S = this.secs(), d = this.state.d, Q = this.state.q || {}, MORE = this.state.more || {};
+    const get = (g) => (d[g.k] !== undefined ? d[g.k] : g.def);
+    const isSet = (g) => (g.multi ? (get(g) || []).length > 0 : get(g) !== g.def);
+    const cnt = (g) => (g.multi ? (get(g) || []).length : isSet(g) ? 1 : 0);
+    const n = S.reduce((t, g) => t + cnt(g), 0);
+    const setK = (k, v) => this.setState({ d: this.prune(S, { ...d, [k]: v }, k) });
+    const pv = typeof this.props.preview === 'function' ? this.props.preview(d) : null;
+    const noun = this.props.noun || 'results';
+    const optOf = (g, v) => (g.opts || []).find((o) => o.v === v);
+    const chips = [];
+    S.forEach((g) => {
+      if (!isSet(g) || g.chip === false) return;
+      const vals = g.multi ? get(g) : [get(g)];
+      vals.forEach((v) => chips.push({ label: g.type === 'range' ? (g.fmt ? g.fmt(v) : v) : (optOf(g, v) || { l: v }).l, remove: () => setK(g.k, g.multi ? get(g).filter((x) => x !== v) : g.def) }));
+    });
+    return {
+      title: this.props.title || cc("common.filters"), n, hasN: n > 0, noneSel: n === 0, chips, hasChips: chips.length > 0,
+      noChange: JSON.stringify(d) === JSON.stringify(this.start),
+      secs: S.map((g, i) => {
+        const val = get(g);
+        const par = g.parent ? (d[g.parent] || []) : [];
+        const parG = g.parent ? S.find((x) => x.k === g.parent) : null;
+        let opts = g.opts || [];
+        if (g.parent && par.length) opts = opts.filter((o) => !o.p || o.p.some((x) => par.indexOf(x) >= 0));
+        const q = (Q[g.k] || '').trim().toLowerCase();
+        if (q) opts = opts.filter((o) => (o.l + ' ' + (o.s || '') + ' ' + (o.g || '')).toLowerCase().indexOf(q) >= 0);
+        const total = opts.length, cap = g.cap || 12, showAll = !!MORE[g.k] || !!q || total <= cap + 2;
+        const on = (o) => (g.multi ? (val || []).indexOf(o.v) >= 0 : val === o.v);
+        let shown = showAll ? opts : opts.filter((o, j) => j < cap || on(o));
+        const groups = [];
+        shown.forEach((o) => { const gl = g.grouped && !(g.parent && par.length === 1) ? (o.g || '') : ''; let G = groups.find((x) => x.label === gl); if (!G) { G = { label: gl, hasLabel: !!gl, opts: [] }; groups.push(G); } G.opts.push(o); });
+        const isRange = g.type === 'range';
+        return {
+          id: 'fp-s' + i, title: g.title, hint: (g.parent && !par.length && parG ? (g.parentHint || ('Showing all — pick a ' + parG.title.toLowerCase() + ' to narrow this list')) : (g.hint || '')),
+          hasHint: !!((g.parent && !par.length && parG) || g.hint),
+          cls: 'fp-sec' + ((g.opts || []).length > 6 || g.wide ? ' wide' : ''),
+          role: g.multi ? 'group' : 'radiogroup',
+          state: isRange ? '' : g.multi ? (cnt(g) ? cnt(g) + cc("filters_page.selected") : 'Any') : (isSet(g) ? cc("filters_page.t_1_selected") : ''),
+          canClear: isSet(g), clear: () => setK(g.k, g.multi ? [] : g.def),
+          isRange, isOpts: !isRange, min: g.min || 0, max: g.max || 20, step: g.step || 1, rv: +(val || 0),
+          rangeLabel: g.fmt ? g.fmt(+(val || 0)) : String(val), onRange: (e) => setK(g.k, +e.target.value),
+          hasSearch: !isRange && (g.search || (g.opts || []).length > 10), searchPh: g.searchPh || ('Search ' + g.title.toLowerCase()), q: Q[g.k] || '',
+          onQ: (e) => this.setState({ q: { ...Q, [g.k]: e.target.value } }),
+          groups, noOpts: !isRange && total === 0, emptyText: q ? 'No matches for “' + (Q[g.k] || '').trim() + '”' : 'No options',
+          hasMore: !q && total > cap + 2, moreLabel: MORE[g.k] ? 'Show fewer' : 'Show all ' + total, toggleMore: () => this.setState({ more: { ...MORE, [g.k]: !MORE[g.k] } }),
+          opts: opts.map((o) => o)
+        };
+      }).map((g, i) => ({ ...g, groups: g.groups.map((G) => ({ ...G, opts: G.opts.map((o) => {
+        const sec = S[i], val = get(sec), isOn = sec.multi ? (val || []).indexOf(o.v) >= 0 : val === o.v;
+        return { l: o.l, s: o.s || '', hasS: !!o.s && !!sec.showSub, on: isOn, role: sec.multi ? 'checkbox' : 'radio', cls: 'fp-opt' + (isOn ? ' on' : ''),
+          pick: () => (sec.multi ? setK(sec.k, isOn ? val.filter((x) => x !== o.v) : (val || []).concat([o.v])) : setK(sec.k, isOn && sec.toggle !== false ? sec.def : o.v)) };
+      }) })) })),
+      reset: () => this.setState({ d: JSON.parse(JSON.stringify(this.start)) }),
+      clearAll: () => { const z = {}; S.forEach((g) => { z[g.k] = g.multi ? [] : g.def; }); this.setState({ d: { ...d, ...z } }); },
+      applyLabel: pv === null ? cc("common.apply_filters") : cc("filters_page.apply_filters") + ccv(pv) + ' ' + ccv(noun),
+      apply: () => { if (this.props.onApply) this.props.onApply(d); },
+      close: () => { if (this.props.onClose) this.props.onClose(); }
+    };
+  }
+}
+ccHook(Component, []);
+</script>
+</body>
+</html>
